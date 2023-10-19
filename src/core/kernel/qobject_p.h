@@ -57,14 +57,6 @@ void Q_CORE_EXPORT qt_register_signal_spy_callbacks(const QSignalSpyCallbackSet 
 
 extern QSignalSpyCallbackSet Q_CORE_EXPORT qt_signal_spy_callback_set;
 
-class Q_CORE_EXPORT QAbstractDeclarativeData
-{
-public:
-    static void (*destroyed)(QAbstractDeclarativeData *, QObject *);
-    static void (*parentChanged)(QAbstractDeclarativeData *, QObject *, QObject *);
-    static void (*objectNameChanged)(QAbstractDeclarativeData *, QObject *);
-};
-
 class Q_CORE_EXPORT QObjectPrivate : public QObjectData
 {
     Q_DECLARE_PUBLIC(QObject)
@@ -136,7 +128,7 @@ public:
     inline bool isSignalConnected(uint signalIdx) const;
 
     // To allow arbitrary objects to call connectNotify()/disconnectNotify() without making
-    // the API public in QObject. This is used by QDeclarativeNotifierEndpoint.
+    // the API public in QObject
     inline void connectNotify(const char *signal);
     inline void disconnectNotify(const char *signal);
 
@@ -155,10 +147,7 @@ public:
     mutable quint32 connectedSignals[2];
 
     QList<QPointer<QObject> > eventFilters;
-    union {
-        QObject *currentChildBeingDeleted;
-        QAbstractDeclarativeData *declarativeData; //extra data used by the declarative module
-    };
+    QObject *currentChildBeingDeleted;
 
     // these objects are all used to indicate that a QObject was deleted
     // plus QPointer, which keeps a separate list

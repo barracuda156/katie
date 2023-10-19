@@ -782,8 +782,8 @@ bool QAbstractScrollArea::event(QEvent *e)
         d->viewport->setMouseTracking(hasMouseTracking());
         break;
     case QEvent::Resize:
-            d->layoutChildren();
-            break;
+        d->layoutChildren();
+        break;
     case QEvent::Paint: {
         QStyleOption option;
         option.initFrom(this);
@@ -792,9 +792,9 @@ bool QAbstractScrollArea::event(QEvent *e)
             QPainter p(this);
             style()->drawPrimitive(QStyle::PE_PanelScrollAreaCorner, &option, &p, this);
         }
-        }
         QFrame::paintEvent((QPaintEvent*)e);
         break;
+    }
 #ifndef QT_NO_CONTEXTMENU
     case QEvent::ContextMenu:
         if (static_cast<QContextMenuEvent *>(e)->reason() == QContextMenuEvent::Keyboard)

@@ -8,7 +8,8 @@ There are several things you should be aware before considering Katie:
   - QMake, Linguist, Assistant, checksdk, macdeployqt, pixeltool, qconfig,
     qdoc, qev, qvfb, runonphone, designer and other non-essential
   - Qt3Support, QtWebKit, QtHelp, QtXmlPatterns, QtOpenGL, ActiveQt, Phonon,
-    QtMultimedia, QtSql, QtDesigner, QtDesignerComponents and QtScriptTtools
+    QtMultimedia, QtSql, QtDesigner, QtDesignerComponents, QtScriptTtools,
+    QtScript and QtDeclarative
 
  - some things have changed:
   - QMake build system replaced with CMake

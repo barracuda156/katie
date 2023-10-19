@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-01 04:23+0300\n"
+"POT-Creation-Date: 2023-10-21 08:02+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,15 +25,15 @@ msgstr ""
 msgid "ELF class mismatch in '%1'"
 msgstr ""
 
-#: src/core/plugin/qlibrary.cpp:336 src/core/plugin/qlibrary.cpp:346
+#: src/core/plugin/qlibrary.cpp:340 src/core/plugin/qlibrary.cpp:350
 msgid "The shared library was not found."
 msgstr ""
 
-#: src/core/plugin/qlibrary.cpp:348
+#: src/core/plugin/qlibrary.cpp:352
 msgid "The file '%1' is not a valid Katie plugin."
 msgstr ""
 
-#: src/core/plugin/qlibrary.cpp:534 src/core/io/qiodevice.cpp:1497
+#: src/core/plugin/qlibrary.cpp:538 src/core/io/qiodevice.cpp:1497
 #: src/network/socket/qtcpserver.cpp:519
 #: src/network/socket/qabstractsocketengine.cpp:408
 msgid "Unknown error"
@@ -258,841 +258,6 @@ msgctxt "QJsonDocument"
 msgid "Rootless arrays are not supported"
 msgstr ""
 
-#: src/declarative/graphicsitems/qdeclarativeitemsmodule.cpp:81
-msgctxt "QDeclarativeAnimatedImage"
-msgid "Katie was built without support for QMovie"
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeitemsmodule.cpp:150
-msgid "KeyNavigation is only available via attached properties"
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeitemsmodule.cpp:151
-msgid "Keys is only available via attached properties"
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeitemsmodule.cpp:173
-msgid "LayoutMirroring is only available via attached properties"
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeloader.cpp:387
-msgid "Loader does not support loading non-visual elements."
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeanchors.cpp:177
-msgid "Possible anchor loop detected on fill."
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeanchors.cpp:206
-msgid "Possible anchor loop detected on centerIn."
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeanchors.cpp:414
-#: src/declarative/graphicsitems/qdeclarativeanchors.cpp:448
-#: src/declarative/graphicsitems/qdeclarativeanchors.cpp:1094
-#: src/declarative/graphicsitems/qdeclarativeanchors.cpp:1131
-msgid "Cannot anchor to an item that isn't a parent or sibling."
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeanchors.cpp:561
-msgid "Possible anchor loop detected on vertical anchor."
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeanchors.cpp:656
-msgid "Possible anchor loop detected on horizontal anchor."
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeanchors.cpp:1078
-msgid "Cannot specify left, right, and hcenter anchors."
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeanchors.cpp:1088
-#: src/declarative/graphicsitems/qdeclarativeanchors.cpp:1125
-msgid "Cannot anchor to a null item."
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeanchors.cpp:1091
-msgid "Cannot anchor a horizontal edge to a vertical edge."
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeanchors.cpp:1097
-#: src/declarative/graphicsitems/qdeclarativeanchors.cpp:1134
-msgid "Cannot anchor item to self."
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeanchors.cpp:1109
-msgid "Cannot specify top, bottom, and vcenter anchors."
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeanchors.cpp:1115
-msgid ""
-"Baseline anchor cannot be used in conjunction with top, bottom, or vcenter "
-"anchors."
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeanchors.cpp:1128
-msgid "Cannot anchor a vertical edge to a horizontal edge."
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativetextinput.cpp:869
-#: src/declarative/graphicsitems/qdeclarativetextinput.cpp:877
-msgid "Could not load cursor delegate"
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativetextinput.cpp:888
-msgid "Could not instantiate cursor delegate"
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeflipable.cpp:118
-msgid "front is a write-once property"
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeflipable.cpp:138
-msgid "back is a write-once property"
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativeitem.cpp:783
-msgid "LayoutDirection attached property only works with Items"
-msgstr ""
-
-#: src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp:1081
-msgid "Delegate component must be Item type."
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:164
-#: src/declarative/qml/qdeclarativecompiler.cpp:1818
-#: src/declarative/qml/qdeclarativecompiler.cpp:2023
-#: src/declarative/qml/qdeclarativecompiler.cpp:2104
-#: src/declarative/qml/qdeclarativecompiler.cpp:2179
-#: src/declarative/qml/qdeclarativecompiler.cpp:2773
-msgid "Invalid property assignment: \"%1\" is a read-only property"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:173
-msgid "Invalid property assignment: unknown enumeration"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:181
-msgid "Invalid property assignment: string expected"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:184
-msgid "Invalid property assignment: url expected"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:194
-msgid "Invalid property assignment: unsigned int expected"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:205
-msgid "Invalid property assignment: int expected"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:209
-#: src/declarative/qml/qdeclarativecompiler.cpp:212
-msgid "Invalid property assignment: number expected"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:218
-msgid "Invalid property assignment: color expected"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:226
-msgid "Invalid property assignment: date expected"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:233
-msgid "Invalid property assignment: time expected"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:240
-msgid "Invalid property assignment: datetime expected"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:249
-msgid "Invalid property assignment: point expected"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:257
-msgid "Invalid property assignment: size expected"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:265
-msgid "Invalid property assignment: rect expected"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:270
-msgid "Invalid property assignment: boolean expected"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:277
-msgid "Invalid property assignment: 3D vector expected"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:282
-msgid "Invalid property assignment: unsupported type \"%1\""
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:554
-msgid "Element is not creatable."
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1204
-msgid "Component elements may not contain properties other than id"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1211
-msgid "Invalid component id specification"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1217
-#: src/declarative/qml/qdeclarativecompiler.cpp:1732
-msgid "id is not unique"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1227
-msgid "Invalid component body specification"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1230
-msgid "Component objects cannot declare new properties."
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1232
-msgid "Component objects cannot declare new signals."
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1234
-msgid "Component objects cannot declare new functions."
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1241
-msgid "Cannot create empty component specification"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1329
-#: src/declarative/qml/qdeclarativecompiler.cpp:1450
-msgid "\"%1.%2\" is not available in %3 %4.%5."
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1331
-#: src/declarative/qml/qdeclarativecompiler.cpp:1452
-msgid "\"%1.%2\" is not available due to component versioning."
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1342
-msgid "Incorrectly specified signal assignment"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1354
-msgid "Cannot assign a value to a signal (expecting a script to be run)"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1358
-msgid "Empty signal assignment"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1396
-msgid "Empty property assignment"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1408
-msgid "Attached properties cannot be used here"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1422
-#: src/declarative/qml/qdeclarativecompiler.cpp:1550
-msgid "Non-existent attached object"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1426
-#: src/declarative/qml/qdeclarativecompiler.cpp:1553
-msgid "Invalid attached object assignment"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1505
-msgid "Cannot assign to non-existent default property"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1507
-#: src/declarative/qml/qdeclarativecompiler.cpp:1863
-#: src/declarative/qml/qdeclarativecompiler.cpp:1866
-#: src/declarative/util/qdeclarativeconnections.cpp:187
-#: src/declarative/util/qdeclarativeconnections.cpp:251
-#: src/declarative/util/qdeclarativepropertychanges.cpp:404
-msgid "Cannot assign to non-existent property \"%1\""
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1537
-msgid "Invalid use of namespace"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1542
-msgid "Not an attached property name"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1724
-msgid "Invalid use of id property"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1811
-#: src/declarative/qml/qdeclarativecompiler.cpp:1813
-msgid "Property has already been assigned a value"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1831
-#: src/declarative/qml/qdeclarativecompiler.cpp:1838
-msgid "Invalid grouped property access"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1841
-msgid "Cannot assign a value directly to a grouped property"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1857
-msgid "Invalid property use"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1872
-msgid "Property assignment expected"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1875
-msgid "Single property assignment expected"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1880
-msgid "Unexpected object assignment"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1945
-msgid "Cannot assign object to list"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1951
-msgid "Can only assign one binding to lists"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1957
-msgid "Cannot assign primitives to lists"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1970
-msgid "Cannot assign multiple values to a script property"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1973
-msgid "Invalid property assignment: script expected"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:1988
-msgid "Cannot assign multiple values to a singular property"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2081
-msgid "Cannot assign object to property"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2131
-msgid "\"%1\" cannot operate on \"%2\""
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2307
-msgid "Duplicate default property"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2312
-msgid "Duplicate property name"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2316
-msgid "Property names cannot begin with an upper case letter"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2319
-msgid "Illegal property name"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2327
-msgid "Duplicate signal name"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2330
-msgid "Signal names cannot begin with an upper case letter"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2332
-msgid "Illegal signal name"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2338
-msgid "Duplicate method name"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2341
-msgid "Method names cannot begin with an upper case letter"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2343
-msgid "Illegal method name"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2364
-msgid "Property value set multiple times"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2368
-msgid "Invalid property nesting"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2420
-msgid "Cannot override FINAL property"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2443
-msgid "Invalid property type"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2620
-msgid "Invalid empty ID"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2623
-msgid "IDs cannot start with an uppercase letter"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2629
-msgid "IDs must start with a letter or underscore"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2631
-msgid "IDs must contain only letters, numbers, and underscores"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2637
-msgid "ID illegally masks global JavaScript property"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2668
-#: src/declarative/qml/qdeclarativecompiler.cpp:2677
-msgid "No property alias location"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2673
-#: src/declarative/qml/qdeclarativecompiler.cpp:2698
-#: src/declarative/qml/qdeclarativecompiler.cpp:2705
-#: src/declarative/qml/qdeclarativecompiler.cpp:2712
-#: src/declarative/qml/qdeclarativecompiler.cpp:2718
-msgid "Invalid alias location"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2682
-msgid ""
-"Invalid alias reference. An alias reference must be specified as <id>, <id>."
-"<property> or <id>.<value property>.<property>"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2685
-msgid "Invalid alias reference. Unable to find id \"%1\""
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiler.cpp:2700
-msgid "Alias property exceeds alias bounds"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativeimport.cpp:358
-msgid "plugin cannot be loaded for module \"%1\": %2"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativeimport.cpp:363
-msgid "module \"%1\" plugin \"%2\" not found"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativeimport.cpp:507
-#: src/declarative/qml/qdeclarativeimport.cpp:575
-msgid "module \"%1\" version %2.%3 is not installed"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativeimport.cpp:509
-msgid "module \"%1\" is not installed"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativeimport.cpp:523
-#: src/declarative/qml/qdeclarativeimport.cpp:543
-msgid "\"%1\": no such directory"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativeimport.cpp:541
-msgid "import \"%1\" has no qmldir and no namespace"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativeimport.cpp:609
-msgid "- %1 is not a namespace"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativeimport.cpp:615
-msgid "- nested namespaces not allowed"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativeimport.cpp:662
-#: src/declarative/qml/qdeclarativeimport.cpp:666
-msgid "local directory"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativeimport.cpp:672
-msgid "is ambiguous. Found in %1 and in %2"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativeimport.cpp:676
-msgid "is ambiguous. Found in %1 in version %2.%3 and %4.%5"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativeimport.cpp:690
-msgid "is instantiated recursively"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativeimport.cpp:692
-msgid "is not a type"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativebinding.cpp:407
-msgid "Binding loop detected for property \"%1\""
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecomponent.cpp:477
-msgid "Invalid empty URL"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecomponent.cpp:625
-msgid "createObject: value is not an object"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativevme.cpp:197
-msgctxt "QDeclarativeVME"
-msgid "Unable to create object of type %1"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativevme.cpp:637
-msgctxt "QDeclarativeVME"
-msgid "Cannot assign object type %1 with no default method"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativevme.cpp:640
-msgctxt "QDeclarativeVME"
-msgid "Cannot connect mismatched signal/slot %1 %vs. %2"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativevme.cpp:645
-msgctxt "QDeclarativeVME"
-msgid "Cannot assign an object to signal property %1"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativevme.cpp:794
-msgctxt "QDeclarativeVME"
-msgid "Cannot assign object to list"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativevme.cpp:837
-msgctxt "QDeclarativeVME"
-msgid "Cannot assign object to interface property"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativevme.cpp:848
-msgctxt "QDeclarativeVME"
-msgid "Unable to create attached object"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativevme.cpp:880
-msgctxt "QDeclarativeVME"
-msgid "Cannot set properties on %1 as it is null"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativescriptparser.cpp:235
-#: src/declarative/qml/qdeclarativescriptparser.cpp:664
-#: src/declarative/qml/qdeclarativescriptparser.cpp:723
-msgctxt "QDeclarativeParser"
-msgid "Property value set multiple times"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativescriptparser.cpp:246
-msgctxt "QDeclarativeParser"
-msgid "Expected type name"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativescriptparser.cpp:380
-msgctxt "QDeclarativeParser"
-msgid "Invalid import qualifier ID"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativescriptparser.cpp:388
-msgctxt "QDeclarativeParser"
-msgid "Reserved name \"Qt\" cannot be used as an qualifier"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativescriptparser.cpp:403
-msgctxt "QDeclarativeParser"
-msgid "Script import qualifiers must be unique."
-msgstr ""
-
-#: src/declarative/qml/qdeclarativescriptparser.cpp:413
-msgctxt "QDeclarativeParser"
-msgid "Script import requires a qualifier"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativescriptparser.cpp:424
-msgctxt "QDeclarativeParser"
-msgid "Library import requires a version"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativescriptparser.cpp:483
-msgctxt "QDeclarativeParser"
-msgid "Expected parameter type"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativescriptparser.cpp:525
-msgctxt "QDeclarativeParser"
-msgid "Invalid property type modifier"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativescriptparser.cpp:534
-msgctxt "QDeclarativeParser"
-msgid "Unexpected property type modifier"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativescriptparser.cpp:543
-msgctxt "QDeclarativeParser"
-msgid "Expected property type"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativescriptparser.cpp:552
-msgctxt "QDeclarativeParser"
-msgid "Readonly not yet supported"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativescriptparser.cpp:770
-msgctxt "QDeclarativeParser"
-msgid "JavaScript declaration outside Script element"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativecompiledbindings.cpp:315
-msgctxt "QDeclarativeCompiledBindings"
-msgid "Binding loop detected for property \"%1\""
-msgstr ""
-
-#: src/declarative/qml/qdeclarativetypeloader.cpp:774
-msgid "Script %1 unavailable"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativetypeloader.cpp:792
-msgid "Type %1 unavailable"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativetypeloader.cpp:978
-msgid "Namespace %1 cannot be used as a type"
-msgstr ""
-
-#: src/declarative/qml/qdeclarativetypeloader.cpp:980
-msgid "%1 %2"
-msgstr ""
-
-#: src/declarative/qml/parser/qdeclarativejsparser.cpp:1805
-#: src/declarative/qml/parser/qdeclarativejsparser.cpp:1873
-msgctxt "QDeclarativeParser"
-msgid "Syntax error"
-msgstr ""
-
-#: src/declarative/qml/parser/qdeclarativejsparser.cpp:1807
-msgctxt "QDeclarativeParser"
-msgid "Unexpected token `%1'"
-msgstr ""
-
-#: src/declarative/qml/parser/qdeclarativejsparser.cpp:1836
-#: src/declarative/qml/parser/qdeclarativejsparser.cpp:1860
-msgctxt "QDeclarativeParser"
-msgid "Expected token `%1'"
-msgstr ""
-
-#: src/declarative/qml/parser/qdeclarativejslexer.cpp:516
-#: src/declarative/qml/parser/qdeclarativejslexer.cpp:639
-#: src/declarative/qml/parser/qdeclarativejslexer.cpp:693
-msgctxt "QDeclarativeParser"
-msgid "Illegal unicode escape sequence"
-msgstr ""
-
-#: src/declarative/qml/parser/qdeclarativejslexer.cpp:553
-msgctxt "QDeclarativeParser"
-msgid "Illegal character"
-msgstr ""
-
-#: src/declarative/qml/parser/qdeclarativejslexer.cpp:567
-msgctxt "QDeclarativeParser"
-msgid "Unclosed string at end of line"
-msgstr ""
-
-#: src/declarative/qml/parser/qdeclarativejslexer.cpp:593
-msgctxt "QDeclarativeParser"
-msgid "Illegal escape sequence"
-msgstr ""
-
-#: src/declarative/qml/parser/qdeclarativejslexer.cpp:665
-msgctxt "QDeclarativeParser"
-msgid "Unclosed comment at end of file"
-msgstr ""
-
-#: src/declarative/qml/parser/qdeclarativejslexer.cpp:767
-msgctxt "QDeclarativeParser"
-msgid "Illegal syntax for exponential number"
-msgstr ""
-
-#: src/declarative/qml/parser/qdeclarativejslexer.cpp:793
-msgctxt "QDeclarativeParser"
-msgid "Identifier cannot start with numeric literal"
-msgstr ""
-
-#: src/declarative/qml/parser/qdeclarativejslexer.cpp:1131
-msgctxt "QDeclarativeParser"
-msgid "Unterminated regular expression literal"
-msgstr ""
-
-#: src/declarative/qml/parser/qdeclarativejslexer.cpp:1146
-msgctxt "QDeclarativeParser"
-msgid "Invalid regular expression flag '%0'"
-msgstr ""
-
-#: src/declarative/qml/parser/qdeclarativejslexer.cpp:1162
-#: src/declarative/qml/parser/qdeclarativejslexer.cpp:1184
-msgctxt "QDeclarativeParser"
-msgid "Unterminated regular expression backslash sequence"
-msgstr ""
-
-#: src/declarative/qml/parser/qdeclarativejslexer.cpp:1197
-msgctxt "QDeclarativeParser"
-msgid "Unterminated regular expression class"
-msgstr ""
-
-#: src/declarative/util/qdeclarativeconnections.cpp:197
-msgid "Connections: nested objects not allowed"
-msgstr ""
-
-#: src/declarative/util/qdeclarativeconnections.cpp:200
-msgid "Connections: syntax error"
-msgstr ""
-
-#: src/declarative/util/qdeclarativeconnections.cpp:208
-msgid "Connections: script expected"
-msgstr ""
-
-#: src/declarative/util/qdeclarativeanimation.cpp:152
-msgid "Cannot animate non-existent property \"%1\""
-msgstr ""
-
-#: src/declarative/util/qdeclarativeanimation.cpp:155
-msgid "Cannot animate read-only property \"%1\""
-msgstr ""
-
-#: src/declarative/util/qdeclarativeanimation.cpp:589
-#: src/declarative/util/qdeclarativeanimation.cpp:1823
-#: src/declarative/util/qdeclarativeanimation.cpp:2843
-msgid "Cannot set a duration of < 0"
-msgstr ""
-
-#: src/declarative/util/qdeclarativeanimation.cpp:2675
-#: src/declarative/util/qdeclarativestateoperations.cpp:83
-msgid "Unable to preserve appearance under complex transform"
-msgstr ""
-
-#: src/declarative/util/qdeclarativeanimation.cpp:2686
-#: src/declarative/util/qdeclarativeanimation.cpp:2693
-#: src/declarative/util/qdeclarativestateoperations.cpp:94
-#: src/declarative/util/qdeclarativestateoperations.cpp:101
-msgid "Unable to preserve appearance under non-uniform scale"
-msgstr ""
-
-#: src/declarative/util/qdeclarativeanimation.cpp:2700
-#: src/declarative/util/qdeclarativestateoperations.cpp:108
-msgid "Unable to preserve appearance under scale of 0"
-msgstr ""
-
-#: src/declarative/util/qdeclarativepropertychanges.cpp:236
-msgid "PropertyChanges does not support creating state-specific objects."
-msgstr ""
-
-#: src/declarative/util/qdeclarativepropertychanges.cpp:407
-msgid "Cannot assign to read-only property \"%1\""
-msgstr ""
-
-#: src/declarative/util/qdeclarativebehavior.cpp:107
-msgid "Cannot change the animation assigned to a Behavior."
-msgstr ""
-
-#: src/declarative/util/qdeclarativelistmodel.cpp:370
-msgid "remove: index %1 out of range"
-msgstr ""
-
-#: src/declarative/util/qdeclarativelistmodel.cpp:403
-msgid "insert: value is not an object"
-msgstr ""
-
-#: src/declarative/util/qdeclarativelistmodel.cpp:408
-msgid "insert: index %1 out of range"
-msgstr ""
-
-#: src/declarative/util/qdeclarativelistmodel.cpp:438
-msgid "move: out of range"
-msgstr ""
-
-#: src/declarative/util/qdeclarativelistmodel.cpp:478
-msgid "append: value is not an object"
-msgstr ""
-
-#: src/declarative/util/qdeclarativelistmodel.cpp:549
-msgid "set: value is not an object"
-msgstr ""
-
-#: src/declarative/util/qdeclarativelistmodel.cpp:553
-#: src/declarative/util/qdeclarativelistmodel.cpp:591
-msgid "set: index %1 out of range"
-msgstr ""
-
-#: src/declarative/util/qdeclarativelistmodel.cpp:628
-#: src/declarative/util/qdeclarativelistmodel.cpp:645
-msgid "ListElement: cannot contain nested elements"
-msgstr ""
-
-#: src/declarative/util/qdeclarativelistmodel.cpp:649
-msgid "ListElement: cannot use reserved \"id\" property"
-msgstr ""
-
-#: src/declarative/util/qdeclarativelistmodel.cpp:703
-msgid "ListElement: cannot use script for property value"
-msgstr ""
-
-#: src/declarative/util/qdeclarativelistmodel.cpp:735
-msgid "ListModel: undefined property '%1'"
-msgstr ""
-
-#: src/declarative/util/qdeclarativepixmapcache.cpp:256
-msgid "Error decoding: %1: %2"
-msgstr ""
-
-#: src/declarative/util/qdeclarativepixmapcache.cpp:359
-#: src/declarative/util/qdeclarativepixmapcache.cpp:699
-msgid "Failed to get image from provider: %1"
-msgstr ""
-
-#: src/declarative/util/qdeclarativepixmapcache.cpp:375
-#: src/declarative/util/qdeclarativepixmapcache.cpp:717
-msgid "Cannot open: %1"
-msgstr ""
-
-#: src/declarative/util/qdeclarativeutilmodule.cpp:58
-msgid "Application is an abstract class"
-msgstr ""
-
-#: src/declarative/util/qdeclarativeutilmodule.cpp:85
-msgid "Animation is an abstract class"
-msgstr ""
-
 #: src/gui/dialogs/qwizard.cpp:578
 msgid "Go Back"
 msgstr ""
@@ -1297,47 +462,47 @@ msgstr ""
 msgid "Sample"
 msgstr ""
 
-#: src/gui/dialogs/qcolordialog.cpp:1203
+#: src/gui/dialogs/qcolordialog.cpp:1201
 msgid "Hu&e:"
 msgstr ""
 
-#: src/gui/dialogs/qcolordialog.cpp:1204
+#: src/gui/dialogs/qcolordialog.cpp:1202
 msgid "&Sat:"
 msgstr ""
 
-#: src/gui/dialogs/qcolordialog.cpp:1205
+#: src/gui/dialogs/qcolordialog.cpp:1203
 msgid "&Val:"
 msgstr ""
 
-#: src/gui/dialogs/qcolordialog.cpp:1206
+#: src/gui/dialogs/qcolordialog.cpp:1204
 msgid "&Red:"
 msgstr ""
 
-#: src/gui/dialogs/qcolordialog.cpp:1207
+#: src/gui/dialogs/qcolordialog.cpp:1205
 msgid "&Green:"
 msgstr ""
 
-#: src/gui/dialogs/qcolordialog.cpp:1208
+#: src/gui/dialogs/qcolordialog.cpp:1206
 msgid "Bl&ue:"
 msgstr ""
 
-#: src/gui/dialogs/qcolordialog.cpp:1209
+#: src/gui/dialogs/qcolordialog.cpp:1207
 msgid "A&lpha channel:"
 msgstr ""
 
-#: src/gui/dialogs/qcolordialog.cpp:1310
+#: src/gui/dialogs/qcolordialog.cpp:1308
 msgid "Select Color"
 msgstr ""
 
-#: src/gui/dialogs/qcolordialog.cpp:1436
+#: src/gui/dialogs/qcolordialog.cpp:1424
 msgid "&Basic colors"
 msgstr ""
 
-#: src/gui/dialogs/qcolordialog.cpp:1437
+#: src/gui/dialogs/qcolordialog.cpp:1425
 msgid "&Custom colors"
 msgstr ""
 
-#: src/gui/dialogs/qcolordialog.cpp:1438
+#: src/gui/dialogs/qcolordialog.cpp:1426
 msgid "&Add to Custom Colors"
 msgstr ""
 
@@ -1518,106 +683,106 @@ msgctxt "QPrintDialog"
 msgid "Print"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:461
+#: src/gui/dialogs/qfiledialog.cpp:458
 msgid "Find Directory"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:463
+#: src/gui/dialogs/qfiledialog.cpp:460
 msgid "Open"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:465
+#: src/gui/dialogs/qfiledialog.cpp:462
 msgid "Save As"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:480 src/gui/dialogs/qfiledialog.cpp:980
+#: src/gui/dialogs/qfiledialog.cpp:477 src/gui/dialogs/qfiledialog.cpp:977
 msgid "All Files (*)"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:490
+#: src/gui/dialogs/qfiledialog.cpp:487
 msgid "Show "
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:494
+#: src/gui/dialogs/qfiledialog.cpp:491
 msgid "&Rename"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:495
+#: src/gui/dialogs/qfiledialog.cpp:492
 msgid "&Delete"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:496
+#: src/gui/dialogs/qfiledialog.cpp:493
 msgid "Show &hidden files"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:497
+#: src/gui/dialogs/qfiledialog.cpp:494
 msgid "&New Folder"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:502 src/gui/dialogs/qfiledialog.cpp:1161
+#: src/gui/dialogs/qfiledialog.cpp:499 src/gui/dialogs/qfiledialog.cpp:1158
 msgid "Directory:"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:504 src/gui/dialogs/qfiledialog.cpp:1167
+#: src/gui/dialogs/qfiledialog.cpp:501 src/gui/dialogs/qfiledialog.cpp:1164
 msgid "File &name:"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:1154 src/gui/dialogs/qfiledialog.cpp:1209
-#: src/gui/dialogs/qfiledialog.cpp:2598
+#: src/gui/dialogs/qfiledialog.cpp:1151 src/gui/dialogs/qfiledialog.cpp:1206
+#: src/gui/dialogs/qfiledialog.cpp:2593
 msgid "&Open"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:1154 src/gui/dialogs/qfiledialog.cpp:1209
+#: src/gui/dialogs/qfiledialog.cpp:1151 src/gui/dialogs/qfiledialog.cpp:1206
 msgid "&Save"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:1157
+#: src/gui/dialogs/qfiledialog.cpp:1154
 msgid "Directories"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:1164 src/gui/dialogs/qfiledialog.cpp:1207
+#: src/gui/dialogs/qfiledialog.cpp:1161 src/gui/dialogs/qfiledialog.cpp:1204
 msgid "&Choose"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:1815 src/gui/dialogs/qfiledialog.cpp:2669
+#: src/gui/dialogs/qfiledialog.cpp:1812 src/gui/dialogs/qfiledialog.cpp:2664
 msgid ""
 "%1\n"
 "Directory not found.\n"
 "Please verify the correct directory name was given."
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:1849
+#: src/gui/dialogs/qfiledialog.cpp:1846
 msgid ""
 "%1 already exists.\n"
 "Do you want to replace it?"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:1869
+#: src/gui/dialogs/qfiledialog.cpp:1866
 msgid ""
 "%1\n"
 "File not found.\n"
 "Please verify the correct file name was given."
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:2318
+#: src/gui/dialogs/qfiledialog.cpp:2313
 msgid "New Folder"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:2447
+#: src/gui/dialogs/qfiledialog.cpp:2442
 msgid ""
 "'%1' is write protected.\n"
 "Do you want to delete it anyway?"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:2452
+#: src/gui/dialogs/qfiledialog.cpp:2447
 msgid "Are sure you want to delete '%1'?"
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:2467
+#: src/gui/dialogs/qfiledialog.cpp:2462
 msgid "Could not delete directory."
 msgstr ""
 
-#: src/gui/dialogs/qfiledialog.cpp:2864
+#: src/gui/dialogs/qfiledialog.cpp:2859
 msgid "Recent Places"
 msgstr ""
 
@@ -1902,7 +1067,7 @@ msgstr ""
 msgid "Step &down"
 msgstr ""
 
-#: src/gui/kernel/qwidget.cpp:4737
+#: src/gui/kernel/qwidget.cpp:4732
 msgid "*"
 msgstr ""
 

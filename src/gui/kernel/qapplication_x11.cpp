@@ -161,10 +161,6 @@ static const char* X11AtomsTbl[QX11Data::NPredefinedAtoms] = {
 
     "_NET_SUPPORTING_WM_CHECK\0",
 
-    "_NET_SYSTEM_TRAY_VISUAL\0",
-    "_NET_SYSTEM_TRAY_OPCODE\0",
-    "MANAGER\0",
-
     "_NET_ACTIVE_WINDOW\0",
 
     // Property formats

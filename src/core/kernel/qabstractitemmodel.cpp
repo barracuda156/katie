@@ -2121,10 +2121,9 @@ QSize QAbstractItemModel::span(const QModelIndex &) const
 
     Sets the model's role names to \a roleNames.
 
-    This function allows mapping of role identifiers to role property names in
-    Declarative UI.  This function must be called before the model is used.
-    Modifying the role names after the model has been set may result in
-    undefined behaviour.
+    This function allows mapping of role identifiers to role property names.
+    This function must be called before the model is used. Modifying the
+    role names after the model has been set may result in undefined behaviour.
 
     \sa roleNames()
 */

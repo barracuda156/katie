@@ -7,11 +7,9 @@ components = {
     'Core': 'Q_CORE_EXPORT',
     'Gui': 'Q_GUI_EXPORT',
     'DBus': 'Q_DBUS_EXPORT',
-    'Declarative': 'Q_DECLARATIVE_EXPORT',
     'Network': 'Q_NETWORK_EXPORT',
     'Svg': 'Q_SVG_EXPORT',
     'Xml': 'Q_XML_EXPORT',
-    'Script': 'Q_SCRIPT_EXPORT',
     'Test': 'Q_TEST_EXPORT',
     'UiTools': 'Q_UITOOLS_EXPORT',
 }

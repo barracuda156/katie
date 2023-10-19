@@ -100,13 +100,6 @@ incmap = {
         'QDBusSignature': 'qdbusextratypes.h',
         'QDBusVariant': 'qdbusextratypes.h',
     },
-    'QtDeclarative': {
-        'QDeclarativeAttachedPropertiesFunc': 'qdeclarativeprivate.h',
-        'QDeclarativeListProperty': 'qdeclarativelist.h',
-        'QDeclarativeListReference': 'qdeclarativelist.h',
-        'QDeclarativeProperties': 'qdeclarativeproperty.h',
-        'QDeclarativeTypeInfo': 'qdeclarativeprivate.h',
-    },
     'QtGui': {
         'QAbstractGraphicsShapeItem': 'qgraphicsitem.h',
         'QAbstractUndoItem': 'qtextdocument.h',

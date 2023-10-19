@@ -2274,8 +2274,7 @@ bool QMetaProperty::write(QObject *object, const QVariant &value) const
     // -1 (unchanged): normal qt_metacall, result stored in argv[0]
     // changed: result stored directly in value, return the value of status
     int status = -1;
-    // the flags variable is used by the declarative module to implement
-    // interception of property writes.
+    // the flags variable can be used to implement interception of property writes.
     int flags = 0;
     void *argv[] = { nullptr, &v, &status, &flags };
     if (t == QVariant::LastType)

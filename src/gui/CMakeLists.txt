@@ -154,7 +154,6 @@ set(GUI_PUBLIC_HEADERS
     QStylePainter
     QStylePlugin
     QSyntaxHighlighter
-    QSystemTrayIcon
     QTabBar
     QTableView
     QTableWidget
@@ -479,10 +478,8 @@ set(GUI_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontengine_ft_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qunicodetables_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/util/qsystemtrayicon.h
     ${CMAKE_CURRENT_SOURCE_DIR}/util/qcompleter.h
     ${CMAKE_CURRENT_SOURCE_DIR}/util/qcompleter_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/util/qsystemtrayicon_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/util/qundogroup.h
     ${CMAKE_CURRENT_SOURCE_DIR}/util/qundostack.h
     ${CMAKE_CURRENT_SOURCE_DIR}/util/qundostack_p.h
@@ -778,12 +775,10 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfont_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qunicodetables.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/util/qsystemtrayicon.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/util/qcompleter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/util/qundogroup.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/util/qundostack.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/util/qundoview.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/util/qsystemtrayicon_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qabstractbutton.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qabstractslider.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qabstractspinbox.cpp
@@ -907,7 +902,6 @@ katie_unity_exclude(
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfont.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qfont_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextformat.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/util/qsystemtrayicon_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qsizegrip.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtextedit.cpp
 )

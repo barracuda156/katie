@@ -201,7 +201,6 @@
 #cmakedefine QT_NO_STYLE_STYLESHEET
 #cmakedefine QT_NO_STYLE_WINDOWS
 #cmakedefine QT_NO_SYNTAXHIGHLIGHTER
-#cmakedefine QT_NO_SYSTEMTRAYICON
 #cmakedefine QT_NO_TEMPORARYFILE
 #cmakedefine QT_NO_TEXTBROWSER
 #cmakedefine QT_NO_UDPSOCKET

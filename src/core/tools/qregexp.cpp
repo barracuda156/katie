@@ -1293,36 +1293,32 @@ struct QRegExpLookahead
 };
 #endif
 
-/*! \internal
-    convert the pattern string to the RegExp syntax.
-
-    This is also used by QScriptEngine::newRegExp to convert to a pattern that JavaScriptCore can understan
- */
-Q_CORE_EXPORT QString qt_regexp_toCanonical(const QString &pattern, QRegExp::PatternSyntax patternSyntax)
-{
-    switch (patternSyntax) {
-#ifndef QT_NO_REGEXP_WILDCARD
-        case QRegExp::Wildcard: {
-            return wc2rx(pattern, false);
-        }
-        case QRegExp::WildcardUnix: {
-            return wc2rx(pattern, true);
-        }
-#endif
-        case QRegExp::FixedString: {
-            return QRegExp::escape(pattern);
-        }
-        default:
-            return pattern;
-    }
-}
-
 QRegExpEngine::QRegExpEngine(const QRegExpEngineKey &key)
     : cs(key.cs), greedyQuantifiers(key.patternSyntax == QRegExp::RegExp2)
 {
     setup();
 
-    QString rx = qt_regexp_toCanonical(key.pattern, key.patternSyntax);
+    QString rx;
+    switch (key.patternSyntax) {
+#ifndef QT_NO_REGEXP_WILDCARD
+        case QRegExp::Wildcard: {
+            rx = wc2rx(key.pattern, false);
+            break;
+        }
+        case QRegExp::WildcardUnix: {
+            rx = wc2rx(key.pattern, true);
+            break;
+        }
+#endif
+        case QRegExp::FixedString: {
+            rx = QRegExp::escape(key.pattern);
+            break;
+        }
+        default: {
+            rx = key.pattern;
+            break;
+        }
+    }
 
     valid = (parse(rx.unicode(), rx.length()) == rx.length());
     if (!valid) {

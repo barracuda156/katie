@@ -329,10 +329,6 @@ public:
 
         _NET_SUPPORTING_WM_CHECK,
 
-        _NET_SYSTEM_TRAY_VISUAL,
-        _NET_SYSTEM_TRAY_OPCODE,
-        MANAGER,
-
         _NET_ACTIVE_WINDOW,
 
         // Property formats

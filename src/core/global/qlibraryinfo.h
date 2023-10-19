@@ -35,8 +35,7 @@ public:
         LibrariesPath,
         BinariesPath,
         PluginsPath,
-        TranslationsPath,
-        ImportsPath
+        TranslationsPath
     };
 
     static QString location(LibraryLocation);

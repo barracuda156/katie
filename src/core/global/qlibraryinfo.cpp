@@ -52,7 +52,6 @@ QT_BEGIN_NAMESPACE
     \value LibrariesPath The location of installed libraries.
     \value BinariesPath The location of installed Qt binaries (tools and applications).
     \value PluginsPath The location of installed Qt plugins.
-    \value ImportsPath The location of installed QML extensions to import.
     \value TranslationsPath The location of translation information for Qt strings.
 
     \sa location()
@@ -76,8 +75,6 @@ QString QLibraryInfo::location(LibraryLocation loc)
             return QString::fromLocal8Bit(qt_configure_plugins_path_str);
         case TranslationsPath:
             return QString::fromLocal8Bit(qt_configure_translations_path_str);
-        case ImportsPath:
-            return QString::fromLocal8Bit(qt_configure_imports_path_str);
     }
 
     Q_UNREACHABLE();

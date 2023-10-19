@@ -223,22 +223,10 @@ typedef double qreal;
 #  define Q_TEST_EXPORT Q_DECL_IMPORT
 #endif
 
-#ifdef KtDeclarative_EXPORTS
-#  define Q_DECLARATIVE_EXPORT Q_DECL_EXPORT
-#else
-#  define Q_DECLARATIVE_EXPORT Q_DECL_IMPORT
-#endif
-
 #ifdef KtXml_EXPORTS
 #  define Q_XML_EXPORT Q_DECL_EXPORT
 #else
 #  define Q_XML_EXPORT Q_DECL_IMPORT
-#endif
-
-#ifdef KtScript_EXPORTS
-#  define Q_SCRIPT_EXPORT Q_DECL_EXPORT
-#else
-#  define Q_SCRIPT_EXPORT Q_DECL_IMPORT
 #endif
 
 #ifdef KtDBus_EXPORTS

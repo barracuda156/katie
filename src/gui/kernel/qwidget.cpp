@@ -1103,11 +1103,6 @@ QWidget::~QWidget()
         emit destroyed(this);
     }
 
-    if (d->declarativeData) {
-        QAbstractDeclarativeData::destroyed(d->declarativeData, this);
-        d->declarativeData = 0;                 // don't activate again in ~QObject
-    }
-
     d->blockSig = blocked;
 
     if (!d->children.isEmpty())
