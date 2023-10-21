@@ -6978,7 +6978,6 @@ void QGraphicsItem::prepareGeometryChange()
         d_ptr->scene->d_func()->dirtyGrowingItemsBoundingRect = true;
         d_ptr->geometryChanged = true;
         d_ptr->paintedViewBoundingRectsNeedRepaint = true;
-        d_ptr->notifyBoundingRectChanged = !d_ptr->inSetPosHelper;
 
         QGraphicsScenePrivate *scenePrivate = d_ptr->scene->d_func();
         scenePrivate->index->prepareBoundingRectChange(this);
@@ -7106,142 +7105,6 @@ QGraphicsObject::QGraphicsObject(QGraphicsItemPrivate &dd, QGraphicsItem *parent
 {
     QGraphicsItem::d_ptr->isObject = true;
 }
-
-void QGraphicsItemPrivate::children_append(QDeclarativeListProperty<QGraphicsObject> *list, QGraphicsObject *item)
-{
-    if (item) {
-        QGraphicsObject *graphicsObject = static_cast<QGraphicsObject *>(list->object);
-        if (QGraphicsItemPrivate::get(graphicsObject)->sendParentChangeNotification) {
-            item->setParentItem(graphicsObject);
-        } else {
-            QGraphicsItemPrivate::get(item)->setParentItemHelper(graphicsObject, 0, 0);
-        }
-    }
-}
-
-int QGraphicsItemPrivate::children_count(QDeclarativeListProperty<QGraphicsObject> *list)
-{
-    QGraphicsItemPrivate *d = QGraphicsItemPrivate::get(static_cast<QGraphicsObject *>(list->object));
-    return d->children.count();
-}
-
-QGraphicsObject *QGraphicsItemPrivate::children_at(QDeclarativeListProperty<QGraphicsObject> *list, int index)
-{
-    QGraphicsItemPrivate *d = QGraphicsItemPrivate::get(static_cast<QGraphicsObject *>(list->object));
-    if (index >= 0 && index < d->children.count())
-        return d->children.at(index)->toGraphicsObject();
-    else
-        return 0;
-}
-
-void QGraphicsItemPrivate::children_clear(QDeclarativeListProperty<QGraphicsObject> *list)
-{
-    QGraphicsItemPrivate *d = QGraphicsItemPrivate::get(static_cast<QGraphicsObject *>(list->object));
-    int childCount = d->children.count();
-    if (d->sendParentChangeNotification) {
-        for (int index = 0; index < childCount; index++)
-            d->children.at(0)->setParentItem(0);
-    } else {
-        for (int index = 0; index < childCount; index++)
-            QGraphicsItemPrivate::get(d->children.at(0))->setParentItemHelper(0, 0, 0);
-    }
-}
-
-/*!
-    Returns a list of this item's children.
-
-    The items are sorted by stacking order. This takes into account both the
-    items' insertion order and their Z-values.
-
-*/
-QDeclarativeListProperty<QGraphicsObject> QGraphicsItemPrivate::childrenList()
-{
-    Q_Q(QGraphicsItem);
-    if (isObject) {
-        QGraphicsObject *that = static_cast<QGraphicsObject *>(q);
-        return QDeclarativeListProperty<QGraphicsObject>(that, &children, children_append,
-                                                         children_count, children_at, children_clear);
-    } else {
-        //QGraphicsItem is not supported for this property
-        return QDeclarativeListProperty<QGraphicsObject>();
-    }
-}
-
-/*!
-  \internal
-  Returns the width of the item
-  Reimplemented by QGraphicsWidget
-*/
-qreal QGraphicsItemPrivate::width() const
-{
-    return 0;
-}
-
-/*!
-  \internal
-  Set the width of the item
-  Reimplemented by QGraphicsWidget
-*/
-void QGraphicsItemPrivate::setWidth(qreal w)
-{
-    Q_UNUSED(w);
-}
-
-/*!
-  \internal
-  Reset the width of the item
-  Reimplemented by QGraphicsWidget
-*/
-void QGraphicsItemPrivate::resetWidth()
-{
-}
-
-/*!
-  \internal
-  Returns the height of the item
-  Reimplemented by QGraphicsWidget
-*/
-qreal QGraphicsItemPrivate::height() const
-{
-    return 0;
-}
-
-/*!
-  \internal
-  Set the height of the item
-  Reimplemented by QGraphicsWidget
-*/
-void QGraphicsItemPrivate::setHeight(qreal h)
-{
-    Q_UNUSED(h);
-}
-
-/*!
-  \internal
-  Reset the height of the item
-  Reimplemented by QGraphicsWidget
-*/
-void QGraphicsItemPrivate::resetHeight()
-{
-}
-
-/*!
-    \property QGraphicsObject::children
-    \since 4.7
-    \internal
-*/
-
-/*!
-    \property QGraphicsObject::width
-    \since 4.7
-    \internal
-*/
-
-/*!
-    \property QGraphicsObject::height
-    \since 4.7
-    \internal
-*/
 
 /*!
   \property QGraphicsObject::parent
@@ -7427,24 +7290,6 @@ void QGraphicsItemPrivate::resetHeight()
   origin for scale and rotation.
 
   \sa scale, rotation, QGraphicsItem::transformOriginPoint()
-*/
-
-/*!
-    \fn void QGraphicsObject::widthChanged()
-    \internal
-*/
-
-/*!
-    \fn void QGraphicsObject::heightChanged()
-    \internal
-*/
-
-/*!
-
-  \fn QGraphicsObject::childrenChanged()
-
-  This signal gets emitted whenever the children list changes
-  \internal
 */
 
 /*!

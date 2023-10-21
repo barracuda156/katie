@@ -45,62 +45,6 @@
 
 QT_BEGIN_NAMESPACE
 
-class QGraphicsItemPrivate;
-
-#ifndef QDECLARATIVELISTPROPERTY
-#define QDECLARATIVELISTPROPERTY
-template<typename T>
-class QDeclarativeListProperty {
-public:
-    typedef void (*AppendFunction)(QDeclarativeListProperty<T> *, T*);
-    typedef int (*CountFunction)(QDeclarativeListProperty<T> *);
-    typedef T *(*AtFunction)(QDeclarativeListProperty<T> *, int);
-    typedef void (*ClearFunction)(QDeclarativeListProperty<T> *);
-
-    QDeclarativeListProperty()
-        : object(0), data(0), append(0), count(0), at(0), clear(0) {}
-    QDeclarativeListProperty(QObject *o, QList<T *> &list)
-        : object(o), data(&list), append(qlist_append), count(qlist_count), at(qlist_at),
-          clear(qlist_clear) {}
-    QDeclarativeListProperty(QObject *o, void *d, AppendFunction a, CountFunction c = 0, AtFunction t = 0,
-                    ClearFunction r = 0)
-        : object(o), data(d), append(a), count(c), at(t), clear(r) {}
-
-    bool operator==(const QDeclarativeListProperty &o) const {
-        return object == o.object &&
-               data == o.data &&
-               append == o.append &&
-               count == o.count &&
-               at == o.at &&
-               clear == o.clear;
-    }
-
-    QObject *object;
-    void *data;
-
-    AppendFunction append;
-
-    CountFunction count;
-    AtFunction at;
-
-    ClearFunction clear;
-
-private:
-    static void qlist_append(QDeclarativeListProperty *p, T *v) {
-        ((QList<T *> *)p->data)->append(v);
-    }
-    static int qlist_count(QDeclarativeListProperty *p) {
-        return ((QList<T *> *)p->data)->count();
-    }
-    static T *qlist_at(QDeclarativeListProperty *p, int idx) {
-        return ((QList<T *> *)p->data)->at(idx);
-    }
-    static void qlist_clear(QDeclarativeListProperty *p) {
-        return ((QList<T *> *)p->data)->clear();
-    }
-};
-#endif
-
 class QGraphicsItemCache
 {
 public:
@@ -190,8 +134,6 @@ public:
         ignoreOpacity(false),
         filtersDescendantEvents(false),
         sceneTransformTranslateOnly(false),
-        notifyBoundingRectChanged(false),
-        notifyInvalidated(false),
         mouseSetsFocus(true),
         explicitActivate(false),
         wantsActive(false),
@@ -199,8 +141,6 @@ public:
         sequentialOrdering(true),
         scenePosDescendants(false),
         pendingPolish(false),
-        isDeclarativeItem(false),
-        sendParentChangeNotification(false),
         cacheMode(QGraphicsItem::NoCache),
         acceptedMouseButtons(Qt::LeftButton | Qt::RightButton | Qt::MiddleButton),
         flags(0),
@@ -254,7 +194,6 @@ public:
     void resolveDepth();
     void addChild(QGraphicsItem *child);
     void removeChild(QGraphicsItem *child);
-    QDeclarativeListProperty<QGraphicsObject> childrenList();
     void setParentItemHelper(QGraphicsItem *parent, const QVariant *newParentVariant,
                              const QVariant *thisPointerVariant);
     void childrenBoundingRectHelper(QTransform *x, QRectF *rect, QGraphicsItem *topMostEffectItem);
@@ -431,26 +370,12 @@ public:
     void resetFocusProxy();
     virtual void focusScopeItemChange(bool isSubFocusItem);
 
-    static void children_append(QDeclarativeListProperty<QGraphicsObject> *list, QGraphicsObject *item);
-    static int children_count(QDeclarativeListProperty<QGraphicsObject> *list);
-    static QGraphicsObject *children_at(QDeclarativeListProperty<QGraphicsObject> *list, int);
-    static void children_clear(QDeclarativeListProperty<QGraphicsObject> *list);
-
     inline QTransform transformToParent() const;
     inline void ensureSortedChildren();
     static inline bool insertionOrder(QGraphicsItem *a, QGraphicsItem *b);
     void ensureSequentialSiblingIndex();
     inline void sendScenePosChange();
     virtual void siblingOrderChange();
-
-    // Private Properties
-    virtual qreal width() const;
-    virtual void setWidth(qreal);
-    virtual void resetWidth();
-
-    virtual qreal height() const;
-    virtual void setHeight(qreal);
-    virtual void resetHeight();
 
     QRectF childrenBoundingRect;
     QRectF needsRepaint;
@@ -503,8 +428,6 @@ public:
     bool ignoreOpacity;
     bool filtersDescendantEvents;
     bool sceneTransformTranslateOnly;
-    bool notifyBoundingRectChanged;
-    bool notifyInvalidated;
     bool mouseSetsFocus;
     bool explicitActivate;
     bool wantsActive;
@@ -512,8 +435,6 @@ public:
     bool sequentialOrdering;
     bool scenePosDescendants;
     bool pendingPolish;
-    bool isDeclarativeItem ;
-    bool sendParentChangeNotification;
 
     QGraphicsItem::CacheMode cacheMode;
     Qt::MouseButtons acceptedMouseButtons;
@@ -730,8 +651,6 @@ inline void QGraphicsItemPrivate::markParentDirty(bool updateBoundingRect)
 
         if (updateBoundingRect) {
             parentp->dirtyChildrenBoundingRect = true;
-            // ### Only do this if the parent's effect applies to the entire subtree.
-            parentp->notifyBoundingRectChanged = true;
         }
     }
 }

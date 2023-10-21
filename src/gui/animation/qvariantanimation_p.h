@@ -79,9 +79,6 @@ public:
     void convertValues(int t);
 
     void updateInterpolator();
-
-    // this is needed by declarative animations
-    static Q_GUI_EXPORT QVariantAnimation::Interpolator getInterpolator(int interpolationType);
 };
 
 QT_END_NAMESPACE

@@ -1348,7 +1348,6 @@ void tst_QPainter::drawTransformedImageRoundedRect()
     }
 }
 
-//code from QDeclarativeRectangle for drawing rounded rects
 void tst_QPainter::drawBorderPixmapRoundedRect()
 {
     //setup image
@@ -1399,7 +1398,6 @@ void tst_QPainter::drawScaledBorderPixmapRoundedRect_data()
     //    QTest::newRow(QString(QLatin1String("scale=%1; imagetype=RGB16")).arg(i).toLatin1()) << i << (int)QImage::Format_RGB16;
 }
 
-//code from QDeclarativeRectangle for drawing rounded rects
 void tst_QPainter::drawScaledBorderPixmapRoundedRect()
 {
     QFETCH(float, scale);
@@ -1455,7 +1453,6 @@ void tst_QPainter::drawTransformedBorderPixmapRoundedRect_data()
 
 }
 
-//code from QDeclarativeRectangle for drawing rounded rects
 void tst_QPainter::drawTransformedBorderPixmapRoundedRect()
 {
     QFETCH(QTransform, transform);
