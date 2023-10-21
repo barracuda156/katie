@@ -264,8 +264,6 @@ set(GUI_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicssceneevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicssceneindex_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicsscenelinearindex_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicstransform.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicstransform_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicsview.h
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicsview_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicswidget.h
@@ -608,7 +606,6 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicssceneevent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicssceneindex.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicsscenelinearindex.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicstransform.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicsview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicswidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicswidget_p.cpp

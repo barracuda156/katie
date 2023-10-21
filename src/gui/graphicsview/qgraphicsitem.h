@@ -48,7 +48,6 @@ class QGraphicsSceneHoverEvent;
 class QGraphicsSceneMouseEvent;
 class QGraphicsSceneWheelEvent;
 class QGraphicsScene;
-class QGraphicsTransform;
 class QGraphicsWidget;
 class QKeyEvent;
 class QMatrix;
@@ -271,9 +270,6 @@ public:
     void setScale(qreal scale);
     qreal scale() const;
 
-    QList<QGraphicsTransform *> transformations() const;
-    void setTransformations(const QList<QGraphicsTransform *> &transformations);
-
     QPointF transformOriginPoint() const;
     void setTransformOriginPoint(const QPointF &origin);
     inline void setTransformOriginPoint(qreal ax, qreal ay)
@@ -430,7 +426,6 @@ private:
     friend class QGraphicsSceneIndexPrivate;
     friend class QGraphicsSceneBspTreeIndex;
     friend class QGraphicsSceneBspTreeIndexPrivate;
-    friend class QGraphicsTransformPrivate;
     friend class ::tst_QGraphicsItem;
     friend bool qt_closestLeaf(const QGraphicsItem *, const QGraphicsItem *);
     friend bool qt_closestItemFirst(const QGraphicsItem *, const QGraphicsItem *);

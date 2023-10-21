@@ -356,7 +356,30 @@ QMatrix4x4 QMatrix4x4::inverted(bool *invertible) const
     } else if (flagBits == Rotation || flagBits == (Rotation | Translation)) {
         if (invertible)
             *invertible = true;
-        return orthonormalInverse();
+        QMatrix4x4 inv(1);  // The "1" says to not load the identity
+
+        inv.m[0][0] = m[0][0];
+        inv.m[1][0] = m[0][1];
+        inv.m[2][0] = m[0][2];
+
+        inv.m[0][1] = m[1][0];
+        inv.m[1][1] = m[1][1];
+        inv.m[2][1] = m[1][2];
+
+        inv.m[0][2] = m[2][0];
+        inv.m[1][2] = m[2][1];
+        inv.m[2][2] = m[2][2];
+
+        inv.m[0][3] = 0.0f;
+        inv.m[1][3] = 0.0f;
+        inv.m[2][3] = 0.0f;
+
+        inv.m[3][0] = -(inv.m[0][0] * m[3][0] + inv.m[1][0] * m[3][1] + inv.m[2][0] * m[3][2]);
+        inv.m[3][1] = -(inv.m[0][1] * m[3][0] + inv.m[1][1] * m[3][1] + inv.m[2][1] * m[3][2]);
+        inv.m[3][2] = -(inv.m[0][2] * m[3][0] + inv.m[1][2] * m[3][1] + inv.m[2][2] * m[3][2]);
+        inv.m[3][3] = 1.0f;
+
+        return inv;
     }
 
     QMatrix4x4 inv(1); // The "1" says to not load the identity.
@@ -638,7 +661,7 @@ QMatrix4x4& QMatrix4x4::operator/=(qreal divisor)
 */
 QMatrix4x4 operator/(const QMatrix4x4& matrix, qreal divisor)
 {
-    QMatrix4x4 m(1); // The "1" says to not load the identity.
+    QMatrix4x4 m(1); // The "1" says to not load the identity
     m.m[0][0] = matrix.m[0][0] / divisor;
     m.m[0][1] = matrix.m[0][1] / divisor;
     m.m[0][2] = matrix.m[0][2] / divisor;
@@ -975,7 +998,7 @@ void QMatrix4x4::rotate(qreal angle, qreal x, qreal y, qreal z)
 {
     if (angle == 0.0f)
         return;
-    QMatrix4x4 m(1); // The "1" says to not load the identity.
+    QMatrix4x4 m(1); // The "1" says to not load the identity
     qreal c, s, ic;
     if (angle == 90.0f || angle == -270.0f) {
         s = 1.0f;
@@ -1062,109 +1085,6 @@ void QMatrix4x4::rotate(qreal angle, qreal x, qreal y, qreal z)
         m.m[3][2] = 0.0f;
         m.m[0][3] = 0.0f;
         m.m[1][3] = 0.0f;
-        m.m[2][3] = 0.0f;
-        m.m[3][3] = 1.0f;
-    }
-    int flags = flagBits;
-    *this *= m;
-    if (flags != Identity)
-        flagBits = flags | Rotation;
-    else
-        flagBits = Rotation;
-}
-
-/*!
-    \internal
-*/
-void QMatrix4x4::projectedRotate(qreal angle, qreal x, qreal y, qreal z)
-{
-    // Used by QGraphicsRotation::applyTo() to perform a rotation
-    // and projection back to 2D in a single step.
-    if (angle == 0.0f)
-        return;
-    QMatrix4x4 m(1); // The "1" says to not load the identity.
-    qreal c, s, ic;
-    if (angle == 90.0f || angle == -270.0f) {
-        s = 1.0f;
-        c = 0.0f;
-    } else if (angle == -90.0f || angle == 270.0f) {
-        s = -1.0f;
-        c = 0.0f;
-    } else if (angle == 180.0f || angle == -180.0f) {
-        s = 0.0f;
-        c = -1.0f;
-    } else {
-        qreal a = angle * M_PI / 180.0f;
-        c = qCos(a);
-        s = qSin(a);
-    }
-    bool quick = false;
-    if (x == 0.0f) {
-        if (y == 0.0f) {
-            if (z != 0.0f) {
-                // Rotate around the Z axis.
-                m.setToIdentity();
-                m.m[0][0] = c;
-                m.m[1][1] = c;
-                if (z < 0.0f) {
-                    m.m[1][0] = s;
-                    m.m[0][1] = -s;
-                } else {
-                    m.m[1][0] = -s;
-                    m.m[0][1] = s;
-                }
-                m.flagBits = General;
-                quick = true;
-            }
-        } else if (z == 0.0f) {
-            // Rotate around the Y axis.
-            m.setToIdentity();
-            m.m[0][0] = c;
-            m.m[2][2] = 1.0f;
-            if (y < 0.0f) {
-                m.m[0][3] = -s * inv_dist_to_plane;
-            } else {
-                m.m[0][3] = s * inv_dist_to_plane;
-            }
-            m.flagBits = General;
-            quick = true;
-        }
-    } else if (y == 0.0f && z == 0.0f) {
-        // Rotate around the X axis.
-        m.setToIdentity();
-        m.m[1][1] = c;
-        m.m[2][2] = 1.0f;
-        if (x < 0.0f) {
-            m.m[1][3] = s * inv_dist_to_plane;
-        } else {
-            m.m[1][3] = -s * inv_dist_to_plane;
-        }
-        m.flagBits = General;
-        quick = true;
-    }
-    if (!quick) {
-        qreal len = x * x + y * y + z * z;
-        if (!qFuzzyIsNull(len - 1.0f) && !qFuzzyIsNull(len)) {
-            len = qSqrt(len);
-            x /= len;
-            y /= len;
-            z /= len;
-        }
-        ic = 1.0f - c;
-        m.m[0][0] = x * x * ic + c;
-        m.m[1][0] = x * y * ic - z * s;
-        m.m[2][0] = 0.0f;
-        m.m[3][0] = 0.0f;
-        m.m[0][1] = y * x * ic + z * s;
-        m.m[1][1] = y * y * ic + c;
-        m.m[2][1] = 0.0f;
-        m.m[3][1] = 0.0f;
-        m.m[0][2] = 0.0f;
-        m.m[1][2] = 0.0f;
-        m.m[2][2] = 1.0f;
-        m.m[3][2] = 0.0f;
-        m.m[0][3] = (x * z * ic - y * s) * -inv_dist_to_plane;
-        m.m[1][3] = (y * z * ic + x * s) * -inv_dist_to_plane;
         m.m[2][3] = 0.0f;
         m.m[3][3] = 1.0f;
     }
@@ -1667,36 +1587,6 @@ QRectF QMatrix4x4::mapRect(const QRectF& rect) const
 
     \sa data()
 */
-
-// Helper routine for inverting orthonormal matrices that consist
-// of just rotations and translations.
-QMatrix4x4 QMatrix4x4::orthonormalInverse() const
-{
-    QMatrix4x4 result(1);  // The '1' says not to load identity
-
-    result.m[0][0] = m[0][0];
-    result.m[1][0] = m[0][1];
-    result.m[2][0] = m[0][2];
-
-    result.m[0][1] = m[1][0];
-    result.m[1][1] = m[1][1];
-    result.m[2][1] = m[1][2];
-
-    result.m[0][2] = m[2][0];
-    result.m[1][2] = m[2][1];
-    result.m[2][2] = m[2][2];
-
-    result.m[0][3] = 0.0f;
-    result.m[1][3] = 0.0f;
-    result.m[2][3] = 0.0f;
-
-    result.m[3][0] = -(result.m[0][0] * m[3][0] + result.m[1][0] * m[3][1] + result.m[2][0] * m[3][2]);
-    result.m[3][1] = -(result.m[0][1] * m[3][0] + result.m[1][1] * m[3][1] + result.m[2][1] * m[3][2]);
-    result.m[3][2] = -(result.m[0][2] * m[3][0] + result.m[1][2] * m[3][1] + result.m[2][2] * m[3][2]);
-    result.m[3][3] = 1.0f;
-
-    return result;
-}
 
 /*!
     Optimize the usage of this matrix from its current elements.

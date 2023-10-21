@@ -175,8 +175,6 @@ classlist = [
     "QGraphicsPolygonItem",
     "QGraphicsProxyWidget",
     "QGraphicsRectItem",
-    "QGraphicsRotation",
-    "QGraphicsScale",
     "QGraphicsScene",
     "QGraphicsSceneContextMenuEvent",
     "QGraphicsSceneDragDropEvent",

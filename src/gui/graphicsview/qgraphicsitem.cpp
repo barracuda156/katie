@@ -694,20 +694,21 @@
 #include "qgraphicswidget.h"
 #include "qgraphicsproxywidget.h"
 #include "qgraphicsscenebsptreeindex_p.h"
-#include <QtCore/qbitarray.h>
-#include <QtCore/qdebug.h>
-#include <QtCore/qpoint.h>
-#include <QtCore/qstack.h>
-#include <QtCore/qtimer.h>
-#include <QtCore/qvariant.h>
-#include <QtCore/qnumeric.h>
-#include <QtGui/qapplication.h>
-#include <QtGui/qbitmap.h>
-#include <QtGui/qpainter.h>
-#include <QtGui/qpainterpath.h>
-#include <QtGui/qpixmapcache.h>
-#include <QtGui/qstyleoption.h>
-#include <QtGui/qevent.h>
+#include "qbitarray.h"
+#include "qdebug.h"
+#include "qpoint.h"
+#include "qstack.h"
+#include "qtimer.h"
+#include "qvariant.h"
+#include "qnumeric.h"
+#include "qapplication.h"
+#include "qbitmap.h"
+#include "qpainter.h"
+#include "qpainterpath.h"
+#include "qmatrix4x4.h"
+#include "qpixmapcache.h"
+#include "qstyleoption.h"
+#include "qevent.h"
 #include "qgraphicsitem_p.h"
 #include "qgraphicswidget_p.h"
 #include "qtextcontrol_p.h"
@@ -1396,13 +1397,6 @@ QGraphicsItem::~QGraphicsItem()
         setParentItem(0);
     }
 
-    if (d_ptr->transformData) {
-        for(int i = 0; i < d_ptr->transformData->graphicsTransforms.size(); ++i) {
-            QGraphicsTransform *t = d_ptr->transformData->graphicsTransforms.at(i);
-            static_cast<QGraphicsTransformPrivate *>(t->d_ptr)->item = 0;
-            delete t;
-        }
-    }
     delete d_ptr->transformData;
 }
 
@@ -3629,93 +3623,6 @@ void QGraphicsItem::setScale(qreal factor)
 
     if (d_ptr->isObject)
         emit static_cast<QGraphicsObject *>(this)->scaleChanged();
-}
-
-
-/*!
-    \since 4.6
-
-    Returns a list of graphics transforms that currently apply to this item.
-
-    QGraphicsTransform is for applying and controlling a chain of individual
-    transformation operations on an item. It's particularly useful in
-    animations, where each transform operation needs to be interpolated
-    independently, or differently.
-
-    The transformations are combined with the item's rotation(), scale() and
-    transform() to map the item's coordinate system to the parent item.
-
-    \sa scale(), rotation(), transformOriginPoint(), {Transformations}
-*/
-QList<QGraphicsTransform *> QGraphicsItem::transformations() const
-{
-    if (!d_ptr->transformData)
-        return QList<QGraphicsTransform *>();
-    return d_ptr->transformData->graphicsTransforms;
-}
-
-/*!
-    \since 4.6
-
-    Sets a list of graphics \a transformations (QGraphicsTransform) that
-    currently apply to this item.
-
-    If all you want is to rotate or scale an item, you should call setRotation()
-    or setScale() instead. If you want to set an arbitrary transformation on
-    an item, you can call setTransform().
-
-    QGraphicsTransform is for applying and controlling a chain of individual
-    transformation operations on an item. It's particularly useful in
-    animations, where each transform operation needs to be interpolated
-    independently, or differently.
-
-    The transformations are combined with the item's rotation(), scale() and
-    transform() to map the item's coordinate system to the parent item.
-
-    \sa scale(), setTransformOriginPoint(), {Transformations}
-*/
-void QGraphicsItem::setTransformations(const QList<QGraphicsTransform *> &transformations)
-{
-    prepareGeometryChange();
-    if (!d_ptr->transformData)
-        d_ptr->transformData = new QGraphicsItemPrivate::TransformData;
-    d_ptr->transformData->graphicsTransforms = transformations;
-    for (int i = 0; i < transformations.size(); ++i)
-        transformations.at(i)->d_func()->setItem(this);
-    d_ptr->transformData->onlyTransform = false;
-    d_ptr->dirtySceneTransform = true;
-}
-
-/*!
-    \internal
-*/
-void QGraphicsItemPrivate::prependGraphicsTransform(QGraphicsTransform *t)
-{
-    if (!transformData)
-        transformData = new QGraphicsItemPrivate::TransformData;
-    if (!transformData->graphicsTransforms.contains(t))
-        transformData->graphicsTransforms.prepend(t);
-
-    Q_Q(QGraphicsItem);
-    t->d_func()->setItem(q);
-    transformData->onlyTransform = false;
-    dirtySceneTransform = true;
-}
-
-/*!
-    \internal
-*/
-void QGraphicsItemPrivate::appendGraphicsTransform(QGraphicsTransform *t)
-{
-    if (!transformData)
-        transformData = new QGraphicsItemPrivate::TransformData;
-    if (!transformData->graphicsTransforms.contains(t))
-        transformData->graphicsTransforms.append(t);
-
-    Q_Q(QGraphicsItem);
-    t->d_func()->setItem(q);
-    transformData->onlyTransform = false;
-    dirtySceneTransform = true;
 }
 
 /*!
@@ -9777,9 +9684,6 @@ void QGraphicsItemGroup::addToGroup(QGraphicsItem *item)
     // removing additional transformations properties applied with itemTransform()
     QPointF origin = item->transformOriginPoint();
     QMatrix4x4 m;
-    QList<QGraphicsTransform*> transformList = item->transformations();
-    for (int i = 0; i < transformList.size(); ++i)
-        transformList.at(i)->applyTo(&m);
     newItemTransform *= m.toTransform().inverted();
     newItemTransform.translate(origin.x(), origin.y());
     newItemTransform.rotate(-item->rotation());
@@ -9833,9 +9737,6 @@ void QGraphicsItemGroup::removeFromGroup(QGraphicsItem *item)
     // with itemTransform() or sceneTransform()
     QPointF origin = item->transformOriginPoint();
     QMatrix4x4 m;
-    QList<QGraphicsTransform*> transformList = item->transformations();
-    for (int i = 0; i < transformList.size(); ++i)
-        transformList.at(i)->applyTo(&m);
     itemTransform *= m.toTransform().inverted();
     itemTransform.translate(origin.x(), origin.y());
     itemTransform.rotate(-item->rotation());

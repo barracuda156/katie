@@ -37,8 +37,6 @@
 #include "qset.h"
 #include "qpixmapcache.h"
 #include "qgraphicsview_p.h"
-#include "qgraphicstransform.h"
-#include "qgraphicstransform_p.h"
 #include "qpoint.h"
 
 #ifndef QT_NO_GRAPHICSVIEW
@@ -180,8 +178,6 @@ public:
 
     void setPosHelper(const QPointF &pos);
     void setTransformHelper(const QTransform &transform);
-    void prependGraphicsTransform(QGraphicsTransform *t);
-    void appendGraphicsTransform(QGraphicsTransform *t);
     void setVisibleHelper(bool newVisible, bool explicitly, bool update = true);
     void setEnabledHelper(bool newEnabled, bool explicitly, bool update = true);
     bool discardUpdateRequest(bool ignoreVisibleBit = false,
@@ -447,7 +443,6 @@ struct QGraphicsItemPrivate::TransformData
     qreal rotation;
     qreal xOrigin;
     qreal yOrigin;
-    QList<QGraphicsTransform *> graphicsTransforms;
     bool onlyTransform;
 
     TransformData() :
@@ -467,12 +462,6 @@ struct QGraphicsItemPrivate::TransformData
         }
 
         QTransform x(transform);
-        if (!graphicsTransforms.isEmpty()) {
-            QMatrix4x4 m;
-            for (int i = 0; i < graphicsTransforms.size(); ++i)
-                graphicsTransforms.at(i)->applyTo(&m);
-            x *= m.toTransform();
-        }
         x.translate(xOrigin, yOrigin);
         x.rotate(rotation);
         x.scale(scale, scale);

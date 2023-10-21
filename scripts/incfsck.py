@@ -129,8 +129,6 @@ incmap = {
         'QGraphicsPixmapItem': 'qgraphicsitem.h',
         'QGraphicsPolygonItem': 'qgraphicsitem.h',
         'QGraphicsRectItem': 'qgraphicsitem.h',
-        'QGraphicsRotation': 'qgraphicstransform.h',
-        'QGraphicsScale': 'qgraphicstransform.h',
         'QGraphicsSceneContextMenuEvent': 'qgraphicssceneevent.h',
         'QGraphicsSceneDragDropEvent': 'qgraphicssceneevent.h',
         'QGraphicsSceneHelpEvent': 'qgraphicssceneevent.h',

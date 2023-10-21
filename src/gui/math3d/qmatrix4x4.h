@@ -172,12 +172,6 @@ private:
 
     // Construct without initializing identity matrix.
     QMatrix4x4(int) { flagBits = General; }
-
-    QMatrix4x4 orthonormalInverse() const;
-
-    void projectedRotate(qreal angle, qreal x, qreal y, qreal z);
-
-    friend class QGraphicsRotation;
 };
 
 Q_DECLARE_TYPEINFO(QMatrix4x4, Q_MOVABLE_TYPE);

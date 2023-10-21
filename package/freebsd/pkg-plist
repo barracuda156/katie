@@ -384,8 +384,6 @@ include/katie/QtGui/QGraphicsPixmapItem
 include/katie/QtGui/QGraphicsPolygonItem
 include/katie/QtGui/QGraphicsProxyWidget
 include/katie/QtGui/QGraphicsRectItem
-include/katie/QtGui/QGraphicsRotation
-include/katie/QtGui/QGraphicsScale
 include/katie/QtGui/QGraphicsScene
 include/katie/QtGui/QGraphicsSceneContextMenuEvent
 include/katie/QtGui/QGraphicsSceneDragDropEvent
@@ -705,7 +703,6 @@ include/katie/QtGui/qgraphicslinearlayout.h
 include/katie/QtGui/qgraphicsproxywidget.h
 include/katie/QtGui/qgraphicsscene.h
 include/katie/QtGui/qgraphicssceneevent.h
-include/katie/QtGui/qgraphicstransform.h
 include/katie/QtGui/qgraphicsview.h
 include/katie/QtGui/qgraphicswidget.h
 include/katie/QtGui/qgridlayout.h
