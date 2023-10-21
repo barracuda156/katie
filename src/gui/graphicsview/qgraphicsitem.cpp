@@ -944,42 +944,37 @@ QPointF QGraphicsItemPrivate::genericMapFromScene(const QPointF &pos,
 /*!
     \internal
 
-    Combines this item's position and transform onto \a transform.
+    Combines this item's position and transform onto \a x.
 
     If you need to change this function (e.g., adding more transformation
     modes / options), make sure to change all places marked with COMBINE.
 */
-void QGraphicsItemPrivate::combineTransformToParent(QTransform *x, const QTransform *viewTransform) const
+void QGraphicsItemPrivate::combineTransformToParent(QTransform *x) const
 {
     // COMBINE
-    if (viewTransform && itemIsUntransformable()) {
-        *x = q_ptr->deviceTransform(*viewTransform);
-    } else {
-        if (transformData)
-            *x *= transformData->computedFullTransform();
-        if (!pos.isNull())
-            *x *= QTransform::fromTranslate(pos.x(), pos.y());
+    if (transformData) {
+        *x *= transformData->computedFullTransform();
+    }
+    if (!pos.isNull()) {
+        *x *= QTransform::fromTranslate(pos.x(), pos.y());
     }
 }
 
 /*!
     \internal
 
-    Combines this item's position and transform onto \a transform.
+    Combines this item's position and transform onto \a x.
 
     If you need to change this function (e.g., adding more transformation
     modes / options), make sure to change QGraphicsItem::deviceTransform() as
     well.
 */
-void QGraphicsItemPrivate::combineTransformFromParent(QTransform *x, const QTransform *viewTransform) const
+void QGraphicsItemPrivate::combineTransformFromParent(QTransform *x) const
 {
     // COMBINE
-    if (viewTransform && itemIsUntransformable()) {
-        *x = q_ptr->deviceTransform(*viewTransform);
-    } else {
-        x->translate(pos.x(), pos.y());
-        if (transformData)
-            *x = transformData->computedFullTransform(x);
+    x->translate(pos.x(), pos.y());
+    if (transformData) {
+        *x = transformData->computedFullTransform(x);
     }
 }
 

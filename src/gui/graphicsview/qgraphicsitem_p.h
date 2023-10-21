@@ -172,8 +172,8 @@ public:
             || (ancestorFlags & AncestorIgnoresTransformations);
     }
 
-    void combineTransformToParent(QTransform *x, const QTransform *viewTransform = 0) const;
-    void combineTransformFromParent(QTransform *x, const QTransform *viewTransform = 0) const;
+    void combineTransformToParent(QTransform *x) const;
+    void combineTransformFromParent(QTransform *x) const;
     void updateSceneTransformFromParent();
 
     static bool movableAncestorIsSelected(const QGraphicsItem *item);
