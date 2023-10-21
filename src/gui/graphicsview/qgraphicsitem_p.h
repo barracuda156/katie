@@ -134,7 +134,6 @@ public:
         ignoreOpacity(false),
         filtersDescendantEvents(false),
         sceneTransformTranslateOnly(false),
-        mouseSetsFocus(true),
         explicitActivate(false),
         wantsActive(false),
         holesInSiblingIndex(false),
@@ -145,7 +144,6 @@ public:
         acceptedMouseButtons(Qt::LeftButton | Qt::RightButton | Qt::MiddleButton),
         flags(0),
         ancestorFlags(0),
-        globalStackingOrder(-1),
         q_ptr(0)
     {
     }
@@ -176,11 +174,11 @@ public:
 
     void combineTransformToParent(QTransform *x, const QTransform *viewTransform = 0) const;
     void combineTransformFromParent(QTransform *x, const QTransform *viewTransform = 0) const;
-    virtual void updateSceneTransformFromParent();
+    void updateSceneTransformFromParent();
 
     static bool movableAncestorIsSelected(const QGraphicsItem *item);
 
-    virtual void setPosHelper(const QPointF &pos);
+    void setPosHelper(const QPointF &pos);
     void setTransformHelper(const QTransform &transform);
     void prependGraphicsTransform(QGraphicsTransform *t);
     void appendGraphicsTransform(QGraphicsTransform *t);
@@ -188,7 +186,6 @@ public:
     void setEnabledHelper(bool newEnabled, bool explicitly, bool update = true);
     bool discardUpdateRequest(bool ignoreVisibleBit = false,
                               bool ignoreDirtyBit = false, bool ignoreOpacity = false) const;
-    virtual void transformChanged() {}
     int depth() const;
     void invalidateDepthRecursively();
     void resolveDepth();
@@ -368,14 +365,12 @@ public:
     void setSubFocus(QGraphicsItem *rootItem = 0, QGraphicsItem *stopItem = 0);
     void clearSubFocus(QGraphicsItem *rootItem = 0, QGraphicsItem *stopItem = 0);
     void resetFocusProxy();
-    virtual void focusScopeItemChange(bool isSubFocusItem);
 
     inline QTransform transformToParent() const;
     inline void ensureSortedChildren();
     static inline bool insertionOrder(QGraphicsItem *a, QGraphicsItem *b);
     void ensureSequentialSiblingIndex();
     inline void sendScenePosChange();
-    virtual void siblingOrderChange();
 
     QRectF childrenBoundingRect;
     QRectF needsRepaint;
@@ -428,7 +423,6 @@ public:
     bool ignoreOpacity;
     bool filtersDescendantEvents;
     bool sceneTransformTranslateOnly;
-    bool mouseSetsFocus;
     bool explicitActivate;
     bool wantsActive;
     bool holesInSiblingIndex;
@@ -443,8 +437,6 @@ public:
 
     QMap<int, QVariant> datastore;
 
-    // Optional stacking order
-    int globalStackingOrder;
     QGraphicsItem *q_ptr;
 };
 
@@ -489,28 +481,6 @@ struct QGraphicsItemPrivate::TransformData
             x *= *postmultiplyTransform;
         return x;
     }
-};
-
-struct QGraphicsItemPaintInfo
-{
-    inline QGraphicsItemPaintInfo(const QTransform *const xform1, const QTransform *const xform2,
-                                  const QTransform *const xform3,
-                                  QRegion *r, QWidget *w, QStyleOptionGraphicsItem *opt,
-                                  QPainter *p, qreal o, bool b1, bool b2)
-        : viewTransform(xform1), transformPtr(xform2), effectTransform(xform3), exposedRegion(r), widget(w),
-          option(opt), painter(p), opacity(o), wasDirtySceneTransform(b1), drawItem(b2)
-    {}
-
-    const QTransform *viewTransform;
-    const QTransform *transformPtr;
-    const QTransform *effectTransform;
-    QRegion *exposedRegion;
-    QWidget *widget;
-    QStyleOptionGraphicsItem *option;
-    QPainter *painter;
-    qreal opacity;
-    bool wasDirtySceneTransform;
-    bool drawItem;
 };
 
 /*!

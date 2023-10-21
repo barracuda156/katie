@@ -1251,7 +1251,7 @@ void QGraphicsScenePrivate::mousePressEventHandler(QGraphicsSceneMouseEvent *mou
         if (item->isEnabled() && ((item->flags() & QGraphicsItem::ItemIsFocusable))) {
             if (!item->isWidget() || ((QGraphicsWidget *)item)->focusPolicy() & Qt::ClickFocus) {
                 setFocus = true;
-                if (item != q->focusItem() && item->d_ptr->mouseSetsFocus)
+                if (item != q->focusItem())
                     q->setFocusItem(item, Qt::MouseFocusReason);
                 break;
             }
@@ -4005,7 +4005,7 @@ void QGraphicsScene::wheelEvent(QGraphicsSceneWheelEvent *wheelEvent)
     bool hasSetFocus = false;
     foreach (QGraphicsItem *item, wheelCandidates) {
         if (!hasSetFocus && item->isEnabled()
-            && ((item->flags() & QGraphicsItem::ItemIsFocusable) && item->d_ptr->mouseSetsFocus)) {
+            && (item->flags() & QGraphicsItem::ItemIsFocusable)) {
             if (item->isWidget() && static_cast<QGraphicsWidget *>(item)->focusPolicy() == Qt::WheelFocus) {
                 hasSetFocus = true;
                 if (item != focusItem())

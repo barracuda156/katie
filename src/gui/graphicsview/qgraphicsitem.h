@@ -430,7 +430,6 @@ private:
     friend class QGraphicsSceneIndexPrivate;
     friend class QGraphicsSceneBspTreeIndex;
     friend class QGraphicsSceneBspTreeIndexPrivate;
-    friend class QGraphicsItemEffectSourcePrivate;
     friend class QGraphicsTransformPrivate;
     friend class ::tst_QGraphicsItem;
     friend bool qt_closestLeaf(const QGraphicsItem *, const QGraphicsItem *);

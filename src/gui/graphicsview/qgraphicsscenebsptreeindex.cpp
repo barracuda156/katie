@@ -82,9 +82,7 @@ QGraphicsSceneBspTreeIndexPrivate::QGraphicsSceneBspTreeIndexPrivate(QGraphicsSc
     restartIndexTimer(false),
     regenerateIndex(true),
     lastItemCount(0),
-    purgePending(false),
-    sortCacheEnabled(false),
-    updatingSortCache(false)
+    purgePending(false)
 {
 }
 
@@ -97,7 +95,7 @@ QGraphicsSceneBspTreeIndexPrivate::QGraphicsSceneBspTreeIndexPrivate(QGraphicsSc
 
     \internal
 */
-void QGraphicsSceneBspTreeIndexPrivate::_q_updateIndex()
+void QGraphicsSceneBspTreeIndexPrivate::updateIndex()
 {
     Q_Q(QGraphicsSceneBspTreeIndex);
     if (!indexTimerId)
@@ -216,70 +214,6 @@ void QGraphicsSceneBspTreeIndexPrivate::resetIndex()
     startIndexTimer();
 }
 
-/*!
-    \internal
-*/
-void QGraphicsSceneBspTreeIndexPrivate::climbTree(QGraphicsItem *item, int *stackingOrder)
-{
-    if (!item->d_ptr->children.isEmpty()) {
-        QList<QGraphicsItem *> childList = item->d_ptr->children;
-        qSort(childList.begin(), childList.end(), qt_closestLeaf);
-        for (int i = 0; i < childList.size(); ++i) {
-            QGraphicsItem *item = childList.at(i);
-            if (!(item->flags() & QGraphicsItem::ItemStacksBehindParent))
-                climbTree(childList.at(i), stackingOrder);
-        }
-        item->d_ptr->globalStackingOrder = (*stackingOrder)++;
-        for (int i = 0; i < childList.size(); ++i) {
-            QGraphicsItem *item = childList.at(i);
-            if (item->flags() & QGraphicsItem::ItemStacksBehindParent)
-                climbTree(childList.at(i), stackingOrder);
-        }
-    } else {
-        item->d_ptr->globalStackingOrder = (*stackingOrder)++;
-    }
-}
-
-/*!
-    \internal
-*/
-void QGraphicsSceneBspTreeIndexPrivate::_q_updateSortCache()
-{
-    Q_Q(QGraphicsSceneBspTreeIndex);
-    _q_updateIndex();
-
-    if (!sortCacheEnabled || !updatingSortCache)
-        return;
-
-    updatingSortCache = false;
-    int stackingOrder = 0;
-
-    QList<QGraphicsItem *> topLevels;
-    const QList<QGraphicsItem *> items = q->items();
-    for (int i = 0; i < items.size(); ++i) {
-        QGraphicsItem *item = items.at(i);
-        if (item && !item->d_ptr->parent)
-            topLevels << item;
-    }
-
-    qSort(topLevels.begin(), topLevels.end(), qt_closestLeaf);
-    for (int i = 0; i < topLevels.size(); ++i)
-        climbTree(topLevels.at(i), &stackingOrder);
-}
-
-/*!
-    \internal
-*/
-void QGraphicsSceneBspTreeIndexPrivate::invalidateSortCache()
-{
-    Q_Q(QGraphicsSceneBspTreeIndex);
-    if (!sortCacheEnabled || updatingSortCache)
-        return;
-
-    updatingSortCache = true;
-    QMetaObject::invokeMethod(q, "_q_updateSortCache", Qt::QueuedConnection);
-}
-
 void QGraphicsSceneBspTreeIndexPrivate::addItem(QGraphicsItem *item, bool recursive)
 {
     if (!item)
@@ -287,11 +221,6 @@ void QGraphicsSceneBspTreeIndexPrivate::addItem(QGraphicsItem *item, bool recurs
 
     // Prevent reusing a recently deleted pointer: purge all removed item from our lists.
     purgeRemovedItems();
-
-    // Invalidate any sort caching; arrival of a new item means we need to resort.
-    // Update the scene's sort cache settings.
-    item->d_ptr->globalStackingOrder = -1;
-    invalidateSortCache();
 
     // Indexing requires sceneBoundingRect(), but because \a item might
     // not be completely constructed at this point, we need to store it in
@@ -337,7 +266,6 @@ void QGraphicsSceneBspTreeIndexPrivate::removeItem(QGraphicsItem *item, bool rec
     } else {
         unindexedItems.removeOne(item);
     }
-    invalidateSortCache(); // ### Only do this when removing from BSP?
 
     Q_ASSERT(item->d_ptr->index == -1);
     Q_ASSERT(!indexedItems.contains(item));
@@ -361,7 +289,7 @@ QList<QGraphicsItem *> QGraphicsSceneBspTreeIndexPrivate::estimateItems(const QR
         return q->QGraphicsSceneIndex::estimateTopLevelItems(rect, order);
 
     purgeRemovedItems();
-    _q_updateSortCache();
+    updateIndex();
     Q_ASSERT(unindexedItems.isEmpty());
 
     QList<QGraphicsItem *> rectItems = bsp.items(rect, onlyTopLevelItems);
@@ -380,7 +308,7 @@ QList<QGraphicsItem *> QGraphicsSceneBspTreeIndexPrivate::estimateItems(const QR
         rectItems += untransformableItems;
     }
 
-    sortItems(&rectItems, order, sortCacheEnabled, onlyTopLevelItems);
+    sortItems(&rectItems, order, onlyTopLevelItems);
     return rectItems;
 }
 
@@ -390,7 +318,7 @@ QList<QGraphicsItem *> QGraphicsSceneBspTreeIndexPrivate::estimateItems(const QR
     \internal
 */
 void QGraphicsSceneBspTreeIndexPrivate::sortItems(QList<QGraphicsItem *> *itemList, Qt::SortOrder order,
-                                                  bool sortCacheEnabled, bool onlyTopLevelItems)
+                                                  bool onlyTopLevelItems)
 {
     if (order == Qt::SortOrder(-1))
         return;
@@ -403,18 +331,10 @@ void QGraphicsSceneBspTreeIndexPrivate::sortItems(QList<QGraphicsItem *> *itemLi
         return;
     }
 
-    if (sortCacheEnabled) {
-        if (order == Qt::DescendingOrder) {
-            qSort(itemList->begin(), itemList->end(), closestItemFirst_withCache);
-        } else if (order == Qt::AscendingOrder) {
-            qSort(itemList->begin(), itemList->end(), closestItemLast_withCache);
-        }
-    } else {
-        if (order == Qt::DescendingOrder) {
-            qSort(itemList->begin(), itemList->end(), qt_closestItemFirst);
-        } else if (order == Qt::AscendingOrder) {
-            qSort(itemList->begin(), itemList->end(), qt_closestItemLast);
-        }
+    if (order == Qt::DescendingOrder) {
+        qSort(itemList->begin(), itemList->end(), qt_closestItemFirst);
+    } else if (order == Qt::AscendingOrder) {
+        qSort(itemList->begin(), itemList->end(), qt_closestItemLast);
     }
 }
 
@@ -548,7 +468,7 @@ QList<QGraphicsItem *> QGraphicsSceneBspTreeIndex::items(Qt::SortOrder order) co
         }
     }
 
-    d->sortItems(&itemList, order, d->sortCacheEnabled);
+    d->sortItems(&itemList, order);
 
     return itemList;
 }
@@ -636,10 +556,8 @@ void QGraphicsSceneBspTreeIndex::itemChange(const QGraphicsItem *item, QGraphics
         break;
     }
     case QGraphicsItem::ItemZValueChange:
-        d->invalidateSortCache();
         break;
     case QGraphicsItem::ItemParentChange: {
-        d->invalidateSortCache();
         // Handle ItemIgnoresTransformations
         const QGraphicsItem *newParent = static_cast<const QGraphicsItem *>(value);
         bool ignoredTransform = item->d_ptr->itemIsUntransformable();
@@ -679,7 +597,7 @@ bool QGraphicsSceneBspTreeIndex::event(QEvent *event)
                 d->restartIndexTimer = false;
             } else {
                 // this call will kill the timer
-                d->_q_updateIndex();
+                d->updateIndex();
             }
         }
     }

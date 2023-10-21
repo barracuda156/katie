@@ -1117,7 +1117,6 @@ void QGraphicsItemPrivate::setParentItemHelper(QGraphicsItem *newParent, const Q
                 }
 
                 p->d_ptr->focusScopeItem = newFocusScopeItem;
-                newFocusScopeItem->d_ptr->focusScopeItemChange(true);
                 // Ensure the new item is no longer the subFocusItem. The
                 // only way to set focus on a child of a focus scope is
                 // by setting focus on the scope itself.
@@ -1183,12 +1182,6 @@ void QGraphicsItemPrivate::setParentItemHelper(QGraphicsItem *newParent, const Q
     }
 
     dirtySceneTransform = true;
-    if (!inDestructor && (transformData || (newParent && newParent->d_ptr->transformData)))
-        transformChanged();
-
-    // Reparenting is finished, now safe to notify the previous focusScopeItem about changes
-    if (parentFocusScopeItem)
-      parentFocusScopeItem->d_ptr->focusScopeItemChange(false);
 
     // Restore the sub focus chain.
     if (subFocusItem) {
@@ -2967,9 +2960,6 @@ void QGraphicsItemPrivate::setFocusHelper(Qt::FocusReason focusReason, bool clim
         if (p->flags() & QGraphicsItem::ItemIsFocusScope) {
             QGraphicsItem *oldFocusScopeItem = p->d_ptr->focusScopeItem;
             p->d_ptr->focusScopeItem = q_ptr;
-            if (oldFocusScopeItem)
-                oldFocusScopeItem->d_ptr->focusScopeItemChange(false);
-            focusScopeItemChange(true);
             if (!p->focusItem() && !focusFromHide) {
                 // Calling setFocus() on a child of a focus scope that does
                 // not have focus changes only the focus scope pointer,
@@ -3041,8 +3031,6 @@ void QGraphicsItemPrivate::clearFocusHelper(bool giveFocusToParent)
                 if (p->flags() & QGraphicsItem::ItemIsFocusScope) {
                     if (p->d_ptr->focusScopeItem == q_ptr) {
                         p->d_ptr->focusScopeItem = 0;
-                        if (!subFocusItem->hasFocus()) //if it has focus, focusScopeItemChange is called elsewhere
-                            focusScopeItemChange(false);
                     }
                     if (subFocusItem->hasFocus())
                         p->d_ptr->setFocusHelper(Qt::OtherFocusReason, /* climb = */ false,
@@ -3388,7 +3376,6 @@ void QGraphicsItemPrivate::setTransformHelper(const QTransform &transform)
     q_ptr->prepareGeometryChange();
     transformData->transform = transform;
     dirtySceneTransform = true;
-    transformChanged();
 }
 
 /*!
@@ -3583,8 +3570,6 @@ void QGraphicsItem::setRotation(qreal angle)
 
     if (d_ptr->isObject)
         emit static_cast<QGraphicsObject *>(this)->rotationChanged();
-
-    d_ptr->transformChanged();
 }
 
 /*!
@@ -3649,8 +3634,6 @@ void QGraphicsItem::setScale(qreal factor)
 
     if (d_ptr->isObject)
         emit static_cast<QGraphicsObject *>(this)->scaleChanged();
-
-    d_ptr->transformChanged();
 }
 
 
@@ -3706,7 +3689,6 @@ void QGraphicsItem::setTransformations(const QList<QGraphicsTransform *> &transf
         transformations.at(i)->d_func()->setItem(this);
     d_ptr->transformData->onlyTransform = false;
     d_ptr->dirtySceneTransform = true;
-    d_ptr->transformChanged();
 }
 
 /*!
@@ -3723,7 +3705,6 @@ void QGraphicsItemPrivate::prependGraphicsTransform(QGraphicsTransform *t)
     t->d_func()->setItem(q);
     transformData->onlyTransform = false;
     dirtySceneTransform = true;
-    transformChanged();
 }
 
 /*!
@@ -3740,7 +3721,6 @@ void QGraphicsItemPrivate::appendGraphicsTransform(QGraphicsTransform *t)
     t->d_func()->setItem(q);
     transformData->onlyTransform = false;
     dirtySceneTransform = true;
-    transformChanged();
 }
 
 /*!
@@ -4415,12 +4395,6 @@ void QGraphicsItem::stackBefore(const QGraphicsItem *sibling)
                 ++index;
         }
         d_ptr->siblingIndex = siblingIndex;
-        for (int i = 0; i < siblings->size(); ++i) {
-            int &index = siblings->at(i)->d_ptr->siblingIndex;
-            if (i != siblingIndex && index >= siblingIndex && index <= myIndex)
-                siblings->at(i)->d_ptr->siblingOrderChange();
-        }
-        d_ptr->siblingOrderChange();
     }
 }
 
@@ -5246,27 +5220,6 @@ void QGraphicsItemPrivate::resetFocusProxy()
     for (int i = 0; i < focusProxyRefs.size(); ++i)
         *focusProxyRefs.at(i) = 0;
     focusProxyRefs.clear();
-}
-
-/*!
-    \internal
-
-    Subclasses can reimplement this function to be notified when an item
-    becomes a focusScopeItem (or is no longer a focusScopeItem).
-*/
-void QGraphicsItemPrivate::focusScopeItemChange(bool isSubFocusItem)
-{
-    Q_UNUSED(isSubFocusItem);
-}
-
-/*!
-    \internal
-
-    Subclasses can reimplement this function to be notified when its
-    siblingIndex order is changed.
-*/
-void QGraphicsItemPrivate::siblingOrderChange()
-{
 }
 
 /*!
