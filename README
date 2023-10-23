@@ -27,7 +27,6 @@ There are several things you should be aware before considering Katie:
   - Blitter is no longer supported painting engine
   - native graphics system is no more, rasterizer is faster than native
   - QPicture, QPictureIO and plugins for it are no longer supported
-  - QML debugger and inspector have been removed, potentially dangerous
   - no SIMD, zero performance impact with decent compiler
   - state machine is no more
   - removed 3rd party sources that are very common nowdays
@@ -70,7 +69,6 @@ There are several things you should be aware before considering Katie:
   - improved namespaces support and introduced QT_NAMESPACE_COMPAT
   - improved cross-compilation support
   - improved POSIX, XSI, SUSv2, etc. requirements build checks
-  - script component uses QRegExp instead of internal PCRE copy
   - tests and benchmarks can be run without prior installation
 
 Bugs fixed in Katie, some of which in Qt5 too:
