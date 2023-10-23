@@ -1168,7 +1168,6 @@ void QWidgetPrivate::createTLExtra()
         x->sizeAdjusted = false;
         x->inTopLevelResize = false;
         x->inRepaint = false;
-        x->embedded = false;
 
         createTLSysExtra();
 #ifdef QWIDGET_EXTRA_DEBUG
@@ -4982,11 +4981,6 @@ bool QWidget::hasFocus() const
     is sent to this widget to tell it that it just received the focus.
     (Nothing happens if the focus in and focus out widgets are the
     same.)
-
-    \note On embedded platforms, setFocus() will not cause an input panel
-    to be opened by the input method. If you want this to happen, you
-    have to send a QEvent::RequestSoftwareInputPanel event to the
-    widget yourself.
 
     setFocus() gives focus to a widget regardless of its focus policy,
     but does not clear any keyboard grab (see grabKeyboard()).

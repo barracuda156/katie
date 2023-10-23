@@ -1537,7 +1537,7 @@ QWidget *QWidget::keyboardGrabber()
 void QWidget::activateWindow()
 {
     QWidget *tlw = window();
-    if (tlw->isVisible() && !tlw->d_func()->topData()->embedded && !qt_x11Data->deferred_map.contains(tlw)) {
+    if (tlw->isVisible() && !qt_x11Data->deferred_map.contains(tlw)) {
         if (qt_x11Data->userTime == 0)
             qt_x11Data->userTime = qt_x11Data->time;
         qt_net_update_user_time(tlw, qt_x11Data->userTime);
@@ -1885,8 +1885,7 @@ void QWidgetPrivate::show_sys()
         }
 #endif
 
-        if (!topData()->embedded
-            && (topData()->validWMState || topData()->waitingForMapNotify)
+        if ((topData()->validWMState || topData()->waitingForMapNotify)
             && !q->isMinimized()) {
             qt_x11Data->deferred_map.append(q);
             return;

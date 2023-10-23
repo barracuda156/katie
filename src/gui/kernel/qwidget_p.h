@@ -134,7 +134,6 @@ struct QTLWExtra {
     bool sizeAdjusted;
     bool inTopLevelResize;
     bool inRepaint;
-    bool embedded;
 
     // *************************** Platform specific values (bit fields first) **********
 #if defined(Q_WS_X11) // <----------------------------------------------------------- X11

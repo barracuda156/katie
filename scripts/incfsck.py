@@ -255,8 +255,6 @@ incmap = {
         'QWidgetSet': 'qwindowdefs.h',
         'QWindowStateChangeEvent': 'qevent.h',
         'QWizardPage': 'qwizard.h',
-        'QX11EmbedContainer': 'qx11embed_x11.h',
-        'QX11EmbedWidget': 'qx11embed_x11.h',
         'QX11Info': 'qx11info_x11.h',
         'QtEvents': 'qevent.h',
     },

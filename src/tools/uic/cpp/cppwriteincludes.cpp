@@ -524,8 +524,6 @@ static const struct ClassTblData {
     { QLatin1String("QWindowsStyle"), QLatin1String("QtGui/qwindowsstyle.h") },
     { QLatin1String("QWizard"), QLatin1String("QtGui/qwizard.h") },
     { QLatin1String("QWizardPage"), QLatin1String("QtGui/qwizard.h") },
-    { QLatin1String("QX11EmbedContainer"), QLatin1String("QtGui/qx11embed_x11.h") },
-    { QLatin1String("QX11EmbedWidget"), QLatin1String("QtGui/qx11embed_x11.h") },
     { QLatin1String("QX11Info"), QLatin1String("QtGui/qx11info_x11.h") },
     { QLatin1String("QXmlAttributes"), QLatin1String("QtXml/qxml.h") },
     { QLatin1String("QXmlContentHandler"), QLatin1String("QtXml/qxml.h") },

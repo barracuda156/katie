@@ -354,10 +354,6 @@ public:
         XdndActionLink,
         XdndActionMove,
 
-        // XEMBED
-        _XEMBED,
-        _XEMBED_INFO,
-
         _QT_SETTINGS_TIMESTAMP,
         NPredefinedAtoms
     };

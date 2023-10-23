@@ -186,10 +186,6 @@ static const char* X11AtomsTbl[QX11Data::NPredefinedAtoms] = {
     "XdndActionLink\0",
     "XdndActionMove\0",
 
-    // XEMBED
-    "_XEMBED\0",
-    "_XEMBED_INFO\0",
-
     "_QT_SETTINGS_TIMESTAMP\0"
 };
 

@@ -634,8 +634,6 @@ include/katie/QtGui/QWindowStateChangeEvent
 include/katie/QtGui/QWindowsStyle
 include/katie/QtGui/QWizard
 include/katie/QtGui/QWizardPage
-include/katie/QtGui/QX11EmbedContainer
-include/katie/QtGui/QX11EmbedWidget
 include/katie/QtGui/QX11Info
 include/katie/QtGui/QtEvents
 include/katie/QtGui/QtGui
@@ -826,7 +824,6 @@ include/katie/QtGui/qwidgetaction.h
 include/katie/QtGui/qwindowdefs.h
 include/katie/QtGui/qwindowsstyle.h
 include/katie/QtGui/qwizard.h
-include/katie/QtGui/qx11embed_x11.h
 include/katie/QtGui/qx11info_x11.h
 include/katie/QtNetwork/QAbstractSocket
 include/katie/QtNetwork/QCryptographicHash

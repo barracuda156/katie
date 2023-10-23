@@ -371,7 +371,6 @@ set(GUI_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguiplatformplugin.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qt_x11_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11embed_x11.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11info_x11.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_x11_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/math3d/qgenericmatrix.h
@@ -689,7 +688,6 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnd_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget_x11.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11embed_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11info_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_x11.cpp
@@ -889,7 +887,6 @@ katie_unity_exclude(
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget_x11.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11embed_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11info_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qt_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/painting/qbackingstore.cpp

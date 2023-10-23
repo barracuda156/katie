@@ -566,8 +566,6 @@ classlist = [
     "QWindowsStyle",
     "QWizard",
     "QWizardPage",
-    "QX11EmbedContainer",
-    "QX11EmbedWidget",
     "QX11Info",
     "QXmlAttributes",
     "QXmlContentHandler",

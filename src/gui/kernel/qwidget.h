@@ -585,8 +585,6 @@ private:
     friend class QGraphicsProxyWidget;
     friend class QGraphicsProxyWidgetPrivate;
     friend class QStyleSheetStyle;
-    friend class QX11EmbedWidgetPrivate;
-    friend class QX11EmbedContainerPrivate;
 
 #ifdef Q_WS_X11
     friend void qt_net_update_user_time(QWidget *tlw, unsigned long timestamp);
