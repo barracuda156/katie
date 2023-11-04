@@ -59,7 +59,6 @@ There are several things you should be aware before considering Katie:
   - Unicode v5.0+ characters and partial scripts support
   - support for AArch64 architecture
   - support for locale aliases
-  - support for generating SHA-256 and SHA-512 hash sums (SHA-2)
   - qCompress() and qUncompress() use libdeflate which is much faster
   - stack backtrace on assert, crash or warning via execinfo
   - brief manual pages for all command-line tools

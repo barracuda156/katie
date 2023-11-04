@@ -19,7 +19,6 @@ include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude
     ${CMAKE_BINARY_DIR}/include/QtCore
     ${CMAKE_BINARY_DIR}/include/QtNetwork
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/digest
 )
 
 set(NETWORK_HEADERS
@@ -62,9 +61,6 @@ set(NETWORK_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/socket/qlocalserver.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/socket/qlocalsocket_unix.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/socket/qlocalserver_unix.cpp
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/digest/md5c.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/digest/sha1.c
-    ${CMAKE_SOURCE_DIR}/src/3rdparty/digest/sha2.c
 )
 
 if(WITH_XXHASH AND XXHASH_FOUND)

@@ -34,15 +34,7 @@ class QIODevice;
 class Q_NETWORK_EXPORT QCryptographicHash
 {
 public:
-    enum Algorithm {
-        Md5,
-        Sha1,
-        Sha256,
-        Sha512,
-        KAT
-    };
-
-    explicit QCryptographicHash(Algorithm method);
+    explicit QCryptographicHash();
     ~QCryptographicHash();
 
     void reset();
@@ -54,7 +46,7 @@ public:
 
     QByteArray result() const;
 
-    static QByteArray hash(const QByteArray &data, Algorithm method);
+    static QByteArray hash(const QByteArray &data);
 private:
     Q_DISABLE_COPY(QCryptographicHash)
     QCryptographicHashPrivate *d;
