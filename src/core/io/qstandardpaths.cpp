@@ -74,7 +74,7 @@ QT_BEGIN_NAMESPACE
          \li "$HOME/Pictures"
     \row \li PublicLocation
          \li "$HOME/Public"
-    \row \li Templates
+    \row \li TemplatesLocation
          \li "$HOME/Templates"
     \row \li DataLocation
          \li "$HOME/.local/share"
