@@ -128,7 +128,7 @@ QCryptographicHashPrivate::QCryptographicHashPrivate()
     QCryptographicHash with chunks of data that have different sizes either -
     the chunks size must be fixed, i.e. QT_BUFFSIZE. In other words, if you
     cannot tell what the optimal buffer size or when to use it then use a
-    generic algorithms.
+    generic algorithm.
 */
 
 /*!
@@ -200,7 +200,6 @@ QByteArray QCryptographicHash::result() const
         qWarning("QCryptographicHash::result called without any data");
         return QByteArray();
     }
-
     return d->katContext.result();
 }
 
