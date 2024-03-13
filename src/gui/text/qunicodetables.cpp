@@ -1973,6 +1973,7 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0xA8CF:
         case 0xA92E:
         case 0xA92F:
+        case 0xA9CF:
         case 0xAAF0:
         case 0xAAF1:
         case 0xABEB:
@@ -1991,6 +1992,8 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x1123B:
         case 0x1123C:
         case 0x112A9:
+        case 0x1133D:
+        case 0x1135D:
         case 0x1145A:
         case 0x1145B:
         case 0x115C2:
@@ -1999,6 +2002,9 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x11642:
         case 0x11AA1:
         case 0x11AA2:
+        case 0x11EF2:
+        case 0x11EF7:
+        case 0x11EF8:
         case 0x11F43:
         case 0x11F44:
         case 0x11FFF:
@@ -2134,7 +2140,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x066E:
         case 0x066F:
         case 0x06D5:
-        case 0x06DD:
         case 0x06DE:
         case 0x06E5:
         case 0x06E6:
@@ -2157,10 +2162,7 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x0828:
         case 0x085E:
         case 0x0888:
-        case 0x0890:
-        case 0x0891:
         case 0x08C9:
-        case 0x08E2:
         case 0x093D:
         case 0x0950:
         case 0x0970:
@@ -2262,7 +2264,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x1940:
         case 0x1A1E:
         case 0x1A1F:
-        case 0x1B5C:
         case 0x1BAE:
         case 0x1BAF:
         case 0x1CD3:
@@ -2453,10 +2454,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0xA8FD:
         case 0xA8FE:
         case 0xA95F:
-        case 0xA9CF:
-        case 0xA9DE:
-        case 0xA9DF:
-        case 0xAA5C:
         case 0xAAF2:
         case 0xAAF3:
         case 0xAAF4:
@@ -2504,13 +2501,8 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x10EB0:
         case 0x10EB1:
         case 0x10F27:
-        case 0x11071:
-        case 0x11072:
-        case 0x11075:
         case 0x110BB:
         case 0x110BC:
-        case 0x110BD:
-        case 0x110CD:
         case 0x11144:
         case 0x11147:
         case 0x11174:
@@ -2524,12 +2516,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x1123F:
         case 0x11240:
         case 0x11288:
-        case 0x1130F:
-        case 0x11310:
-        case 0x11332:
-        case 0x11333:
-        case 0x1133D:
-        case 0x11350:
         case 0x1144F:
         case 0x1145D:
         case 0x114C4:
@@ -2542,11 +2528,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x116B9:
         case 0x1183B:
         case 0x118FF:
-        case 0x11909:
-        case 0x11915:
-        case 0x11916:
-        case 0x1193F:
-        case 0x11941:
         case 0x119E1:
         case 0x119E3:
         case 0x11A00:
@@ -2562,9 +2543,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x11D67:
         case 0x11D68:
         case 0x11D98:
-        case 0x11EF7:
-        case 0x11EF8:
-        case 0x11F02:
         case 0x11FB0:
         case 0x12FF1:
         case 0x12FF2:
@@ -2783,6 +2761,7 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x13286:
         case 0x13288:
         case 0x13379:
+        case 0x1342F:
         case 0x13437:
         case 0x1343C:
         case 0x1343E:
@@ -3072,7 +3051,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x1B3C:
         case 0x1B42:
         case 0x1B43:
-        case 0x1B44:
         case 0x1B80:
         case 0x1B81:
         case 0x1B82:
@@ -3088,8 +3066,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x1BE9:
         case 0x1BED:
         case 0x1BEE:
-        case 0x1BF2:
-        case 0x1BF3:
         case 0x1C34:
         case 0x1C35:
         case 0x1C36:
@@ -3139,6 +3115,8 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0xA9BB:
         case 0xA9BC:
         case 0xA9BD:
+        case 0xA9BE:
+        case 0xA9BF:
         case 0xAA2F:
         case 0xAA30:
         case 0xAA31:
@@ -3183,7 +3161,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x11070:
         case 0x11073:
         case 0x11074:
-        case 0x1107F:
         case 0x11080:
         case 0x11081:
         case 0x11082:
@@ -3223,6 +3200,8 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x11340:
         case 0x11347:
         case 0x11348:
+        case 0x1134B:
+        case 0x1134C:
         case 0x11357:
         case 0x11362:
         case 0x11363:
@@ -3266,7 +3245,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x1193B:
         case 0x1193C:
         case 0x1193D:
-        case 0x1193E:
         case 0x11940:
         case 0x11942:
         case 0x11943:
@@ -3315,7 +3293,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x11F3F:
         case 0x11F40:
         case 0x11F41:
-        case 0x11F42:
         case 0x13440:
         case 0x16F4F:
         case 0x16FF0:
@@ -3345,6 +3322,7 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x2007:
         case 0x2011:
         case 0x202F:
+        case 0x1107F:
         case 0x16FE4:
             return QUnicodeTables::LineBreak_GL;
         case 0x00B4:
@@ -3376,6 +3354,12 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
             return QUnicodeTables::LineBreak_BB;
         case 0x066B:
         case 0x066C:
+        case 0x06DD:
+        case 0x0890:
+        case 0x0891:
+        case 0x08E2:
+        case 0x110BD:
+        case 0x110CD:
             return QUnicodeTables::LineBreak_NU;
         case 0x0E31:
         case 0x0E32:
@@ -3500,19 +3484,7 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x16FE2:
         case 0x16FE3:
             return QUnicodeTables::LineBreak_NS;
-        case 0x200B:
-            return QUnicodeTables::LineBreak_ZW;
-        case 0x2014:
-        case 0x2E3A:
-        case 0x2E3B:
-            return QUnicodeTables::LineBreak_B2;
-        case 0x2060:
-        case 0xFEFF:
-            return QUnicodeTables::LineBreak_WJ;
-        case 0x22EF:
-        case 0xFE19:
-        case 0x10AF6:
-            return QUnicodeTables::LineBreak_IN;
+        case 0x1B5C:
         case 0x231A:
         case 0x231B:
         case 0x2614:
@@ -3564,7 +3536,11 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x30FF:
         case 0x3190:
         case 0x3191:
+        case 0x31EF:
         case 0x3250:
+        case 0xA9DE:
+        case 0xA9DF:
+        case 0xAA5C:
         case 0xFA6E:
         case 0xFA6F:
         case 0xFE30:
@@ -3637,6 +3613,19 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         case 0x2FA1E:
         case 0x2FA1F:
             return QUnicodeTables::LineBreak_ID;
+        case 0x200B:
+            return QUnicodeTables::LineBreak_ZW;
+        case 0x2014:
+        case 0x2E3A:
+        case 0x2E3B:
+            return QUnicodeTables::LineBreak_B2;
+        case 0x2060:
+        case 0xFEFF:
+            return QUnicodeTables::LineBreak_WJ;
+        case 0x22EF:
+        case 0xFE19:
+        case 0x10AF6:
+            return QUnicodeTables::LineBreak_IN;
         case 0xAC00:
         case 0xAC1C:
         case 0xAC38:
@@ -4238,8 +4227,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_CM;
     if (ucs4 <= 0xA9B9 && ucs4 >= 0xA9B6)
         return QUnicodeTables::LineBreak_CM;
-    if (ucs4 <= 0xA9C0 && ucs4 >= 0xA9BE)
-        return QUnicodeTables::LineBreak_CM;
     if (ucs4 <= 0xAA2E && ucs4 >= 0xAA29)
         return QUnicodeTables::LineBreak_CM;
     if (ucs4 <= 0xFE0F && ucs4 >= 0xFE00)
@@ -4264,7 +4251,7 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_CM;
     if (ucs4 <= 0x10F85 && ucs4 >= 0x10F82)
         return QUnicodeTables::LineBreak_CM;
-    if (ucs4 <= 0x11046 && ucs4 >= 0x11038)
+    if (ucs4 <= 0x11045 && ucs4 >= 0x11038)
         return QUnicodeTables::LineBreak_CM;
     if (ucs4 <= 0x110B2 && ucs4 >= 0x110B0)
         return QUnicodeTables::LineBreak_CM;
@@ -4291,8 +4278,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
     if (ucs4 <= 0x112EA && ucs4 >= 0x112E3)
         return QUnicodeTables::LineBreak_CM;
     if (ucs4 <= 0x11344 && ucs4 >= 0x11341)
-        return QUnicodeTables::LineBreak_CM;
-    if (ucs4 <= 0x1134D && ucs4 >= 0x1134B)
         return QUnicodeTables::LineBreak_CM;
     if (ucs4 <= 0x1136C && ucs4 >= 0x11366)
         return QUnicodeTables::LineBreak_CM;
@@ -4424,6 +4409,8 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_CM;
     if (ucs4 <= 0x0039 && ucs4 >= 0x0030)
         return QUnicodeTables::LineBreak_NU;
+    if (ucs4 <= 0x0605 && ucs4 >= 0x0600)
+        return QUnicodeTables::LineBreak_NU;
     if (ucs4 <= 0x0669 && ucs4 >= 0x0660)
         return QUnicodeTables::LineBreak_NU;
     if (ucs4 <= 0x06F9 && ucs4 >= 0x06F0)
@@ -4472,8 +4459,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_NU;
     if (ucs4 <= 0x1A99 && ucs4 >= 0x1A90)
         return QUnicodeTables::LineBreak_NU;
-    if (ucs4 <= 0x1B59 && ucs4 >= 0x1B50)
-        return QUnicodeTables::LineBreak_NU;
     if (ucs4 <= 0x1BB9 && ucs4 >= 0x1BB0)
         return QUnicodeTables::LineBreak_NU;
     if (ucs4 <= 0x1C49 && ucs4 >= 0x1C40)
@@ -4486,19 +4471,13 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_NU;
     if (ucs4 <= 0xA909 && ucs4 >= 0xA900)
         return QUnicodeTables::LineBreak_NU;
-    if (ucs4 <= 0xA9D9 && ucs4 >= 0xA9D0)
-        return QUnicodeTables::LineBreak_NU;
     if (ucs4 <= 0xA9F9 && ucs4 >= 0xA9F0)
-        return QUnicodeTables::LineBreak_NU;
-    if (ucs4 <= 0xAA59 && ucs4 >= 0xAA50)
         return QUnicodeTables::LineBreak_NU;
     if (ucs4 <= 0xABF9 && ucs4 >= 0xABF0)
         return QUnicodeTables::LineBreak_NU;
     if (ucs4 <= 0x104A9 && ucs4 >= 0x104A0)
         return QUnicodeTables::LineBreak_NU;
     if (ucs4 <= 0x10D39 && ucs4 >= 0x10D30)
-        return QUnicodeTables::LineBreak_NU;
-    if (ucs4 <= 0x1106F && ucs4 >= 0x11066)
         return QUnicodeTables::LineBreak_NU;
     if (ucs4 <= 0x110F9 && ucs4 >= 0x110F0)
         return QUnicodeTables::LineBreak_NU;
@@ -4520,15 +4499,11 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_NU;
     if (ucs4 <= 0x118E9 && ucs4 >= 0x118E0)
         return QUnicodeTables::LineBreak_NU;
-    if (ucs4 <= 0x11959 && ucs4 >= 0x11950)
-        return QUnicodeTables::LineBreak_NU;
     if (ucs4 <= 0x11C59 && ucs4 >= 0x11C50)
         return QUnicodeTables::LineBreak_NU;
     if (ucs4 <= 0x11D59 && ucs4 >= 0x11D50)
         return QUnicodeTables::LineBreak_NU;
     if (ucs4 <= 0x11DA9 && ucs4 >= 0x11DA0)
-        return QUnicodeTables::LineBreak_NU;
-    if (ucs4 <= 0x11F59 && ucs4 >= 0x11F50)
         return QUnicodeTables::LineBreak_NU;
     if (ucs4 <= 0x16A69 && ucs4 >= 0x16A60)
         return QUnicodeTables::LineBreak_NU;
@@ -4609,8 +4584,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
     if (ucs4 <= 0x055F && ucs4 >= 0x055A)
         return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x0588 && ucs4 >= 0x0560)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x0605 && ucs4 >= 0x0600)
         return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x0608 && ucs4 >= 0x0606)
         return QUnicodeTables::LineBreak_AL;
@@ -4864,19 +4837,9 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x1A16 && ucs4 >= 0x1A00)
         return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x1B33 && ucs4 >= 0x1B05)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x1B4C && ucs4 >= 0x1B45)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x1B6A && ucs4 >= 0x1B61)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x1B7C && ucs4 >= 0x1B74)
-        return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x1BA0 && ucs4 >= 0x1B83)
         return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x1BBF && ucs4 >= 0x1BBA)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x1BE5 && ucs4 >= 0x1BC0)
         return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x1BFF && ucs4 >= 0x1BFC)
         return QUnicodeTables::LineBreak_AL;
@@ -5236,18 +5199,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0xA946 && ucs4 >= 0xA930)
         return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0xA9B2 && ucs4 >= 0xA984)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0xA9C6 && ucs4 >= 0xA9C1)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0xA9CD && ucs4 >= 0xA9CA)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0xAA28 && ucs4 >= 0xAA00)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0xAA42 && ucs4 >= 0xAA40)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0xAA4B && ucs4 >= 0xAA44)
-        return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0xAAEA && ucs4 >= 0xAAE0)
         return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0xAB06 && ucs4 >= 0xAB01)
@@ -5492,12 +5443,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x10FF6 && ucs4 >= 0x10FE0)
         return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x11037 && ucs4 >= 0x11003)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x1104D && ucs4 >= 0x11049)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x11065 && ucs4 >= 0x11052)
-        return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x110AF && ucs4 >= 0x11083)
         return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x110E8 && ucs4 >= 0x110D0)
@@ -5526,16 +5471,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x112DE && ucs4 >= 0x112B0)
         return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x1130C && ucs4 >= 0x11305)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x11328 && ucs4 >= 0x11313)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x11330 && ucs4 >= 0x1132A)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x11339 && ucs4 >= 0x11335)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x11361 && ucs4 >= 0x1135D)
-        return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x11434 && ucs4 >= 0x11400)
         return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x1144A && ucs4 >= 0x11447)
@@ -5559,12 +5494,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
     if (ucs4 <= 0x118DF && ucs4 >= 0x118A0)
         return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x118F2 && ucs4 >= 0x118EA)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x11906 && ucs4 >= 0x11900)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x11913 && ucs4 >= 0x1190C)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x1192F && ucs4 >= 0x11918)
         return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x119A7 && ucs4 >= 0x119A0)
         return QUnicodeTables::LineBreak_AL;
@@ -5594,12 +5523,6 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x11D89 && ucs4 >= 0x11D6A)
         return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x11EF2 && ucs4 >= 0x11EE0)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x11F10 && ucs4 >= 0x11F04)
-        return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x11F33 && ucs4 >= 0x11F12)
-        return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x11FD4 && ucs4 >= 0x11FC0)
         return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x11FDC && ucs4 >= 0x11FD5)
@@ -5622,7 +5545,7 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x13378 && ucs4 >= 0x1328A)
         return QUnicodeTables::LineBreak_AL;
-    if (ucs4 <= 0x1342F && ucs4 >= 0x1337C)
+    if (ucs4 <= 0x1342E && ucs4 >= 0x1337C)
         return QUnicodeTables::LineBreak_AL;
     if (ucs4 <= 0x13446 && ucs4 >= 0x13441)
         return QUnicodeTables::LineBreak_AL;
@@ -6032,6 +5955,10 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_BA;
     if (ucs4 <= 0xA9C9 && ucs4 >= 0xA9C7)
         return QUnicodeTables::LineBreak_BA;
+    if (ucs4 <= 0xAA42 && ucs4 >= 0xAA40)
+        return QUnicodeTables::LineBreak_BA;
+    if (ucs4 <= 0xAA4B && ucs4 >= 0xAA44)
+        return QUnicodeTables::LineBreak_BA;
     if (ucs4 <= 0xAA5F && ucs4 >= 0xAA5D)
         return QUnicodeTables::LineBreak_BA;
     if (ucs4 <= 0x10102 && ucs4 >= 0x10100)
@@ -6068,16 +5995,12 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_BA;
     if (ucs4 <= 0x1DA8A && ucs4 >= 0x1DA87)
         return QUnicodeTables::LineBreak_BA;
-    if (ucs4 <= 0x2026 && ucs4 >= 0x2024)
-        return QUnicodeTables::LineBreak_IN;
-    if (ucs4 <= 0x2037 && ucs4 >= 0x2030)
-        return QUnicodeTables::LineBreak_PO;
-    if (ucs4 <= 0x11FE0 && ucs4 >= 0x11FDD)
-        return QUnicodeTables::LineBreak_PO;
-    if (ucs4 <= 0x2049 && ucs4 >= 0x2047)
-        return QUnicodeTables::LineBreak_NS;
-    if (ucs4 <= 0x1F67B && ucs4 >= 0x1F679)
-        return QUnicodeTables::LineBreak_NS;
+    if (ucs4 <= 0x1B59 && ucs4 >= 0x1B50)
+        return QUnicodeTables::LineBreak_ID;
+    if (ucs4 <= 0x1B6A && ucs4 >= 0x1B61)
+        return QUnicodeTables::LineBreak_ID;
+    if (ucs4 <= 0x1B7C && ucs4 >= 0x1B74)
+        return QUnicodeTables::LineBreak_ID;
     if (ucs4 <= 0x23F3 && ucs4 >= 0x23F0)
         return QUnicodeTables::LineBreak_ID;
     if (ucs4 <= 0x2603 && ucs4 >= 0x2600)
@@ -6104,7 +6027,7 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_ID;
     if (ucs4 <= 0x2FD5 && ucs4 >= 0x2F00)
         return QUnicodeTables::LineBreak_ID;
-    if (ucs4 <= 0x2FFB && ucs4 >= 0x2FF0)
+    if (ucs4 <= 0x2FFF && ucs4 >= 0x2FF0)
         return QUnicodeTables::LineBreak_ID;
     if (ucs4 <= 0x3029 && ucs4 >= 0x3021)
         return QUnicodeTables::LineBreak_ID;
@@ -6172,6 +6095,14 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_ID;
     if (ucs4 <= 0xA4C6 && ucs4 >= 0xA490)
         return QUnicodeTables::LineBreak_ID;
+    if (ucs4 <= 0xA9C6 && ucs4 >= 0xA9C1)
+        return QUnicodeTables::LineBreak_ID;
+    if (ucs4 <= 0xA9CD && ucs4 >= 0xA9CA)
+        return QUnicodeTables::LineBreak_ID;
+    if (ucs4 <= 0xA9D9 && ucs4 >= 0xA9D0)
+        return QUnicodeTables::LineBreak_ID;
+    if (ucs4 <= 0xAA59 && ucs4 >= 0xAA50)
+        return QUnicodeTables::LineBreak_ID;
     if (ucs4 <= 0xFA6D && ucs4 >= 0xF900)
         return QUnicodeTables::LineBreak_ID;
     if (ucs4 <= 0xFAD9 && ucs4 >= 0xFA70)
@@ -6205,6 +6136,12 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
     if (ucs4 <= 0xFFD7 && ucs4 >= 0xFFD2)
         return QUnicodeTables::LineBreak_ID;
     if (ucs4 <= 0xFFDC && ucs4 >= 0xFFDA)
+        return QUnicodeTables::LineBreak_ID;
+    if (ucs4 <= 0x1104D && ucs4 >= 0x11049)
+        return QUnicodeTables::LineBreak_ID;
+    if (ucs4 <= 0x11065 && ucs4 >= 0x11052)
+        return QUnicodeTables::LineBreak_ID;
+    if (ucs4 <= 0x11959 && ucs4 >= 0x11950)
         return QUnicodeTables::LineBreak_ID;
     if (ucs4 <= 0x11F4F && ucs4 >= 0x11F45)
         return QUnicodeTables::LineBreak_ID;
@@ -6420,7 +6357,11 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_ID;
     if (ucs4 <= 0x2EBE0 && ucs4 >= 0x2CEB0)
         return QUnicodeTables::LineBreak_ID;
-    if (ucs4 <= 0x2F7FF && ucs4 >= 0x2EBE1)
+    if (ucs4 <= 0x2EBEF && ucs4 >= 0x2EBE1)
+        return QUnicodeTables::LineBreak_ID;
+    if (ucs4 <= 0x2EE5D && ucs4 >= 0x2EBF0)
+        return QUnicodeTables::LineBreak_ID;
+    if (ucs4 <= 0x2F7FF && ucs4 >= 0x2EE5E)
         return QUnicodeTables::LineBreak_ID;
     if (ucs4 <= 0x2FA1D && ucs4 >= 0x2F800)
         return QUnicodeTables::LineBreak_ID;
@@ -6434,6 +6375,16 @@ Q_GUI_EXPORT QUnicodeTables::LineBreak QT_FASTCALL QUnicodeTables::lineBreakClas
         return QUnicodeTables::LineBreak_ID;
     if (ucs4 <= 0x3FFFD && ucs4 >= 0x323B0)
         return QUnicodeTables::LineBreak_ID;
+    if (ucs4 <= 0x2026 && ucs4 >= 0x2024)
+        return QUnicodeTables::LineBreak_IN;
+    if (ucs4 <= 0x2037 && ucs4 >= 0x2030)
+        return QUnicodeTables::LineBreak_PO;
+    if (ucs4 <= 0x11FE0 && ucs4 >= 0x11FDD)
+        return QUnicodeTables::LineBreak_PO;
+    if (ucs4 <= 0x2049 && ucs4 >= 0x2047)
+        return QUnicodeTables::LineBreak_NS;
+    if (ucs4 <= 0x1F67B && ucs4 >= 0x1F679)
+        return QUnicodeTables::LineBreak_NS;
     if (ucs4 <= 0x2760 && ucs4 >= 0x275B)
         return QUnicodeTables::LineBreak_QU;
     if (ucs4 <= 0x2E08 && ucs4 >= 0x2E06)
@@ -9185,6 +9136,8 @@ Q_GUI_EXPORT QUnicodeTables::Script QT_FASTCALL QUnicodeTables::script(uint ucs4
     if (ucs4 <= 0x2CEA1 && ucs4 >= 0x2B820)
         return QUnicodeTables::Han;
     if (ucs4 <= 0x2EBE0 && ucs4 >= 0x2CEB0)
+        return QUnicodeTables::Han;
+    if (ucs4 <= 0x2EE5D && ucs4 >= 0x2EBF0)
         return QUnicodeTables::Han;
     if (ucs4 <= 0x2FA1D && ucs4 >= 0x2F800)
         return QUnicodeTables::Han;

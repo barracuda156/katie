@@ -191,7 +191,8 @@ public:
         Unicode_13_0,
         Unicode_14_0,
         Unicode_15_0,
-        Unicode_Last = Unicode_15_0
+        Unicode_15_1,
+        Unicode_Last = Unicode_15_1
     };
     // ****** WHEN ADDING FUNCTIONS, CONSIDER ADDING TO QCharRef TOO
 

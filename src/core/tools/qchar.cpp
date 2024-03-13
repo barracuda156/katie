@@ -176,6 +176,7 @@ static inline bool is_ascii_char(uint ucs4)
     \value Unicode_13_0
     \value Unicode_14_0
     \value Unicode_15_0
+    \value Unicode_15_1
     \value Unicode_Last Latest supported version
     \value Unicode_Unassigned  The value is not assigned to any character
         in Unicode.
