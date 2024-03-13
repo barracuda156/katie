@@ -40,7 +40,7 @@ public:
     void update(const char *data, const int length);
     QByteArray result() const;
 
-    bool rehash;
+    bool hasdata;
 
 private:
     Q_DISABLE_COPY(QCryptographicHashPrivate);
@@ -50,10 +50,11 @@ private:
 };
 
 QCryptographicHashPrivate::QCryptographicHashPrivate()
-    : rehash(false),
+    : hasdata(false),
     m_xxh3(XXH3_createState()),
     m_xxh32(XXH3_createState())
 {
+    reset();
 }
 
 QCryptographicHashPrivate::~QCryptographicHashPrivate()
@@ -128,7 +129,6 @@ QByteArray QCryptographicHashPrivate::result() const
 QCryptographicHash::QCryptographicHash()
     : d(new QCryptographicHashPrivate())
 {
-    reset();
 }
 
 /*!
@@ -144,7 +144,7 @@ QCryptographicHash::~QCryptographicHash()
 */
 void QCryptographicHash::reset()
 {
-    d->rehash = false;
+    d->hasdata = false;
     d->reset();
 }
 
@@ -153,7 +153,7 @@ void QCryptographicHash::reset()
 */
 void QCryptographicHash::addData(const char *data, int length)
 {
-    d->rehash = true;
+    d->hasdata = true;
     d->update(data, length);
 }
 
@@ -186,7 +186,7 @@ bool QCryptographicHash::addData(QIODevice* device)
 */
 QByteArray QCryptographicHash::result() const
 {
-    if (Q_UNLIKELY(!d->rehash)) {
+    if (Q_UNLIKELY(!d->hasdata)) {
         qWarning("QCryptographicHash::result called without any data");
         return QByteArray();
     }
@@ -199,7 +199,6 @@ QByteArray QCryptographicHash::result() const
 QByteArray QCryptographicHash::hash(const QByteArray &data)
 {
     QCryptographicHashPrivate kathash;
-    kathash.reset();
     kathash.update(data.constData(), data.length());
     return kathash.result();
 }
