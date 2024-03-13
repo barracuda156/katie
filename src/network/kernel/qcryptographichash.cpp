@@ -30,42 +30,45 @@ QT_BEGIN_NAMESPACE
 
 static const int xxh3len = sizeof(XXH128_hash_t);
 
-class QKatHash
+class QCryptographicHashPrivate
 {
 public:
-    QKatHash();
-    ~QKatHash();
+    QCryptographicHashPrivate();
+    ~QCryptographicHashPrivate();
 
     void reset();
     void update(const char *data, const int length);
     QByteArray result() const;
 
+    bool rehash;
+
 private:
-    Q_DISABLE_COPY(QKatHash);
+    Q_DISABLE_COPY(QCryptographicHashPrivate);
 
     XXH3_state_t* m_xxh3;
     XXH3_state_t* m_xxh32;
 };
 
-QKatHash::QKatHash()
-    : m_xxh3(XXH3_createState()),
+QCryptographicHashPrivate::QCryptographicHashPrivate()
+    : rehash(false),
+    m_xxh3(XXH3_createState()),
     m_xxh32(XXH3_createState())
 {
 }
 
-QKatHash::~QKatHash()
+QCryptographicHashPrivate::~QCryptographicHashPrivate()
 {
     XXH3_freeState(m_xxh3);
     XXH3_freeState(m_xxh32);
 }
 
-void QKatHash::reset()
+void QCryptographicHashPrivate::reset()
 {
     XXH3_128bits_reset(m_xxh3);
     XXH3_128bits_reset(m_xxh32);
 }
 
-void QKatHash::update(const char *data, const int length)
+void QCryptographicHashPrivate::update(const char *data, const int length)
 {
     if (Q_UNLIKELY(length == 1)) {
         XXH3_128bits_update(m_xxh3, data, length);
@@ -77,7 +80,7 @@ void QKatHash::update(const char *data, const int length)
     }
 }
 
-QByteArray QKatHash::result() const
+QByteArray QCryptographicHashPrivate::result() const
 {
     QByteArray result(xxh3len * 2, char(0));
     char* resultdata = result.data();
@@ -92,19 +95,6 @@ QByteArray QKatHash::result() const
     return result;
 }
 
-class QCryptographicHashPrivate
-{
-public:
-    QCryptographicHashPrivate();
-
-    QKatHash katContext;
-    bool rehash;
-};
-
-QCryptographicHashPrivate::QCryptographicHashPrivate()
-    : rehash(false)
-{
-}
 
 /*!
     \class QCryptographicHash
@@ -155,7 +145,7 @@ QCryptographicHash::~QCryptographicHash()
 void QCryptographicHash::reset()
 {
     d->rehash = false;
-    d->katContext.reset();
+    d->reset();
 }
 
 /*!
@@ -164,7 +154,7 @@ void QCryptographicHash::reset()
 void QCryptographicHash::addData(const char *data, int length)
 {
     d->rehash = true;
-    d->katContext.update(data, length);
+    d->update(data, length);
 }
 
 /*!
@@ -200,7 +190,7 @@ QByteArray QCryptographicHash::result() const
         qWarning("QCryptographicHash::result called without any data");
         return QByteArray();
     }
-    return d->katContext.result();
+    return d->result();
 }
 
 /*!
@@ -208,7 +198,7 @@ QByteArray QCryptographicHash::result() const
 */
 QByteArray QCryptographicHash::hash(const QByteArray &data)
 {
-    QKatHash kathash;
+    QCryptographicHashPrivate kathash;
     kathash.reset();
     kathash.update(data.constData(), data.length());
     return kathash.result();
