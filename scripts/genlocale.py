@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #-*- coding: UTF-8 -*-
 
-# Data is from https://unicode.org/Public/cldr/43.1/core.zip
+# Data is from https://unicode.org/Public/cldr/44/core.zip
 
 import os, sys, glob, re
 import xml.etree.ElementTree as ET
@@ -342,7 +342,7 @@ def printlocaledata(frommap, key):
     if value['country'] == 'QLocale::Country::AnyCountry' and not key == 'C':
         return
     # HACK: skip table entries the language of which is unknown
-    if key == 'apc_SY':
+    if key == 'apc_SY' or key == 'skr_PK':
         return
     # HACK: skip table entries with and without specifiec script
     if key == 'ha_Arab_NG':

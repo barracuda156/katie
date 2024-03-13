@@ -83,7 +83,7 @@
     \note For the current keyboard input locale take a look at
     QApplication::keyboardInputLocale().
 
-    QLocale's data is based on Common Locale Data Repository v43.1.
+    QLocale's data is based on Common Locale Data Repository v44.
 
     The double-to-string and string-to-double conversion functions are
     covered by the following licenses:
@@ -144,6 +144,7 @@
     \value AncientEgyptian
     \value AncientGreek
     \value Angika
+    \value Anii
     \value AoNaga
     \value Arabic
     \value ArabicNajdi
@@ -380,6 +381,7 @@
     \value Kalmyk
     \value Kamba
     \value Kanembu
+    \value Kangri
     \value Kannada
     \value Kanuri
     \value KaraKalpak
@@ -422,6 +424,7 @@
     \value KurdishSorani
     \value Kurukh
     \value Kutenai
+    \value Kuvi
     \value Kwakwala
     \value Kwasio
     \value Kyrgyz
@@ -469,6 +472,7 @@
     \value MainFranconian
     \value Maithili
     \value Makasar
+    \value Makhuwa
     \value MakhuwaMeetto
     \value Makonde
     \value Malagasy
@@ -502,7 +506,7 @@
     \value MiddleFrench
     \value MiddleHighGerman
     \value MiddleIrish
-    \value Mikmaq
+    \value Mikmaw
     \value MinNanChinese
     \value Minangkabau
     \value Mingrelian
@@ -871,6 +875,7 @@
     \value CentralAsia
     \value CeutaAndMelilla
     \value Chad
+    \value ChagosArchipelago
     \value Chile
     \value China
     \value ChristmasIsland
