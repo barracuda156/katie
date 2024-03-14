@@ -423,9 +423,9 @@ QDataStream &operator<<(QDataStream &stream, const QSizePolicy &policy)
 */
 QDataStream &operator>>(QDataStream &stream, QSizePolicy &policy)
 {
-    quint32 horzPolicy = 0;
-    quint32 vertPolicy = 0;
-    quint32 ctype = 0;
+    quint32 horzPolicy = QSizePolicy::Fixed;
+    quint32 vertPolicy = QSizePolicy::Fixed;
+    quint32 ctype = QSizePolicy::DefaultType;
     stream >> horzPolicy;
     stream >> vertPolicy;
     policy.horzPolicy = static_cast<QSizePolicy::Policy>(horzPolicy);
