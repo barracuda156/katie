@@ -3,19 +3,26 @@
 ** Copyright (C) 2015 The Qt Company Ltd.
 ** Copyright (C) 2016 Ivailo Monev
 **
-** This file is part of the documentation of the Katie Toolkit.
+** This file is part of the QtGui module of the Katie Toolkit.
 **
-** $QT_BEGIN_LICENSE:FDL$
-** GNU Free Documentation License Usage
-** This file may be used under the terms of the GNU Free
-** Documentation License version 1.3 as published by the Free Software
-** Foundation and appearing in the file included in the packaging of
-** this file.  Please review the following information to ensure
-** the GNU Free Documentation License version 1.3 requirements
-** will be met: http://www.gnu.org/copyleft/fdl.html.
+** $QT_BEGIN_LICENSE:LGPL$
+**
+** GNU Lesser General Public License Usage
+** This file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 as published by the Free Software
+** Foundation and appearing in the file LICENSE.LGPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU Lesser General Public License version 2.1 requirements
+** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
+
+#include "qsizepolicy.h"
+#include "qvariant.h"
+
+QT_BEGIN_NAMESPACE
 
 /*!
     \class QSizePolicy
@@ -275,13 +282,23 @@
 */
 
 /*!
-    \fn bool QSizePolicy::operator==(const QSizePolicy &other) const
-
     Returns true if this policy is equal to \a other; otherwise
     returns false.
 
     \sa operator!=()
 */
+bool QSizePolicy::operator==(const QSizePolicy &s) const
+{
+    return (
+        horzPolicy == s.horzPolicy &&
+        vertPolicy == s.vertPolicy &&
+        hfw == s.hfw &&
+        wfh == s.wfh &&
+        verStretch == s.verStretch &&
+        horStretch == s.horStretch &&
+        ctype == s.ctype
+    );
+}
 
 /*!
     \fn bool QSizePolicy::operator!=(const QSizePolicy &other) const
@@ -327,12 +344,6 @@
 */
 
 /*!
-    \fn void QSizePolicy::transpose()
-
-    Swaps the horizontal and vertical policies and stretches.
-*/
-
-/*!
     \enum QSizePolicy::ControlType
     \since 4.3
 
@@ -357,3 +368,76 @@
 
     \sa setControlType(), controlType()
 */
+
+/*!
+    Returns a QVariant storing this QSizePolicy.
+*/
+QSizePolicy::operator QVariant() const
+{
+    return QVariant(QVariant::SizePolicy, this);
+}
+
+/*!
+    Swaps the horizontal and vertical policies and stretches.
+*/
+void QSizePolicy::transpose()
+{
+    Policy hData = horizontalPolicy();
+    Policy vData = verticalPolicy();
+    int hStretch = horizontalStretch();
+    int vStretch = verticalStretch();
+    setHorizontalPolicy(vData);
+    setVerticalPolicy(hData);
+    setHorizontalStretch(vStretch);
+    setVerticalStretch(hStretch);
+}
+
+#ifndef QT_NO_DATASTREAM
+/*!
+    \relates QSizePolicy
+    \since 4.2
+
+    Writes the size \a policy to the data stream \a stream.
+
+    \sa \link datastreamformat.html Format of the QDataStream operators \endlink
+*/
+QDataStream &operator<<(QDataStream &stream, const QSizePolicy &policy)
+{
+    stream << static_cast<quint32>(policy.horzPolicy);
+    stream << static_cast<quint32>(policy.vertPolicy);
+    stream << policy.hfw;
+    stream << policy.wfh;
+    stream << policy.verStretch;
+    stream << policy.horStretch;
+    stream << policy.ctype;
+    return stream;
+}
+
+/*!
+    \relates QSizePolicy
+    \since 4.2
+
+    Reads the size \a policy from the data stream \a stream.
+
+    \sa \link datastreamformat.html Format of the QDataStream operators \endlink
+*/
+QDataStream &operator>>(QDataStream &stream, QSizePolicy &policy)
+{
+    quint32 horzPolicy = 0;
+    quint32 vertPolicy = 0;
+    quint32 ctype = 0;
+    stream >> horzPolicy;
+    stream >> vertPolicy;
+    policy.horzPolicy = static_cast<QSizePolicy::Policy>(horzPolicy);
+    policy.vertPolicy = static_cast<QSizePolicy::Policy>(vertPolicy);
+    stream >> policy.hfw;
+    stream >> policy.wfh;
+    stream >> policy.verStretch;
+    stream >> policy.horStretch;
+    stream >> ctype;
+    policy.ctype = static_cast<QSizePolicy::ControlType>(ctype);
+    return stream;
+}
+#endif // QT_NO_DATASTREAM
+
+QT_END_NAMESPACE

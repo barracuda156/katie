@@ -55,14 +55,6 @@ inline static QSize toLayoutItemSize(QWidgetPrivate *priv, const QSize &size)
 }
 
 /*!
-   Returns a QVariant storing this QSizePolicy.
-*/
-QSizePolicy::operator QVariant() const
-{
-    return QVariant(QVariant::SizePolicy, this);
-}
-
-/*!
     \class QLayoutItem
     \brief The QLayoutItem class provides an abstract item that a
     QLayout manipulates.

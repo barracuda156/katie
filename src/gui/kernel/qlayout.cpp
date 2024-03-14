@@ -1383,65 +1383,6 @@ QSize QLayout::closestAcceptableSize(const QWidget *widget, const QSize &size)
     Use sizeConstraint() instead.
 */
 
-void QSizePolicy::setControlType(ControlType type)
-{
-    /*
-        The control type is a flag type, with values 0x1, 0x2, 0x4, 0x8, 0x10,
-        etc. In memory, we pack it onto the available bits (CTSize) in
-        setControlType(), and unpack it here.
-
-        Example:
-
-            0x00000001 maps to 0x00000000
-            0x00000002 maps to 0x00000200
-            0x00000004 maps to 0x00000400
-            0x00000008 maps to 0x00000600
-            etc.
-    */
-
-    int i = 0;
-    while (true) {
-        if (type & (0x1 << i)) {
-            data = (data & ~CTMask) | (i << CTShift);
-            return;
-        }
-        ++i;
-    }
-}
-
-QSizePolicy::ControlType QSizePolicy::controlType() const
-{
-    return QSizePolicy::ControlType(0x1 << ((data & CTMask) >> CTShift));
-}
-
-#ifndef QT_NO_DATASTREAM
-/*!
-    \relates QSizePolicy
-    \since 4.2
-
-    Writes the size \a policy to the data stream \a stream.
-
-    \sa \link datastreamformat.html Format of the QDataStream operators \endlink
-*/
-QDataStream &operator<<(QDataStream &stream, const QSizePolicy &policy)
-{
-    return stream << policy.data;
-}
-
-/*!
-    \relates QSizePolicy
-    \since 4.2
-
-    Reads the size \a policy from the data stream \a stream.
-
-    \sa \link datastreamformat.html Format of the QDataStream operators \endlink
-*/
-QDataStream &operator>>(QDataStream &stream, QSizePolicy &policy)
-{
-    return stream >> policy.data;
-}
-#endif // QT_NO_DATASTREAM
-
 QT_END_NAMESPACE
 
 #include "moc_qlayout.h"

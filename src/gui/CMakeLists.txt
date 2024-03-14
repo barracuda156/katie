@@ -691,6 +691,7 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qx11info_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_x11.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsizepolicy.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qt_x11.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/math3d/qgenericmatrix.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/math3d/qmatrix4x4.cpp

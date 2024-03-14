@@ -509,7 +509,7 @@ QBrush &QBrush::operator=(const QBrush &other)
 */
 
 /*!
-   Returns the brush as a QVariant
+    Returns the brush as a QVariant
 */
 QBrush::operator QVariant() const
 {
