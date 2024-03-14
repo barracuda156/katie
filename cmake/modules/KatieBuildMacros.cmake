@@ -261,10 +261,7 @@ endfunction()
 
 # a function to make a meta target depend on all plugins, the meta target itself is used in the
 # tests setup macros to build all plugins before any test so that plugins from the host are not
-# used.
-# TODO: this is cheap and sub-optimal way of forcing tests depend on all plugins, perhaps with
-# plugin and test targets dependencies introspection it can be optimized, e.g. make tests that
-# depend on KtNetwork depend on plugins that depend on it too
+# used
 add_custom_target(plugins_dependant_tests)
 function(KATIE_SETUP_PLUGIN FORPLUGIN)
     add_dependencies(plugins_dependant_tests ${FORPLUGIN})
