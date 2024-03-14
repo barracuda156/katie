@@ -574,7 +574,7 @@ QValidator::State QDoubleValidatorPrivate::validateWithLocale(QString &input, QL
     if (q->t < 0 && buff.startsWith('+'))
         return QValidator::Invalid;
 
-    bool ok;
+    bool ok = false;
     double i = QLocalePrivate::bytearrayToDouble(buff.constData(), &ok);
     if (!ok)
         return QValidator::Invalid;
