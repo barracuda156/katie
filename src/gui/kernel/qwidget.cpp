@@ -1687,9 +1687,13 @@ static inline void fillRegion(QPainter *painter, const QRegion &rgn, const QBrus
         painter->fillRect(0, 0, painter->device()->width(), painter->device()->height(), brush);
         painter->restore();
     } else {
-        const QVector<QRect> &rects = rgn.rects();
-        for (int i = 0; i < rects.size(); ++i)
-            painter->fillRect(rects.at(i), brush);
+        QPen oldPen = painter->pen();
+        QBrush oldBrush = painter->brush();
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(brush);
+        painter->drawRects(rgn.rects());
+        painter->setBrush(oldBrush);
+        painter->setPen(oldPen);
     }
 }
 
@@ -1715,8 +1719,7 @@ void QWidgetPrivate::paintBackground(QPainter *painter, const QRegion &rgn, int 
     const QBrush autoFillBrush = q->palette().brush(q->backgroundRole());
 
     if ((flags & DrawAsRoot) && !(q->autoFillBackground() && autoFillBrush.isOpaque())) {
-        const QBrush bg = q->palette().brush(QPalette::Window);
-        fillRegion(painter, rgn, bg);
+        fillRegion(painter, rgn, q->palette().brush(QPalette::Window));
     }
 
     if (q->autoFillBackground())

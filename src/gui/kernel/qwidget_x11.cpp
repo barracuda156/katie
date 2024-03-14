@@ -1256,28 +1256,29 @@ void QWidgetPrivate::updateSystemBackground()
         || q->testAttribute(Qt::WA_NoSystemBackground)
         || q->testAttribute(Qt::WA_UpdatesDisabled)
         || type == Qt::Popup || type == Qt::ToolTip) {
-            if (QX11Info::isCompositingManagerRunning()
-                && q->testAttribute(Qt::WA_TranslucentBackground)
-                && !(q->parent()))
-                XSetWindowBackground(qt_x11Data->display, q->internalWinId(),
-                                     QX11Data::XColorPixel(xinfo.screen(), Qt::transparent));
-            else
-                XSetWindowBackgroundPixmap(qt_x11Data->display, q->internalWinId(), XNone);
+        if (QX11Info::isCompositingManagerRunning()
+            && q->testAttribute(Qt::WA_TranslucentBackground)
+            && !(q->parent())) {
+            XSetWindowBackground(qt_x11Data->display, q->internalWinId(),
+                                 QX11Data::XColorPixel(xinfo.screen(), Qt::transparent));
+        } else {
+            XSetWindowBackgroundPixmap(qt_x11Data->display, q->internalWinId(), XNone);
         }
-    else if (brush.style() == Qt::SolidPattern && brush.isOpaque())
+    } else if (brush.style() == Qt::SolidPattern && brush.isOpaque()) {
         XSetWindowBackground(qt_x11Data->display, q->internalWinId(),
                              QX11Data::XColorPixel(xinfo.screen(), brush.color()));
-    else if (isBackgroundInherited())
+    } else if (isBackgroundInherited()) {
         XSetWindowBackgroundPixmap(qt_x11Data->display, q->internalWinId(), ParentRelative);
-    else if (brush.style() == Qt::TexturePattern) {
+    } else if (brush.style() == Qt::TexturePattern) {
         const Qt::HANDLE bgpixmap = brush.texture().toX11Pixmap();
         XSetWindowBackgroundPixmap(qt_x11Data->display, q->internalWinId(), bgpixmap);
         if (bgpixmap) {
             XFreePixmap(qt_x11Data->display, bgpixmap);
         }
-    } else
+    } else {
         XSetWindowBackground(qt_x11Data->display, q->internalWinId(),
                              QX11Data::XColorPixel(xinfo.screen(), brush.color()));
+    }
 }
 
 #ifndef QT_NO_CURSOR
