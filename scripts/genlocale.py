@@ -351,7 +351,6 @@ def printlocaledata(frommap, key):
         %s, %s, %s,
         %s, %s, %s,
         %s, %s, %s, %s, %s, %s, %s, %s,
-        %s, %s,
         %s, %s, %s, %s,
         %s, %s,
         %s,
@@ -381,8 +380,6 @@ def printlocaledata(frommap, key):
             touint(value['plus']),
             touint(value['exponential']),
             touint(value['zero']),
-            tochar(value['language_endonym']),
-            tochar(value['country_endonym']),
             tochar(value['short_date_format']),
             tochar(value['long_date_format']),
             tochar(value['short_time_format']),
@@ -601,8 +598,6 @@ localedefaults = {
     'plus': '+',
     'exponential': 'e', # default in CLDR is E
     # strings
-    'language_endonym': '',
-    'country_endonym': '',
     'short_date_format': 'd MMM yyyy', # default in CLDR is y-MM-dd
     'long_date_format': 'd MMMM yyyy',
     'short_time_format': 'HH:mm:ss', # default in CLDR is HH:mm
@@ -764,19 +759,6 @@ def readlocale(fromxml, tomap, isparent):
 
         # locale numeric system was found, break
         break
-
-    for nativelang in root.findall('./localeDisplayNames/languages/language'):
-        nativelangtype = nativelang.get('type')
-        if nativelangtype == langtype:
-            tomap[locale]['language_endonym'] = nativelang.text
-            break
-
-    if countrytype:
-        for nativecountry in root.findall('./localeDisplayNames/territories/territory'):
-            nativecountrytype = nativecountry.get('type')
-            if nativecountrytype == countrytype:
-                tomap[locale]['country_endonym'] = nativecountry.text
-                break
 
     for calendar in root.findall('./dates/calendars/calendar'):
         calendartype = calendar.get('type')

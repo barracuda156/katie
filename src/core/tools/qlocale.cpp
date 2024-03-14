@@ -2495,56 +2495,6 @@ qulonglong QLocalePrivate::bytearrayToUnsLongLong(const char *num, int base, boo
     return ret;
 }
 
-/*!
-    \since 4.8
-
-    Returns an ordered list of locale names for translation purposes in
-    preference order.
-
-    The return value represents locale names that the user expects to see the
-    UI translation in.
-
-    Most like you do not need to use this function directly, but just pass the
-    QLocale object to the QTranslator::load() function.
-
-    The first item in the list is the most preferred one.
-
-    \sa QTranslator, bcp47Name()
-*/
-QStringList QLocale::uiLanguages() const
-{
-    QStringList result;
-    const QByteArray asciibcp47 = bcp47Name();
-    result.append(QString::fromLatin1(asciibcp47.constData(), asciibcp47.size()));
-    return result;
-}
-
-/*!
-    \since 4.8
-
-    Returns a native name of the language for the locale. For example
-    "Schwiizertüütsch" for Swiss-German locale.
-
-    \sa nativeCountryName(), languageToString()
-*/
-QString QLocale::nativeLanguageName() const
-{
-    return getLocaleData(d()->m_language_endonym);
-}
-
-/*!
-    \since 4.8
-
-    Returns a native name of the country for the locale. For example
-    "España" for Spanish/Spain locale.
-
-    \sa nativeLanguageName(), countryToString()
-*/
-QString QLocale::nativeCountryName() const
-{
-    return getLocaleData(d()->m_country_endonym);
-}
-
 QT_END_NAMESPACE
 
 #ifndef QT_NO_QOBJECT

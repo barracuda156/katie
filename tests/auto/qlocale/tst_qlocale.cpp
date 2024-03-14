@@ -100,7 +100,6 @@ private slots:
     void defaultNumeringSystem();
 
     void ampm();
-    void uiLanguages();
     void weekendDays();
 
 private:
@@ -1564,21 +1563,6 @@ void tst_QLocale::standaloneMonthName()
     QCOMPARE(ru.standaloneMonthName(1, QLocale::LongFormat), QString::fromUtf8("январь"));
     QCOMPARE(ru.standaloneMonthName(1, QLocale::ShortFormat), QString::fromUtf8("янв."));
     QCOMPARE(ru.standaloneMonthName(1, QLocale::NarrowFormat), QString::fromUtf8("Я"));
-}
-
-void tst_QLocale::uiLanguages()
-{
-    const QLocale c(QLocale::C);
-    QCOMPARE(c.uiLanguages().size(), 1);
-    QCOMPARE(c.uiLanguages().at(0), QLatin1String("C"));
-
-    const QLocale en_US("en_US");
-    QCOMPARE(en_US.uiLanguages().size(), 1);
-    QCOMPARE(en_US.uiLanguages().at(0), QLatin1String("en-Dsrt-US"));
-
-    const QLocale ru_RU("ru_RU");
-    QCOMPARE(ru_RU.uiLanguages().size(), 1);
-    QCOMPARE(ru_RU.uiLanguages().at(0), QLatin1String("ru-Cyrl-RU"));
 }
 
 void tst_QLocale::weekendDays()

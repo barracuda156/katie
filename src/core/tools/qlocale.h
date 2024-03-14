@@ -1300,8 +1300,6 @@ public:
     QString name() const;
 
     QByteArray bcp47Name() const;
-    QString nativeLanguageName() const;
-    QString nativeCountryName() const;
 
     short toShort(const QString &s, bool *ok = nullptr, int base = 0) const;
     ushort toUShort(const QString &s, bool *ok = nullptr, int base = 0) const;
@@ -1366,8 +1364,6 @@ public:
 
     QString toUpper(const QString &str) const;
     QString toLower(const QString &str) const;
-
-    QStringList uiLanguages() const;
 
     inline bool operator==(const QLocale &other) const;
     inline bool operator!=(const QLocale &other) const;
