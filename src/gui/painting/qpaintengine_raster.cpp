@@ -40,6 +40,29 @@ QT_BEGIN_NAMESPACE
 
 Q_GUI_EXPORT extern bool qt_scaleForTransform(const QTransform &transform, qreal *scale); // qtransform.cpp
 
+static QImage qt_colorizeBitmap(const QImage &image, const QColor &color)
+{
+    Q_ASSERT(image.depth() == 1);
+
+    QImage sourceImage = image.convertToFormat(QImage::Format_MonoLSB);
+    QImage dest = QImage(sourceImage.size(), QImage::Format_ARGB32_Premultiplied);
+
+    QRgb fg = PREMUL(color.rgba());
+    QRgb bg = 0;
+
+    int height = sourceImage.height();
+    int width = sourceImage.width();
+    int bpl = dest.bytesPerLine();
+    uchar *data = dest.bits();
+    for (int y=0; y<height; ++y) {
+        const uchar *source = sourceImage.constScanLine(y);
+        QRgb *target = reinterpret_cast<QRgb *>(QFAST_SCAN_LINE(data, bpl, y));
+        for (int x=0; x < width; ++x)
+            target[x] = (source[x>>3] >> (x&7)) & 1 ? fg : bg;
+    }
+    return dest;
+}
+
 #define IMAGE_FOR_STYLE(STYLE) \
     QImage(STYLE, 8, 8, 1, QImage::Format_MonoLSB);
 static QImage qt_imageForBrush(int brushStyle)
@@ -1564,7 +1587,7 @@ void QRasterPaintEngine::drawPixmap(const QRectF &r, const QPixmap &pixmap, cons
             drawBitmap(r.topLeft() + QPointF(s->matrix.dx(), s->matrix.dy()), image, &s->penData);
             return;
         } else {
-            drawImage(r, d->rasterBuffer->colorizeBitmap(image, s->pen.color()), sr);
+            drawImage(r, qt_colorizeBitmap(image, s->pen.color()), sr);
         }
     } else {
         drawImage(r, image, sr);
@@ -1722,7 +1745,7 @@ void QRasterPaintEngine::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap,
     QImage image = pd->image;
 
     if (image.depth() == 1)
-        image = d->rasterBuffer->colorizeBitmap(image, s->pen.color());
+        image = qt_colorizeBitmap(image, s->pen.color());
 
     if (s->matrix.type() > QTransform::TxTranslate) {
         QTransform copy = s->matrix;
@@ -2175,33 +2198,6 @@ void QRasterPaintEnginePrivate::rasterize(QT_FT_Outline *outline,
     rasterParams.clip_box = clip_box;
     rasterParams.gray_spans = callback;
     gray_raster_render(&rasterParams);
-}
-
-QImage QRasterBuffer::colorizeBitmap(const QImage &image, const QColor &color)
-{
-    Q_ASSERT(image.depth() == 1);
-
-    QImage sourceImage = image.convertToFormat(QImage::Format_MonoLSB);
-    QImage dest = QImage(sourceImage.size(), QImage::Format_ARGB32_Premultiplied);
-
-    QRgb fg = PREMUL(color.rgba());
-    QRgb bg = 0;
-
-    int height = sourceImage.height();
-    int width = sourceImage.width();
-    int bpl = dest.bytesPerLine();
-    uchar *data = dest.bits();
-    for (int y=0; y<height; ++y) {
-        const uchar *source = sourceImage.constScanLine(y);
-        QRgb *target = reinterpret_cast<QRgb *>(QFAST_SCAN_LINE(data, bpl, y));
-        for (int x=0; x < width; ++x)
-            target[x] = (source[x>>3] >> (x&7)) & 1 ? fg : bg;
-    }
-    return dest;
-}
-
-QRasterBuffer::~QRasterBuffer()
-{
 }
 
 QRasterBuffer::QRasterBuffer()
@@ -2744,7 +2740,7 @@ void QSpanData::setup(const QBrush &brush, int alpha, QPainter::CompositionMode 
             type = Texture;
             if (!tempImage)
                 tempImage = new QImage();
-            *tempImage = rasterBuffer->colorizeBitmap(qt_imageForBrush(brushStyle), brush.color());
+            *tempImage = qt_colorizeBitmap(qt_imageForBrush(brushStyle), brush.color());
             initTexture(tempImage, alpha, QTextureData::Tiled);
             break;
         }
@@ -2755,7 +2751,7 @@ void QSpanData::setup(const QBrush &brush, int alpha, QPainter::CompositionMode 
                 tempImage = new QImage();
 
             if (qHasPixmapTexture(brush) && brush.texture().isQBitmap())
-                *tempImage = rasterBuffer->colorizeBitmap(brush.textureImage(), brush.color());
+                *tempImage = qt_colorizeBitmap(brush.textureImage(), brush.color());
             else
                 *tempImage = brush.textureImage();
             initTexture(tempImage, alpha, QTextureData::Tiled, tempImage->rect());

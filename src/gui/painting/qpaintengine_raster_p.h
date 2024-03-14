@@ -337,8 +337,6 @@ class QRasterBuffer
 public:
     QRasterBuffer();
 
-    ~QRasterBuffer();
-
     QImage::Format prepare(QImage *image);
     QImage::Format prepare(QPixmap *pix);
     void prepare(int w, int h);
@@ -364,7 +362,6 @@ public:
     QPainter::CompositionMode compositionMode;
     QImage::Format format;
     DrawHelper *drawHelper;
-    QImage colorizeBitmap(const QImage &image, const QColor &color);
 
 private:
     int m_width;
