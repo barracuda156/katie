@@ -40,6 +40,74 @@ QT_BEGIN_NAMESPACE
 
 Q_GUI_EXPORT extern bool qt_scaleForTransform(const QTransform &transform, qreal *scale); // qtransform.cpp
 
+#define IMAGE_FOR_STYLE(STYLE) \
+    QImage(STYLE, 8, 8, 1, QImage::Format_MonoLSB);
+static QImage qt_imageForBrush(int brushStyle)
+{
+    static const uchar dense1_pat[] = { 0xff, 0xbb, 0xff, 0xff, 0xff, 0xbb, 0xff, 0xff };
+    static const uchar dense2_pat[] = { 0x77, 0xff, 0xdd, 0xff, 0x77, 0xff, 0xdd, 0xff };
+    static const uchar dense3_pat[] = { 0x55, 0xbb, 0x55, 0xee, 0x55, 0xbb, 0x55, 0xee };
+    static const uchar dense4_pat[] = { 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55 };
+    static const uchar dense5_pat[] = { 0xaa, 0x44, 0xaa, 0x11, 0xaa, 0x44, 0xaa, 0x11 };
+    static const uchar dense6_pat[] = { 0x88, 0x00, 0x22, 0x00, 0x88, 0x00, 0x22, 0x00 };
+    static const uchar dense7_pat[] = { 0x00, 0x44, 0x00, 0x00, 0x00, 0x44, 0x00, 0x00 };
+    static const uchar hor_pat[]    = { 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00 };
+    static const uchar ver_pat[]    = { 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10 };
+    static const uchar cross_pat[]  = { 0x10, 0x10, 0x10, 0xff, 0x10, 0x10, 0x10, 0x10 };
+    static const uchar bdiag_pat[]  = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
+    static const uchar fdiag_pat[]  = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
+    static const uchar dcross_pat[] = { 0x81, 0x42, 0x24, 0x18, 0x18, 0x24, 0x42, 0x81 };
+
+    switch (brushStyle) {
+        case Qt::Dense1Pattern: {
+            return IMAGE_FOR_STYLE(dense1_pat);
+        }
+        case Qt::Dense2Pattern: {
+            return IMAGE_FOR_STYLE(dense2_pat);
+        }
+        case Qt::Dense3Pattern: {
+            return IMAGE_FOR_STYLE(dense3_pat);
+        }
+        case Qt::Dense4Pattern: {
+            return IMAGE_FOR_STYLE(dense4_pat);
+        }
+        case Qt::Dense5Pattern: {
+            return IMAGE_FOR_STYLE(dense5_pat);
+        }
+        case Qt::Dense6Pattern: {
+            return IMAGE_FOR_STYLE(dense6_pat);
+        }
+        case Qt::Dense7Pattern: {
+            return IMAGE_FOR_STYLE(dense7_pat);
+        }
+        case Qt::HorPattern: {
+            return IMAGE_FOR_STYLE(hor_pat);
+        }
+        case Qt::VerPattern: {
+            return IMAGE_FOR_STYLE(ver_pat);
+        }
+        case Qt::CrossPattern: {
+            return IMAGE_FOR_STYLE(cross_pat);
+        }
+        case Qt::BDiagPattern: {
+            return IMAGE_FOR_STYLE(bdiag_pat);
+        }
+        case Qt::FDiagPattern: {
+            return IMAGE_FOR_STYLE(fdiag_pat);
+        }
+        case Qt::DiagCrossPattern: {
+            return IMAGE_FOR_STYLE(dcross_pat);
+        }
+        default: {
+            Q_ASSERT(false);
+            return QImage();
+        }
+    }
+    Q_UNREACHABLE();
+    return QImage();
+}
+#undef IMAGE_FOR_STYLE
+
 // #define QT_DEBUG_DRAW
 #ifdef QT_DEBUG_DRAW
 void dumpClip(int width, int height, const QClipData *clip);
@@ -2607,8 +2675,6 @@ void QSpanData::init(QRasterBuffer *rb, const QRasterPaintEngine *pe)
     m12 = m13 = m21 = m23 = dx = dy = 0.0;
     clip = pe ? pe->d_func()->clip() : 0;
 }
-
-Q_GUI_EXPORT extern QImage qt_imageForBrush(int brushStyle);
 
 void QSpanData::setup(const QBrush &brush, int alpha, QPainter::CompositionMode compositionMode)
 {
