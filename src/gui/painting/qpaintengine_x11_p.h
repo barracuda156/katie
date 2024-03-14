@@ -63,9 +63,6 @@ public:
 protected:
     QX11PaintEngine(QX11PaintEnginePrivate &dptr);
 
-    friend class QPixmap;
-    friend class QFontEngineBox;
-
 private:
     Q_DISABLE_COPY(QX11PaintEngine)
 };
