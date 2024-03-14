@@ -1646,7 +1646,7 @@ QTextStreamPrivate::NumberParsingStatus QTextStreamPrivate::getNumber(qulonglong
             if (ch.isDigit()) {
                 val *= 10;
                 val += ch.digitValue();
-            } else if (locale != QLocale::c() && ch == locale.groupSeparator()) {
+            } else if (locale.language() != QLocale::C && ch == locale.groupSeparator()) {
                 continue;
             } else {
                 ungetChar(ch);
@@ -1797,7 +1797,7 @@ bool QTextStreamPrivate::getReal(double *f)
             else if (lc == locale.negativeSign().toLower()
                      || lc == locale.positiveSign().toLower())
                 input = InputSign;
-            else if (locale != QLocale::c() // backward-compatibility
+            else if (locale.language() != QLocale::C // backward-compatibility
                      && lc == locale.groupSeparator().toLower())
                 input = InputDigit; // well, it isn't a digit, but no one cares.
             else
