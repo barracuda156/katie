@@ -56,12 +56,6 @@ static const uchar *qt_patternForBrush(int brushStyle)
     return pat_tbl[brushStyle - Qt::Dense1Pattern];
 }
 
-QPixmap qt_pixmapForBrush(int brushStyle)
-{
-
-    return QBitmap::fromData(QSize(8, 8), qt_patternForBrush(brushStyle), QImage::Format_MonoLSB);
-}
-
 Q_GUI_EXPORT QImage qt_imageForBrush(int brushStyle)
 {
     return QImage(qt_patternForBrush(brushStyle), 8, 8, 1, QImage::Format_MonoLSB);
