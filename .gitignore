@@ -15,7 +15,6 @@
 # build directories
 apidocs/
 minsize/
-oldmake/
 debug/
 crossdeb/
 
@@ -33,6 +32,5 @@ package/debian/katie-*/
 # Fedora build files and directories
 *-linux-gnu/
 
-# tarballs from tarball.sh and oldmake.sh
+# tarballs from tarball.sh
 *.tar.xz
-scripts/cmake-*.tar.gz
