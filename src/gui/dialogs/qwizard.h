@@ -35,9 +35,8 @@ class QWizardPrivate;
 class Q_GUI_EXPORT QWizard : public QDialog
 {
     Q_OBJECT
-    Q_ENUMS(WizardStyle WizardOption)
+    Q_ENUMS(WizardOption)
     Q_FLAGS(WizardOptions)
-    Q_PROPERTY(WizardStyle wizardStyle READ wizardStyle WRITE setWizardStyle)
     Q_PROPERTY(WizardOptions options READ options WRITE setOptions)
     Q_PROPERTY(Qt::TextFormat titleFormat READ titleFormat WRITE setTitleFormat)
     Q_PROPERTY(Qt::TextFormat subTitleFormat READ subTitleFormat WRITE setSubTitleFormat)
@@ -65,18 +64,7 @@ public:
     enum WizardPixmap {
         WatermarkPixmap,
         LogoPixmap,
-        BannerPixmap,
-        BackgroundPixmap,
         NPixmaps
-    };
-
-    // TODO: get rid of those?
-    enum WizardStyle {
-        ClassicStyle,
-        ModernStyle,
-        MacStyle,
-        AeroStyle,
-        NStyles
     };
 
     enum WizardOption {
@@ -121,9 +109,6 @@ public:
     void setField(const QString &name, const QVariant &value);
     QVariant field(const QString &name) const;
 
-    void setWizardStyle(WizardStyle style);
-    WizardStyle wizardStyle() const;
-
     void setOption(WizardOption option, bool on = true);
     bool testOption(WizardOption option) const;
     void setOptions(WizardOptions options);
@@ -166,7 +151,6 @@ public Q_SLOTS:
 protected:
     bool event(QEvent *event);
     void resizeEvent(QResizeEvent *event);
-    void paintEvent(QPaintEvent *event);
     void done(int result);
     virtual void initializePage(int id);
     virtual void cleanupPage(int id);

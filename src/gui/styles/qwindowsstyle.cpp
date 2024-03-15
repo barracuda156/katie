@@ -520,11 +520,6 @@ int QWindowsStyle::styleHint(StyleHint hint, const QStyleOption *opt, const QWid
     case SH_LineEdit_PasswordCharacter:
         ret = '*';
         break;
-#ifndef QT_NO_WIZARD
-    case SH_WizardStyle:
-        ret = QWizard::ModernStyle;
-        break;
-#endif
     case SH_ItemView_ArrowKeysNavigateIntoChildren:
         ret = true;
         break;

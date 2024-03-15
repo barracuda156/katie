@@ -1737,8 +1737,6 @@ void QStyle::drawItemPixmap(QPainter *painter, const QRect &rect, int alignment,
 
     \value SH_TabBar_ElideMode The default eliding style for a tab bar.
 
-    \value SH_WizardStyle Controls the look and feel of a QWizard. Returns a QWizard::WizardStyle enum.
-
     \value SH_FormLayoutWrapPolicy Provides a default for how rows are wrapped in a QFormLayout. Returns a QFormLayout::RowWrapPolicy enum.
     \value SH_FormLayoutFieldGrowthPolicy Provides a default for how fields can grow in a QFormLayout. Returns a QFormLayout::FieldGrowthPolicy enum.
     \value SH_FormLayoutFormAlignment Provides a default for how a QFormLayout aligns its contents within the available space. Returns a Qt::Alignment enum.

@@ -182,7 +182,7 @@ public:
     : topLevelMarginLeft(-1), topLevelMarginRight(-1), topLevelMarginTop(-1),
       topLevelMarginBottom(-1), childMarginLeft(-1), childMarginRight(-1),
       childMarginTop(-1), childMarginBottom(-1), hspacing(-1), vspacing(-1),
-      wizStyle(QWizard::ClassicStyle), header(false), watermark(false), title(false),
+      header(false), watermark(false), title(false),
       subTitle(false), extension(false), sideWidget(false) {}
 
     int topLevelMarginLeft;
@@ -196,7 +196,6 @@ public:
     int hspacing;
     int vspacing;
     int buttonSpacing;
-    QWizard::WizardStyle wizStyle;
     bool header;
     bool watermark;
     bool title;
@@ -221,7 +220,6 @@ bool QWizardLayoutInfo::operator==(const QWizardLayoutInfo &other) const
            && hspacing == other.hspacing
            && vspacing == other.vspacing
            && buttonSpacing == other.buttonSpacing
-           && wizStyle == other.wizStyle
            && header == other.header
            && watermark == other.watermark
            && title == other.title
@@ -240,7 +238,7 @@ public:
     QWizardHeader(QWidget *parent = nullptr);
 
     void setup(const QWizardLayoutInfo &info, const QString &title,
-               const QString &subTitle, const QPixmap &logo, const QPixmap &banner,
+               const QString &subTitle, const QPixmap &logo,
                Qt::TextFormat titleFormat, Qt::TextFormat subTitleFormat);
 
 protected:
@@ -250,7 +248,6 @@ private:
     QLabel *subTitleLabel;
     QLabel *logoLabel;
     QGridLayout *layout;
-    QPixmap bannerPixmap;
 };
 
 QWizardHeader::QWizardHeader(QWidget *parent)
@@ -289,20 +286,15 @@ QWizardHeader::QWizardHeader(QWidget *parent)
 }
 
 void QWizardHeader::setup(const QWizardLayoutInfo &info, const QString &title,
-                          const QString &subTitle, const QPixmap &logo, const QPixmap &banner,
+                          const QString &subTitle, const QPixmap &logo,
                           Qt::TextFormat titleFormat, Qt::TextFormat subTitleFormat)
 {
-    const bool modern = (info.wizStyle == QWizard::ModernStyle);
+    layout->setRowMinimumHeight(0, 0);
+    layout->setRowMinimumHeight(1, 0);
+    layout->setRowMinimumHeight(6, GapBetweenLogoAndRightEdge + 2);
 
-    layout->setRowMinimumHeight(0, modern ? ModernHeaderTopMargin : 0);
-    layout->setRowMinimumHeight(1, modern ? info.topLevelMarginTop - ModernHeaderTopMargin - 1 : 0);
-    layout->setRowMinimumHeight(6, (modern ? 3 : GapBetweenLogoAndRightEdge) + 2);
-
-    int minColumnWidth0 = modern ? info.topLevelMarginLeft + info.topLevelMarginRight : 0;
-    int minColumnWidth1 = modern ? info.topLevelMarginLeft + info.topLevelMarginRight + 1
-                                 : info.topLevelMarginLeft + ClassicHMargin;
-    layout->setColumnMinimumWidth(0, minColumnWidth0);
-    layout->setColumnMinimumWidth(1, minColumnWidth1);
+    layout->setColumnMinimumWidth(0, 0);
+    layout->setColumnMinimumWidth(1, info.topLevelMarginLeft + ClassicHMargin);
 
     titleLabel->setTextFormat(titleFormat);
     titleLabel->setText(title);
@@ -313,41 +305,30 @@ void QWizardHeader::setup(const QWizardLayoutInfo &info, const QString &title,
     int desiredSubTitleHeight = subTitleLabel->sizeHint().height();
     subTitleLabel->setText(subTitle);
 
-    if (modern) {
-        bannerPixmap = banner;
-    } else {
-        bannerPixmap = QPixmap();
+    /*
+        There is no widthForHeight() function, so we simulate it with a loop.
+    */
+    int candidateSubTitleWidth = qMin(512, 2 * QApplication::desktop()->width() / 3);
+    int delta = candidateSubTitleWidth >> 1;
+    while (delta > 0) {
+        if (subTitleLabel->heightForWidth(candidateSubTitleWidth - delta)
+                    <= desiredSubTitleHeight)
+            candidateSubTitleWidth -= delta;
+        delta >>= 1;
     }
 
-    if (bannerPixmap.isNull()) {
-        /*
-            There is no widthForHeight() function, so we simulate it with a loop.
-        */
-        int candidateSubTitleWidth = qMin(512, 2 * QApplication::desktop()->width() / 3);
-        int delta = candidateSubTitleWidth >> 1;
-        while (delta > 0) {
-            if (subTitleLabel->heightForWidth(candidateSubTitleWidth - delta)
-                        <= desiredSubTitleHeight)
-                candidateSubTitleWidth -= delta;
-            delta >>= 1;
-        }
+    subTitleLabel->setMinimumSize(candidateSubTitleWidth, desiredSubTitleHeight);
 
-        subTitleLabel->setMinimumSize(candidateSubTitleWidth, desiredSubTitleHeight);
+    QSize size = layout->totalMinimumSize();
+    setMinimumSize(size);
+    setMaximumSize(QWIDGETSIZE_MAX, size.height());
 
-        QSize size = layout->totalMinimumSize();
-        setMinimumSize(size);
-        setMaximumSize(QWIDGETSIZE_MAX, size.height());
-    } else {
-        subTitleLabel->setMinimumSize(0, 0);
-        setFixedSize(banner.size() + QSize(0, 2));
-    }
     updateGeometry();
 }
 
 void QWizardHeader::paintEvent(QPaintEvent * /* event */)
 {
     QPainter painter(this);
-    painter.drawPixmap(0, 0, bannerPixmap);
 
     int x = width() - 2;
     int y = height() - 2;
@@ -471,8 +452,6 @@ public:
         , buttonsHaveCustomLayout(false)
         , titleFmt(Qt::AutoText)
         , subTitleFmt(Qt::AutoText)
-        , placeholderWidget1(0)
-        , placeholderWidget2(0)
         , headerWidget(0)
         , watermarkLabel(0)
         , sideWidget(0)
@@ -506,7 +485,6 @@ public:
     void updateButtonLayout();
     void setButtonLayout(const QWizard::WizardButton *array, int size);
     bool buttonLayoutContains(QWizard::WizardButton which);
-    void updatePixmap(QWizard::WizardPixmap which);
     void disableUpdates();
     void enableUpdates();
     void _q_emitCustomButtonClicked();
@@ -528,7 +506,6 @@ public:
     QWizardLayoutInfo layoutInfo;
     int disableUpdatesCount;
 
-    QWizard::WizardStyle wizStyle;
     QWizard::WizardOptions opts;
     QMap<int, QString> buttonCustomTexts;
     bool buttonsHaveCustomLayout;
@@ -550,8 +527,6 @@ public:
         mutable QAbstractButton *btns[QWizard::NButtons];
     };
     QWidget *antiFlickerWidget;
-    QWidget *placeholderWidget1;
-    QWidget *placeholderWidget2;
     QWizardHeader *headerWidget;
     QWatermarkLabel *watermarkLabel;
     QWidget *sideWidget;
@@ -570,25 +545,21 @@ public:
     int maximumHeight;
 };
 
-static QString buttonDefaultText(QWizard::WizardStyle wstyle, int which, const QWizardPrivate *wizard)
+static QString buttonDefaultText(int which, const QWizardPrivate *wizard)
 {
-    const bool macStyle = (wstyle == QWizard::MacStyle);
     switch (which) {
     case QWizard::BackButton:
-        return macStyle ? QWizard::tr("Go Back") : QWizard::tr("< &Back");
+        return QWizard::tr("< &Back");
     case QWizard::NextButton:
-        if (macStyle)
-            return QWizard::tr("Continue");
-        else
-            return QWizard::tr("&Next >");
+        return QWizard::tr("&Next >");
     case QWizard::CommitButton:
         return QWizard::tr("Commit");
     case QWizard::FinishButton:
-        return macStyle ? QWizard::tr("Done") : QWizard::tr("&Finish");
+        return QWizard::tr("&Finish");
     case QWizard::CancelButton:
         return QWizard::tr("Cancel");
     case QWizard::HelpButton:
-        return macStyle ? QWizard::tr("Help") : QWizard::tr("&Help");
+        return QWizard::tr("&Help");
     default:
         return QString();
     }
@@ -599,12 +570,6 @@ void QWizardPrivate::init()
     Q_Q(QWizard);
 
     antiFlickerWidget = new QWidget(q);
-    wizStyle = QWizard::WizardStyle(q->style()->styleHint(QStyle::SH_WizardStyle, 0, q));
-    if (wizStyle == QWizard::MacStyle) {
-        opts = (QWizard::NoDefaultButton | QWizard::NoCancelButton);
-    } else if (wizStyle == QWizard::ModernStyle) {
-        opts = QWizard::HelpButtonOnRight;
-    }
 
     // create these buttons right away; create the other buttons as necessary
     ensureButton(QWizard::BackButton);
@@ -767,9 +732,6 @@ void QWizardPrivate::switchToPage(int newId, Direction direction)
         candidate = nextOrFinishButton;
     candidate->setFocus();
 
-    if (wizStyle == QWizard::MacStyle)
-        q->updateGeometry();
-
     enableUpdates();
     updateLayout();
 
@@ -806,30 +768,19 @@ QWizardLayoutInfo QWizardPrivate::layoutInfoForCurrentPage()
         ? style->layoutSpacing(QSizePolicy::PushButton, QSizePolicy::PushButton, Qt::Horizontal)
         : layoutHorizontalSpacing;
 
-    if (wizStyle == QWizard::MacStyle)
-        info.buttonSpacing = 12;
-
-    info.wizStyle = wizStyle;
-    if (info.wizStyle == QWizard::AeroStyle)
-        info.wizStyle = QWizard::ModernStyle;
-
     QString titleText;
     QString subTitleText;
-    QPixmap backgroundPixmap;
     QPixmap watermarkPixmap;
 
     if (QWizardPage *page = q->currentPage()) {
         titleText = page->title();
         subTitleText = page->subTitle();
-        backgroundPixmap = page->pixmap(QWizard::BackgroundPixmap);
         watermarkPixmap = page->pixmap(QWizard::WatermarkPixmap);
     }
 
-    info.header = (info.wizStyle == QWizard::ClassicStyle || info.wizStyle == QWizard::ModernStyle)
-        && !(opts & QWizard::IgnoreSubTitles) && !subTitleText.isEmpty();
+    info.header = !(opts & QWizard::IgnoreSubTitles) && !subTitleText.isEmpty();
     info.sideWidget = sideWidget;
-    info.watermark = (info.wizStyle != QWizard::MacStyle) && (info.wizStyle != QWizard::AeroStyle)
-        && !watermarkPixmap.isNull();
+    info.watermark = !watermarkPixmap.isNull();
     info.title = !info.header && !titleText.isEmpty();
     info.subTitle = !(opts & QWizard::IgnoreSubTitles) && !info.header && !subTitleText.isEmpty();
     info.extension = (info.watermark || info.sideWidget) && (opts & QWizard::ExtendedWatermarkPixmap);
@@ -861,10 +812,6 @@ void QWizardPrivate::recreateLayout(const QWizardLayoutInfo &info)
         Now, recreate it.
     */
 
-    bool mac = (info.wizStyle == QWizard::MacStyle);
-    bool classic = (info.wizStyle == QWizard::ClassicStyle);
-    bool modern = (info.wizStyle == QWizard::ModernStyle);
-    bool aero = (info.wizStyle == QWizard::AeroStyle);
     int deltaMarginLeft = info.topLevelMarginLeft - info.childMarginLeft;
     int deltaMarginRight = info.topLevelMarginRight - info.childMarginRight;
     int deltaMarginTop = info.topLevelMarginTop - info.childMarginTop;
@@ -873,52 +820,32 @@ void QWizardPrivate::recreateLayout(const QWizardLayoutInfo &info)
 
     int row = 0;
     int numColumns;
-    if (mac) {
-        numColumns = 3;
-    } else if (info.watermark || info.sideWidget) {
+    if (info.watermark || info.sideWidget) {
         numColumns = 2;
     } else {
         numColumns = 1;
     }
     int pageColumn = qMin(1, numColumns - 1);
 
-    if (mac) {
-        mainLayout->setMargin(0);
-        mainLayout->setSpacing(0);
-        buttonLayout->setContentsMargins(MacLayoutLeftMargin, MacButtonTopMargin, MacLayoutRightMargin, MacLayoutBottomMargin);
-        pageVBoxLayout->setMargin(7);
-    } else {
-        if (modern) {
-            mainLayout->setMargin(0);
-            mainLayout->setSpacing(0);
-            pageVBoxLayout->setContentsMargins(deltaMarginLeft, deltaMarginTop,
-                                               deltaMarginRight, deltaMarginBottom);
-            buttonLayout->setContentsMargins(info.topLevelMarginLeft, info.topLevelMarginTop,
-                                             info.topLevelMarginRight, info.topLevelMarginBottom);
-        } else {
-            mainLayout->setContentsMargins(info.topLevelMarginLeft, info.topLevelMarginTop,
-                                           info.topLevelMarginRight, info.topLevelMarginBottom);
-            mainLayout->setHorizontalSpacing(info.hspacing);
-            mainLayout->setVerticalSpacing(info.vspacing);
-            pageVBoxLayout->setContentsMargins(0, 0, 0, 0);
-            buttonLayout->setContentsMargins(0, 0, 0, 0);
-        }
-    }
+
+    mainLayout->setContentsMargins(info.topLevelMarginLeft, info.topLevelMarginTop,
+                                   info.topLevelMarginRight, info.topLevelMarginBottom);
+    mainLayout->setHorizontalSpacing(info.hspacing);
+    mainLayout->setVerticalSpacing(info.vspacing);
+    pageVBoxLayout->setContentsMargins(0, 0, 0, 0);
+    buttonLayout->setContentsMargins(0, 0, 0, 0);
     buttonLayout->setSpacing(info.buttonSpacing);
 
     if (info.header) {
         if (!headerWidget)
             headerWidget = new QWizardHeader(antiFlickerWidget);
-        headerWidget->setAutoFillBackground(modern);
+        headerWidget->setAutoFillBackground(false);
         mainLayout->addWidget(headerWidget, row++, 0, 1, numColumns);
     }
     if (headerWidget)
         headerWidget->setVisible(info.header);
 
     int watermarkStartRow = row;
-
-    if (mac)
-        mainLayout->setRowMinimumHeight(row++, 10);
 
     if (info.title) {
         if (!titleLabel) {
@@ -928,52 +855,14 @@ void QWizardPrivate::recreateLayout(const QWizardLayoutInfo &info)
         }
 
         QFont titleFont = q->font();
-        titleFont.setPointSize(titleFont.pointSize() + (mac ? 3 : 4));
+        titleFont.setPointSize(titleFont.pointSize() + 4);
         titleFont.setBold(true);
         titleLabel->setPalette(QPalette());
 
-        if (aero) {
-            // ### hardcoded for now:
-            titleFont = QFont(QLatin1String("Segoe UI"), 12);
-            QPalette pal(titleLabel->palette());
-            pal.setColor(QPalette::Text, "#003399");
-            titleLabel->setPalette(pal);
-        }
-
         titleLabel->setFont(titleFont);
-        const int aeroTitleIndent = 25; // ### hardcoded for now - should be calculated somehow
-        if (aero)
-            titleLabel->setIndent(aeroTitleIndent);
-        else if (mac)
-            titleLabel->setIndent(2);
-        else if (classic)
-            titleLabel->setIndent(info.childMarginLeft);
-        else
-            titleLabel->setIndent(info.topLevelMarginLeft);
-        if (modern) {
-            if (!placeholderWidget1) {
-                placeholderWidget1 = new QWidget(antiFlickerWidget);
-                placeholderWidget1->setBackgroundRole(QPalette::Base);
-            }
-            placeholderWidget1->setFixedHeight(info.topLevelMarginLeft + 2);
-            mainLayout->addWidget(placeholderWidget1, row++, pageColumn);
-        }
+        titleLabel->setIndent(info.childMarginLeft);
         mainLayout->addWidget(titleLabel, row++, pageColumn);
-        if (modern) {
-            if (!placeholderWidget2) {
-                placeholderWidget2 = new QWidget(antiFlickerWidget);
-                placeholderWidget2->setBackgroundRole(QPalette::Base);
-            }
-            placeholderWidget2->setFixedHeight(5);
-            mainLayout->addWidget(placeholderWidget2, row++, pageColumn);
-        }
-        if (mac)
-            mainLayout->setRowMinimumHeight(row++, 7);
     }
-    if (placeholderWidget1)
-        placeholderWidget1->setVisible(info.title && modern);
-    if (placeholderWidget2)
-        placeholderWidget2->setVisible(info.title && modern);
 
     if (info.subTitle) {
         if (!subTitleLabel) {
@@ -990,32 +879,19 @@ void QWizardPrivate::recreateLayout(const QWizardLayoutInfo &info)
     // ### try to replace with margin.
     changeSpacerSize(pageVBoxLayout, 0, 0, info.subTitle ? info.childMarginLeft : 0);
 
-    int hMargin = mac ? 1 : 0;
+    int hMargin = 0;
     int vMargin = hMargin;
 
-    pageFrame->setFrameStyle(mac ? (QFrame::Box | QFrame::Raised) : QFrame::NoFrame);
+    pageFrame->setFrameStyle(QFrame::NoFrame);
     pageFrame->setLineWidth(0);
     pageFrame->setMidLineWidth(hMargin);
 
     if (info.header) {
-        if (modern) {
-            hMargin = info.topLevelMarginLeft;
-            vMargin = deltaMarginBottom;
-        } else if (classic) {
-            hMargin = deltaMarginLeft + ClassicHMargin;
-            vMargin = 0;
-        }
+        hMargin = deltaMarginLeft + ClassicHMargin;
+        vMargin = 0;
     }
 
-    if (aero) {
-        int leftMargin   = 18; // ### hardcoded for now - should be calculated somehow
-        int topMargin    = vMargin;
-        int rightMargin  = hMargin; // ### for now
-        int bottomMargin = vMargin;
-        pageFrame->setContentsMargins(leftMargin, topMargin, rightMargin, bottomMargin);
-    } else {
-        pageFrame->setContentsMargins(hMargin, vMargin, hMargin, vMargin);
-    }
+    pageFrame->setContentsMargins(hMargin, vMargin, hMargin, vMargin);
 
     if ((info.watermark || info.sideWidget) && !watermarkLabel) {
         watermarkLabel = new QWatermarkLabel(antiFlickerWidget, sideWidget);
@@ -1029,68 +905,30 @@ void QWizardPrivate::recreateLayout(const QWizardLayoutInfo &info)
     const bool wasSemiTransparent =
         pageFrame->palette().brush(QPalette::Window).color().alpha() < 255
         || pageFrame->palette().brush(QPalette::Base).color().alpha() < 255;
-    if (mac) {
-        if (!wasSemiTransparent) {
-            QPalette pal = pageFrame->palette();
-            pal.setBrush(QPalette::Window, QColor(255, 255, 255, 153));
-            // ### The next line is required to ensure visual semitransparency when
-            // ### switching from ModernStyle to MacStyle. See TAG1 below.
-            pal.setBrush(QPalette::Base, QColor(255, 255, 255, 153));
-            pageFrame->setPalette(pal);
-            pageFrame->setAutoFillBackground(true);
-            antiFlickerWidget->setAutoFillBackground(false);
-        }
-    } else {
-        if (wasSemiTransparent)
-            pageFrame->setPalette(QPalette());
+    if (wasSemiTransparent)
+        pageFrame->setPalette(QPalette());
 
-        bool baseBackground = (modern && !info.header); // ### TAG1
-        pageFrame->setBackgroundRole(baseBackground ? QPalette::Base : QPalette::Window);
+    pageFrame->setBackgroundRole(QPalette::Window);
 
-        if (titleLabel)
-            titleLabel->setAutoFillBackground(baseBackground);
-        pageFrame->setAutoFillBackground(baseBackground);
-        if (watermarkLabel)
-            watermarkLabel->setAutoFillBackground(baseBackground);
-        if (placeholderWidget1)
-            placeholderWidget1->setAutoFillBackground(baseBackground);
-        if (placeholderWidget2)
-            placeholderWidget2->setAutoFillBackground(baseBackground);
-
-        if (aero) {
-            QPalette pal = pageFrame->palette();
-            pal.setBrush(QPalette::Window, QColor(255, 255, 255));
-            pageFrame->setPalette(pal);
-            pageFrame->setAutoFillBackground(true);
-            pal = antiFlickerWidget->palette();
-            pal.setBrush(QPalette::Window, QColor(255, 255, 255));
-            antiFlickerWidget->setPalette(pal);
-            antiFlickerWidget->setAutoFillBackground(true);
-        }
-    }
+    if (titleLabel)
+        titleLabel->setAutoFillBackground(false);
+    pageFrame->setAutoFillBackground(false);
+    if (watermarkLabel)
+        watermarkLabel->setAutoFillBackground(false);
 
     mainLayout->addWidget(pageFrame, row++, pageColumn);
 
     int watermarkEndRow = row;
-    if (classic)
-        mainLayout->setRowMinimumHeight(row++, deltaVSpacing);
-
-    if (aero) {
-        buttonLayout->setContentsMargins(9, 9, 9, 9);
-        mainLayout->setContentsMargins(0, 11, 0, 0);
-    }
+    mainLayout->setRowMinimumHeight(row++, deltaVSpacing);
 
     int buttonStartColumn = info.extension ? 1 : 0;
     int buttonNumColumns = info.extension ? 1 : numColumns;
 
-    if (classic || modern) {
-        if (!bottomRuler)
-            bottomRuler = new QWizardRuler(antiFlickerWidget);
-        mainLayout->addWidget(bottomRuler, row++, buttonStartColumn, 1, buttonNumColumns);
-    }
+    if (!bottomRuler)
+        bottomRuler = new QWizardRuler(antiFlickerWidget);
+    mainLayout->addWidget(bottomRuler, row++, buttonStartColumn, 1, buttonNumColumns);
 
-    if (classic)
-        mainLayout->setRowMinimumHeight(row++, deltaVSpacing);
+    mainLayout->setRowMinimumHeight(row++, deltaVSpacing);
 
     mainLayout->addLayout(buttonLayout, row++, buttonStartColumn, 1, buttonNumColumns);
 
@@ -1101,9 +939,7 @@ void QWizardPrivate::recreateLayout(const QWizardLayoutInfo &info)
                               watermarkEndRow - watermarkStartRow, 1);
     }
 
-    mainLayout->setColumnMinimumWidth(0, mac && !info.watermark ? 181 : 0);
-    if (mac)
-        mainLayout->setColumnMinimumWidth(2, 21);
+    mainLayout->setColumnMinimumWidth(0, 0);
 
     if (headerWidget)
         headerWidget->setVisible(info.header);
@@ -1112,7 +948,7 @@ void QWizardPrivate::recreateLayout(const QWizardLayoutInfo &info)
     if (subTitleLabel)
         subTitleLabel->setVisible(info.subTitle);
     if (bottomRuler)
-        bottomRuler->setVisible(classic || modern);
+        bottomRuler->setVisible(true);
     if (watermarkLabel)
         watermarkLabel->setVisible(info.watermark || info.sideWidget);
 
@@ -1150,7 +986,7 @@ void QWizardPrivate::updateLayout()
     if (info.header) {
         Q_ASSERT(page);
         headerWidget->setup(info, page->title(), page->subTitle(),
-                            page->pixmap(QWizard::LogoPixmap), page->pixmap(QWizard::BannerPixmap),
+                            page->pixmap(QWizard::LogoPixmap),
                             titleFmt, subTitleFmt);
     }
 
@@ -1268,7 +1104,7 @@ bool QWizardPrivate::ensureButton(QWizard::WizardButton which) const
         pushButton->hide();
         btns[which] = pushButton;
         if (which < QWizard::NStandardButtons)
-            pushButton->setText(buttonDefaultText(wizStyle, which, this));
+            pushButton->setText(buttonDefaultText(which, this));
 
         connectButton(which);
     }
@@ -1295,7 +1131,7 @@ void QWizardPrivate::updateButtonTexts()
             else if (buttonCustomTexts.contains(i))
                 btns[i]->setText(buttonCustomTexts.value(i));
             else if (i < QWizard::NStandardButtons)
-                btns[i]->setText(buttonDefaultText(wizStyle, i, this));
+                btns[i]->setText(buttonDefaultText(i, this));
         }
     }
 }
@@ -1377,19 +1213,6 @@ void QWizardPrivate::setButtonLayout(const QWizard::WizardButton *array, int siz
 bool QWizardPrivate::buttonLayoutContains(QWizard::WizardButton which)
 {
     return !buttonsHaveCustomLayout || buttonsCustomLayout.contains(which);
-}
-
-void QWizardPrivate::updatePixmap(QWizard::WizardPixmap which)
-{
-    Q_Q(QWizard);
-    if (which == QWizard::BackgroundPixmap) {
-        if (wizStyle == QWizard::MacStyle) {
-            q->update();
-            q->updateGeometry();
-        }
-    } else {
-        updateLayout();
-    }
 }
 
 void QWizardPrivate::disableUpdates()
@@ -1538,41 +1361,10 @@ void QWizardPrivate::setStyle(QStyle *style)
 
     \section1 Wizard Look and Feel
 
-    QWizard supports four wizard looks:
-
-    \list
-    \o ClassicStyle
-    \o ModernStyle
-    \o MacStyle
-    \o AeroStyle
-    \endlist
-
-    You can explicitly set the look to use using setWizardStyle()
-    (e.g., if you want the same look on all platforms).
-
-    \table
-    \header \o ClassicStyle
-            \o ModernStyle
-            \o MacStyle
-            \o AeroStyle
-    \row    \o \inlineimage qtwizard-classic1.png
-            \o \inlineimage qtwizard-modern1.png
-            \o \inlineimage qtwizard-mac1.png
-            \o \inlineimage qtwizard-aero1.png
-    \row    \o \inlineimage qtwizard-classic2.png
-            \o \inlineimage qtwizard-modern2.png
-            \o \inlineimage qtwizard-mac2.png
-            \o \inlineimage qtwizard-aero2.png
-    \endtable
-
-    Note: AeroStyle has effect only on a Windows Vista system with alpha compositing enabled.
-    ModernStyle is used as a fallback when this condition is not met.
-
-    In addition to the wizard style, there are several options that
-    control the look and feel of the wizard. These can be set using
-    setOption() or setOptions(). For example, HaveHelpButton makes
-    QWizard show a \gui Help button along with the other wizard
-    buttons.
+    There are several options that control the look and feel of
+    the wizard. These can be set using setOption() or setOptions().
+    For example, HaveHelpButton makes QWizard show a \gui Help
+    button along with the other wizard buttons.
 
     You can even change the order of the wizard buttons to any
     arbitrary order using setButtonLayout(), and you can add up to
@@ -1596,10 +1388,8 @@ void QWizardPrivate::setStyle(QStyle *style)
     \o A set of pixmaps, which may or may not be honored, depending
        on the wizard's style:
         \list
-        \o WatermarkPixmap (used by ClassicStyle and ModernStyle)
-        \o BannerPixmap (used by ModernStyle)
-        \o LogoPixmap (used by ClassicStyle and ModernStyle)
-        \o BackgroundPixmap (used by MacStyle)
+        \o WatermarkPixmap
+        \o LogoPixmap
         \endlist
     \endlist
 
@@ -1609,11 +1399,10 @@ void QWizardPrivate::setStyle(QStyle *style)
     \image qtwizard-nonmacpage.png
 
     When a \l{QWizardPage::}{subTitle} is set, QWizard displays it
-    in a header, in which case it also uses the BannerPixmap and the
-    LogoPixmap to decorate the header. The WatermarkPixmap is
-    displayed on the left side, below the header. At the bottom,
-    there is a row of buttons allowing the user to navigate through
-    the pages.
+    in a header, in which case it also uses the LogoPixmap to
+    decorate the header. The WatermarkPixmap is displayed on the
+    left side, below the header. At the bottom, there is a row of
+    buttons allowing the user to navigate through the pages.
 
     The page itself (the \l{QWizardPage} widget) occupies the area
     between the header, the watermark, and the button row. Typically,
@@ -1624,11 +1413,6 @@ void QWizardPrivate::setStyle(QStyle *style)
     different:
 
     \image qtwizard-macpage.png
-
-    The watermark, banner, and logo pixmaps are ignored by the
-    MacStyle. If the BackgroundPixmap is set, it is used as the
-    background for the wizard; otherwise, a default "assistant" image
-    is used.
 
     The title and subtitle are set by calling
     QWizardPage::setTitle() and QWizardPage::setSubTitle() on the
@@ -1826,29 +1610,12 @@ void QWizardPrivate::setStyle(QStyle *style)
 
     This enum specifies the pixmaps that can be associated with a page.
 
-    \value WatermarkPixmap  The tall pixmap on the left side of a ClassicStyle or ModernStyle page
-    \value LogoPixmap  The small pixmap on the right side of a ClassicStyle or ModernStyle page header
-    \value BannerPixmap  The pixmap that occupies the background of a ModernStyle page header
-    \value BackgroundPixmap  The pixmap that occupies the background of a MacStyle wizard
+    \value WatermarkPixmap  The tall pixmap on the left side of a page
+    \value LogoPixmap  The small pixmap on the right side of a page header
 
     \omitvalue NPixmaps
 
     \sa setPixmap(), QWizardPage::setPixmap(), {Elements of a Wizard Page}
-*/
-
-/*!
-    \enum QWizard::WizardStyle
-
-    This enum specifies the different looks supported by QWizard.
-
-    \value ClassicStyle  Classic Windows look
-    \value ModernStyle  Modern Windows look
-    \value MacStyle  Mac OS X look
-    \value AeroStyle  Windows Aero look
-
-    \omitvalue NStyles
-
-    \sa setWizardStyle(), WizardOption, {Wizard Look and Feel}
 */
 
 /*!
@@ -2221,42 +1988,10 @@ QVariant QWizard::field(const QString &name) const
 }
 
 /*!
-    \property QWizard::wizardStyle
-    \brief the look and feel of the wizard
-
-    By default, QWizard uses the AeroStyle on a Windows Vista system with alpha compositing
-    enabled, regardless of the current widget style. If this is not the case, the default
-    wizard style depends on the current widget style as follows: ModernStyle is the default
-    if the current widget style is QWindowsStyle, and ClassicStyle is the default in all
-    other cases.
-
-    \sa {Wizard Look and Feel}, options
-*/
-void QWizard::setWizardStyle(WizardStyle style)
-{
-    Q_D(QWizard);
-
-    if (style != d->wizStyle) {
-        d->disableUpdates();
-        d->wizStyle = style;
-        d->updateButtonTexts();
-        d->updateLayout();
-        updateGeometry();
-        d->enableUpdates();
-    }
-}
-
-QWizard::WizardStyle QWizard::wizardStyle() const
-{
-    Q_D(const QWizard);
-    return d->wizStyle;
-}
-
-/*!
     Sets the given \a option to be enabled if \a on is true;
     otherwise, clears the given \a option.
 
-    \sa options, testOption(), setWizardStyle()
+    \sa options, testOption(
 */
 void QWizard::setOption(WizardOption option, bool on)
 {
@@ -2269,7 +2004,7 @@ void QWizard::setOption(WizardOption option, bool on)
     Returns true if the given \a option is enabled; otherwise, returns
     false.
 
-    \sa options, setOption(), setWizardStyle()
+    \sa options, setOption()
 */
 bool QWizard::testOption(WizardOption option) const
 {
@@ -2288,8 +2023,6 @@ bool QWizard::testOption(WizardOption option) const
     \o Mac OS X: NoDefaultButton and NoCancelButton.
     \o X11 and QWS (Qt for Embedded Linux): none.
     \endlist
-
-    \sa wizardStyle
 */
 void QWizard::setOptions(WizardOptions options)
 {
@@ -2328,10 +2061,6 @@ QWizard::WizardOptions QWizard::options() const
 /*!
     Sets the text on button \a which to be \a text.
 
-    By default, the text on buttons depends on the wizardStyle. For
-    example, on Mac OS X, the \gui Next button is called \gui
-    Continue.
-
     To add extra buttons to the wizard (e.g., a \gui Print button),
     one way is to call setButtonText() with CustomButton1,
     CustomButton2, or CustomButton3 to set their text, and make the
@@ -2360,10 +2089,6 @@ void QWizard::setButtonText(WizardButton which, const QString &text)
 
     If a text has ben set using setButtonText(), this text is returned.
 
-    By default, the text on buttons depends on the wizardStyle. For
-    example, on Mac OS X, the \gui Next button is called \gui
-    Continue.
-
     \sa button(), setButton(), setButtonText(), QWizardPage::buttonText(),
     QWizardPage::setButtonText()
 */
@@ -2377,7 +2102,7 @@ QString QWizard::buttonText(WizardButton which) const
     if (d->buttonCustomTexts.contains(which))
         return d->buttonCustomTexts.value(which);
 
-    const QString defText = buttonDefaultText(d->wizStyle, which, d);
+    const QString defText = buttonDefaultText(which, d);
     if(!defText.isNull())
         return defText;
 
@@ -2536,14 +2261,13 @@ void QWizard::setPixmap(WizardPixmap which, const QPixmap &pixmap)
     Q_D(QWizard);
     Q_ASSERT(uint(which) < NPixmaps);
     d->defaultPixmaps[which] = pixmap;
-    d->updatePixmap(which);
+    d->updateLayout();
 }
 
 /*!
     Returns the pixmap set for role \a which.
 
-    By default, the only pixmap that is set is the BackgroundPixmap on
-    Mac OS X.
+    By default, no pixmap that is set.
 
     \sa QWizardPage::pixmap(), {Elements of a Wizard Page}
 */
@@ -2662,22 +2386,6 @@ QSize QWizard::sizeHint() const
     Q_D(const QWizard);
     QSize result = d->mainLayout->totalSizeHint();
     QSize extra(500, 360);
-    if (d->wizStyle == MacStyle && d->current != -1) {
-        QSize pixmap(currentPage()->pixmap(BackgroundPixmap).size());
-        extra.setWidth(616);
-        if (!pixmap.isNull()) {
-            extra.setHeight(pixmap.height());
-
-            /*
-                The width isn't always reliable as a size hint, as
-                some wizard backgrounds just cover the leftmost area.
-                Use a rule of thumb to determine if the width is
-                reliable or not.
-            */
-            if (pixmap.width() >= pixmap.height())
-                extra.setWidth(pixmap.width());
-        }
-    }
     return result.expandedTo(extra);
 }
 
@@ -2835,23 +2543,6 @@ void QWizard::resizeEvent(QResizeEvent *event)
     Q_D(QWizard);
     d->antiFlickerWidget->resize(event->size().width(), event->size().height());
     QDialog::resizeEvent(event);
-}
-
-/*!
-    \reimp
-*/
-void QWizard::paintEvent(QPaintEvent * event)
-{
-    Q_D(QWizard);
-    if (d->wizStyle == MacStyle && currentPage()) {
-        QPixmap backgroundPixmap = currentPage()->pixmap(BackgroundPixmap);
-        if (backgroundPixmap.isNull())
-            return;
-
-        QPainter painter(this);
-        painter.drawPixmap(0, (height() - backgroundPixmap.height()) / 2, backgroundPixmap);
-    }
-    Q_UNUSED(event);
 }
 
 /*!
@@ -3122,7 +2813,7 @@ void QWizardPage::setPixmap(QWizard::WizardPixmap which, const QPixmap &pixmap)
     Q_ASSERT(uint(which) < QWizard::NPixmaps);
     d->pixmaps[which] = pixmap;
     if (d->wizard && d->wizard->currentPage() == this)
-        d->wizard->d_func()->updatePixmap(which);
+        d->wizard->d_func()->updateLayout();
 }
 
 /*!
@@ -3347,9 +3038,6 @@ bool QWizardPage::isCommitPage() const
 /*!
     Sets the text on button \a which to be \a text on this page.
 
-    By default, the text on buttons depends on the QWizard::wizardStyle,
-    but may be redefined for the wizard as a whole using QWizard::setButtonText().
-
     \sa buttonText(), QWizard::setButtonText(), QWizard::buttonText()
 */
 void QWizardPage::setButtonText(QWizard::WizardButton which, const QString &text)
@@ -3366,10 +3054,6 @@ void QWizardPage::setButtonText(QWizard::WizardButton which, const QString &text
     If a text has ben set using setButtonText(), this text is returned.
     Otherwise, if a text has been set using QWizard::setButtonText(),
     this text is returned.
-
-    By default, the text on buttons depends on the QWizard::wizardStyle.
-    For example, on Mac OS X, the \gui Next button is called \gui
-    Continue.
 
     \sa setButtonText(), QWizard::buttonText(), QWizard::setButtonText()
 */

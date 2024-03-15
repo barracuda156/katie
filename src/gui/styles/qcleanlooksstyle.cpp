@@ -3934,11 +3934,6 @@ int QCleanlooksStyle::styleHint(StyleHint hint, const QStyleOption *option, cons
     case SH_MessageBox_CenterButtons:
         ret = false;
         break;
-#ifndef QT_NO_WIZARD
-    case SH_WizardStyle:
-        ret = QWizard::ClassicStyle;
-        break;
-#endif
     case SH_ItemView_ArrowKeysNavigateIntoChildren:
         ret = false;
         break;

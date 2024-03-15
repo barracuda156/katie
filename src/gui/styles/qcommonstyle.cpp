@@ -4734,11 +4734,6 @@ int QCommonStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget
             vret->variant = fmt;
         }
         break;
-#ifndef QT_NO_WIZARD
-    case SH_WizardStyle:
-        ret = QWizard::ClassicStyle;
-        break;
-#endif
     case SH_FormLayoutWrapPolicy:
         ret = QFormLayout::DontWrapRows;
         break;
