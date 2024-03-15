@@ -204,7 +204,6 @@ incmap = {
         'QStyleOptionTabV2': 'qstyleoption.h',
         'QStyleOptionTabV3': 'qstyleoption.h',
         'QStyleOptionTabWidgetFrame': 'qstyleoption.h',
-        'QStyleOptionTabWidgetFrameV2': 'qstyleoption.h',
         'QStyleOptionTitleBar': 'qstyleoption.h',
         'QStyleOptionToolBar': 'qstyleoption.h',
         'QStyleOptionToolBox': 'qstyleoption.h',

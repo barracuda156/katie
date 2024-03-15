@@ -144,7 +144,6 @@ public:
 protected:
     QStyleOptionTabWidgetFrame(int version);
 };
-typedef QStyleOptionTabWidgetFrame QStyleOptionTabWidgetFrameV2;
 #endif // QT_NO_TABWIDGET
 
 
@@ -166,7 +165,7 @@ public:
 protected:
     QStyleOptionTabBarBase(int version);
 };
-#endif// QT_NO_TABBAR
+#endif // QT_NO_TABBAR
 
 class Q_GUI_EXPORT QStyleOptionHeader : public QStyleOption
 {

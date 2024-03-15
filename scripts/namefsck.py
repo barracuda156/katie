@@ -428,7 +428,6 @@ classlist = [
     "QStyleOptionTabV2",
     "QStyleOptionTabV3",
     "QStyleOptionTabWidgetFrame",
-    "QStyleOptionTabWidgetFrameV2",
     "QStyleOptionTitleBar",
     "QStyleOptionToolBar",
     "QStyleOptionToolBox",

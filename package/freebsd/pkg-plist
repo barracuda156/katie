@@ -542,7 +542,6 @@ include/katie/QtGui/QStyleOptionTabBarBase
 include/katie/QtGui/QStyleOptionTabV2
 include/katie/QtGui/QStyleOptionTabV3
 include/katie/QtGui/QStyleOptionTabWidgetFrame
-include/katie/QtGui/QStyleOptionTabWidgetFrameV2
 include/katie/QtGui/QStyleOptionTitleBar
 include/katie/QtGui/QStyleOptionToolBar
 include/katie/QtGui/QStyleOptionToolBox

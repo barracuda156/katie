@@ -3172,13 +3172,6 @@ QStyleOptionViewItem::QStyleOptionViewItem(int version)
 */
 
 /*!
-    \typedef QStyleOptionTabWidgetFrameV2
-    \relates QStyleOptionTabWidgetFrame
-
-    Synonym for QStyleOptionTabWidgetFrame.
-*/
-
-/*!
     Constructs a QStyleOptionTabWidgetFrame, initializing the members
     variables to their default values.
 */
