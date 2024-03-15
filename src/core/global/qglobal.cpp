@@ -1829,18 +1829,6 @@ int qrand()
 
     This macro marks a symbol for shared library export (see
      \l{sharedlibrary.html}{Creating Shared Libraries}).
-
-    \sa Q_DECL_IMPORT
-*/
-
-/*!
-    \macro Q_DECL_IMPORT
-    \relates <QtGlobal>
-
-    This macro declares a symbol to be an import from a shared library (see
-    \l{sharedlibrary.html}{Creating Shared Libraries}).
-
-    \sa Q_DECL_EXPORT
 */
 
 // the displayMode value is according to the what are blocks in the piecetable, not

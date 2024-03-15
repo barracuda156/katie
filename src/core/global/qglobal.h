@@ -191,54 +191,53 @@ typedef double qreal;
 
 #define Q_DECL_EXPORT __attribute__((visibility("default")))
 #define Q_DECL_HIDDEN __attribute__((visibility("hidden")))
-#define Q_DECL_IMPORT
 
 #ifdef KtCore_EXPORTS
 #  define Q_CORE_EXPORT Q_DECL_EXPORT
 #else
-#  define Q_CORE_EXPORT Q_DECL_IMPORT
+#  define Q_CORE_EXPORT
 #endif
 
 #ifdef KtGui_EXPORTS
 #  define Q_GUI_EXPORT Q_DECL_EXPORT
 #else
-#  define Q_GUI_EXPORT Q_DECL_IMPORT
+#  define Q_GUI_EXPORT
 #endif
 
 #ifdef KtNetwork_EXPORTS
 #  define Q_NETWORK_EXPORT Q_DECL_EXPORT
 #else
-#  define Q_NETWORK_EXPORT Q_DECL_IMPORT
+#  define Q_NETWORK_EXPORT
 #endif
 
 #ifdef KtSvg_EXPORTS
 #  define Q_SVG_EXPORT Q_DECL_EXPORT
 #else
-#  define Q_SVG_EXPORT Q_DECL_IMPORT
+#  define Q_SVG_EXPORT
 #endif
 
 #ifdef KtTest_EXPORTS
 #  define Q_TEST_EXPORT Q_DECL_EXPORT
 #else
-#  define Q_TEST_EXPORT Q_DECL_IMPORT
+#  define Q_TEST_EXPORT
 #endif
 
 #ifdef KtXml_EXPORTS
 #  define Q_XML_EXPORT Q_DECL_EXPORT
 #else
-#  define Q_XML_EXPORT Q_DECL_IMPORT
+#  define Q_XML_EXPORT
 #endif
 
 #ifdef KtDBus_EXPORTS
 #  define Q_DBUS_EXPORT Q_DECL_EXPORT
 #else
-#  define Q_DBUS_EXPORT Q_DECL_IMPORT
+#  define Q_DBUS_EXPORT
 #endif
 
 #ifdef KtUiTools_EXPORTS
 #  define Q_UITOOLS_EXPORT Q_DECL_EXPORT
 #else
-#  define Q_UITOOLS_EXPORT Q_DECL_IMPORT
+#  define Q_UITOOLS_EXPORT
 #endif
 
 #define Q_CORE_EXPORT_INLINE Q_CORE_EXPORT inline
