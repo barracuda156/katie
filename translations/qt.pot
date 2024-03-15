@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-21 08:02+0300\n"
+"POT-Creation-Date: 2024-03-15 08:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -258,43 +258,27 @@ msgctxt "QJsonDocument"
 msgid "Rootless arrays are not supported"
 msgstr ""
 
-#: src/gui/dialogs/qwizard.cpp:578
-msgid "Go Back"
-msgstr ""
-
-#: src/gui/dialogs/qwizard.cpp:578
+#: src/gui/dialogs/qwizard.cpp:546
 msgid "< &Back"
 msgstr ""
 
-#: src/gui/dialogs/qwizard.cpp:581
-msgid "Continue"
-msgstr ""
-
-#: src/gui/dialogs/qwizard.cpp:583
+#: src/gui/dialogs/qwizard.cpp:548
 msgid "&Next >"
 msgstr ""
 
-#: src/gui/dialogs/qwizard.cpp:585
+#: src/gui/dialogs/qwizard.cpp:550
 msgid "Commit"
 msgstr ""
 
-#: src/gui/dialogs/qwizard.cpp:587
-msgid "Done"
-msgstr ""
-
-#: src/gui/dialogs/qwizard.cpp:587
+#: src/gui/dialogs/qwizard.cpp:552
 msgid "&Finish"
 msgstr ""
 
-#: src/gui/dialogs/qwizard.cpp:589 src/gui/dialogs/qprogressdialog.cpp:164
+#: src/gui/dialogs/qwizard.cpp:554 src/gui/dialogs/qprogressdialog.cpp:164
 msgid "Cancel"
 msgstr ""
 
-#: src/gui/dialogs/qwizard.cpp:591
-msgid "Help"
-msgstr ""
-
-#: src/gui/dialogs/qwizard.cpp:591
+#: src/gui/dialogs/qwizard.cpp:556
 msgid "&Help"
 msgstr ""
 
@@ -876,7 +860,7 @@ msgctxt "QImageReader"
 msgid "Unable to read image data"
 msgstr ""
 
-#: src/gui/widgets/qtabbar.cpp:2163
+#: src/gui/widgets/qtabbar.cpp:2161
 msgid "Close Tab"
 msgstr ""
 
@@ -1067,7 +1051,7 @@ msgstr ""
 msgid "Step &down"
 msgstr ""
 
-#: src/gui/kernel/qwidget.cpp:4732
+#: src/gui/kernel/qwidget.cpp:4734
 msgid "*"
 msgstr ""
 
@@ -2669,11 +2653,11 @@ msgstr ""
 msgid "Connection timed out"
 msgstr ""
 
-#: src/network/socket/qabstractsocket.cpp:1430
+#: src/network/socket/qabstractsocket.cpp:1427
 msgid "Socket operation timed out"
 msgstr ""
 
-#: src/network/socket/qabstractsocket.cpp:1833
+#: src/network/socket/qabstractsocket.cpp:1830
 msgid "Socket is not connected"
 msgstr ""
 
