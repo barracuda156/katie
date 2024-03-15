@@ -143,7 +143,6 @@ incmap = {
         'QHelpEvent': 'qevent.h',
         'QHideEvent': 'qevent.h',
         'QHoverEvent': 'qevent.h',
-        'QIconEngineV2': 'qiconengine.h',
         'QImageIOPlugin': 'qimageiohandler.h',
         'QInputEvent': 'qevent.h',
         'QIntValidator': 'qvalidator.h',

@@ -207,7 +207,6 @@ classlist = [
     "QIPv6Address",
     "QIcon",
     "QIconEngine",
-    "QIconEngineV2",
     "QIdentityProxyModel",
     "QImage",
     "QImageIOHandler",

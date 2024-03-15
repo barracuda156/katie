@@ -395,7 +395,7 @@ QSize QIconLoaderEngine::actualSize(const QSize &size, QIcon::Mode mode,
             return QSize(result, result);
         }
     }
-    return QIconEngineV2::actualSize(size, mode, state);
+    return QIconEngine::actualSize(size, mode, state);
 }
 
 QList<QSize> QIconLoaderEngine::availableSizes(QIcon::Mode mode, QIcon::State state) const

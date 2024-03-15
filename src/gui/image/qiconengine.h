@@ -48,7 +48,6 @@ public:
                                 QIcon::State state = QIcon::Off) const;
     virtual QString iconName() const;
 };
-typedef QIconEngine QIconEngineV2;
 
 QT_END_NAMESPACE
 

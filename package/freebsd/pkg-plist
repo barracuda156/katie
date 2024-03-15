@@ -408,7 +408,6 @@ include/katie/QtGui/QHideEvent
 include/katie/QtGui/QHoverEvent
 include/katie/QtGui/QIcon
 include/katie/QtGui/QIconEngine
-include/katie/QtGui/QIconEngineV2
 include/katie/QtGui/QIdentityProxyModel
 include/katie/QtGui/QImage
 include/katie/QtGui/QImageIOHandler
