@@ -412,8 +412,6 @@ classlist = [
     "QStyleOptionDockWidget",
     "QStyleOptionFocusRect",
     "QStyleOptionFrame",
-    "QStyleOptionFrameV2",
-    "QStyleOptionFrameV3",
     "QStyleOptionGraphicsItem",
     "QStyleOptionGroupBox",
     "QStyleOptionHeader",

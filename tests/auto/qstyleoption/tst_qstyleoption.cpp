@@ -124,10 +124,10 @@ void tst_QStyleOption::qstyleoptioncast()
 void tst_QStyleOption::copyconstructors()
 {
     QStyleOptionFrame frame;
-    QStyleOptionFrameV2 frame2(frame);
-    QCOMPARE(frame2.version, int(QStyleOptionFrameV2::Version));
+    QStyleOptionFrame frame2(frame);
+    QCOMPARE(frame2.version, int(QStyleOptionFrame::Version));
     frame2 = frame;
-    QCOMPARE(frame2.version, int(QStyleOptionFrameV2::Version));
+    QCOMPARE(frame2.version, int(QStyleOptionFrame::Version));
 
     QStyleOptionProgressBar bar;
     QStyleOptionProgressBar bar2(bar);

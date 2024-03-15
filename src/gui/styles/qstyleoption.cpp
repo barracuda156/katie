@@ -421,20 +421,6 @@ QStyleOptionFocusRect::QStyleOptionFocusRect(int version)
 */
 
 /*!
-    \typedef QStyleOptionFrameV2
-    \relates QStyleOptionFrame
-
-    Synonym for QStyleOptionFrame.
-*/
-
-/*!
-    \typedef QStyleOptionFrameV3
-    \relates QStyleOptionFrame
-
-    Synonym for QStyleOptionFrame.
-*/
-
-/*!
     Constructs a QStyleOptionFrame, initializing the members
     variables to their default values.
 */

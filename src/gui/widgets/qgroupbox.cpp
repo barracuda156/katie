@@ -86,7 +86,7 @@ void QGroupBox::initStyleOption(QStyleOptionGroupBox *option) const
         option->state &= ~QStyle::State_MouseOver;
 
     if (d->flat)
-        option->features |= QStyleOptionFrameV2::Flat;
+        option->features |= QStyleOptionFrame::Flat;
 
     if (d->checkable) {
         option->subControls |= QStyle::SC_GroupBoxCheckBox;

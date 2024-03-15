@@ -3004,11 +3004,11 @@ void QCleanlooksStyle::drawComplexControl(ComplexControl control, const QStyleOp
         if (const QStyleOptionGroupBox *groupBox = qstyleoption_cast<const QStyleOptionGroupBox *>(option)) {
             QRect textRect = proxy()->subControlRect(CC_GroupBox, groupBox, SC_GroupBoxLabel, widget);
             QRect checkBoxRect = proxy()->subControlRect(CC_GroupBox, groupBox, SC_GroupBoxCheckBox, widget);
-            bool flat = groupBox->features & QStyleOptionFrameV2::Flat;
+            bool flat = groupBox->features & QStyleOptionFrame::Flat;
 
             if(!flat) {
                 if (groupBox->subControls & QStyle::SC_GroupBoxFrame) {
-                    QStyleOptionFrameV2 frame;
+                    QStyleOptionFrame frame;
                     frame.QStyleOption::operator=(*groupBox);
                     frame.features = groupBox->features;
                     frame.lineWidth = groupBox->lineWidth;
@@ -3704,7 +3704,7 @@ QRect QCleanlooksStyle::subControlRect(ComplexControl control, const QStyleOptio
             int topMargin = 0;
             int topHeight = 0;
             int verticalAlignment = proxy()->styleHint(SH_GroupBox_TextLabelVerticalAlignment, groupBox, widget);
-            bool flat = groupBox->features & QStyleOptionFrameV2::Flat;
+            bool flat = groupBox->features & QStyleOptionFrame::Flat;
             if (!groupBox->text.isEmpty()) {
                 topHeight = groupBox->fontMetrics.height();
                 if (verticalAlignment & Qt::AlignVCenter)

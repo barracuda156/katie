@@ -118,8 +118,6 @@ protected:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionFrame::FrameFeatures)
-typedef QStyleOptionFrame QStyleOptionFrameV2;
-typedef QStyleOptionFrame QStyleOptionFrameV3;
 
 #ifndef QT_NO_TABWIDGET
 class Q_GUI_EXPORT QStyleOptionTabWidgetFrame : public QStyleOption
@@ -580,7 +578,7 @@ public:
     enum StyleOptionType { Type = SO_GroupBox };
     enum StyleOptionVersion { Version = 1 };
 
-    QStyleOptionFrameV2::FrameFeatures features;
+    QStyleOptionFrame::FrameFeatures features;
     QString text;
     Qt::Alignment textAlignment;
     QColor textColor;

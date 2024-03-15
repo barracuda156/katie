@@ -541,7 +541,7 @@ QSize QLineEdit::sizeHint() const
     int w = fm.width(QLatin1Char('x')) * 17 + 2*d->horizontalMargin
             + d->leftTextMargin + d->rightTextMargin
             + d->leftmargin + d->rightmargin; // "some"
-    QStyleOptionFrameV2 opt;
+    QStyleOptionFrame opt;
     initStyleOption(&opt);
     return (style()->sizeFromContents(QStyle::CT_LineEdit, &opt, QSize(w, h).
                                       expandedTo(QApplication::globalStrut()), this));
@@ -562,7 +562,7 @@ QSize QLineEdit::minimumSizeHint() const
     int h = fm.height() + qMax(2*d->verticalMargin, fm.leading())
             + d->topmargin + d->bottommargin;
     int w = fm.maxWidth() + d->leftmargin + d->rightmargin;
-    QStyleOptionFrameV2 opt;
+    QStyleOptionFrame opt;
     initStyleOption(&opt);
     return (style()->sizeFromContents(QStyle::CT_LineEdit, &opt, QSize(w, h).
                                       expandedTo(QApplication::globalStrut()), this));
@@ -850,7 +850,7 @@ void QLineEdit::setSelection(int start, int length)
     d->control->setSelection(start, length);
 
     if (d->control->hasSelectedText()){
-        QStyleOptionFrameV2 opt;
+        QStyleOptionFrame opt;
         initStyleOption(&opt);
         if (!style()->styleHint(QStyle::SH_BlinkCursorWhenTextSelected, &opt, this))
             d->setCursorVisible(false);
@@ -1248,7 +1248,7 @@ bool QLineEdit::event(QEvent * e)
         //In order to get the cursor blinking if QComboBox::setEditable is called when the combobox has focus
         if (hasFocus()) {
             d->control->setCursorBlinkPeriod(QApplication::cursorFlashTime());
-            QStyleOptionFrameV2 opt;
+            QStyleOptionFrame opt;
             initStyleOption(&opt);
             if (!hasSelectedText() || style()->styleHint(QStyle::SH_BlinkCursorWhenTextSelected, &opt, this))
                 d->setCursorVisible(true);
@@ -1413,7 +1413,7 @@ void QLineEdit::focusInEvent(QFocusEvent *e)
         d->clickCausedFocus = 1;
     }
     d->control->setCursorBlinkPeriod(QApplication::cursorFlashTime());
-    QStyleOptionFrameV2 opt;
+    QStyleOptionFrame opt;
     initStyleOption(&opt);
     if(!hasSelectedText() || style()->styleHint(QStyle::SH_BlinkCursorWhenTextSelected, &opt, this))
         d->setCursorVisible(true);
@@ -1471,7 +1471,7 @@ void QLineEdit::paintEvent(QPaintEvent *)
     QRect r = rect();
     QPalette pal = palette();
 
-    QStyleOptionFrameV2 panel;
+    QStyleOptionFrame panel;
     initStyleOption(&panel);
     style()->drawPrimitive(QStyle::PE_PanelLineEdit, &panel, &p, this);
     r = style()->subElementRect(QStyle::SE_LineEditContents, &panel, this);
@@ -1770,7 +1770,7 @@ void QLineEdit::changeEvent(QEvent *ev)
         break;
     case QEvent::StyleChange:
         {
-            QStyleOptionFrameV2 opt;
+            QStyleOptionFrame opt;
             initStyleOption(&opt);
             d->control->setPasswordCharacter(style()->styleHint(QStyle::SH_LineEdit_PasswordCharacter, &opt, this));
         }
