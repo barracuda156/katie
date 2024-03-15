@@ -1298,23 +1298,23 @@ bool QAbstractSocket::setSocketDescriptor(int socketDescriptor, SocketState sock
 
     \sa socketOption()
 */
-void QAbstractSocket::setSocketOption(QAbstractSocket::SocketOption option, const QVariant &value)
+void QAbstractSocket::setSocketOption(QAbstractSocket::SocketOption option, const int value)
 {
     if (!d_func()->socketEngine)
         return;
 
     switch (option) {
         case LowDelayOption:
-            d_func()->socketEngine->setOption(QAbstractSocketEngine::LowDelayOption, value.toInt());
+            d_func()->socketEngine->setOption(QAbstractSocketEngine::LowDelayOption, value);
             break;
         case KeepAliveOption:
-            d_func()->socketEngine->setOption(QAbstractSocketEngine::KeepAliveOption, value.toInt());
+            d_func()->socketEngine->setOption(QAbstractSocketEngine::KeepAliveOption, value);
             break;
         case MulticastTtlOption:
-            d_func()->socketEngine->setOption(QAbstractSocketEngine::MulticastTtlOption, value.toInt());
+            d_func()->socketEngine->setOption(QAbstractSocketEngine::MulticastTtlOption, value);
             break;
         case MulticastLoopbackOption:
-            d_func()->socketEngine->setOption(QAbstractSocketEngine::MulticastLoopbackOption, value.toInt());
+            d_func()->socketEngine->setOption(QAbstractSocketEngine::MulticastLoopbackOption, value);
             break;
     }
 }
@@ -1325,12 +1325,12 @@ void QAbstractSocket::setSocketOption(QAbstractSocket::SocketOption option, cons
 
     \sa setSocketOption()
 */
-QVariant QAbstractSocket::socketOption(QAbstractSocket::SocketOption option)
+int QAbstractSocket::socketOption(QAbstractSocket::SocketOption option)
 {
-    if (!d_func()->socketEngine)
-        return QVariant();
-
     int ret = -1;
+    if (!d_func()->socketEngine)
+        return ret;
+
     switch (option) {
         case LowDelayOption:
             ret = d_func()->socketEngine->option(QAbstractSocketEngine::LowDelayOption);
@@ -1345,10 +1345,7 @@ QVariant QAbstractSocket::socketOption(QAbstractSocket::SocketOption option)
             ret = d_func()->socketEngine->option(QAbstractSocketEngine::MulticastLoopbackOption);
             break;
     }
-    if (ret == -1)
-        return QVariant();
-    else
-        return QVariant(ret);
+    return ret;
 }
 
 /*!

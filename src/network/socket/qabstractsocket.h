@@ -109,8 +109,8 @@ public:
     virtual bool setSocketDescriptor(int socketDescriptor, SocketState state = ConnectedState,
                                      OpenMode openMode = ReadWrite);
 
-    virtual void setSocketOption(QAbstractSocket::SocketOption option, const QVariant &value);
-    virtual QVariant socketOption(QAbstractSocket::SocketOption option);
+    void setSocketOption(QAbstractSocket::SocketOption option, const int value);
+    int socketOption(QAbstractSocket::SocketOption option);
 
     SocketType socketType() const;
     SocketState state() const;
