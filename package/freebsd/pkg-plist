@@ -543,9 +543,6 @@ include/katie/QtGui/QStyleOptionToolBar
 include/katie/QtGui/QStyleOptionToolBox
 include/katie/QtGui/QStyleOptionToolButton
 include/katie/QtGui/QStyleOptionViewItem
-include/katie/QtGui/QStyleOptionViewItemV2
-include/katie/QtGui/QStyleOptionViewItemV3
-include/katie/QtGui/QStyleOptionViewItemV4
 include/katie/QtGui/QStylePainter
 include/katie/QtGui/QStylePlugin
 include/katie/QtGui/QStyledItemDelegate

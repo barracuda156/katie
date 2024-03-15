@@ -2860,27 +2860,6 @@ QStyleOptionTitleBar::QStyleOptionTitleBar(int version)
 */
 
 /*!
-    \typedef QStyleOptionViewItemV2
-    \relates QStyleOptionViewItem
-
-    Synonym for QStyleOptionViewItem.
-*/
-
-/*!
-    \typedef QStyleOptionViewItemV3
-    \relates QStyleOptionViewItem
-
-    Synonym for QStyleOptionViewItem.
-*/
-
-/*!
-    \typedef QStyleOptionViewItemV4
-    \relates QStyleOptionViewItem
-
-    Synonym for QStyleOptionViewItem.
-*/
-
-/*!
     \enum QStyleOptionViewItem::Position
 
     This enum describes the position of the item's decoration.

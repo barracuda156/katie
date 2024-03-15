@@ -277,9 +277,7 @@ QString QStyledItemDelegate::displayText(const QVariant &value, const QLocale& l
 /*!
     Initialize \a option with the values using the index \a index. This method
     is useful for subclasses when they need a QStyleOptionViewItem, but don't want
-    to fill in all the information themselves. This function will check the version
-    of the QStyleOptionViewItem and fill in the additional values for a
-    QStyleOptionViewItemV2, QStyleOptionViewItemV3 and QStyleOptionViewItemV4.
+    to fill in all the information themselves.
 
     \sa QStyleOption::initFrom()
 */
@@ -303,13 +301,13 @@ void QStyledItemDelegate::initStyleOption(QStyleOptionViewItem *option,
     option->index = index;
     value = index.data(Qt::CheckStateRole);
     if (value.isValid() && !value.isNull()) {
-        option->features |= QStyleOptionViewItemV2::HasCheckIndicator;
+        option->features |= QStyleOptionViewItem::HasCheckIndicator;
         option->checkState = static_cast<Qt::CheckState>(value.toInt());
     }
 
     value = index.data(Qt::DecorationRole);
     if (value.isValid() && !value.isNull()) {
-        option->features |= QStyleOptionViewItemV2::HasDecoration;
+        option->features |= QStyleOptionViewItem::HasDecoration;
         switch (value.type()) {
         case QVariant::Icon: {
             option->icon = qvariant_cast<QIcon>(value);
@@ -349,7 +347,7 @@ void QStyledItemDelegate::initStyleOption(QStyleOptionViewItem *option,
 
     value = index.data(Qt::DisplayRole);
     if (value.isValid() && !value.isNull()) {
-        option->features |= QStyleOptionViewItemV2::HasDisplay;
+        option->features |= QStyleOptionViewItem::HasDisplay;
         option->text = displayText(value, option->locale);
     }
 
@@ -365,7 +363,7 @@ void QStyledItemDelegate::initStyleOption(QStyleOptionViewItem *option,
     When reimplementing paint in a subclass. Use the initStyleOption()
     to set up the \a option in the same way as the
     QStyledItemDelegate; the option will always be an instance of
-    QStyleOptionViewItemV4. Please see its class description for
+    QStyleOptionViewItem. Please see its class description for
     information on its contents.
 
     Whenever possible, use the \a option while painting.
@@ -385,7 +383,7 @@ void QStyledItemDelegate::paint(QPainter *painter,
 {
     Q_ASSERT(index.isValid());
 
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     initStyleOption(&opt, index);
 
     QStyle *style = option.widget ? option.widget->style() : QApplication::style();
@@ -409,7 +407,7 @@ QSize QStyledItemDelegate::sizeHint(const QStyleOptionViewItem &option,
     if (value.isValid())
         return qvariant_cast<QSize>(value);
 
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     initStyleOption(&opt, index);
 
     QStyle *style = option.widget ? option.widget->style() : QApplication::style();
@@ -520,7 +518,7 @@ void QStyledItemDelegate::updateEditorGeometry(QWidget *editor,
     Q_ASSERT(index.isValid());
     const QWidget *widget = option.widget;
 
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     initStyleOption(&opt, index);
     // let the editor take up all available space 
     //if the editor is not a QLineEdit
@@ -696,7 +694,7 @@ bool QStyledItemDelegate::editorEvent(QEvent *event,
     if ((event->type() == QEvent::MouseButtonRelease)
         || (event->type() == QEvent::MouseButtonDblClick)
         || (event->type() == QEvent::MouseButtonPress)) {
-        QStyleOptionViewItemV4 viewOpt(option);
+        QStyleOptionViewItem viewOpt(option);
         initStyleOption(&viewOpt, index);
         QRect checkRect = style->subElementRect(QStyle::SE_ItemViewItemCheckIndicator, &viewOpt, option.widget);
         QMouseEvent *me = static_cast<QMouseEvent*>(event);

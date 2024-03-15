@@ -606,7 +606,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
     }
 #ifndef QT_NO_ITEMVIEWS
     case PE_PanelItemViewRow: {
-        if (const QStyleOptionViewItemV4 *vopt = qstyleoption_cast<const QStyleOptionViewItemV4 *>(opt)) {
+        if (const QStyleOptionViewItem *vopt = qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
             QPalette::ColorGroup cg = (widget ? widget->isEnabled() : (vopt->state & QStyle::State_Enabled))
                                       ? QPalette::Normal : QPalette::Disabled;
             if (cg == QPalette::Normal && !(vopt->state & QStyle::State_Active))
@@ -614,13 +614,13 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
 
             if ((vopt->state & QStyle::State_Selected) &&  proxy()->styleHint(QStyle::SH_ItemView_ShowDecorationSelected, opt, widget))
                 p->fillRect(vopt->rect, vopt->palette.brush(cg, QPalette::Highlight));
-            else if (vopt->features & QStyleOptionViewItemV2::Alternate)
+            else if (vopt->features & QStyleOptionViewItem::Alternate)
                 p->fillRect(vopt->rect, vopt->palette.brush(cg, QPalette::AlternateBase));
         }
         break;
     }
     case PE_PanelItemViewItem: {
-        if (const QStyleOptionViewItemV4 *vopt = qstyleoption_cast<const QStyleOptionViewItemV4 *>(opt)) {
+        if (const QStyleOptionViewItem *vopt = qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
             QPalette::ColorGroup cg = (widget ? widget->isEnabled() : (vopt->state & QStyle::State_Enabled))
                                       ? QPalette::Normal : QPalette::Disabled;
             if (cg == QPalette::Normal && !(vopt->state & QStyle::State_Active))
@@ -686,23 +686,23 @@ static void drawArrow(const QStyle *style, const QStyleOptionToolButton *toolbut
 
 #ifndef QT_NO_ITEMVIEWS
 
-QSize QCommonStylePrivate::viewItemSize(const QStyleOptionViewItemV4 *option, int role) const
+QSize QCommonStylePrivate::viewItemSize(const QStyleOptionViewItem *option, int role) const
 {
     switch (role) {
     case Qt::CheckStateRole:
-        if (option->features & QStyleOptionViewItemV2::HasCheckIndicator)
+        if (option->features & QStyleOptionViewItem::HasCheckIndicator)
             return QSize(proxyStyle->pixelMetric(QStyle::PM_IndicatorWidth, option, option->widget),
                          proxyStyle->pixelMetric(QStyle::PM_IndicatorHeight, option, option->widget));
         break;
     case Qt::DisplayRole:
-        if (option->features & QStyleOptionViewItemV2::HasDisplay) {
+        if (option->features & QStyleOptionViewItem::HasDisplay) {
             QTextOption textOption;
             textOption.setWrapMode(QTextOption::WordWrap);
             QTextLayout textLayout;
             textLayout.setTextOption(textOption);
             textLayout.setFont(option->font);
             textLayout.setText(option->text);
-            const bool wrapText = option->features & QStyleOptionViewItemV2::WrapText;
+            const bool wrapText = option->features & QStyleOptionViewItem::WrapText;
             const int textMargin = proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, option, option->widget) + 1;
             QRect bounds = option->rect;
             switch (option->decorationPosition) {
@@ -738,7 +738,7 @@ QSize QCommonStylePrivate::viewItemSize(const QStyleOptionViewItemV4 *option, in
         }
         break;
     case Qt::DecorationRole:
-        if (option->features & QStyleOptionViewItemV2::HasDecoration) {
+        if (option->features & QStyleOptionViewItem::HasDecoration) {
             return option->decorationSize;
         }
         break;
@@ -768,12 +768,12 @@ static QSizeF viewItemTextLayout(QTextLayout &textLayout, int lineWidth)
 }
 
 
-void QCommonStylePrivate::viewItemDrawText(QPainter *p, const QStyleOptionViewItemV4 *option, const QRect &rect) const
+void QCommonStylePrivate::viewItemDrawText(QPainter *p, const QStyleOptionViewItem *option, const QRect &rect) const
 {
     const int textMargin = proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, 0, option->widget) + 1;
 
     QRect textRect = rect.adjusted(textMargin, 0, -textMargin, 0); // remove width padding
-    const bool wrapText = option->features & QStyleOptionViewItemV2::WrapText;
+    const bool wrapText = option->features & QStyleOptionViewItem::WrapText;
     QTextOption textOption;
     textOption.setWrapMode(wrapText ? QTextOption::WordWrap : QTextOption::NoWrap);
     textOption.setTextDirection(option->direction);
@@ -847,7 +847,7 @@ void QCommonStylePrivate::viewItemDrawText(QPainter *p, const QStyleOptionViewIt
 
     Code duplicated in QItemDelegate::doLayout
 */
-void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItemV4 *opt,  QRect *checkRect,
+void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItem *opt,  QRect *checkRect,
                                          QRect *pixmapRect, QRect *textRect, bool sizehint) const
 {
     Q_ASSERT(checkRect && pixmapRect && textRect);
@@ -1994,7 +1994,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
 
 #ifndef QT_NO_ITEMVIEWS
     case CE_ItemViewItem:
-        if (const QStyleOptionViewItemV4 *vopt = qstyleoption_cast<const QStyleOptionViewItemV4 *>(opt)) {
+        if (const QStyleOptionViewItem *vopt = qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
             p->save();
             p->setClipRect(opt->rect);
 
@@ -2006,8 +2006,8 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             proxy()->drawPrimitive(PE_PanelItemViewItem, opt, p, widget);
 
             // draw the check mark
-            if (vopt->features & QStyleOptionViewItemV2::HasCheckIndicator) {
-                QStyleOptionViewItemV4 option(*vopt);
+            if (vopt->features & QStyleOptionViewItem::HasCheckIndicator) {
+                QStyleOptionViewItem option(*vopt);
                 option.rect = checkRect;
                 option.state = option.state & ~QStyle::State_HasFocus;
 
@@ -2824,21 +2824,21 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
 #endif
 #ifndef QT_NO_ITEMVIEWS
     case SE_ItemViewItemCheckIndicator:
-        if (!qstyleoption_cast<const QStyleOptionViewItemV4 *>(opt)) {
+        if (!qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
             r = subElementRect(SE_CheckBoxIndicator, opt, widget);
             break;
         }
     case SE_ItemViewItemDecoration:
     case SE_ItemViewItemText:
     case SE_ItemViewItemFocusRect:
-        if (const QStyleOptionViewItemV4 *vopt = qstyleoption_cast<const QStyleOptionViewItemV4 *>(opt)) {
+        if (const QStyleOptionViewItem *vopt = qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
             if (!d->isViewItemCached(*vopt)) {
                 d->viewItemLayout(vopt, &d->checkRect, &d->decorationRect, &d->displayRect, false);
                 if (d->cachedOption) {
                     delete d->cachedOption;
                     d->cachedOption = 0;
                 }
-                d->cachedOption = new QStyleOptionViewItemV4(*vopt);
+                d->cachedOption = new QStyleOptionViewItem(*vopt);
             }
             if (sr == SE_ItemViewItemCheckIndicator)
                 r = d->checkRect;
@@ -4480,7 +4480,7 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
 #endif // QT_NO_GROUPBOX
 #ifndef QT_NO_ITEMVIEWS
     case CT_ItemViewItem:
-        if (const QStyleOptionViewItemV4 *vopt = qstyleoption_cast<const QStyleOptionViewItemV4 *>(opt)) {
+        if (const QStyleOptionViewItem *vopt = qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
             QRect decorationRect, displayRect, checkRect;
             d->viewItemLayout(vopt, &checkRect, &decorationRect, &displayRect, true);
             sz = (decorationRect|displayRect|checkRect).size();

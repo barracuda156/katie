@@ -156,6 +156,9 @@ protected:
     bool isIndexHidden(const QModelIndex &index) const;
 
 private:
+    friend class QListModeViewBase;
+    friend class QIconModeViewBase;
+
     int visualIndex(const QModelIndex &index) const;
 
     Q_DECLARE_PRIVATE(QListView)

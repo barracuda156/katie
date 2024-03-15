@@ -397,10 +397,6 @@ protected:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionViewItem::ViewItemFeatures)
-
-typedef QStyleOptionViewItem QStyleOptionViewItemV2;
-typedef QStyleOptionViewItem QStyleOptionViewItemV3;
-typedef QStyleOptionViewItem QStyleOptionViewItemV4;
 #endif // QT_NO_ITEMVIEWS
 
 class Q_GUI_EXPORT QStyleOptionToolBox : public QStyleOption
