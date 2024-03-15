@@ -199,8 +199,6 @@ incmap = {
         'QStyleOptionSpinBox': 'qstyleoption.h',
         'QStyleOptionTab': 'qstyleoption.h',
         'QStyleOptionTabBarBase': 'qstyleoption.h',
-        'QStyleOptionTabV2': 'qstyleoption.h',
-        'QStyleOptionTabV3': 'qstyleoption.h',
         'QStyleOptionTabWidgetFrame': 'qstyleoption.h',
         'QStyleOptionTitleBar': 'qstyleoption.h',
         'QStyleOptionToolBar': 'qstyleoption.h',

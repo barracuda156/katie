@@ -250,9 +250,6 @@ protected:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionTab::CornerWidgets)
-
-typedef QStyleOptionTab QStyleOptionTabV2;
-typedef QStyleOptionTab QStyleOptionTabV3;
 #endif // QT_NO_TABBAR
 
 

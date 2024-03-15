@@ -3897,7 +3897,7 @@ void QStyleSheetStyle::drawControl(ControlElement ce, const QStyleOption *opt, Q
     case CE_TabBarTabLabel:
     case CE_TabBarTabShape:
         if (const QStyleOptionTab *tab = qstyleoption_cast<const QStyleOptionTab *>(opt)) {
-            QStyleOptionTabV3 tabCopy(*tab);
+            QStyleOptionTab tabCopy(*tab);
             QRenderRule subRule = renderRule(w, opt, PseudoElement_TabBarTab);
             QRect r = positionRect(w, subRule, PseudoElement_TabBarTab, opt->rect, opt->direction);
             if (ce == CE_TabBarTabShape && subRule.hasDrawable()) {

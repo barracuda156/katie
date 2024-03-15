@@ -1176,20 +1176,6 @@ QStyleOptionToolBar::QStyleOptionToolBar(int version)
 */
 
 /*!
-    \typedef QStyleOptionTabV2
-    \relates QStyleOptionTab
-
-    Synonym for QStyleOptionTab.
-*/
-
-/*!
-    \typedef QStyleOptionTabV3
-    \relates QStyleOptionTab
-
-    Synonym for QStyleOptionTab.
-*/
-
-/*!
     Constructs a QStyleOptionTab object, initializing the members
     variables to their default values.
 */
