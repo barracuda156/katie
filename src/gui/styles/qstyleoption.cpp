@@ -3319,13 +3319,6 @@ QStyleOptionTabWidgetFrame::QStyleOptionTabWidgetFrame(int version)
 */
 
 /*!
-    \typedef QStyleOptionTabBarBaseV2
-    \relates QStyleOptionTabBarBase
-
-    Synonym for QStyleOptionTabBarBase.
-*/
-
-/*!
     Construct a QStyleOptionTabBarBase, initializing the members
     vaiables to their default values.
 */

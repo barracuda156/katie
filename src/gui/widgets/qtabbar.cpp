@@ -652,7 +652,7 @@ void QTabBar::setShape(Shape shape)
     If true then QTabBar draws a base in relation to the styles overlab.
     Otherwise only the tabs are drawn.
 
-    \sa QStyle::pixelMetric() QStyle::PM_TabBarBaseOverlap QStyleOptionTabBarBaseV2
+    \sa QStyle::pixelMetric() QStyle::PM_TabBarBaseOverlap QStyleOptionTabBarBase
 */
 
 void QTabBar::setDrawBase(bool drawBase)
@@ -1389,7 +1389,7 @@ void QTabBar::paintEvent(QPaintEvent *)
 {
     Q_D(QTabBar);
 
-    QStyleOptionTabBarBaseV2 optTabBase;
+    QStyleOptionTabBarBase optTabBase;
     QTabBarPrivate::initStyleBaseOption(&optTabBase, this, size());
 
     QStylePainter p(this);
@@ -1609,7 +1609,7 @@ void QTabBar::mousePressEvent(QMouseEvent *event)
 
     d->pressedIndex = d->indexAtPos(event->pos());
     if (d->validIndex(d->pressedIndex)) {
-        QStyleOptionTabBarBaseV2 optTabBase;
+        QStyleOptionTabBarBase optTabBase;
         optTabBase.init(this);
         optTabBase.documentMode = d->documentMode;
         if (event->type() == style()->styleHint(QStyle::SH_TabBar_SelectMouseType, &optTabBase, this))
@@ -1694,7 +1694,7 @@ void QTabBar::mouseMoveEvent(QMouseEvent *event)
         event->ignore();
         return;
     }
-    QStyleOptionTabBarBaseV2 optTabBase;
+    QStyleOptionTabBarBase optTabBase;
     optTabBase.init(this);
     optTabBase.documentMode = d->documentMode;
 }
@@ -1795,7 +1795,7 @@ void QTabBar::mouseReleaseEvent(QMouseEvent *event)
 
     int i = d->indexAtPos(event->pos()) == d->pressedIndex ? d->pressedIndex : -1;
     d->pressedIndex = -1;
-    QStyleOptionTabBarBaseV2 optTabBase;
+    QStyleOptionTabBarBase optTabBase;
     optTabBase.initFrom(this);
     optTabBase.documentMode = d->documentMode;
     if (style()->styleHint(QStyle::SH_TabBar_SelectMouseType, &optTabBase, this) == QEvent::MouseButtonRelease)

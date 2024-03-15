@@ -166,7 +166,6 @@ public:
 protected:
     QStyleOptionTabBarBase(int version);
 };
-typedef QStyleOptionTabBarBase QStyleOptionTabBarBaseV2;
 #endif// QT_NO_TABBAR
 
 class Q_GUI_EXPORT QStyleOptionHeader : public QStyleOption

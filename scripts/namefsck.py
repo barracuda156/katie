@@ -425,7 +425,6 @@ classlist = [
     "QStyleOptionSpinBox",
     "QStyleOptionTab",
     "QStyleOptionTabBarBase",
-    "QStyleOptionTabBarBaseV2",
     "QStyleOptionTabV2",
     "QStyleOptionTabV3",
     "QStyleOptionTabWidgetFrame",

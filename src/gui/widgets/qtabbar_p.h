@@ -178,7 +178,7 @@ public:
 
     QWidget *movingTab;
     // shared by tabwidget and qtabbar
-    static void initStyleBaseOption(QStyleOptionTabBarBaseV2 *optTabBase, QTabBar *tabbar, QSize size)
+    static void initStyleBaseOption(QStyleOptionTabBarBase *optTabBase, QTabBar *tabbar, QSize size)
     {
         QStyleOptionTab tabOverlap;
         tabOverlap.shape = tabbar->shape();
