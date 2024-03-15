@@ -34,7 +34,6 @@
 //
 
 #include <QtCore/QByteArray>
-#include <QtCore/QMetaType>
 
 // This file is here for use by the form preview in Linguist. If you change anything
 // here or in the code which uses it, remember to adapt Linguist accordingly.
@@ -46,21 +45,7 @@
 #define PROP_TABPAGETOOLTIP "_q_tabPageToolTip_notr"
 #define PROP_TABPAGEWHATSTHIS "_q_tabPageWhatsThis_notr"
 
-
 QT_BEGIN_NAMESPACE
-
-class QUiTranslatableStringValue
-{
-public:
-    QByteArray value() const { return m_value; }
-    void setValue(const QByteArray &value) { m_value = value; }
-    QByteArray comment() const { return m_comment; }
-    void setComment(const QByteArray &comment) { m_comment = comment; }
-
-private:
-    QByteArray m_value;
-    QByteArray m_comment;
-};
 
 struct QUiItemRolePair {
     int realRole;
@@ -68,9 +53,5 @@ struct QUiItemRolePair {
 };
 
 QT_END_NAMESPACE
-
-
-Q_DECLARE_METATYPE(QUiTranslatableStringValue)
-
 
 #endif // QUILOADER_P_H
