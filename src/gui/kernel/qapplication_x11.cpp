@@ -259,9 +259,7 @@ struct qt_xfixes_selection_event_data
     Atom selection;
 };
 
-#if defined(Q_C_CALLBACKS)
 extern "C" {
-#endif
 
 static Bool qt_xfixes_scanner(Display*, XEvent *event, XPointer arg)
 {
@@ -274,9 +272,7 @@ static Bool qt_xfixes_scanner(Display*, XEvent *event, XPointer arg)
     return false;
 }
 
-#if defined(Q_C_CALLBACKS)
 }
-#endif
 
 #endif // QT_NO_XFIXES
 
@@ -351,9 +347,7 @@ QAbstractEventDispatcher* QApplicationPrivate::createEventDispatcher()
   Default X error handlers
  *****************************************************************************/
 
-#if defined(Q_C_CALLBACKS)
 extern "C" {
-#endif
 
 static int (*original_x_errhandler)(Display *dpy, XErrorEvent *);
 static int (*original_xio_errhandler)(Display *dpy);
@@ -472,9 +466,7 @@ static int qt_xio_errhandler(Display *)
     return 0;
 }
 
-#if defined(Q_C_CALLBACKS)
 }
-#endif
 
 
 #ifndef QT_NO_XSYNC
@@ -483,9 +475,7 @@ struct qt_sync_request_event_data
     WId window;
 };
 
-#if defined(Q_C_CALLBACKS)
 extern "C" {
-#endif
 
 static Bool qt_sync_request_scanner(Display*, XEvent *event, XPointer arg)
 {
@@ -510,9 +500,7 @@ static Bool qt_sync_request_scanner(Display*, XEvent *event, XPointer arg)
     return false;
 }
 
-#if defined(Q_C_CALLBACKS)
 }
-#endif
 
 #endif // QT_NO_XSYNC
 
@@ -2923,9 +2911,7 @@ struct PaintEventInfo {
     Window window;
 };
 
-#if defined(Q_C_CALLBACKS)
 extern "C" {
-#endif
 
 static Bool isPaintOrScrollDoneEvent(Display *, XEvent *ev, XPointer a)
 {
@@ -2939,9 +2925,7 @@ static Bool isPaintOrScrollDoneEvent(Display *, XEvent *ev, XPointer a)
     return False;
 }
 
-#if defined(Q_C_CALLBACKS)
 }
-#endif
 
 
 

@@ -46,9 +46,7 @@ QT_BEGIN_NAMESPACE
   Never to grayscale.
 */
 
-#if defined(Q_C_CALLBACKS)
 extern "C" {
-#endif
 
 static void qt_png_warning(png_structp /*png_ptr*/, png_const_charp message)
 {
@@ -79,9 +77,7 @@ static void qt_png_flush(png_structp /* png_ptr */)
 {
 }
 
-#if defined(Q_C_CALLBACKS)
 }
-#endif
 
 QPngHandler::QPngHandler()
     : m_compression(1)

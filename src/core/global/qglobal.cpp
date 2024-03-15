@@ -864,13 +864,6 @@ const char *qVersion()
 */
 
 /*!
-    \macro Q_OS_UNIX
-    \relates <QtGlobal>
-
-    Defined on Any UNIX BSD/SYSV system.
-*/
-
-/*!
     \macro Q_CC_GNU
     \relates <QtGlobal>
 

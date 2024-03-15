@@ -754,9 +754,7 @@ namespace QTest
     static int keyVerbose = -1;
     static unsigned int seed = 0;
     static bool seedSet = false;
-#if defined(Q_OS_UNIX)
     static bool noCrashHandler = false;
-#endif
 
 void filter_unprintable(char *str)
 {
@@ -990,9 +988,7 @@ Q_TEST_EXPORT void qtest_qParseArgs(int argc, char *argv[], bool qml)
          " -keyevent-verbose : Turn on verbose messages for keyboard simulation\n"
          " -maxwarnings n    : Sets the maximum amount of messages to output.\n"
          "                     0 means unlimited, default: 2000\n"
-#if defined(Q_OS_UNIX)
          " -nocrashhandler   : Disables the crash handler\n"
-#endif
          "\n"
          " Benchmark related options:\n"
         " -tickcounter    : Use CPU tick counters to time benchmarks\n"
@@ -1071,10 +1067,8 @@ Q_TEST_EXPORT void qtest_qParseArgs(int argc, char *argv[], bool qml)
             } else {
                 QTestLog::setMaxWarnings(qToInt(argv[++i]));
             }
-#if defined(Q_OS_UNIX)
         } else if (strcmp(argv[i], "-nocrashhandler") == 0) {
             QTest::noCrashHandler = true;
-#endif
         } else if (strcmp(argv[i], "-keyevent-verbose") == 0) {
             QTest::keyVerbose = 1;
         } else if (strcmp(argv[i], "-tickcounter") == 0) {
@@ -1539,7 +1533,6 @@ static void qInvokeTestMethods(QObject *testObject)
     QTestLog::stopLogging();
 }
 
-#if defined(Q_OS_UNIX)
 class FatalSignalHandler
 {
 public:
@@ -1612,7 +1605,6 @@ FatalSignalHandler::~FatalSignalHandler()
             sigaction(i, &oldact, 0);
     }
 }
-#endif // Q_OS_UNIX
 
 
 } // namespace
@@ -1674,11 +1666,9 @@ int QTest::qExec(QObject *testObject, int argc, char **argv)
             seedRandom();
         }
         {
-#if defined(Q_OS_UNIX)
             QScopedPointer<FatalSignalHandler> handler;
             if (!noCrashHandler)
                 handler.reset(new FatalSignalHandler());
-#endif
             qInvokeTestMethods(testObject);
         }
 

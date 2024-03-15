@@ -329,9 +329,7 @@ struct qt_init_timestamp_data
     Time timestamp;
 };
 
-#if defined(Q_C_CALLBACKS)
 extern "C" {
-#endif
 
 static Bool qt_init_timestamp_scanner(Display*, XEvent *event, XPointer arg)
 {
@@ -373,9 +371,7 @@ static Bool qt_init_timestamp_scanner(Display*, XEvent *event, XPointer arg)
     return false;
 }
 
-#if defined(Q_C_CALLBACKS)
 }
-#endif
 
 QClipboard::QClipboard(QObject *parent)
     : QObject(parent)

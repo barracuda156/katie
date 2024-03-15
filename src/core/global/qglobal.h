@@ -32,7 +32,6 @@
 
 // Compatibility, used to be conditional
 #define Q_WS_X11
-#define Q_OS_UNIX
 
 #include <utility> // std::swap
 #include <cstdint> // std::uintptr_t
@@ -94,7 +93,6 @@ QT_USE_NAMESPACE
 #  error "Katie has not been tested with this compiler"
 #endif
 
-#define Q_C_CALLBACKS
 #define Q_ALIGNOF(type)   __alignof__(type)
 #define Q_TYPEOF(expr)    __typeof__(expr)
 #define Q_DECL_ALIGN(n)   __attribute__((__aligned__(n)))

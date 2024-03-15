@@ -912,8 +912,6 @@ Q_AUTOTEST_EXPORT QPainterPath qt_regionToPath(const QRegion &region)
     return result;
 }
 
-#if defined(Q_OS_UNIX)
-
 //#define QT_REGION_DEBUG
 /*
  *   clip region
@@ -4161,7 +4159,5 @@ void *QRegion::clipRectangles(int &num) const
         num = d->qt_rgn->numRects;
     return d->xrectangles;
 }
-
-#endif // Q_OS_UNIX
 
 QT_END_NAMESPACE
