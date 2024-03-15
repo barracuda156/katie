@@ -130,10 +130,10 @@ void tst_QStyleOption::copyconstructors()
     QCOMPARE(frame2.version, int(QStyleOptionFrameV2::Version));
 
     QStyleOptionProgressBar bar;
-    QStyleOptionProgressBarV2 bar2(bar);
-    QCOMPARE(bar2.version, int(QStyleOptionProgressBarV2::Version));
+    QStyleOptionProgressBar bar2(bar);
+    QCOMPARE(bar2.version, int(QStyleOptionProgressBar::Version));
     bar2 = bar;
-    QCOMPARE(bar2.version, int(QStyleOptionProgressBarV2::Version));
+    QCOMPARE(bar2.version, int(QStyleOptionProgressBar::Version));
 }
 
 QTEST_MAIN(tst_QStyleOption)

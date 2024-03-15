@@ -3692,7 +3692,7 @@ void QStyleSheetStyle::drawControl(ControlElement ce, const QStyleOption *opt, Q
     case CE_ProgressBarContents: {
         QRenderRule subRule = renderRule(w, opt, PseudoElement_ProgressBarChunk);
         if (subRule.hasDrawable()) {
-            if (const QStyleOptionProgressBarV2 *pb = qstyleoption_cast<const QStyleOptionProgressBarV2 *>(opt)) {
+            if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(opt)) {
                 p->save();
                 p->setClipRect(pb->rect);
 
@@ -3767,12 +3767,12 @@ void QStyleSheetStyle::drawControl(ControlElement ce, const QStyleOption *opt, Q
     }
 
     case CE_ProgressBarLabel:
-        if (const QStyleOptionProgressBarV2 *pb = qstyleoption_cast<const QStyleOptionProgressBarV2 *>(opt)) {
+        if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(opt)) {
             if (rule.hasBox() || rule.hasBorder() || hasStyleRule(w, PseudoElement_ProgressBarChunk)) {
                 drawItemText(p, pb->rect, pb->textAlignment | Qt::TextSingleLine, pb->palette,
                              pb->state & State_Enabled, pb->text, QPalette::Text);
             } else {
-                QStyleOptionProgressBarV2 pbCopy(*pb);
+                QStyleOptionProgressBar pbCopy(*pb);
                 rule.configurePalette(&pbCopy.palette, QPalette::HighlightedText, QPalette::Highlight);
                 baseStyle()->drawControl(ce, &pbCopy, p, w);
             }
@@ -5555,7 +5555,7 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
     case SE_ProgressBarGroove:
     case SE_ProgressBarContents:
     case SE_ProgressBarLabel:
-        if (const QStyleOptionProgressBarV2 *pb = qstyleoption_cast<const QStyleOptionProgressBarV2 *>(opt)) {
+        if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(opt)) {
             if (rule.hasBox() || !rule.hasNativeBorder() || rule.hasPosition() || hasStyleRule(w, PseudoElement_ProgressBarChunk)) {
                 if (se == SE_ProgressBarGroove)
                     return rule.borderRect(pb->rect);

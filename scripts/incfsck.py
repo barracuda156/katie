@@ -195,7 +195,6 @@ incmap = {
         'QStyleOptionHeader': 'qstyleoption.h',
         'QStyleOptionMenuItem': 'qstyleoption.h',
         'QStyleOptionProgressBar': 'qstyleoption.h',
-        'QStyleOptionProgressBarV2': 'qstyleoption.h',
         'QStyleOptionRubberBand': 'qstyleoption.h',
         'QStyleOptionSizeGrip': 'qstyleoption.h',
         'QStyleOptionSlider': 'qstyleoption.h',

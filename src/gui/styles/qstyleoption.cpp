@@ -1419,13 +1419,6 @@ QStyleOptionTab::QStyleOptionTab(int version)
 */
 
 /*!
-    \typedef QStyleOptionProgressBarV2
-    \relates QStyleOptionProgressBar
-
-    Synonym for QStyleOptionProgressBar.
-*/
-
-/*!
     Constructs a QStyleOptionProgressBar, initializing the members
     variables to their default values.
 */

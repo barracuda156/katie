@@ -1056,9 +1056,9 @@ void QWindowsStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, 
 #ifndef QT_NO_PROGRESSBAR
     case PE_IndicatorProgressChunk: {
         bool vertical = false, inverted = false;
-        if (const QStyleOptionProgressBarV2 *pb2 = qstyleoption_cast<const QStyleOptionProgressBarV2 *>(opt)) {
-            vertical = (pb2->orientation == Qt::Vertical);
-            inverted = pb2->invertedAppearance;
+        if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(opt)) {
+            vertical = (pb->orientation == Qt::Vertical);
+            inverted = pb->invertedAppearance;
         }
 
         int space = 2;
@@ -1747,7 +1747,7 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
             if (pb->minimum == 0 && pb->maximum == 0) {
                 Q_D(const QWindowsStyle);
                 const int unit_width = proxy()->pixelMetric(PM_ProgressBarChunkWidth, pb, widget);
-                QStyleOptionProgressBarV2 pbBits = *pb;
+                QStyleOptionProgressBar pbBits = *pb;
                 Q_ASSERT(unit_width >0);
 
                 pbBits.rect = rect;

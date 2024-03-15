@@ -419,7 +419,6 @@ classlist = [
     "QStyleOptionHeader",
     "QStyleOptionMenuItem",
     "QStyleOptionProgressBar",
-    "QStyleOptionProgressBarV2",
     "QStyleOptionRubberBand",
     "QStyleOptionSizeGrip",
     "QStyleOptionSlider",

@@ -533,7 +533,6 @@ include/katie/QtGui/QStyleOptionGroupBox
 include/katie/QtGui/QStyleOptionHeader
 include/katie/QtGui/QStyleOptionMenuItem
 include/katie/QtGui/QStyleOptionProgressBar
-include/katie/QtGui/QStyleOptionProgressBarV2
 include/katie/QtGui/QStyleOptionRubberBand
 include/katie/QtGui/QStyleOptionSizeGrip
 include/katie/QtGui/QStyleOptionSlider
