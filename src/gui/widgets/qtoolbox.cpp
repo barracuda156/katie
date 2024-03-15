@@ -198,20 +198,20 @@ void QToolBoxButton::initStyleOption(QStyleOptionToolBox *option) const
     const int widgetCount = toolBox->count();
     const int currIndex = toolBox->currentIndex();
     if (widgetCount == 1) {
-        option->position = QStyleOptionToolBoxV2::OnlyOneTab;
+        option->position = QStyleOptionToolBox::OnlyOneTab;
     } else if (indexInPage == 0) {
-        option->position = QStyleOptionToolBoxV2::Beginning;
+        option->position = QStyleOptionToolBox::Beginning;
     } else if (indexInPage == widgetCount - 1) {
-        option->position = QStyleOptionToolBoxV2::End;
+        option->position = QStyleOptionToolBox::End;
     } else {
-        option->position = QStyleOptionToolBoxV2::Middle;
+        option->position = QStyleOptionToolBox::Middle;
     }
     if (currIndex == indexInPage - 1) {
-        option->selectedPosition = QStyleOptionToolBoxV2::PreviousIsSelected;
+        option->selectedPosition = QStyleOptionToolBox::PreviousIsSelected;
     } else if (currIndex == indexInPage + 1) {
-        option->selectedPosition = QStyleOptionToolBoxV2::NextIsSelected;
+        option->selectedPosition = QStyleOptionToolBox::NextIsSelected;
     } else {
-        option->selectedPosition = QStyleOptionToolBoxV2::NotAdjacent;
+        option->selectedPosition = QStyleOptionToolBox::NotAdjacent;
     }
 }
 
@@ -220,7 +220,7 @@ void QToolBoxButton::paintEvent(QPaintEvent *)
     QPainter paint(this);
     QString text = QAbstractButton::text();
     QPainter *p = &paint;
-    QStyleOptionToolBoxV2 opt;
+    QStyleOptionToolBox opt;
     initStyleOption(&opt);
     style()->drawControl(QStyle::CE_ToolBoxTab, &opt, p, parentWidget());
 }

@@ -547,7 +547,6 @@ include/katie/QtGui/QStyleOptionTabWidgetFrameV2
 include/katie/QtGui/QStyleOptionTitleBar
 include/katie/QtGui/QStyleOptionToolBar
 include/katie/QtGui/QStyleOptionToolBox
-include/katie/QtGui/QStyleOptionToolBoxV2
 include/katie/QtGui/QStyleOptionToolButton
 include/katie/QtGui/QStyleOptionViewItem
 include/katie/QtGui/QStyleOptionViewItemV2

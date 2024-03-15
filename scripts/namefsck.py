@@ -433,7 +433,6 @@ classlist = [
     "QStyleOptionTitleBar",
     "QStyleOptionToolBar",
     "QStyleOptionToolBox",
-    "QStyleOptionToolBoxV2",
     "QStyleOptionToolButton",
     "QStyleOptionViewItem",
     "QStyleOptionViewItemV2",

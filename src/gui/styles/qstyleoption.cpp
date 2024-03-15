@@ -2564,13 +2564,6 @@ QStyleOptionComboBox::QStyleOptionComboBox(int version)
 */
 
 /*!
-    \typedef QStyleOptionToolBoxV2
-    \relates QStyleOptionToolBox
-
-    Synonym for QStyleOptionToolBox.
-*/
-
-/*!
     Creates a QStyleOptionToolBox, initializing the members variables
     to their default values.
 */

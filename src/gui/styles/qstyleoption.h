@@ -430,7 +430,6 @@ public:
 protected:
     QStyleOptionToolBox(int version);
 };
-typedef QStyleOptionToolBox QStyleOptionToolBoxV2;
 
 #ifndef QT_NO_RUBBERBAND
 class Q_GUI_EXPORT QStyleOptionRubberBand : public QStyleOption
