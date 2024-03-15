@@ -454,7 +454,7 @@ void QDockWidgetLayout::setGeometry(const QRect &geometry)
         if (QLayoutItem *item = item_list[TitleBar]) {
             item->setGeometry(_titleArea);
         } else {
-            QStyleOptionDockWidgetV2 opt;
+            QStyleOptionDockWidget opt;
             q->initStyleOption(&opt);
 
             if (QLayoutItem *item = item_list[CloseButton]) {
@@ -1261,7 +1261,7 @@ void QDockWidget::paintEvent(QPaintEvent *event)
 
         // Title must be painted after the frame, since the areas overlap, and
         // the title may wish to extend out to all sides (eg. XP style)
-        QStyleOptionDockWidgetV2 titleOpt;
+        QStyleOptionDockWidget titleOpt;
         initStyleOption(&titleOpt);
         p.drawControl(QStyle::CE_DockWidgetTitle, titleOpt);
     }

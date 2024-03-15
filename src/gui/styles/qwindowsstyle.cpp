@@ -1893,9 +1893,8 @@ QRect QWindowsStyle::subElementRect(SubElement sr, const QStyleOption *opt, cons
         break;
     case SE_DockWidgetTitleBarText: {
         r = QCommonStyle::subElementRect(sr, opt, w);
-        const QStyleOptionDockWidgetV2 *v2
-            = qstyleoption_cast<const QStyleOptionDockWidgetV2*>(opt);
-        bool verticalTitleBar = v2 == 0 ? false : v2->verticalTitleBar;
+        const QStyleOptionDockWidget *dwOpt = qstyleoption_cast<const QStyleOptionDockWidget*>(opt);
+        bool verticalTitleBar = dwOpt == 0 ? false : dwOpt->verticalTitleBar;
         int m = proxy()->pixelMetric(PM_DockWidgetTitleMargin, opt, w);
         if (verticalTitleBar) {
             r.adjust(0, 0, 0, -m);

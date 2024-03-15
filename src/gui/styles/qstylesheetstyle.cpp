@@ -1925,7 +1925,7 @@ QRenderRule QStyleSheetStyle::renderRule(const QWidget *w, const QStyleOption *o
         }
 #endif // QT_NO_TOOLBOX
 #ifndef QT_NO_DOCKWIDGET
-        else if (const QStyleOptionDockWidgetV2 *dw = qstyleoption_cast<const QStyleOptionDockWidgetV2 *>(opt)) {
+        else if (const QStyleOptionDockWidget *dw = qstyleoption_cast<const QStyleOptionDockWidget *>(opt)) {
             if (dw->verticalTitleBar)
                 extraClass |= PseudoClass_Vertical;
             else
@@ -3931,14 +3931,14 @@ void QStyleSheetStyle::drawControl(ControlElement ce, const QStyleOption *opt, Q
        break;
 
     case CE_DockWidgetTitle:
-       if (const QStyleOptionDockWidgetV2 *dwOpt = qstyleoption_cast<const QStyleOptionDockWidgetV2 *>(opt)) {
+       if (const QStyleOptionDockWidget *dwOpt = qstyleoption_cast<const QStyleOptionDockWidget *>(opt)) {
            QRenderRule subRule = renderRule(w, opt, PseudoElement_DockWidgetTitle);
            if (!subRule.hasDrawable() && !subRule.hasPosition())
                break;
            if (subRule.hasDrawable()) {
                subRule.drawRule(p, opt->rect);
            } else {
-               QStyleOptionDockWidgetV2 dwCopy(*dwOpt);
+               QStyleOptionDockWidget dwCopy(*dwOpt);
                dwCopy.title = QString();
                baseStyle()->drawControl(ce, &dwCopy, p, w);
            }

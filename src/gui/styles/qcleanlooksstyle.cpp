@@ -3956,9 +3956,8 @@ QRect QCleanlooksStyle::subElementRect(SubElement sr, const QStyleOption *opt, c
         r.adjust(0, 1, 0, -1);
         break;
     case SE_DockWidgetTitleBarText: {
-        const QStyleOptionDockWidgetV2 *v2
-            = qstyleoption_cast<const QStyleOptionDockWidgetV2*>(opt);
-        bool verticalTitleBar = v2 == 0 ? false : v2->verticalTitleBar;
+        const QStyleOptionDockWidget *dwOpt = qstyleoption_cast<const QStyleOptionDockWidget*>(opt);
+        bool verticalTitleBar = dwOpt == 0 ? false : dwOpt->verticalTitleBar;
         if (verticalTitleBar) {
             r.adjust(0, 0, 0, -4);
         } else {

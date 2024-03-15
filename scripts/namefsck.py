@@ -410,7 +410,6 @@ classlist = [
     "QStyleOptionComboBox",
     "QStyleOptionComplex",
     "QStyleOptionDockWidget",
-    "QStyleOptionDockWidgetV2",
     "QStyleOptionFocusRect",
     "QStyleOptionFrame",
     "QStyleOptionFrameV2",

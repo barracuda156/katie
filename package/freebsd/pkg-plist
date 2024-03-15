@@ -524,7 +524,6 @@ include/katie/QtGui/QStyleOptionButton
 include/katie/QtGui/QStyleOptionComboBox
 include/katie/QtGui/QStyleOptionComplex
 include/katie/QtGui/QStyleOptionDockWidget
-include/katie/QtGui/QStyleOptionDockWidgetV2
 include/katie/QtGui/QStyleOptionFocusRect
 include/katie/QtGui/QStyleOptionFrame
 include/katie/QtGui/QStyleOptionFrameV2

@@ -2179,13 +2179,6 @@ QStyleOptionSpinBox::QStyleOptionSpinBox(int version)
 */
 
 /*!
-    \typedef QStyleOptionDockWidgetV2
-    \relates QStyleOptionDockWidget
-
-    Synonym for QStyleOptionDockWidget.
-*/
-
-/*!
     Constructs a QStyleOptionDockWidget, initializing the member
     variables to their default values.
 */

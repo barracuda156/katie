@@ -356,7 +356,6 @@ public:
 protected:
     QStyleOptionDockWidget(int version);
 };
-typedef QStyleOptionDockWidget QStyleOptionDockWidgetV2;
 
 #ifndef QT_NO_ITEMVIEWS
 class Q_GUI_EXPORT QStyleOptionViewItem : public QStyleOption

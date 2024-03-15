@@ -186,7 +186,6 @@ incmap = {
         'QStyleOptionComboBox': 'qstyleoption.h',
         'QStyleOptionComplex': 'qstyleoption.h',
         'QStyleOptionDockWidget': 'qstyleoption.h',
-        'QStyleOptionDockWidgetV2': 'qstyleoption.h',
         'QStyleOptionFocusRect': 'qstyleoption.h',
         'QStyleOptionFrame': 'qstyleoption.h',
         'QStyleOptionFrameV2': 'qstyleoption.h',
