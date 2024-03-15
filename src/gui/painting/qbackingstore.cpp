@@ -82,17 +82,14 @@ bool QWidgetBackingStore::flushPaint(QWidget *widget, const QRegion &rgn)
     if (!widget)
         return false;
 
-    int delay = 0;
     if (widget->testAttribute(Qt::WA_WState_InPaintEvent)) {
         static int flushPaintEvent = qgetenv("QT_FLUSH_PAINT_EVENT").toInt();
         if (!flushPaintEvent)
             return false;
-        delay = flushPaintEvent;
     } else {
         static int flushPaint = qgetenv("QT_FLUSH_PAINT").toInt();
         if (!flushPaint)
             return false;
-        delay = flushPaint;
     }
 
     return true;

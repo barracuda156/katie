@@ -1578,7 +1578,6 @@ void QRasterPaintEngine::drawPixmap(const QRectF &r, const QPixmap &pixmap, cons
     QPixmapData* pd = pixmap.pixmapData();
     const QImage &image = pd->image;
     if (image.depth() == 1) {
-        Q_D(QRasterPaintEngine);
         QRasterPaintEngineState *s = state();
         if (s->matrix.type() <= QTransform::TxTranslate
             && r.size() == sr.size()

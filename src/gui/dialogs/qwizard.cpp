@@ -47,13 +47,7 @@ QT_BEGIN_NAMESPACE
 
 // These fudge terms were needed a few places to obtain pixel-perfect results
 const int GapBetweenLogoAndRightEdge = 5;
-const int ModernHeaderTopMargin = 2;
 const int ClassicHMargin = 4;
-const int MacButtonTopMargin = 13;
-const int MacLayoutLeftMargin = 20;
-//const int MacLayoutTopMargin = 14; // Unused. Save some space and avoid warning.
-const int MacLayoutRightMargin = 20;
-const int MacLayoutBottomMargin = 17;
 
 static void changeSpacerSize(QLayout *layout, int index, int width, int height)
 {
@@ -813,9 +807,6 @@ void QWizardPrivate::recreateLayout(const QWizardLayoutInfo &info)
     */
 
     int deltaMarginLeft = info.topLevelMarginLeft - info.childMarginLeft;
-    int deltaMarginRight = info.topLevelMarginRight - info.childMarginRight;
-    int deltaMarginTop = info.topLevelMarginTop - info.childMarginTop;
-    int deltaMarginBottom = info.topLevelMarginBottom - info.childMarginBottom;
     int deltaVSpacing = info.topLevelMarginBottom - info.vspacing;
 
     int row = 0;

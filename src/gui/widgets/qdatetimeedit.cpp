@@ -356,7 +356,6 @@ QDate QDateTimeEdit::date() const
 
 void QDateTimeEdit::setDate(const QDate &date)
 {
-    Q_D(QDateTimeEdit);
     if (date.isValid()) {
         setDateTime(QDateTime(date, time()));
     }
@@ -381,7 +380,6 @@ QTime QDateTimeEdit::time() const
 
 void QDateTimeEdit::setTime(const QTime &time)
 {
-    Q_D(QDateTimeEdit);
     if (time.isValid()) {
         setDateTime(QDateTime(date(), time));
     }
@@ -536,7 +534,6 @@ QTime QDateTimeEdit::maximumTime() const
 */
 void QDateTimeEdit::setDateRange(const QDate &min, const QDate &max)
 {
-    Q_D(QDateTimeEdit);
     if (min.isValid() && max.isValid()) {
         setDateTimeRange(QDateTime(min, minimumTime()), QDateTime(max, maximumTime()));
     }
@@ -553,7 +550,6 @@ void QDateTimeEdit::setDateRange(const QDate &min, const QDate &max)
 */
 void QDateTimeEdit::setTimeRange(const QTime &min, const QTime &max)
 {
-    Q_D(QDateTimeEdit);
     if (min.isValid() && max.isValid()) {
         setDateTimeRange(QDateTime(minimumDate(), min), QDateTime(maximumDate(), max));
     }
