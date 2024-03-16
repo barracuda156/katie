@@ -114,15 +114,12 @@ void Chip::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
         }
     }
     if (option->levelOfDetail >= 0.4) {
-        const QLineF lineData[] = {
-            QLineF(25, 35, 35, 35),
-            QLineF(35, 30, 35, 40),
-            QLineF(35, 30, 45, 35),
-            QLineF(35, 40, 45, 35),
-            QLineF(45, 30, 45, 40),
-            QLineF(45, 35, 55, 35)
-        };
-        lines.append(lineData, 6);
+        lines.append(QLineF(25, 35, 35, 35));
+        lines.append(QLineF(35, 30, 35, 40));
+        lines.append(QLineF(35, 30, 45, 35));
+        lines.append(QLineF(35, 40, 45, 35));
+        lines.append(QLineF(45, 30, 45, 40));
+        lines.append(QLineF(45, 35, 55, 35));
     }
     painter->drawLines(lines.data(), lines.size());
 
