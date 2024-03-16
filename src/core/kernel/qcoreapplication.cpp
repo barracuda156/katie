@@ -41,7 +41,6 @@
 #include "qthread_p.h"
 #include "qprocess_p.h"
 #include "qfactoryloader_p.h"
-#include "qlocale_p.h"
 #include "qeventdispatcher_unix_p.h"
 #include "qstdcontainers_p.h"
 #include "qcorecommon_p.h"
