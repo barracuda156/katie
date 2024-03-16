@@ -38,6 +38,7 @@
 #include "qelapsedtimer.h"
 #include "qscopedpointer.h"
 #include "qlibraryinfo.h"
+#include "qlocale_tools_p.h"
 #include "qthread_p.h"
 #include "qprocess_p.h"
 #include "qfactoryloader_p.h"
@@ -317,6 +318,10 @@ void QCoreApplication::init()
 
     Q_ASSERT_X(!self, "QCoreApplication", "there should be only one application object");
     QCoreApplication::self = this;
+
+    // if there is no application instance then the locale-aware comparison
+    // will use fallback method (see QString::localeAwareCompare_helper())
+    qt_initLocale(qGetLang());
 
     // use the event dispatcher created by the app programmer (if any),
     // otherwise we create one
