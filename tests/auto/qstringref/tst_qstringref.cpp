@@ -22,7 +22,6 @@
 #include <QtTest/QtTest>
 #include <qstringlist.h>
 #include <qvariant.h>
-#include <qlocale.h>
 
 #include <locale.h>
 // This next bit is needed for the NAN and INF in string -> number conversion tests
@@ -43,12 +42,8 @@ class tst_QStringRef : public QObject
 
 public:
     tst_QStringRef();
-    virtual ~tst_QStringRef();
 
 
-public slots:
-    void init();
-    void cleanup();
 private slots:
     void endsWith();
     void startsWith();
@@ -85,19 +80,6 @@ Q_DECLARE_METATYPE(IntList)
 
 tst_QStringRef::tst_QStringRef()
 {
-}
-
-tst_QStringRef::~tst_QStringRef()
-{
-}
-
-void tst_QStringRef::init()
-{
-}
-
-void tst_QStringRef::cleanup()
-{
-    QLocale::setDefault(QString(QLatin1Char('C')));
 }
 
 void tst_QStringRef::length_data()

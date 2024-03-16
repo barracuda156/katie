@@ -5046,8 +5046,7 @@ ushort QString::toUShort(bool *ok, int base) const
 
     This function tries to interpret the string according to the
     current locale. The current locale is determined from the
-    system at application startup and can be changed by calling
-    QLocale::setDefault(). If the string cannot be interpreted
+    system at application startup. If the string cannot be interpreted
     according to the current locale, this function falls back
     on the "C" locale.
 
@@ -5061,7 +5060,7 @@ ushort QString::toUShort(bool *ok, int base) const
 
     \snippet doc/src/snippets/qstring/main.cpp 68
 
-    \sa number() QLocale::setDefault() QLocale::toDouble() trimmed()
+    \sa number() QLocale::system() QLocale::toDouble() trimmed()
 */
 
 double QString::toDouble(bool *ok) const
@@ -5837,9 +5836,8 @@ QString QString::arg(const QString &a, int fieldWidth, const QChar &fillChar) co
 
   The '%' can be followed by an 'L', in which case the sequence is
   replaced with a localized representation of \a a. The conversion
-  uses the default locale, set by QLocale::setDefault(). If no default
-  locale was specified, the "C" locale is used. The 'L' flag is
-  ignored if \a base is not 10.
+  uses the system locale. If no locale was specified, the "C" locale
+  is used. The 'L' flag is ignored if \a base is not 10.
 
   \snippet doc/src/snippets/qstring/main.cpp 12
   \snippet doc/src/snippets/qstring/main.cpp 14
@@ -5874,9 +5872,8 @@ QString QString::arg(const QString &a, int fieldWidth, const QChar &fillChar) co
   The '%' can be followed by an 'L', in which case the sequence is
   replaced with a localized representation of \a a. The conversion
   uses the default locale. The default locale is determined from the
-  system's locale settings at application startup. It can be changed
-  using QLocale::setDefault(). The 'L' flag is ignored if \a base is
-  not 10.
+  system's locale settings at application startup. The 'L' flag is
+  ignored if \a base is not 10.
 
   \snippet doc/src/snippets/qstring/main.cpp 12
   \snippet doc/src/snippets/qstring/main.cpp 14
@@ -6062,8 +6059,8 @@ QString QString::arg(char a, int fieldWidth, const QChar &fillChar) const
 
   The '%' can be followed by an 'L', in which case the sequence is
   replaced with a localized representation of \a a. The conversion
-  uses the default locale, set by QLocale::setDefaultLocale(). If no
-  default locale was specified, the "C" locale is used.
+  uses the system locale. If no locale was specified, the "C" locale
+  is used.
 
   If \a fillChar is '0' (the number 0, ASCII 48), this function will
   use the locale's zero to pad. For negative numbers, the zero padding

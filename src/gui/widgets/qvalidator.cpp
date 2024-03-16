@@ -156,12 +156,10 @@ QLocale QValidator::locale() const
 }
 
 /*!
-    Sets the \a locale that will be used for the validator. Unless
-    setLocale has been called, the validator will use the default
-    locale set with QLocale::setDefault(). If a default locale has not
-    been set, it is the operating system's locale.
+    Sets the \a locale that will be used for the validator. If a locale has
+    not been set, it is the operating system's locale.
 
-    \sa locale() QLocale::setDefault()
+    \sa locale() QLocale::system()
 */
 void QValidator::setLocale(const QLocale &locale)
 {

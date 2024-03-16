@@ -4601,12 +4601,12 @@ QGraphicsProxyWidget * QWidgetPrivate::nearestGraphicsProxyWidget(const QWidget 
 
     As long as no special locale has been set, this is either
     the parent's locale or (if this widget is a top level widget),
-    the default locale.
+    the system locale.
 
     If the widget displays dates or numbers, these should be formatted
     using the widget's locale.
 
-    \sa QLocale QLocale::setDefault()
+    \sa QLocale QLocale::system()
 */
 
 void QWidgetPrivate::setLocale_helper(const QLocale &loc, bool forceUpdate)

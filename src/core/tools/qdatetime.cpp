@@ -628,14 +628,6 @@ QString QDate::longDayName(int weekday, MonthNameType type)
     QLocale::system().toString(date, QLocale::ShortFormat) or
     QLocale::system().toString(date, QLocale::LongFormat).
 
-    If the \a format is Qt::DefaultLocaleShortDate or
-    Qt::DefaultLocaleLongDate, the string format depends on the
-    default application locale. This is the locale set with
-    QLocale::setDefault(), or the system locale if no default locale
-    has been set. Identical to calling QLocale().toString(date,
-    QLocale::ShortFormat) or QLocale().toString(date,
-    QLocale::LongFormat).
-
     If the date is invalid, an empty string will be returned.
 
     \warning The Qt::ISODate format is only valid for years in the
@@ -655,10 +647,6 @@ QString QDate::toString(Qt::DateFormat f) const
         case Qt::SystemLocaleLongDate:
             return QLocale::system().toString(*this, f == Qt::SystemLocaleLongDate ? QLocale::LongFormat
                                                                                 : QLocale::ShortFormat);
-        case Qt::DefaultLocaleShortDate:
-        case Qt::DefaultLocaleLongDate:
-            return QLocale().toString(*this, f == Qt::DefaultLocaleLongDate ? QLocale::LongFormat
-                                                                            : QLocale::ShortFormat);
 #ifndef QT_NO_TEXTDATE
         case Qt::TextDate: {
             return QString::fromLatin1("%0 %1 %2 %3")
@@ -1018,11 +1006,6 @@ QDate QDate::fromString(const QString& s, Qt::DateFormat f)
         case Qt::SystemLocaleLongDate:
             return QLocale::system().toDate(s, f == Qt::SystemLocaleLongDate ? QLocale::LongFormat
                                                                             : QLocale::ShortFormat);
-
-        case Qt::DefaultLocaleShortDate:
-        case Qt::DefaultLocaleLongDate:
-            return QLocale().toDate(s, f == Qt::DefaultLocaleLongDate ? QLocale::LongFormat
-                                                                    : QLocale::ShortFormat);
 
 #ifndef QT_NO_TEXTDATE
         case Qt::TextDate: {
@@ -1395,14 +1378,6 @@ int QTime::msec() const
     QLocale::system().toString(time, QLocale::ShortFormat) or
     QLocale::system().toString(time, QLocale::LongFormat).
 
-    If the \a format is Qt::DefaultLocaleShortDate or
-    Qt::DefaultLocaleLongDate, the string format depends on the
-    default application locale. This is the locale set with
-    QLocale::setDefault(), or the system locale if no default locale
-    has been set. Identical to calling QLocale().toString(time,
-    QLocale::ShortFormat) or QLocale().toString(time,
-    QLocale::LongFormat).
-
     If the time is invalid, an empty string will be returned.
 */
 
@@ -1416,11 +1391,6 @@ QString QTime::toString(Qt::DateFormat format) const
         case Qt::SystemLocaleLongDate: {
             return QLocale::system().toString(*this, format == Qt::SystemLocaleLongDate ? QLocale::LongFormat
                                             : QLocale::ShortFormat);
-        }
-        case Qt::DefaultLocaleShortDate:
-        case Qt::DefaultLocaleLongDate: {
-            return QLocale().toString(*this, format == Qt::DefaultLocaleLongDate ? QLocale::LongFormat
-                                    : QLocale::ShortFormat);
         }
         case Qt::ISODate:
         case Qt::TextDate: {
@@ -1656,10 +1626,6 @@ QTime QTime::fromString(const QString& s, Qt::DateFormat f)
             return QLocale::system().toTime(s, f == Qt::SystemLocaleLongDate ? QLocale::LongFormat
                                                                             : QLocale::ShortFormat);
 
-        case Qt::DefaultLocaleShortDate:
-        case Qt::DefaultLocaleLongDate:
-            return QLocale().toTime(s, f == Qt::DefaultLocaleLongDate ? QLocale::LongFormat
-                                                                    : QLocale::ShortFormat);
         case Qt::ISODate:
         case Qt::TextDate: {
             bool ok = true;
@@ -2229,14 +2195,6 @@ void QDateTime::setTime_t(uint secsSince1Jan1970UTC)
     settings of the system. Identical to calling
     QLocale::system().toString(datetime, QLocale::ShortFormat) or
     QLocale::system().toString(datetime, QLocale::LongFormat).
-
-    If the \a format is Qt::DefaultLocaleShortDate or
-    Qt::DefaultLocaleLongDate, the string format depends on the
-    default application locale. This is the locale set with
-    QLocale::setDefault(), or the system locale if no default locale
-    has been set. Identical to calling QLocale().toString(datetime,
-    QLocale::ShortFormat) or QLocale().toString(datetime,
-    QLocale::LongFormat).
 
     If the datetime is invalid, an empty string will be returned.
 
@@ -2941,10 +2899,6 @@ QDateTime QDateTime::fromString(const QString& s, Qt::DateFormat f)
         return QLocale::system().toDateTime(s, f == Qt::SystemLocaleLongDate ? QLocale::LongFormat
                                                                              : QLocale::ShortFormat);
 
-    case Qt::DefaultLocaleShortDate:
-    case Qt::DefaultLocaleLongDate:
-        return QLocale().toDateTime(s, f == Qt::DefaultLocaleLongDate ? QLocale::LongFormat
-                                                                       : QLocale::ShortFormat);
 #if !defined(QT_NO_TEXTDATE)
     case Qt::TextDate: {
         QStringList parts = s.split(QLatin1Char(' '), QString::SkipEmptyParts);

@@ -156,14 +156,7 @@ static const QLocalePrivate *findLocale(const QByteArray &name)
 static const QLocalePrivate *defaultPrivate()
 {
     if (!default_lp) {
-        QByteArray lang = qgetenv("LC_ALL");
-        if (lang.isEmpty()) {
-            lang = qgetenv("LC_CTYPE");
-        }
-        if (lang.isEmpty()) {
-            lang = qgetenv("LANG");
-        }
-        default_lp = findLocale(lang);
+        default_lp = findLocale(qGetLang());
     }
     return default_lp;
 }
@@ -340,11 +333,10 @@ QLocale::QLocale(const QString &name)
 }
 
 /*!
-    Constructs a QLocale object initialized with the default locale. If
-    no default locale was set using setDefaultLocale(), this locale will
-    be the same as the one returned by system().
+    Constructs a QLocale object initialized with the default locale. This
+    locale will be the same as the one returned by system().
 
-    \sa setDefault()
+    \sa system()
 */
 
 QLocale::QLocale()
@@ -363,13 +355,13 @@ QLocale::QLocale()
        is \c AnyCountry, the language is used with the most
        appropriate available country (for example, Germany for German),
     \i If neither the language nor the country are found, QLocale
-       defaults to the default locale (see setDefault()).
+       defaults to the system locale (see system()).
     \endlist
 
     The language and country that are actually used can be queried
     using language() and country().
 
-    \sa setDefault() language() country()
+    \sa system() language() country()
 */
 
 QLocale::QLocale(Language language, Country country)
@@ -401,13 +393,13 @@ QLocale::QLocale(Language language, Country country)
        language is used with the first locale that matches the given \a script
        and \a country.
     \i If neither the language nor the country are found, QLocale
-       defaults to the default locale (see setDefault()).
+       defaults to the system locale (see system()).
     \endlist
 
     The language, script and country that are actually used can be queried
     using language(), script() and country().
 
-    \sa setDefault() language() script() country()
+    \sa system() language() script() country()
 */
 
 QLocale::QLocale(Language language, Script script, Country country)
@@ -471,29 +463,6 @@ void QLocale::setNumberOptions(NumberOptions options)
 QLocale::NumberOptions QLocale::numberOptions() const
 {
     return p.numberOptions;
-}
-
-/*!
-    \nonreentrant
-
-    Sets the global default locale to \a locale. These
-    values are used when a QLocale object is constructed with
-    no arguments. If this function is not called, the system's
-    locale is used.
-
-    \warning In a multithreaded application, the default locale
-    should be set at application startup, before any non-GUI threads
-    are created.
-
-    \sa system() c()
-*/
-
-void QLocale::setDefault(const QLocale &locale)
-{
-    default_lp = locale.d();
-    default_number_options = locale.numberOptions();
-
-    qt_initLocale(locale.bcp47Name());
 }
 
 /*!
@@ -1316,7 +1285,6 @@ QString QLocale::toString(double i, char f, int prec) const
 
     \sa c()
 */
-
 QLocale QLocale::system()
 {
     QByteArray lang = qgetenv("LC_ALL");

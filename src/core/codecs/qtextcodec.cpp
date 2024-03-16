@@ -981,15 +981,7 @@ QByteArray qt_locale_codec()
         return localecodec;
     }
 
-    // Get the first non-empty value from $LC_ALL, $LC_CTYPE, and $LANG
-    // environment variables.
-    QByteArray lang = qgetenv("LC_ALL");
-    if (lang.isEmpty()) {
-        lang = qgetenv("LC_CTYPE");
-    }
-    if (lang.isEmpty()) {
-        lang = qgetenv("LANG");
-    }
+    const QByteArray lang = qGetLang();
 
     const int indexOfDot = lang.indexOf('.');
     if (indexOfDot != -1) {

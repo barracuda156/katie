@@ -445,19 +445,7 @@
     \value SystemLocaleLongDate The \l{QLocale::LongFormat}{long format} used
     by the \l{QLocale::system()}{operating system}.
 
-    \value DefaultLocaleShortDate The \l{QLocale::ShortFormat}{short format} specified
-    by the \l{QLocale::setDefault()}{application's locale}.
-
-    \value DefaultLocaleLongDate The \l{QLocale::LongFormat}{long format} used
-    by the \l{QLocale::setDefault()}{application's locale}.
-
     \value SystemLocaleDate \e{This enum value is deprecated.} Use Qt::SystemLocaleShortDate
-    instead (or Qt::SystemLocaleLongDate if you want long dates).
-
-    \value LocaleDate \e{This enum value is deprecated.} Use Qt::DefaultLocaleShortDate
-    instead (or Qt::DefaultLocaleLongDate if you want long dates).
-
-    \value LocalDate \e{This enum value is deprecated.} Use Qt::SystemLocaleShortDate
     instead (or Qt::SystemLocaleLongDate if you want long dates).
 
     \note For \c ISODate formats, each \c Y, \c M and \c D represents a single digit

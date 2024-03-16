@@ -812,9 +812,7 @@ public:
         TextDate,      // default Qt
         ISODate,       // ISO 8601
         SystemLocaleShortDate,
-        SystemLocaleLongDate,
-        DefaultLocaleShortDate,
-        DefaultLocaleLongDate
+        SystemLocaleLongDate
     };
 
     enum TimeSpec {

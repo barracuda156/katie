@@ -1371,7 +1371,6 @@ public:
     static QString languageToString(Language language);
     static QString countryToString(Country country);
     static QString scriptToString(Script script);
-    static void setDefault(const QLocale &locale);
 
     static QLocale c() { return QLocale(C); }
     static QLocale system();

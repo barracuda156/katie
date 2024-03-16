@@ -123,6 +123,20 @@ static inline QStringList qGetEnvList(const char* const name)
     return result;
 }
 
+// Get the first non-empty value from $LC_ALL, $LC_CTYPE and $LANG environment
+// variables.
+static inline QByteArray qGetLang()
+{
+    QByteArray result = qgetenv("LC_ALL");
+    if (result.isEmpty()) {
+        result = qgetenv("LC_CTYPE");
+    }
+    if (result.isEmpty()) {
+        result = qgetenv("LANG");
+    }
+    return result;
+}
+
 QT_END_NAMESPACE
 
 #endif // QCORECOMMON_P_H

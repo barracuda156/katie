@@ -36,19 +36,17 @@
 
     \snippet doc/src/snippets/code/src_corelib_tools_qlocale.cpp 0
 
-    QLocale supports the concept of a default locale, which is
+    QLocale supports the concept of a system locale, which is
     determined from the system's locale settings at application
-    startup. The default locale can be changed by calling the
-    static member setDefault(). Setting the default locale has the
-    following effects:
+    startup. The default locale has the following effects:
 
     \list
     \i If a QLocale object is constructed with the default constructor,
-       it will use the default locale's settings.
+       it will use the system locale's settings.
     \i QString::toInt(), QString::toDouble(), etc., interpret the
-       string according to the default locale. If this fails, it
+       string according to the system locale. If this fails, it
        falls back on the "C" locale.
-    \i QString::arg() uses the default locale to format a number when
+    \i QString::arg() uses the system locale to format a number when
        its position specifier in the format string contains an 'L',
        e.g. "%L1".
     \endlist
@@ -66,7 +64,7 @@
        is \c AnyCountry, the language is used with the most
        appropriate available country (for example, Germany for German),
     \i If neither the language nor the country are found, QLocale
-       defaults to the default locale (see setDefault()).
+       defaults to the system locale (see system()).
     \endlist
 
     Use language() and country() to determine the actual language and

@@ -167,46 +167,18 @@ void tst_QLocale::ctor()
     TEST_CTOR(C, France, QLocale::C, QLocale::AnyCountry)
     TEST_CTOR(Spanish, LatinAmerica, QLocale::Spanish, QLocale::LatinAmerica)
 
-    QLocale::setDefault(QLocale(QLocale::English, QLocale::France));
-
-    {
-        QLocale l;
-        QVERIFY(l.language() == QLocale::English);
-        QVERIFY(l.country() == QLocale::world);
-    }
-
     TEST_CTOR(French, France, QLocale::French, QLocale::France)
     TEST_CTOR(English, UnitedKingdom, QLocale::English, QLocale::UnitedKingdom)
 
     TEST_CTOR(French, France, QLocale::French, QLocale::France)
     TEST_CTOR(C, AnyCountry, QLocale::C, QLocale::AnyCountry)
     TEST_CTOR(C, France, QLocale::C, QLocale::AnyCountry)
-    TEST_CTOR(Aymara, AnyCountry, QLocale::English, QLocale::world)
-
-    QLocale::setDefault(QLocale(QLocale::English, QLocale::UnitedKingdom));
-
-    {
-        QLocale l;
-        QVERIFY(l.language() == QLocale::English);
-        QVERIFY(l.country() == QLocale::UnitedKingdom);
-    }
 
     TEST_CTOR(French, France, QLocale::French, QLocale::France)
     TEST_CTOR(English, UnitedKingdom, QLocale::English, QLocale::UnitedKingdom)
 
     TEST_CTOR(C, AnyCountry, QLocale::C, QLocale::AnyCountry)
     TEST_CTOR(C, France, QLocale::C, QLocale::AnyCountry)
-
-    QLocale::setDefault(QLocale(QLocale::Aymara, QLocale::France));
-
-    {
-        QLocale l;
-        QVERIFY(l.language() == QLocale::English);
-        QVERIFY(l.country() == QLocale::UnitedKingdom);
-    }
-
-    TEST_CTOR(Aymara, AnyCountry, QLocale::English, QLocale::UnitedKingdom)
-    TEST_CTOR(Aymara, France, QLocale::English, QLocale::UnitedKingdom)
 
     TEST_CTOR(English, AnyCountry, QLocale::English, QLocale::UnitedStates)
     TEST_CTOR(English, UnitedStates, QLocale::English, QLocale::UnitedStates)
@@ -217,18 +189,6 @@ void tst_QLocale::ctor()
     TEST_CTOR(French, France, QLocale::French, QLocale::France)
     TEST_CTOR(C, AnyCountry, QLocale::C, QLocale::AnyCountry)
     TEST_CTOR(C, France, QLocale::C, QLocale::AnyCountry)
-
-    QLocale::setDefault(QLocale(QLocale::Aymara, QLocale::AnyCountry));
-
-    {
-        QLocale l;
-        QVERIFY(l.language() == QLocale::English);
-        QVERIFY(l.country() == QLocale::UnitedKingdom);
-    }
-
-
-    TEST_CTOR(Aymara, AnyCountry, QLocale::English, QLocale::UnitedKingdom)
-    TEST_CTOR(Aymara, France, QLocale::English, QLocale::UnitedKingdom)
 
     TEST_CTOR(English, AnyCountry, QLocale::English, QLocale::UnitedStates)
     TEST_CTOR(English, UnitedStates, QLocale::English, QLocale::UnitedStates)
@@ -265,8 +225,6 @@ void tst_QLocale::ctor()
 		+ QLocale::languageToString(l.language()) \
 		+ "/" + QLocale::countryToString(l.country())).toLatin1().constData()); \
     }
-
-    QLocale::setDefault(QLocale(QLocale::C));
 
     QChar c;
     TEST_CTOR("C", C, AnyCountry)
@@ -437,8 +395,6 @@ void tst_QLocale::unixLocaleName()
         QLocale l(QLocale::req_lang, QLocale::req_country); \
         QCOMPARE(l.name(), QString(exp_name)); \
     }
-
-    QLocale::setDefault(QLocale(QLocale::C));
 
     TEST_NAME(C, AnyCountry, "C")
     TEST_NAME(English, world, "en_001")
@@ -715,10 +671,6 @@ void tst_QLocale::long_long_conversion_extra()
 
 /*
 void tst_QLocale::languageToString()
-{
-}
-
-void tst_QLocale::setDefault()
 {
 }
 */
