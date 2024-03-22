@@ -84,47 +84,47 @@ public:
     QFontEngineFT(const QFontDef &fd, FcPattern *pattern);
 #endif
     QFontEngineFT(const QFontDef &fd);
-    virtual ~QFontEngineFT();
+    ~QFontEngineFT();
 
-    virtual QFontEngine::FaceId faceId() const;
-    virtual QFontEngine::Properties properties() const;
+    QFontEngine::FaceId faceId() const final;
+    QFontEngine::Properties properties() const final;
 
-    virtual bool getSfntTableData(uint tag, uchar *buffer, uint *length) const;
-    virtual int synthesized() const;
+    bool getSfntTableData(uint tag, uchar *buffer, uint *length) const final;
+    int synthesized() const final;
 
-    virtual QFixed ascent() const;
-    virtual QFixed descent() const;
-    virtual QFixed leading() const;
-    virtual QFixed xHeight() const;
-    virtual QFixed averageCharWidth() const;
+    QFixed ascent() const final;
+    QFixed descent() const final;
+    QFixed leading() const final;
+    QFixed xHeight() const final;
+    QFixed averageCharWidth() const final;
 
-    virtual qreal maxCharWidth() const;
-    virtual qreal minLeftBearing() const;
-    virtual qreal minRightBearing() const;
-    virtual QFixed lineThickness() const;
-    virtual QFixed underlinePosition() const;
+    qreal maxCharWidth() const final;
+    qreal minLeftBearing() const final;
+    qreal minRightBearing() const final;
+    QFixed lineThickness() const final;
+    QFixed underlinePosition() const final;
 
     void doKerning(QGlyphLayout *);
 
-    inline virtual Type type() const
+    inline Type type() const final
     { return QFontEngine::Freetype; }
-    inline virtual const char *name() const
+    inline const char *name() const final
     { return "freetype"; }
 
-    virtual void getUnscaledGlyph(glyph_t glyph, QPainterPath *path, glyph_metrics_t *metrics);
+    void getUnscaledGlyph(glyph_t glyph, QPainterPath *path, glyph_metrics_t *metrics) final;
 
-    virtual bool canRender(const QChar *string, int len);
+    bool canRender(const QChar *string, int len) final;
 
-    virtual void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs,
-                         QPainterPath *path);
+    void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs,
+                         QPainterPath *path) final;
 
-    virtual bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
-                      QTextEngine::ShaperFlags flags) const;
+    bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs,
+                      QTextEngine::ShaperFlags flags) const final;
 
-    virtual glyph_metrics_t boundingBox(const QGlyphLayout &glyphs) const;
-    virtual glyph_metrics_t boundingBox(glyph_t glyph) const;
+    glyph_metrics_t boundingBox(const QGlyphLayout &glyphs) const final;
+    glyph_metrics_t boundingBox(glyph_t glyph) const final;
 
-    virtual void recalcAdvances(QGlyphLayout *glyphs) const;
+    void recalcAdvances(QGlyphLayout *glyphs) const final;
 
     enum Scaling {
         Scaled,
