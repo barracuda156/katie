@@ -71,7 +71,7 @@ public:
     FT_Face face;
     FT_Library library;
 
-    static void addGlyphToPath(FT_Outline outline, const QFixedPoint &point, QPainterPath *path);
+    static void addGlyphToPath(const FT_Outline &outline, const QFixedPoint &point, QPainterPath *path);
 
 private:
     Q_DISABLE_COPY(QFreetypeFace);

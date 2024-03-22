@@ -77,7 +77,7 @@ QFreetypeFace::~QFreetypeFace()
     FT_Done_FreeType(library);
 }
 
-void QFreetypeFace::addGlyphToPath(FT_Outline outline, const QFixedPoint &point, QPainterPath *path)
+void QFreetypeFace::addGlyphToPath(const FT_Outline &outline, const QFixedPoint &point, QPainterPath *path)
 {
     static const qreal factor = (1.0 / 64.0);
 
