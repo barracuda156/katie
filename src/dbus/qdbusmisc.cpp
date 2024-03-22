@@ -92,13 +92,11 @@ bool qDBusInterfaceInObject(QObject *obj, const QString &interface_name)
 // sig must be the normalised signature for the method
 int qDBusParametersForMethod(const QMetaMethod &mm, QList<int>& metaTypes)
 {
-    QList<QByteArray> parameterTypes = mm.parameterTypes();
     metaTypes.clear();
-
     metaTypes.append(0);        // return type
     int inputCount = 0;
     bool seenMessage = false;
-    foreach (const QByteArray &type, parameterTypes) {
+    foreach (const QByteArray &type, mm.parameterTypes()) {
         if (type.endsWith('*')) {
             //qWarning("Could not parse the method '%s'", mm.signature());
             // pointer?
