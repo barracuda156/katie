@@ -124,7 +124,6 @@ static const struct ClassTblData {
     { QLatin1String("QDBusUnixFileDescriptor"), QLatin1String("QtDBus/qdbusunixfiledescriptor.h") },
     { QLatin1String("QDBusVariant"), QLatin1String("QtDBus/qdbusextratypes.h") },
     { QLatin1String("QDataStream"), QLatin1String("QtCore/qdatastream.h") },
-    { QLatin1String("QDataWidgetMapper"), QLatin1String("QtGui/qdatawidgetmapper.h") },
     { QLatin1String("QDate"), QLatin1String("QtCore/qdatetime.h") },
     { QLatin1String("QDateEdit"), QLatin1String("QtGui/qdatetimeedit.h") },
     { QLatin1String("QDateTime"), QLatin1String("QtCore/qdatetime.h") },

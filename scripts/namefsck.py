@@ -88,7 +88,6 @@ classlist = [
     "QDBusUnixFileDescriptor",
     "QDBusVariant",
     "QDataStream",
-    "QDataWidgetMapper",
     "QDate",
     "QDateEdit",
     "QDateTime",

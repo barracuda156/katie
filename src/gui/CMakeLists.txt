@@ -44,7 +44,6 @@ set(GUI_PUBLIC_HEADERS
     QCommonStyle
     QCompleter
     QCursor
-    QDataWidgetMapper
     QDateTimeEdit
     QDesktopWidget
     QDial
@@ -327,7 +326,6 @@ set(GUI_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qstringlistmodel.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qtreewidgetitemiterator.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qtreewidgetitemiterator_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qdatawidgetmapper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qfileiconprovider.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qcolumnviewgrip_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qcolumnview.h 
@@ -650,7 +648,6 @@ set(GUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qstandarditemmodel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qstringlistmodel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qtreewidgetitemiterator.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qdatawidgetmapper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qfileiconprovider.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qcolumnview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qcolumnviewgrip.cpp

@@ -160,7 +160,6 @@
 #cmakedefine QT_NO_COLORNAMES
 #cmakedefine QT_NO_COLUMNVIEW
 #cmakedefine QT_NO_CURSOR
-#cmakedefine QT_NO_DATAWIDGETMAPPER
 #cmakedefine QT_NO_DATETIMEEDIT
 #cmakedefine QT_NO_DEBUG
 #cmakedefine QT_NO_DIAL
@@ -425,11 +424,6 @@
 // QCompleter
 #if !defined(QT_NO_COMPLETER) && defined(QT_NO_PROXYMODEL)
 #  define QT_NO_COMPLETER
-#endif
-
-// QDataWidgetMapper
-#if !defined(QT_NO_DATAWIDGETMAPPER) && (defined(QT_NO_ITEMVIEWS) || defined(QT_NO_PROPERTIES))
-#  define QT_NO_DATAWIDGETMAPPER
 #endif
 
 // QListWidget

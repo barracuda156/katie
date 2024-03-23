@@ -334,7 +334,6 @@ include/katie/QtGui/QCommonStyle
 include/katie/QtGui/QCompleter
 include/katie/QtGui/QContextMenuEvent
 include/katie/QtGui/QCursor
-include/katie/QtGui/QDataWidgetMapper
 include/katie/QtGui/QDateEdit
 include/katie/QtGui/QDateTimeEdit
 include/katie/QtGui/QDesktopWidget
@@ -655,7 +654,6 @@ include/katie/QtGui/qcommandlinkbutton.h
 include/katie/QtGui/qcommonstyle.h
 include/katie/QtGui/qcompleter.h
 include/katie/QtGui/qcursor.h
-include/katie/QtGui/qdatawidgetmapper.h
 include/katie/QtGui/qdatetimeedit.h
 include/katie/QtGui/qdesktopwidget.h
 include/katie/QtGui/qdial.h
