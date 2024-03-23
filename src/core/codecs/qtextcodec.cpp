@@ -938,7 +938,9 @@ static const struct MIBTblData {
 };
 static const qint16 MIBTblSize = sizeof(MIBTbl) / sizeof(MIBTblData);
 
+#ifndef QT_NO_TEXTCODEC
 static const UChar nullchar[2] = { 0x5c, 0x30 };
+#endif
 static const UChar questionmarkchar[1] = { 0x3f };
 
 static QByteArray localecodec;
