@@ -137,8 +137,6 @@
     \value RightButton     The right button.
     \value MiddleButton    The middle button.
 
-    \omitvalue MouseButtonMask
-
     \sa KeyboardModifier Modifier
 */
 
