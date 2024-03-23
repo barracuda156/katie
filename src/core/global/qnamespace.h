@@ -423,11 +423,10 @@ public:
     };
 
     enum MouseButton {
-        NoButton         = 0x00000000,
-        LeftButton       = 0x00000001,
-        RightButton      = 0x00000002,
-        MiddleButton     = 0x00000004,
-        MouseButtonMask  = 0x000000ff
+        NoButton         = 0,
+        LeftButton       = 0x1,
+        RightButton      = 0x2,
+        MiddleButton     = 0x4,
     };
     Q_DECLARE_FLAGS(MouseButtons, MouseButton)
 

@@ -47,7 +47,8 @@ QT_BEGIN_NAMESPACE
 */
 QInputEvent::QInputEvent(Type type, Qt::KeyboardModifiers modifiers)
     : QEvent(type), modState(modifiers)
-{}
+{
+}
 
 /*!
   \internal
@@ -183,13 +184,15 @@ QMouseEvent::QMouseEvent(Type type, const QPoint &pos, const QPoint &globalPos,
                          Qt::MouseButton button, Qt::MouseButtons buttons,
                          Qt::KeyboardModifiers modifiers)
     : QInputEvent(type, modifiers), p(pos), g(globalPos), b(button), mouseState(buttons)
-{}
+{
+}
 
 QMouseEvent::QMouseEvent(Type type, const QPointF &pos, const QPointF &globalPos,
                          Qt::MouseButton button, Qt::MouseButtons buttons,
                          Qt::KeyboardModifiers modifiers)
     : QInputEvent(type, modifiers), p(pos), g(globalPos), b(button), mouseState(buttons)
-{}
+{
+}
 
 /*!
     \fn const QPoint &QMouseEvent::pos() const
@@ -521,13 +524,15 @@ QWheelEvent::QWheelEvent(const QPoint &pos, const QPoint& globalPos, int delta,
                          Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers,
                          Qt::Orientation orient)
     : QInputEvent(Wheel, modifiers), p(pos), g(globalPos), d(delta), mouseState(buttons), o(orient)
-{}
+{
+}
 
 QWheelEvent::QWheelEvent(const QPointF &pos, const QPointF& globalPos, int delta,
                          Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers,
                          Qt::Orientation orient)
     : QInputEvent(Wheel, modifiers), p(pos), g(globalPos), d(delta), mouseState(buttons), o(orient)
-{}
+{
+}
 
 #endif // QT_NO_WHEELEVENT
 
@@ -829,7 +834,8 @@ bool QKeyEvent::matches(QKeySequence::StandardKey matchKey) const
 */
 QFocusEvent::QFocusEvent(Type type, Qt::FocusReason reason)
     : QEvent(type), m_reason(reason)
-{}
+{
+}
 
 /*!
     \internal
@@ -895,7 +901,8 @@ QFocusEvent::~QFocusEvent()
 */
 QPaintEvent::QPaintEvent(const QRegion& paintRegion)
     : QEvent(Paint), m_rect(paintRegion.boundingRect()), m_region(paintRegion)
-{}
+{
+}
 
 /*!
     Constructs a paint event object with the rectangle that needs
@@ -903,9 +910,8 @@ QPaintEvent::QPaintEvent(const QRegion& paintRegion)
 */
 QPaintEvent::QPaintEvent(const QRect &paintRect)
     : QEvent(Paint), m_rect(paintRect),m_region(paintRect)
-{}
-
-
+{
+}
 
 /*!
   \internal
@@ -960,7 +966,8 @@ QUpdateLaterEvent::~QUpdateLaterEvent()
 */
 QMoveEvent::QMoveEvent(const QPoint &pos, const QPoint &oldPos)
     : QEvent(Move), p(pos), oldp(oldPos)
-{}
+{
+}
 
 /*!
   \internal
@@ -1002,7 +1009,8 @@ QMoveEvent::~QMoveEvent()
 */
 QResizeEvent::QResizeEvent(const QSize &size, const QSize &oldSize)
     : QEvent(Resize), s(size), olds(oldSize)
-{}
+{
+}
 
 /*!
   \internal
@@ -1081,7 +1089,8 @@ QResizeEvent::~QResizeEvent()
 */
 QCloseEvent::QCloseEvent()
     : QEvent(Close)
-{}
+{
+}
 
 /*! \internal
 */
@@ -1124,7 +1133,8 @@ QCloseEvent::~QCloseEvent()
 */
 QContextMenuEvent::QContextMenuEvent(Reason reason, const QPoint &pos, const QPoint &globalPos)
     : QInputEvent(ContextMenu), p(pos), gp(globalPos), reas(reason)
-{}
+{
+}
 
 /*!
     Constructs a context menu event object with the accept parameter
@@ -1140,7 +1150,8 @@ QContextMenuEvent::QContextMenuEvent(Reason reason, const QPoint &pos, const QPo
 QContextMenuEvent::QContextMenuEvent(Reason reason, const QPoint &pos, const QPoint &globalPos,
                                      Qt::KeyboardModifiers modifiers)
     : QInputEvent(ContextMenu, modifiers), p(pos), gp(globalPos), reas(reason)
-{}
+{
+}
 
 
 /*! \internal */
@@ -1276,7 +1287,8 @@ QDragMoveEvent::QDragMoveEvent(const QPoint& pos, Qt::DropActions actions, const
                                Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Type type)
     : QDropEvent(pos, actions, data, buttons, modifiers, type)
     , rect(pos, QSize(1, 1))
-{}
+{
+}
 
 /*!
     Destroys the event.
@@ -1589,7 +1601,8 @@ void QDropEvent::setDropAction(Qt::DropAction action)
 QDragEnterEvent::QDragEnterEvent(const QPoint& point, Qt::DropActions actions, const QMimeData *data,
                                  Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers)
     : QDragMoveEvent(point, actions, data, buttons, modifiers, DragEnter)
-{}
+{
+}
 
 /*! \internal
 */
@@ -1646,7 +1659,8 @@ QDragEnterEvent::~QDragEnterEvent()
 */
 QDragLeaveEvent::QDragLeaveEvent()
     : QEvent(DragLeave)
-{}
+{
+}
 
 /*! \internal
 */
@@ -1681,7 +1695,8 @@ QDragLeaveEvent::~QDragLeaveEvent()
 */
 QHelpEvent::QHelpEvent(Type type, const QPoint &pos, const QPoint &globalPos)
     : QEvent(type), p(pos), gp(globalPos)
-{}
+{
+}
 
 /*!
     \fn int QHelpEvent::x() const
@@ -1740,7 +1755,6 @@ QHelpEvent::~QHelpEvent()
 }
 
 #ifndef QT_NO_STATUSTIP
-
 /*!
     \class QStatusTipEvent
     \brief The QStatusTipEvent class provides an event that is used to show messages in a status bar.
@@ -1789,7 +1803,8 @@ QHelpEvent::~QHelpEvent()
 */
 QStatusTipEvent::QStatusTipEvent(const QString &tip)
     : QEvent(StatusTip), s(tip)
-{}
+{
+}
 
 /*! \internal
 */
@@ -1804,11 +1819,9 @@ QStatusTipEvent::~QStatusTipEvent()
 
     \sa QStatusBar::showMessage()
 */
-
 #endif // QT_NO_STATUSTIP
 
 #ifndef QT_NO_WHATSTHIS
-
 /*!
     \class QWhatsThisClickedEvent
     \brief The QWhatsThisClickedEvent class provides an event that
@@ -1828,7 +1841,8 @@ QStatusTipEvent::~QStatusTipEvent()
 */
 QWhatsThisClickedEvent::QWhatsThisClickedEvent(const QString &href)
     : QEvent(WhatsThisClicked), s(href)
-{}
+{
+}
 
 /*! \internal
 */
@@ -1842,11 +1856,9 @@ QWhatsThisClickedEvent::~QWhatsThisClickedEvent()
     Returns the URL that was clicked by the user in the "What's
     This?" text.
 */
-
 #endif // QT_NO_WHATSTHIS
 
 #ifndef QT_NO_ACTION
-
 /*!
     \class QActionEvent
     \brief The QActionEvent class provides an event that is generated
@@ -1873,7 +1885,8 @@ QWhatsThisClickedEvent::~QWhatsThisClickedEvent()
 */
 QActionEvent::QActionEvent(QEvent::Type type, QAction *action, QAction *before)
     : QEvent(type), act(action), bef(before)
-{}
+{
+}
 
 /*! \internal
 */
@@ -1899,7 +1912,6 @@ QActionEvent::~QActionEvent()
 
     \sa action(), QWidget::actions()
 */
-
 #endif // QT_NO_ACTION
 
 /*!
@@ -1926,7 +1938,8 @@ QActionEvent::~QActionEvent()
 */
 QHideEvent::QHideEvent()
     : QEvent(Hide)
-{}
+{
+}
 
 /*! \internal
 */
@@ -1955,7 +1968,8 @@ QHideEvent::~QHideEvent()
 */
 QShowEvent::QShowEvent()
     : QEvent(Show)
-{}
+{
+}
 
 /*! \internal
 */
@@ -1973,7 +1987,6 @@ QShowEvent::~QShowEvent()
 */
 
 #ifndef QT_NO_SHORTCUT
-
 /*!
     Constructs a shortcut event for the given \a key press,
     associated with the QShortcut ID \a id.
@@ -1992,11 +2005,9 @@ QShortcutEvent::QShortcutEvent(const QKeySequence &key, int id, bool ambiguous)
 QShortcutEvent::~QShortcutEvent()
 {
 }
-
 #endif // QT_NO_SHORTCUT
 
 #ifndef QT_NO_DEBUG_STREAM
-
 static const char *eventTypeName(QEvent::Type t)
 {
     static const int enumIdx = QEvent::staticMetaObject.indexOfEnumerator("Type");
@@ -2104,24 +2115,7 @@ static const char *mouseButtonToString(Qt::MouseButton button)
     Q_UNREACHABLE();
 }
 
-static QByteArray mouseButtonsToString(Qt::MouseButtons buttons)
-{
-    QByteArray result;
-    for (int i = 0; (uint)(1 << i) <= Qt::MouseButtonMask; ++i) {
-        const Qt::MouseButton button = static_cast<Qt::MouseButton>(1 << i);
-        if (buttons.testFlag(button)) {
-            if (!result.isEmpty())
-                result.append('|');
-            result.append(mouseButtonToString(button));
-        }
-    }
-    if (result.isEmpty())
-        result.append("NoButton");
-    return result;
-}
-
-#  ifndef QT_NO_DRAGANDDROP
-
+#ifndef QT_NO_DRAGANDDROP
 static void formatDropEvent(QDebug d, const QDropEvent *e)
 {
     const QEvent::Type type = e->type();
@@ -2132,10 +2126,9 @@ static void formatDropEvent(QDebug d, const QDropEvent *e)
     d << ", formats=" << e->mimeData()->formats();
     if (const Qt::KeyboardModifiers mods = e->keyboardModifiers())
         d << ", keyboardModifiers=" << mods;
-    d << ", " << mouseButtonsToString(e->mouseButtons()).constData();
+    d << ", 0x" << QByteArray::number(e->mouseButtons(), 16);
 }
-
-#  endif // !QT_NO_DRAGANDDROP
+#endif // !QT_NO_DRAGANDDROP
 
 QDebug operator<<(QDebug dbg, const QEvent *e) {
 #ifndef Q_BROKEN_DEBUG_STREAM
@@ -2159,20 +2152,20 @@ QDebug operator<<(QDebug dbg, const QEvent *e) {
         if (type != QEvent::MouseMove)
             dbg << ", " << mouseButtonToString(button);
         if (buttons && button != buttons)
-            dbg << ", buttons=" << mouseButtonsToString(buttons).constData();
+            dbg << ", buttons=0x" << QByteArray::number(buttons, 16);
         if (const int mods = int(me->modifiers()))
             dbg << ", modifiers=0x" << QByteArray::number(mods, 16);
         dbg << ')';
         break;
     }
-#  ifndef QT_NO_WHEELEVENT
+#ifndef QT_NO_WHEELEVENT
     case QEvent::Wheel: {
         const QWheelEvent *we = static_cast<const QWheelEvent *>(e);
         dbg << "QWheelEvent(" << "delta=" << we->delta() << ", pos=" << we->pos()
             << ", orientation=" << we->orientation() << ')';
         break;
     }
-#  endif // !QT_NO_WHEELEVENT
+#endif // !QT_NO_WHEELEVENT
     case QEvent::KeyPress:
     case QEvent::KeyRelease:
     case QEvent::ShortcutOverride: {
@@ -2218,14 +2211,14 @@ QDebug operator<<(QDebug dbg, const QEvent *e) {
         dbg << ')';
         break;
     }
-#  ifndef QT_NO_DRAGANDDROP
+#ifndef QT_NO_DRAGANDDROP
     case QEvent::DragEnter:
     case QEvent::DragMove:
     case QEvent::Drop: {
         formatDropEvent(dbg, static_cast<const QDropEvent *>(e));
         break;
     }
-#  endif // !QT_NO_DRAGANDDROP
+#endif // !QT_NO_DRAGANDDROP
     case QEvent::ChildAdded:
     case QEvent::ChildPolished:
     case QEvent::ChildRemoved: {
