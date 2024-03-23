@@ -19,7 +19,7 @@
 **
 ****************************************************************************/
 
-//#define QHOSTINFO_DEBUG
+// #define QHOSTINFO_DEBUG
 
 #include "qplatformdefs.h"
 
@@ -38,19 +38,39 @@
 
 QT_BEGIN_NAMESPACE
 
+#if defined(QHOSTINFO_DEBUG)
+void dumpHostResult(const QString &hostName, const QHostInfo &results)
+{
+    if (results.error() != QHostInfo::NoError) {
+        qDebug("QHostInfoPrivate::fromName(): error #%d %s",
+               int(results.error()), results.errorString().toLatin1().constData());
+    } else {
+        QString tmp;
+        QList<QHostAddress> addresses = results.addresses();
+        for (int i = 0; i < addresses.count(); ++i) {
+            if (i != 0) tmp += ", ";
+            tmp += addresses.at(i).toString();
+        }
+        qDebug("QHostInfoPrivate::fromName(): found %i entries for \"%s\": {%s}",
+               addresses.count(), hostName.toLatin1().constData(),
+               tmp.toLatin1().constData());
+    }
+}
+#endif
+
 QHostInfo QHostInfoPrivate::fromName(const QString &hostName)
 {
     QHostInfo results;
     results.d->err = QHostInfo::NoError;
     results.d->errorStr = QCoreApplication::translate("QHostInfo", "Unknown error");
 
-#if defined(QHOSTINFO_DEBUG)
-    qDebug("QHostInfoPrivate::fromName(%s) looking up...",
-           hostName.toLatin1().constData());
-#endif
-
     QHostAddress address;
     if (address.setAddress(hostName)) {
+#if defined(QHOSTINFO_DEBUG)
+        qDebug("QHostInfoPrivate::fromName(%s) looking up address...",
+               hostName.toLatin1().constData());
+#endif
+
         // Reverse lookup
         sockaddr_in sa4;
 #ifndef QT_NO_IPV6
@@ -61,7 +81,7 @@ QHostInfo QHostInfoPrivate::fromName(const QString &hostName)
         if (address.protocol() == QAbstractSocket::IPv4Protocol) {
             sa = (sockaddr *)&sa4;
             saSize = sizeof(sa4);
-            memset(&sa4, 0, sizeof(sa4));
+            ::memset(&sa4, 0, sizeof(sa4));
             sa4.sin_family = AF_INET;
             sa4.sin_addr.s_addr = htonl(address.toIPv4Address());
         }
@@ -69,14 +89,26 @@ QHostInfo QHostInfoPrivate::fromName(const QString &hostName)
         else {
             sa = (sockaddr *)&sa6;
             saSize = sizeof(sa6);
-            memset(&sa6, 0, sizeof(sa6));
+            ::memset(&sa6, 0, sizeof(sa6));
             sa6.sin6_family = AF_INET6;
-            memcpy(sa6.sin6_addr.s6_addr, address.toIPv6Address().c, sizeof(sa6.sin6_addr.s6_addr));
+            ::memcpy(sa6.sin6_addr.s6_addr, address.toIPv6Address().c, sizeof(sa6.sin6_addr.s6_addr));
         }
 #endif
 
         QSTACKARRAY(char, hbuf, NI_MAXHOST);
-        int result = (sa ? ::getnameinfo(sa, saSize, hbuf, sizeof(hbuf), 0, 0, NI_NAMEREQD) : EAI_NONAME);
+        int result = (sa ? ::getnameinfo(sa, saSize, hbuf, sizeof(hbuf), NULL, 0, NI_NAMEREQD) : EAI_NONAME);
+        // try again without NI_NAMEREQD, that may work for who knows what reason
+        if (result != 0) {
+#if defined(QHOSTINFO_DEBUG)
+            qDebug("QHostInfoPrivate::fromName(%s) getnameinfo retry without NI_NAMEREQD due to %d",
+                   hostName.toLatin1().constData(), result);
+#endif
+            result = (sa ? ::getnameinfo(sa, saSize, hbuf, sizeof(hbuf), NULL, 0, 0) : EAI_NONAME);
+        }
+#if defined(QHOSTINFO_DEBUG)
+        qDebug("QHostInfoPrivate::fromName(%s) getnameinfo returned %d",
+               hostName.toLatin1().constData(), result);
+#endif
         if (result == 0) {
             results.d->hostName = QString::fromLatin1(hbuf);
         } else if (result == EAI_NONAME || result == EAI_FAIL
@@ -95,10 +127,17 @@ QHostInfo QHostInfoPrivate::fromName(const QString &hostName)
         if (results.hostName().isEmpty())
             results.d->hostName = address.toString();
         results.d->addrs.append(address);
+#if defined(QHOSTINFO_DEBUG)
+        dumpHostResult(hostName, results);
+#endif
         return results;
     }
 
     // IDN support
+#if defined(QHOSTINFO_DEBUG)
+    qDebug("QHostInfoPrivate::fromName(%s) looking up name...",
+           hostName.toLatin1().constData());
+#endif
     QByteArray aceHostname = QUrl::toAce(hostName);
     results.d->hostName = hostName;
     if (aceHostname.isEmpty()) {
@@ -108,6 +147,9 @@ QHostInfo QHostInfoPrivate::fromName(const QString &hostName)
         } else {
             results.d->errorStr = QCoreApplication::translate("QHostInfo", "Invalid hostname");
         }
+#if defined(QHOSTINFO_DEBUG)
+        dumpHostResult(hostName, results);
+#endif
         return results;
     }
 
@@ -115,7 +157,7 @@ QHostInfo QHostInfoPrivate::fromName(const QString &hostName)
     // the IPv6 addresses at the end of the address list in results.
     addrinfo *res = 0;
     struct addrinfo hints;
-    memset(&hints, 0, sizeof(hints));
+    ::memset(&hints, 0, sizeof(hints));
     hints.ai_family = PF_UNSPEC;
 #ifdef AI_ADDRCONFIG
     hints.ai_flags = AI_ADDRCONFIG;
@@ -129,6 +171,10 @@ QHostInfo QHostInfoPrivate::fromName(const QString &hostName)
         result = ::getaddrinfo(aceHostname.constData(), 0, &hints, &res);
     }
 # endif
+#if defined(QHOSTINFO_DEBUG)
+    qDebug("QHostInfoPrivate::fromName(%s) getaddrinfo returned %d",
+           hostName.toLatin1().constData(), result);
+#endif
 
     if (result == 0) {
         addrinfo *node = res;
@@ -177,20 +223,7 @@ QHostInfo QHostInfoPrivate::fromName(const QString &hostName)
     }
 
 #if defined(QHOSTINFO_DEBUG)
-    if (results.error() != QHostInfo::NoError) {
-        qDebug("QHostInfoPrivate::fromName(): error #%d %s",
-               h_errno, results.errorString().toLatin1().constData());
-    } else {
-        QString tmp;
-        QList<QHostAddress> addresses = results.addresses();
-        for (int i = 0; i < addresses.count(); ++i) {
-            if (i != 0) tmp += ", ";
-            tmp += addresses.at(i).toString();
-        }
-        qDebug("QHostInfoPrivate::fromName(): found %i entries for \"%s\": {%s}",
-               addresses.count(), hostName.toLatin1().constData(),
-               tmp.toLatin1().constData());
-    }
+    dumpHostResult(hostName, results);
 #endif
     return results;
 }

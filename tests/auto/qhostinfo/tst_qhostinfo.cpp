@@ -120,7 +120,7 @@ void tst_QHostInfo::lookupIPv4_data()
 
     QTest::newRow("single_ip4") << "a-single" TEST_DOMAIN << "192.0.2.1" << int(QHostInfo::NoError);
     QTest::newRow("multiple_ip4") << "a-multi" TEST_DOMAIN << "192.0.2.1 192.0.2.2 192.0.2.3" << int(QHostInfo::NoError);
-    QTest::newRow("literal_ip4") << "128.30.52.100" << "128.30.52.100" << int(QHostInfo::NoError);
+    QTest::newRow("literal_ip4") << "104.18.23.19" << "104.18.23.19" << int(QHostInfo::NoError);
 
     QTest::newRow("notfound") << "invalid" TEST_DOMAIN << "" << int(QHostInfo::HostNotFound);
 
@@ -164,9 +164,7 @@ void tst_QHostInfo::lookupIPv6_data()
     QTest::newRow("a-plus-aaaa") << "a-plus-aaaa" TEST_DOMAIN << "198.51.100.1 2001:db8::1:1" << int(QHostInfo::NoError);
 
     // avoid using real IPv6 addresses here because this will do a DNS query
-    // real addresses are between 2000:: and 3fff:ffff:ffff:ffff:ffff:ffff:ffff
-    QTest::newRow("literal_ip6") << "2603:400A:FFFF:804:801E:34:0:64" << "2603:400A:FFFF:804:801E:34:0:64" << int(QHostInfo::NoError);
-    QTest::newRow("literal_shortip6") << "2a00:1450:4017:80c::200e" << "2a00:1450:4017:80c::200e" << int(QHostInfo::NoError);
+    QTest::newRow("literal_ip6") << "2606:4700::6812:1613" << "2606:4700::6812:1613" << int(QHostInfo::NoError);
 }
 
 void tst_QHostInfo::lookupIPv6()

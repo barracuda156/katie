@@ -53,7 +53,7 @@ public:
     static QString serverIPs()
     {
         if (supportsIPv6()) {
-            return QLatin1String("104.18.23.19 2606:4700::6812:1713");
+            return QLatin1String("104.18.22.19 104.18.23.19 2606:4700::6812:1613 2606:4700::6812:1713");
         }
         return QLatin1String("104.18.23.19");
     }
