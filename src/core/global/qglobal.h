@@ -68,9 +68,6 @@ QT_USE_NAMESPACE
 
 #endif /* QT_NO_USING_NAMESPACE */
 
-#define QT_BEGIN_INCLUDE_HEADER
-#define QT_END_INCLUDE_HEADER extern "C++"
-
 /*
    The compiler, must be one of: (Q_CC_x)
 
