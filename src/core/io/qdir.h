@@ -101,10 +101,6 @@ public:
 
     static inline QChar separator()
         { return QLatin1Char('/'); }
-    static QString toNativeSeparators(const QString &pathName)
-        { return pathName; }
-    static QString fromNativeSeparators(const QString &pathName)
-        { return pathName; }
 
     bool cd(const QString &dirName);
     bool cdUp();

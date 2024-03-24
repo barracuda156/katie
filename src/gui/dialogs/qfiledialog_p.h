@@ -106,7 +106,7 @@ public:
 
     QString basename(const QString &path) const
     {
-        int separator = QDir::toNativeSeparators(path).lastIndexOf(QDir::separator());
+        int separator = path.lastIndexOf(QDir::separator());
         if (separator != -1)
             return path.mid(separator + 1);
         return path;

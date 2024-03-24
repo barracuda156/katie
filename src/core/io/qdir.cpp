@@ -90,12 +90,12 @@ bool QDirPrivate::exists() const
 
 inline void QDirPrivate::setPath(const QString &path)
 {
-    QString p = QDir::fromNativeSeparators(path);
+    QString p = path;
     if (p.endsWith(QLatin1Char('/')) && p.length() > 1) {
         p.truncate(p.length() - 1);
     }
 
-    dirEntry = QFileSystemEntry(QDir::fromNativeSeparators(path));
+    dirEntry = QFileSystemEntry(path);
     metaData.clear();
     clearFileLists();
     absoluteDirEntry = QFileSystemEntry();
@@ -384,12 +384,6 @@ inline void QDirPrivate::initFileLists(const QDir &dir) const
     Paths can also be simplified by using cleanPath() to remove redundant "/"
     and ".." elements.
 
-    It is sometimes necessary to be able to show a path in the native
-    representation for the user's platform. The static toNativeSeparators()
-    function returns a copy of the specified path in which each directory
-    separator is replaced by the appropriate separator for the underlying
-    operating system.
-
     \section1 Examples
 
     Check if a directory exists:
@@ -493,7 +487,7 @@ void QDir::setPath(const QString &path)
     setPath()).
 
     \sa setPath(), absolutePath(), exists(), cleanPath(), dirName(),
-    absoluteFilePath(), toNativeSeparators(), makeAbsolute()
+    absoluteFilePath(), makeAbsolute()
 */
 QString QDir::path() const
 {
@@ -638,34 +632,6 @@ QString QDir::relativeFilePath(const QString &fileName) const
 
     return result;
 }
-
-/*!
-    \fn QDir::toNativeSeparators(const QString &pathName)
-    \since 4.2
-
-    Returns \a pathName with the '/' separators converted to
-    separators that are appropriate for the underlying operating
-    system.
-
-    The returned string may be the same as the argument on some
-    operating systems, for example on Unix.
-
-    \sa fromNativeSeparators(), separator()
-*/
-
-/*!
-    \fn QString QDir::fromNativeSeparators(const QString &pathName)
-    \since 4.2
-
-    Returns \a pathName using '/' as file separator. On Windows,
-    for instance, fromNativeSeparators("\c{c:\\winnt\\system32}") returns
-    "c:/winnt/system32".
-
-    The returned string may be the same as the argument on some
-    operating systems, for example on Unix.
-
-    \sa toNativeSeparators(), separator()
-*/
 
 /*!
     Changes the QDir's directory to \a dirName.
@@ -1401,14 +1367,7 @@ bool QDir::exists(const QString &name) const
 
 /*!
     \fn QChar QDir::separator()
-    Returns the native directory separator: "/" under Unix (including
-    Mac OS X) and "\\" under Windows.
-
-    You do not need to use this function to build file paths. If you
-    always use "/", Qt will translate your paths to conform to the
-    underlying operating system. If you want to display paths to the
-    user using their operating system's separator use
-    toNativeSeparators().
+    Returns the native directory separator: "/" under Unix.
 */
 
 /*!
@@ -1468,9 +1427,6 @@ QString QDir::currentPath()
 
 /*!
     Returns the absolute path of the user's home directory.
-
-    Use the toNativeSeparators() function to convert the separators to
-    the ones that are appropriate for the underlying operating system.
 
     For Unix operating systems the \c HOME environment variable is used
     if it exists, otherwise the path returned by the rootPath().

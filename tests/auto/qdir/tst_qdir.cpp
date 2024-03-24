@@ -123,8 +123,6 @@ private slots:
     void tempPath();
     void rootPath();
 
-    void nativeSeparators();
-
     void longFileName_data();
     void longFileName();
 
@@ -1068,14 +1066,6 @@ void tst_QDir::rootPath()
     QVERIFY(QDir::isAbsolutePath(path));
 
     QCOMPARE(path, QString("/"));
-}
-
-void tst_QDir::nativeSeparators()
-{
-    QCOMPARE(QDir::toNativeSeparators(QLatin1String("/")), QString("/"));
-    QCOMPARE(QDir::toNativeSeparators(QLatin1String("\\")), QString("\\"));
-    QCOMPARE(QDir::fromNativeSeparators(QLatin1String("/")), QString("/"));
-    QCOMPARE(QDir::fromNativeSeparators(QLatin1String("\\")), QString("\\"));
 }
 
 void tst_QDir::longFileName_data()
