@@ -1295,7 +1295,7 @@ void QGraphicsItemPrivate::initStyleOption(QStyleOptionGraphicsItem *option, con
 void QGraphicsItemCache::purge()
 {
     QPixmapCache::remove(key);
-    key = QPixmapCache::Key();
+    key = QByteArray();
     foreach (const DeviceData &data, deviceData) {
         QPixmapCache::remove(data.key);
     }

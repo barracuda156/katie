@@ -51,14 +51,14 @@ public:
     // ItemCoordinateCache only
     QRect boundingRect;
     QSize fixedSize;
-    QPixmapCache::Key key;
+    QByteArray key;
 
     // DeviceCoordinateCache only
     struct DeviceData {
         DeviceData() {}
         QTransform lastTransform;
         QPoint cacheIndent;
-        QPixmapCache::Key key;
+        QByteArray key;
     };
     QMap<QPaintDevice *, DeviceData> deviceData;
 

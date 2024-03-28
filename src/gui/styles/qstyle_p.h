@@ -56,9 +56,9 @@ public:
     QPixmap internalPixmapCache; \
     QImage imageCache; \
     QPainter *p = painter; \
-    QString unique = QStyleHelper::uniqueName((a), option, option->rect.size()); \
-    QTransform::TransformationType devTxType = painter->deviceTransform().type(); \
-    QTransform::TransformationType worldTxType = painter->worldTransform().type(); \
+    const QByteArray unique = QStyleHelper::uniqueName((a), option, option->rect.size()); \
+    const QTransform::TransformationType devTxType = painter->deviceTransform().type(); \
+    const QTransform::TransformationType worldTxType = painter->worldTransform().type(); \
     bool doPixmapCache = (devTxType <= QTransform::TxTranslate && worldTxType <= QTransform::TxTranslate); \
     if (doPixmapCache && QPixmapCache::find(unique, internalPixmapCache)) { \
         painter->drawPixmap(option->rect.topLeft(), internalPixmapCache); \

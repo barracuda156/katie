@@ -682,7 +682,7 @@ void QCleanlooksStyle::drawPrimitive(PrimitiveElement elem,
             return;
         }
 
-        BEGIN_STYLE_PIXMAPCACHE(QString::fromLatin1("pushbutton-%1").arg(isDefault))
+        BEGIN_STYLE_PIXMAPCACHE(QByteArray("pushbutton-") + static_cast<char>(isDefault))
         r = rect.adjusted(0, 1, 0, -1);
 
         bool isEnabled = (option->state & State_Enabled);
@@ -1223,9 +1223,9 @@ void QCleanlooksStyle::drawControl(ControlElement element, const QStyleOption *o
         // Draws the header in tables.
         if (const QStyleOptionHeader *header = qstyleoption_cast<const QStyleOptionHeader *>(option)) {
             QPixmap cache;
-            QString pixmapName = QStyleHelper::uniqueName(QLatin1String("qt_headersection"), option, option->rect.size());
-            pixmapName += QString::number(- int(header->position));
-            pixmapName += QString::number(- int(header->orientation));
+            QByteArray pixmapName = QStyleHelper::uniqueName("qt_headersection", option, option->rect.size());
+            pixmapName += QByteArray::number(- int(header->position));
+            pixmapName += QByteArray::number(- int(header->orientation));
             QRect r = option->rect;
             QColor gradientStopColor;
             QColor gradientStartColor = option->palette.button().color();
@@ -2010,7 +2010,7 @@ void QCleanlooksStyle::drawComplexControl(ComplexControl control, const QStyleOp
     case CC_SpinBox:
         if (const QStyleOptionSpinBox *spinBox = qstyleoption_cast<const QStyleOptionSpinBox *>(option)) {
             QPixmap cache;
-            QString pixmapName = QStyleHelper::uniqueName(QLatin1String("qt_spinbox"), spinBox, spinBox->rect.size());
+            QByteArray pixmapName = QStyleHelper::uniqueName("qt_spinbox", spinBox, spinBox->rect.size());
             if (!QPixmapCache::find(pixmapName, cache)) {
                 cache = QPixmap(spinBox->rect.size());
                 cache.fill(Qt::transparent);
@@ -2759,7 +2759,7 @@ void QCleanlooksStyle::drawComplexControl(ComplexControl control, const QStyleOp
 
                 // The AddLine (down/right) button
                 if (scrollBar->subControls & SC_ScrollBarAddLine) {
-                    QString addLinePixmapName = QStyleHelper::uniqueName(QLatin1String("qt_scrollbar_addline"), option, QSize(16, 16));
+                    QString addLinePixmapName = QStyleHelper::uniqueName("qt_scrollbar_addline", option, QSize(16, 16));
                     QRect pixmapRect = scrollBarAddLine;
                     if (isEnabled) {
                         QRect fillRect = pixmapRect.adjusted(1, 1, -1, -1);
@@ -2837,13 +2837,13 @@ void QCleanlooksStyle::drawComplexControl(ComplexControl control, const QStyleOp
             bool isEnabled = (comboBox->state & State_Enabled);
             bool focus = isEnabled && (comboBox->state & State_HasFocus);
             QPixmap cache;
-            QString pixmapName = QStyleHelper::uniqueName(QLatin1String("qt_combobox"), option, comboBox->rect.size());
+            QByteArray pixmapName = QStyleHelper::uniqueName("qt_combobox", option, comboBox->rect.size());
             if (sunken)
-                pixmapName += QLatin1String("-sunken");
+                pixmapName += "-sunken";
             if (comboBox->editable)
-                pixmapName += QLatin1String("-editable");
+                pixmapName += "-editable";
             if (isEnabled)
-                pixmapName += QLatin1String("-enabled");
+                pixmapName += "-enabled";
 
             if (!QPixmapCache::find(pixmapName, cache)) {
                 cache = QPixmap(comboBox->rect.size());
@@ -3077,7 +3077,7 @@ void QCleanlooksStyle::drawComplexControl(ComplexControl control, const QStyleOp
             highlightAlpha.setAlpha(80);
 
             if ((option->subControls & SC_SliderGroove) && groove.isValid()) {
-                QString groovePixmapName = QStyleHelper::uniqueName(QLatin1String("qt_slider_groove"), option, groove.size());
+                QByteArray groovePixmapName = QStyleHelper::uniqueName("qt_slider_groove", option, groove.size());
                 QRect pixmapRect(0, 0, groove.width(), groove.height());
 
                 // draw background groove
@@ -3155,7 +3155,7 @@ void QCleanlooksStyle::drawComplexControl(ComplexControl control, const QStyleOp
 
             // draw handle
             if ((option->subControls & SC_SliderHandle) ) {
-                QString handlePixmapName = QStyleHelper::uniqueName(QLatin1String("qt_slider_handle"), option, handle.size());
+                QByteArray handlePixmapName = QStyleHelper::uniqueName("qt_slider_handle", option, handle.size());
                 if (!QPixmapCache::find(handlePixmapName, cache)) {
                     cache = QPixmap(handle.size());
                     cache.fill(Qt::transparent);

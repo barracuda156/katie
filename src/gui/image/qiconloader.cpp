@@ -429,7 +429,7 @@ QPixmap QIconLoaderEngineEntry::pixmap(const QSize &size, QIcon::Mode mode, QIco
     }
 
     int actualSize = qMin(size.width(), size.height());
-    const QString key = qHexString(
+    const QByteArray key = qHexString(
         "qt_theme_%lld_%d_%lld_%d",
         m_basePixmap.cacheKey(),
         static_cast<int>(mode),

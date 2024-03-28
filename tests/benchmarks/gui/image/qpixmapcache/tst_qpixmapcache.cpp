@@ -21,6 +21,7 @@
 
 #include <qtest.h>
 #include <QPixmapCache>
+#include <qguicommon_p.h>
 //TESTED_FILES=
 
 class tst_QPixmapCache : public QObject
@@ -67,7 +68,7 @@ void tst_QPixmapCache::insert_data()
     QTest::newRow("QPixmapCache (int API)") << false;
 }
 
-QList<QPixmapCache::Key> keys;
+QList<QByteArray> keys;
 
 void tst_QPixmapCache::insert()
 {
@@ -77,8 +78,8 @@ void tst_QPixmapCache::insert()
         QBENCHMARK {
             for (int i = 0 ; i <= 10000 ; i++)
             {
-                QString tmp;
-                tmp.sprintf("my-key-%d", i);
+                QByteArray tmp("my-key-");
+                tmp += QByteArray::number(i);
                 QPixmapCache::insert(tmp, p);
             }
         }
@@ -103,10 +104,10 @@ void tst_QPixmapCache::find()
     QPixmap p;
     if (cacheType) {
         QBENCHMARK {
-            QString tmp;
             for (int i = 0 ; i <= 10000 ; i++)
             {
-                tmp.sprintf("my-key-%d", i);
+                QByteArray tmp("my-key-");
+                tmp += QByteArray::number(i);
                 QPixmapCache::find(tmp, p);
             }
         }
@@ -127,7 +128,7 @@ void tst_QPixmapCache::styleUseCaseComplexKey_data()
 }
 
 struct styleStruct {
-    QString key;
+    QByteArray key;
     uint state;
     uint direction;
     uint complex;
@@ -155,45 +156,41 @@ void tst_QPixmapCache::styleUseCaseComplexKey()
         QBENCHMARK {
             for (int i = 0 ; i <= 10000 ; i++)
             {
-                QString tmp;
-                tmp.sprintf("%s-%d-%d-%d-%d-%d-%d", QString("my-progressbar-%1").arg(i).toLatin1().constData(), 5, 3, 0, 358, 100, 200);
+                QByteArray tmp = qHexString("my-progressbar-%d-%d-%d-%d-%d-%d-%d", i, 5, 3, 0, 358, 100, 200);
                 QPixmapCache::insert(tmp, p);
             }
 
             for (int i = 0 ; i <= 10000 ; i++)
             {
-                QString tmp;
-                tmp.sprintf("%s-%d-%d-%d-%d-%d-%d", QString("my-progressbar-%1").arg(i).toLatin1().constData(), 5, 3, 0, 358, 100, 200);
+                QByteArray tmp = qHexString("my-progressbar-%d-%d-%d-%d-%d-%d-%d", i, 5, 3, 0, 358, 100, 200);
                 QPixmapCache::find(tmp, p);
             }
         }
     } else {
-        QHash<styleStruct, QPixmapCache::Key> hash;
+        QHash<styleStruct, QByteArray> hash;
         QBENCHMARK {
             for (int i = 0 ; i <= 10000 ; i++)
             {
                 styleStruct myStruct;
-                myStruct.key = QString("my-progressbar-%1").arg(i);
+                myStruct.key = QByteArray("my-progressbar-") + QByteArray::number(i);
                 myStruct.state = 5;
                 myStruct.direction = 4;
                 myStruct.complex = 3;
                 myStruct.palette = 358;
                 myStruct.width = 100;
-                myStruct.key = QString::number(200);
-                QPixmapCache::Key key = QPixmapCache::insert(p);
+                QByteArray key = QPixmapCache::insert(p);
                 hash.insert(myStruct, key);
             }
             for (int i = 0 ; i <= 10000 ; i++)
             {
                 styleStruct myStruct;
-                myStruct.key = QString("my-progressbar-%1").arg(i);
+                myStruct.key = QByteArray("my-progressbar-") + QByteArray::number(i);
                 myStruct.state = 5;
                 myStruct.direction = 4;
                 myStruct.complex = 3;
                 myStruct.palette = 358;
                 myStruct.width = 100;
-                myStruct.key = QString::number(200);
-                QPixmapCache::Key key = hash.value(myStruct);
+                QByteArray key = hash.value(myStruct);
                 QPixmapCache::find(key, &p);
             }
         }

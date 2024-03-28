@@ -223,7 +223,7 @@ QPixmap QPixmapIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::St
     if (!actualSize.isNull() && (actualSize.width() > size.width() || actualSize.height() > size.height()))
         actualSize.scale(size, Qt::KeepAspectRatio);
 
-    const QString key = qHexString(
+    const QByteArray key = qHexString(
         "qt_icon_%lld_%d_%lld_%d_%d",
         pm.cacheKey(),
         static_cast<int>(pe ? pe->mode : QIcon::Normal),
@@ -231,12 +231,12 @@ QPixmap QPixmapIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::St
         actualSize.width(),
         actualSize.height()
     );
-    const QString key2 = key + QLatin1Char('_') + QChar(static_cast<uint>(mode));
+    const QByteArray key2 = key + '_' + static_cast<char>(mode);
 
     if (mode == QIcon::Active) {
         if (QPixmapCache::find(key2, pm))
             return pm; // horray
-        const QString key3 = key + QLatin1Char('_') + QChar(static_cast<uint>(QIcon::Normal));
+        const QByteArray key3 = key + '_' + static_cast<char>(QIcon::Normal);
         if (QPixmapCache::find(key + key3, pm)) {
             QStyleOption opt(0);
             opt.palette = QApplication::palette();

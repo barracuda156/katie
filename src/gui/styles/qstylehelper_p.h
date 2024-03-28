@@ -46,7 +46,7 @@ class QStyleOption;
 
 namespace QStyleHelper
 {
-    QString uniqueName(const QString &key, const QStyleOption *option, const QSize &size);
+    QByteArray uniqueName(const QByteArray &key, const QStyleOption *option, const QSize &size);
 #ifndef QT_NO_DIAL
     qreal angle(const QPointF &p1, const QPointF &p2);
     QPolygonF calcLines(const QStyleOptionSlider *dial);

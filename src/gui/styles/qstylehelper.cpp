@@ -32,10 +32,10 @@ QT_BEGIN_NAMESPACE
 
 namespace QStyleHelper {
 
-QString uniqueName(const QString &key, const QStyleOption *option, const QSize &size)
+QByteArray uniqueName(const QByteArray &key, const QStyleOption *option, const QSize &size)
 {
     const QStyleOptionComplex *complexOption = qstyleoption_cast<const QStyleOptionComplex *>(option);
-    QString tmp = key + qHexString(
+    QByteArray tmp = key + qHexString(
         "_%d_%d_%d_%lld_%d_%d",
         static_cast<int>(option->state),
         static_cast<int>(option->direction),
@@ -47,9 +47,9 @@ QString uniqueName(const QString &key, const QStyleOption *option, const QSize &
 
 #ifndef QT_NO_SPINBOX
     if (const QStyleOptionSpinBox *spinBox = qstyleoption_cast<const QStyleOptionSpinBox *>(option)) {
-        tmp += QLatin1Char('_') + QChar(static_cast<uint>(spinBox->buttonSymbols));
-        tmp += QLatin1Char('_') + QChar(static_cast<uint>(spinBox->stepEnabled));
-        tmp += QLatin1Char('_') + QChar(static_cast<uint>(spinBox->frame ? '1' : '0'));
+        tmp += '_' + static_cast<char>(spinBox->buttonSymbols);
+        tmp += '_' + static_cast<char>(spinBox->stepEnabled);
+        tmp += '_' + static_cast<char>(spinBox->frame ? '1' : '0');
     }
 #endif // QT_NO_SPINBOX
     return tmp;
@@ -184,7 +184,7 @@ void drawDial(const QStyleOptionSlider *option, QPainter *painter)
     }
 
     // Cache dial background
-    BEGIN_STYLE_PIXMAPCACHE(QString::fromLatin1("qdial"));
+    BEGIN_STYLE_PIXMAPCACHE(QByteArray("qdial"));
 
     const qreal d_ = r / 6;
     const qreal dx = option->rect.x() + d_ + (width - 2 * r) / 2 + 1;

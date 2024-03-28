@@ -31,19 +31,17 @@ QT_BEGIN_NAMESPACE
 class Q_GUI_EXPORT QPixmapCache
 {
 public:
-    typedef QString Key;
-
     static int cacheLimit();
     static void setCacheLimit(int);
-    static QPixmap *find(const QString &key);
-    static bool find(const QString &key, QPixmap *pixmap);
+    static QPixmap *find(const QByteArray &key);
+    static bool find(const QByteArray &key, QPixmap *pixmap);
     // ### get rid of this function
-    static inline bool find(const QString &key, QPixmap &pixmap)
+    static inline bool find(const QByteArray &key, QPixmap &pixmap)
         { return find(key, &pixmap); };
-    static bool insert(const QString &key, const QPixmap &pixmap);
-    static Key insert(const QPixmap &pixmap);
-    static bool replace(const Key &key, const QPixmap &pixmap);
-    static void remove(const QString &key);
+    static bool insert(const QByteArray &key, const QPixmap &pixmap);
+    static QByteArray insert(const QPixmap &pixmap);
+    static bool replace(const QByteArray &key, const QPixmap &pixmap);
+    static void remove(const QByteArray &key);
     static void clear();
 };
 

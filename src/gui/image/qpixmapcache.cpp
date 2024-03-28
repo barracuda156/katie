@@ -66,7 +66,7 @@ QT_BEGIN_NAMESPACE
 
 static int cache_limit = 10240; // 10 MB cache limit for desktop
 
-typedef QCache<QString, QPixmap> PixmapCacheType;
+typedef QCache<QByteArray, QPixmap> PixmapCacheType;
 Q_GLOBAL_STATIC(PixmapCacheType, pm_cache)
 
 /*!
@@ -79,13 +79,13 @@ Q_GLOBAL_STATIC(PixmapCacheType, pm_cache)
     \warning If valid, you should copy the pixmap immediately (this is
     fast). Subsequent insertions into the cache could cause the
     pointer to become invalid. For this reason, we recommend you use
-    bool find(const QString&, QPixmap*) instead.
+    bool find(const QByteArray&, QPixmap*) instead.
 
     Example:
     \snippet doc/src/snippets/code/src_gui_image_qpixmapcache.cpp 0
 */
 
-QPixmap *QPixmapCache::find(const QString &key)
+QPixmap *QPixmapCache::find(const QByteArray &key)
 {
     return pm_cache()->object(key);
 }
@@ -93,9 +93,9 @@ QPixmap *QPixmapCache::find(const QString &key)
 
 /*!
     \obsolete
-    \fn QPixmapCache::find(const QString &key, QPixmap& pixmap)
+    \fn QPixmapCache::find(const QByteArray &key, QPixmap& pixmap)
 
-    Use bool find(const QString&, QPixmap*) instead.
+    Use bool find(const QByteArray&, QPixmap*) instead.
 */
 
 /*!
@@ -109,7 +109,7 @@ QPixmap *QPixmapCache::find(const QString &key)
     \snippet doc/src/snippets/code/src_gui_image_qpixmapcache.cpp 1
 */
 
-bool QPixmapCache::find(const QString &key, QPixmap* pixmap)
+bool QPixmapCache::find(const QByteArray &key, QPixmap* pixmap)
 {
     QPixmap *ptr = pm_cache()->object(key);
     if (ptr && pixmap)
@@ -137,7 +137,7 @@ bool QPixmapCache::find(const QString &key, QPixmap* pixmap)
     \sa setCacheLimit()
 */
 
-bool QPixmapCache::insert(const QString &key, const QPixmap &pixmap)
+bool QPixmapCache::insert(const QByteArray &key, const QPixmap &pixmap)
 {
     return pm_cache()->insert(key, new QPixmap(pixmap));
 }
@@ -157,10 +157,10 @@ bool QPixmapCache::insert(const QString &key, const QPixmap &pixmap)
 
     \since 4.6
 */
-QPixmapCache::Key QPixmapCache::insert(const QPixmap &pixmap)
+QByteArray QPixmapCache::insert(const QPixmap &pixmap)
 {
     QPixmap *cpixmap = new QPixmap(pixmap);
-    QString key = QString::number(cpixmap->cacheKey());
+    const QByteArray key = QByteArray::number(cpixmap->cacheKey());
     pm_cache()->insert(key, cpixmap);
     return key;
 }
@@ -174,7 +174,7 @@ QPixmapCache::Key QPixmapCache::insert(const QPixmap &pixmap)
 
     \since 4.6
 */
-bool QPixmapCache::replace(const Key &key, const QPixmap &pixmap)
+bool QPixmapCache::replace(const QByteArray &key, const QPixmap &pixmap)
 {
     return pm_cache()->insert(key, new QPixmap(pixmap));
 }
@@ -211,7 +211,7 @@ void QPixmapCache::setCacheLimit(int n)
 /*!
   Removes the pixmap associated with \a key from the cache.
 */
-void QPixmapCache::remove(const QString &key)
+void QPixmapCache::remove(const QByteArray &key)
 {
     pm_cache()->remove(key);
 }

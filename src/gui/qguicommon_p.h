@@ -136,14 +136,14 @@ inline static QTabBar::Shape tabBarShapeFrom(QTabWidget::TabShape shape, QTabWid
 #endif // QT_NO_TABWIDGET
 
 // converts an integer values to an unique string token
-inline static QString qHexString(const char *format, ...)
+inline static QByteArray qHexString(const char *format, ...)
 {
     va_list ap;
     va_start(ap, format);
     QSTACKARRAY(char, hexbuf, 1024);
     ::vsnprintf(hexbuf, sizeof(hexbuf), format, ap);
     va_end(ap);
-    return QString::fromLatin1(hexbuf);
+    return QByteArray(hexbuf);
 }
 
 QT_END_NAMESPACE

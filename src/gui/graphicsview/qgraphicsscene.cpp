@@ -4229,7 +4229,7 @@ void QGraphicsScenePrivate::drawItemHelper(QGraphicsItem *item, QPainter *painte
         return;
 
     // Fetch the off-screen transparent buffer and exposed area info.
-    QPixmapCache::Key pixmapKey;
+    QByteArray pixmapKey;
     QPixmap pix;
     bool pixmapFound;
     QGraphicsItemCache *itemCache = itemd->extraItemCache();

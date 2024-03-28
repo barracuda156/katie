@@ -694,9 +694,8 @@ void QWindowsStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, 
         QRect r = opt->rect;
         int size = qMin(r.height(), r.width());
         QPixmap pixmap;
-        QString pixmapName = QStyleHelper::uniqueName(QLatin1String("qt_arrow")
-                            + QString::fromLatin1(metaObject()->className()), opt, QSize(size, size))
-                            + QLatin1Char('_') + QChar(static_cast<uint>(pe));
+        QByteArray pixmapName = QStyleHelper::uniqueName(QByteArray("qt_arrow") + metaObject()->className(), opt, QSize(size, size))
+                                                      + '_' + static_cast<char>(pe);
         if (!QPixmapCache::find(pixmapName, pixmap)) {
             int border = size/5;
             int sqsize = 2*(size/2);
