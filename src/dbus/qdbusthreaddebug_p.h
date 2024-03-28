@@ -32,7 +32,7 @@
 // We mean it.
 //
 
-#include <QtCore/qglobal.h>
+#include <QtCore/qdebug.h>
 
 
 QT_BEGIN_NAMESPACE
@@ -43,11 +43,32 @@ QT_BEGIN_NAMESPACE
 # define QDBUS_THREAD_DEBUG 0
 #endif
 
+static inline QDebug operator<<(QDebug dbg, const QThread *th)
+{
+    dbg.nospace() << "QThread(ptr=" << (void*)th;
+    if (th && !th->objectName().isEmpty())
+        dbg.nospace() << ", name=" << th->objectName();
+    dbg.nospace() << ')';
+    return dbg.space();
+}
+
 #if QDBUS_THREAD_DEBUG
-typedef void (*qdbusThreadDebugFunc)(int, int, QDBusConnectionPrivate *);
-Q_DBUS_EXPORT void qdbusDefaultThreadDebug(int, int, QDBusConnectionPrivate *);
-extern Q_DBUS_EXPORT qdbusThreadDebugFunc qdbusThreadDebug;
+static inline QDebug operator<<(QDebug dbg, const QDBusConnectionPrivate *conn)
+{
+    dbg.nospace() << "QDBusConnection("
+                  << "ptr=" << (void*)conn
+                  << ", name=" << conn->name
+                  << ", baseService=" << conn->baseService
+                  << ", thread=";
+    if (conn->thread() == QThread::currentThread())
+        dbg.nospace() << "same thread";
+    else
+        dbg.nospace() << conn->thread();
+    dbg.nospace() << ')';
+    return dbg.space();
+}
 #endif
+
 
 enum ThreadAction {
     ConnectAction = 0,
@@ -112,9 +133,29 @@ struct QDBusLockerBase
         AfterRelease
     };
 
+    static const bool dbusThreadDebug;
 #if QDBUS_THREAD_DEBUG
-    static inline void reportThreadAction(int action, int condition, QDBusConnectionPrivate *ptr)
-    { if (qdbusThreadDebug) qdbusThreadDebug(action, condition, ptr); }
+    static inline void reportThreadAction(int action, int condition, QDBusConnectionPrivate *conn)
+    {
+        if (dbusThreadDebug) {
+            qDebug() << QThread::currentThread()
+                 << "QtDBus threading action" << action
+                 << (condition == QDBusLockerBase::BeforeLock ? "before lock" :
+                     condition == QDBusLockerBase::AfterLock ? "after lock" :
+                     condition == QDBusLockerBase::BeforeUnlock ? "before unlock" :
+                     condition == QDBusLockerBase::AfterUnlock ? "after unlock" :
+                     condition == QDBusLockerBase::BeforePost ? "before event posting" :
+                     condition == QDBusLockerBase::AfterPost ? "after event posting" :
+                     condition == QDBusLockerBase::BeforeDeliver ? "before event delivery" :
+                     condition == QDBusLockerBase::AfterDeliver ? "after event delivery" :
+                     condition == QDBusLockerBase::BeforeAcquire ? "before acquire" :
+                     condition == QDBusLockerBase::AfterAcquire ? "after acquire" :
+                     condition == QDBusLockerBase::BeforeRelease ? "before release" :
+                     condition == QDBusLockerBase::AfterRelease ? "after release" :
+                     "condition unknown")
+                 << "in connection" << conn;
+        }
+    }
 #else
     static inline void reportThreadAction(int, int, QDBusConnectionPrivate *) { }
 #endif
@@ -145,9 +186,8 @@ struct QDBusMutexLocker: QDBusLockerBase
     QDBusConnectionPrivate *self;
     std::recursive_mutex *mutex;
     ThreadAction action;
-    inline QDBusMutexLocker(ThreadAction a, QDBusConnectionPrivate *s,
-                            std::recursive_mutex *m)
-        : self(s), mutex(m), action(a)
+    inline QDBusMutexLocker(ThreadAction a, QDBusConnectionPrivate *s)
+        : self(s), mutex(&s->dispatchLock), action(a)
     {
         reportThreadAction(action, BeforeLock, self);
         mutex->lock();
@@ -160,13 +200,6 @@ struct QDBusMutexLocker: QDBusLockerBase
         mutex->unlock();
         reportThreadAction(action, AfterUnlock, self);
     }
-};
-
-struct QDBusDispatchLocker: QDBusMutexLocker
-{
-    inline QDBusDispatchLocker(ThreadAction a, QDBusConnectionPrivate *s)
-        : QDBusMutexLocker(a, s, &s->dispatchLock)
-    { }
 };
 
 #if QDBUS_THREAD_DEBUG

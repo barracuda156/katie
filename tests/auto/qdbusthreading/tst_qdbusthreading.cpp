@@ -151,17 +151,6 @@ Q_SIGNALS:
     void signal();
 };
 
-#if 0
-typedef void (*qdbusThreadDebugFunc)(int, int, QDBusConnectionPrivate *);
-Q_DBUS_EXPORT void qdbusDefaultThreadDebug(int, int, QDBusConnectionPrivate *);
-extern Q_DBUS_EXPORT qdbusThreadDebugFunc qdbusThreadDebug;
-
-static void threadDebug(int action, int condition, QDBusConnectionPrivate *p)
-{
-    qdbusDefaultThreadDebug(action, condition, p);
-}
-#endif
-
 Thread::Thread(bool automatic)
 {
     setObjectName(QString::fromLatin1("Aux thread %1").arg(++counter));
