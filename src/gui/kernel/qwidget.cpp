@@ -3891,8 +3891,7 @@ void QWidgetPrivate::updateFont(const QFont &font)
 {
     Q_Q(QWidget);
 #ifndef QT_NO_STYLE_STYLESHEET
-    const QStyleSheetStyle* cssStyle;
-    cssStyle = extra ? qobject_cast<const QStyleSheetStyle*>(extra->style) : 0;
+    const QStyleSheetStyle* cssStyle = extra ? qobject_cast<const QStyleSheetStyle*>(extra->style) : nullptr;
 #endif
 
     QFont old = data.fnt;

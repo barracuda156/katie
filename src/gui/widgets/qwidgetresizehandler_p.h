@@ -64,11 +64,6 @@ public:
 
     bool isButtonDown() const { return buttonDown; }
 
-    void setExtraHeight(int h) { extrahei = h; }
-    void setSizeProtection(bool b) { sizeprotect = b; }
-
-    void setFrameWidth(int w) { fw = w; }
-
     void doResize();
     void doMove();
 
@@ -95,13 +90,10 @@ private:
     QPoint moveOffset;
     QPoint invertedMoveOffset;
     MousePosition mode;
-    int fw;
-    int extrahei;
     int range;
     bool buttonDown;
     bool moveResizeMode;
     bool activeForResize;
-    bool sizeprotect;
     bool movingEnabled;
     bool activeForMove;
 

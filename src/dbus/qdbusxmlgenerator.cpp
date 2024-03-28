@@ -37,7 +37,6 @@ extern Q_DBUS_EXPORT QString qDBusGenerateMetaObjectXml(QString interface, const
 
 // implement the D-Bus org.freedesktop.DBus.Introspectable interface
 // we do that by analysing the metaObject of all the adaptor interfaces
-
 static QString generateInterfaceXml(const QMetaObject *mo, int flags, int methodOffset, int propOffset)
 {
     QString retval;

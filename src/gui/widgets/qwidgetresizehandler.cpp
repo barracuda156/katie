@@ -40,7 +40,7 @@ static bool resizeVerticalDirectionFixed = false;
 
 QWidgetResizeHandler::QWidgetResizeHandler(QWidget *parent, QWidget *cw)
     : QObject(parent), widget(parent), childWidget(cw ? cw : parent),
-      fw(0), extrahei(0), buttonDown(false), moveResizeMode(false), sizeprotect(true), movingEnabled(true)
+    buttonDown(false), moveResizeMode(false), movingEnabled(true)
 {
     mode = Nowhere;
     widget->setMouseTracking(true);
@@ -223,9 +223,9 @@ void QWidgetResizeHandler::mouseMoveEvent(QMouseEvent *e)
             globalPos.rx() = 0;
         if (globalPos.y() < 0)
             globalPos.ry() = 0;
-        if (sizeprotect && globalPos.x() > widget->parentWidget()->width())
+        if (globalPos.x() > widget->parentWidget()->width())
             globalPos.rx() = widget->parentWidget()->width();
-        if (sizeprotect && globalPos.y() > widget->parentWidget()->height())
+        if (globalPos.y() > widget->parentWidget()->height())
             globalPos.ry() = widget->parentWidget()->height();
     }
 
@@ -242,19 +242,10 @@ void QWidgetResizeHandler::mouseMoveEvent(QMouseEvent *e)
 #endif
 
     QSize ms = qSmartMinSize(childWidget);
-    int mw = ms.width();
-    int mh = ms.height();
-    if (childWidget != widget) {
-        mw += 2 * fw;
-        mh += 2 * fw + extrahei;
-    }
-
     QSize maxsize(childWidget->maximumSize());
-    if (childWidget != widget)
-        maxsize += QSize(2 * fw, 2 * fw + extrahei);
     QSize mpsize(widget->geometry().right() - pp.x() + 1,
                   widget->geometry().bottom() - pp.y() + 1);
-    mpsize = mpsize.expandedTo(widget->minimumSize()).expandedTo(QSize(mw, mh))
+    mpsize = mpsize.expandedTo(widget->minimumSize()).expandedTo(ms)
                     .boundedTo(maxsize);
     QPoint mp(widget->geometry().right() - mpsize.width() + 1,
                widget->geometry().bottom() - mpsize.height() + 1);
@@ -295,7 +286,7 @@ void QWidgetResizeHandler::mouseMoveEvent(QMouseEvent *e)
 
     geom = QRect(geom.topLeft(),
                   geom.size().expandedTo(widget->minimumSize())
-                             .expandedTo(QSize(mw, mh))
+                             .expandedTo(ms)
                              .boundedTo(maxsize));
 
     if (geom != widget->geometry() &&
