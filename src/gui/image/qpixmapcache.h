@@ -40,7 +40,6 @@ public:
         { return find(key, &pixmap); };
     static bool insert(const QByteArray &key, const QPixmap &pixmap);
     static QByteArray insert(const QPixmap &pixmap);
-    static bool replace(const QByteArray &key, const QPixmap &pixmap);
     static void remove(const QByteArray &key);
     static void clear();
 };

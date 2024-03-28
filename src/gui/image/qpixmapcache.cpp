@@ -116,7 +116,7 @@ bool QPixmapCache::find(const QByteArray &key, QPixmap* pixmap)
     the cache.
 
     All pixmaps inserted by the Katie library have a key starting with
-    "qt_", so your own pixmap keys should never begin "qt_".
+    "qt_", so your own pixmap keys should never begin with "qt_".
 
     When a pixmap is inserted and the cache is about to exceed its
     limit, it removes pixmaps until there is enough room for the
@@ -146,7 +146,7 @@ bool QPixmapCache::insert(const QByteArray &key, const QPixmap &pixmap)
     The oldest pixmaps (least recently accessed in the cache) are
     deleted when more space is needed.
 
-    \sa setCacheLimit(), replace()
+    \sa setCacheLimit()
 
     \since 4.6
 */
@@ -156,20 +156,6 @@ QByteArray QPixmapCache::insert(const QPixmap &pixmap)
     const QByteArray key = QByteArray::number(cpixmap->cacheKey());
     pm_cache()->insert(key, cpixmap);
     return key;
-}
-
-/*!
-    Replaces the pixmap associated with the given \a key with the \a pixmap
-    specified. Returns true if the \a pixmap has been correctly inserted into
-    the cache; otherwise returns false.
-
-    \sa setCacheLimit(), insert()
-
-    \since 4.6
-*/
-bool QPixmapCache::replace(const QByteArray &key, const QPixmap &pixmap)
-{
-    return pm_cache()->insert(key, new QPixmap(pixmap));
 }
 
 /*!
