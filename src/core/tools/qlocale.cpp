@@ -1547,7 +1547,7 @@ Qt::LayoutDirection QLocale::textDirection() const
 QString QLocale::toUpper(const QString &str) const
 {
     QString result;
-    if (qt_u_strToUpper(str, &result, *this))
+    if (qt_u_strToUpper(str, &result, bcp47Name()))
         return result;
     return str.toUpper();
 }
@@ -1560,7 +1560,7 @@ QString QLocale::toUpper(const QString &str) const
 QString QLocale::toLower(const QString &str) const
 {
     QString result;
-    if (qt_u_strToLower(str, &result, *this))
+    if (qt_u_strToLower(str, &result, bcp47Name()))
         return result;
     return str.toLower();
 }

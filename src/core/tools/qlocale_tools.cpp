@@ -254,19 +254,18 @@ bool qt_ucol_strcoll(const QChar *source, int sourceLength, const QChar *target,
     return true;
 }
 
-bool qt_u_strToUpper(const QString &str, QString *out, const QLocale &locale)
+bool qt_u_strToUpper(const QString &str, QString *out, const QByteArray &locale)
 {
     Q_ASSERT(out);
     out->resize(QMAXUSTRLEN(str.size()));
 
-    const QByteArray asciibcp47 = locale.bcp47Name();
     UErrorCode error = U_ZERO_ERROR;
     const int upperresult = u_strToUpper(reinterpret_cast<UChar*>(out->data()), out->size(),
         reinterpret_cast<const UChar*>(str.unicode()), str.size(),
-        asciibcp47.constData(), &error);
+        locale.constData(), &error);
     if (Q_UNLIKELY(U_FAILURE(error))) {
         qWarning("qt_u_strToUpper: u_strToUpper(%s) failed %s",
-            asciibcp47.constData(), u_errorName(error));
+            locale.constData(), u_errorName(error));
         out->clear();
         return false;
     }
@@ -275,19 +274,18 @@ bool qt_u_strToUpper(const QString &str, QString *out, const QLocale &locale)
     return true;
 }
 
-bool qt_u_strToLower(const QString &str, QString *out, const QLocale &locale)
+bool qt_u_strToLower(const QString &str, QString *out, const QByteArray &locale)
 {
     Q_ASSERT(out);
     out->resize(QMAXUSTRLEN(str.size()));
 
-    const QByteArray asciibcp47 = locale.bcp47Name();
     UErrorCode error = U_ZERO_ERROR;
     const int lowerresult = u_strToLower(reinterpret_cast<UChar*>(out->data()), out->size(),
         reinterpret_cast<const UChar*>(str.unicode()), str.size(),
-        asciibcp47.constData(), &error);
+        locale.constData(), &error);
     if (Q_UNLIKELY(U_FAILURE(error))) {
         qWarning("qt_u_strToLower: u_strToLower(%s) failed %s",
-            asciibcp47.constData(), u_errorName(error));
+            locale.constData(), u_errorName(error));
         out->clear();
         return false;
     }

@@ -97,8 +97,8 @@ bool removeGroupSeparators(QLocalePrivate::CharBuff *num);
 
 bool qt_initLocale(const QByteArray &locale);
 bool qt_ucol_strcoll(const QChar *source, int sourceLength, const QChar *target, int targetLength, int *result);
-bool qt_u_strToUpper(const QString &str, QString *out, const QLocale &locale);
-bool qt_u_strToLower(const QString &str, QString *out, const QLocale &locale);
+bool qt_u_strToUpper(const QString &str, QString *out, const QByteArray &locale);
+bool qt_u_strToLower(const QString &str, QString *out, const QByteArray &locale);
 
 #define QECVT_BUFFSIZE 17
 char *qFcvt(double x, int n, int *dp, int *sign, char* buf);
