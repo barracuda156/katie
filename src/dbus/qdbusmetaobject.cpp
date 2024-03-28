@@ -44,7 +44,6 @@ public:
     QDBusMetaObjectGenerator(const QString &interface,
                              const QDBusIntrospection::Interface *parsedData);
     void write(QDBusMetaObject *obj);
-    void writeWithoutXml(QDBusMetaObject *obj);
 
 private:
     struct Method {
@@ -469,31 +468,6 @@ void QDBusMetaObjectGenerator::write(QDBusMetaObject *obj)
     obj->d.stringdata = string_data;
     obj->d.superdata = &QDBusAbstractInterface::staticMetaObject;
 }
-
-#if 0
-void QDBusMetaObjectGenerator::writeWithoutXml(const QString &interface)
-{
-    // no XML definition
-    QString tmp(interface);
-    tmp.replace(QLatin1Char('.'), QLatin1String("::"));
-    QByteArray name(tmp.toLatin1());
-
-    QDBusMetaObjectPrivate *header = new QDBusMetaObjectPrivate;
-    memset(header, 0, sizeof *header);
-    header->revision = 1;
-    // leave the rest with 0
-
-    char *stringdata = new char[name.length() + 1];
-    stringdata[name.length()] = '\0';
-    
-    d.data = reinterpret_cast<uint*>(header);
-    d.relatedMetaObjects = 0;
-    d.static_metacall = 0;
-    d.extradata = 0;
-    d.stringdata = stringdata;
-    d.superdata = &QDBusAbstractInterface::staticMetaObject;
-}
-#endif
 
 /////////
 // class QDBusMetaObject

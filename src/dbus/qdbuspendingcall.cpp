@@ -383,34 +383,6 @@ QDBusMessage QDBusPendingCall::reply() const
     return d->replyMessage;
 }
 
-#if 0
-/*!
-    Sets the slot \a member in object \a target to be called when the
-    reply arrives. The slot's parameter list must match the reply
-    message's arguments for it to be called.
-
-    It may, optionally, contain a QDBusMessage final parameter. If it
-    is present, the parameter will contain the reply message object.
-
-    The callback will not be called if the reply is an error message.
-
-    This function returns true if it could set the callback, false
-    otherwise. It is not a guarantee that the callback will be
-    called.
-
-    \warning QDBusPendingCall only supports one callback per pending
-             asynchronous call, even if multiple QDBusPendingCall
-             objects are referencing the same pending call.
-*/
-bool QDBusPendingCall::setReplyCallback(QObject *target, const char *member)
-{
-    if (!d)
-        return false;
-
-    return d->setReplyCallback(target, member);
-}
-#endif
-
 /*!
     \since 4.6
     Creates a QDBusPendingCall object based on the error condition

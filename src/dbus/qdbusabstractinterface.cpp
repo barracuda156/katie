@@ -417,32 +417,8 @@ QDBusMessage QDBusAbstractInterface::callWithArgumentList(QDBus::CallMode mode,
         m.truncate(pos);
 
     if (mode == QDBus::AutoDetect) {
-        // determine if this a sync or async call
+        // the default is to block call
         mode = QDBus::Block;
-        // not thread-safe, slots/methods have to be annotated from interface generator too
-#if 0
-        const QMetaObject *mo = metaObject();
-        const QByteArray match = m.toLatin1() + '(';
-
-        for (int i = staticMetaObject.methodCount(); i < mo->methodCount(); ++i) {
-            QMetaMethod mm = mo->method(i);
-            if (QByteArray(mm.signature()).startsWith(match)) {
-                // found a method with the same name as what we're looking for
-                // hopefully, nobody is overloading asynchronous and synchronous methods with
-                // the same name
-
-                // check type:
-                if (mm.methodType() != QMetaMethod::Slot && mm.methodType() != QMetaMethod::Method)
-                    continue;
-
-                const int returnType = QMetaType::type(mm.typeName());
-                if (returnType == QMetaType::Void) {
-                    mode = QDBus::NoBlock;
-                    break;
-                }
-            }
-        }
-#endif
     }
 
 //    qDebug() << "QDBusAbstractInterface" << "Service" << service() << "Path:" << path();
