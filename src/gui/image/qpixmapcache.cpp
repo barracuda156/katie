@@ -49,10 +49,9 @@ QT_BEGIN_NAMESPACE
     behavior of the QHash and QCache classes.
 
     The cache becomes full when the total size of all pixmaps in the
-    cache exceeds cacheLimit(). The initial cache limit is
-    2048 KB (2 MB) on embedded platforms, 10240 KB (10 MB) on desktop
-    platforms; you can change this by calling setCacheLimit() with the
-    required value.
+    cache exceeds cacheLimit(). The initial cache limit is 10240 KB
+    (10 MB) on desktop, the value can be changed by calling
+    setCacheLimit() with the required value.
     A pixmap takes roughly (\e{width} * \e{height} * \e{depth})/8 bytes of
     memory.
 
@@ -64,10 +63,8 @@ QT_BEGIN_NAMESPACE
     \sa QCache, QPixmap
 */
 
-static int cache_limit = 10240; // 10 MB cache limit for desktop
-
 typedef QCache<QByteArray, QPixmap> PixmapCacheType;
-Q_GLOBAL_STATIC(PixmapCacheType, pm_cache)
+Q_GLOBAL_STATIC_WITH_ARGS(PixmapCacheType, pm_cache, (10240))
 
 /*!
     \obsolete
@@ -84,12 +81,10 @@ Q_GLOBAL_STATIC(PixmapCacheType, pm_cache)
     Example:
     \snippet doc/src/snippets/code/src_gui_image_qpixmapcache.cpp 0
 */
-
 QPixmap *QPixmapCache::find(const QByteArray &key)
 {
     return pm_cache()->object(key);
 }
-
 
 /*!
     \obsolete
@@ -108,7 +103,6 @@ QPixmap *QPixmapCache::find(const QByteArray &key)
     Example:
     \snippet doc/src/snippets/code/src_gui_image_qpixmapcache.cpp 1
 */
-
 bool QPixmapCache::find(const QByteArray &key, QPixmap* pixmap)
 {
     QPixmap *ptr = pm_cache()->object(key);
@@ -121,8 +115,8 @@ bool QPixmapCache::find(const QByteArray &key, QPixmap* pixmap)
     Inserts a copy of the pixmap \a pixmap associated with the \a key into
     the cache.
 
-    All pixmaps inserted by the Qt library have a key starting with
-    "$qt", so your own pixmap keys should never begin "$qt".
+    All pixmaps inserted by the Katie library have a key starting with
+    "qt_", so your own pixmap keys should never begin "qt_".
 
     When a pixmap is inserted and the cache is about to exceed its
     limit, it removes pixmaps until there is enough room for the
@@ -136,7 +130,6 @@ bool QPixmapCache::find(const QByteArray &key, QPixmap* pixmap)
 
     \sa setCacheLimit()
 */
-
 bool QPixmapCache::insert(const QByteArray &key, const QPixmap &pixmap)
 {
     return pm_cache()->insert(key, new QPixmap(pixmap));
@@ -187,10 +180,9 @@ bool QPixmapCache::replace(const QByteArray &key, const QPixmap &pixmap)
 
     \sa setCacheLimit()
 */
-
 int QPixmapCache::cacheLimit()
 {
-    return cache_limit;
+    return pm_cache()->maxCost();
 }
 
 /*!
@@ -201,11 +193,9 @@ int QPixmapCache::cacheLimit()
 
     \sa cacheLimit()
 */
-
 void QPixmapCache::setCacheLimit(int n)
 {
-    cache_limit = n;
-    pm_cache()->setMaxCost(cache_limit);
+    pm_cache()->setMaxCost(n);
 }
 
 /*!
@@ -219,7 +209,6 @@ void QPixmapCache::remove(const QByteArray &key)
 /*!
     Removes all pixmaps from the cache.
 */
-
 void QPixmapCache::clear()
 {
     pm_cache()->clear();
