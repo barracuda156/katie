@@ -26,6 +26,7 @@
 #include "qmath.h"
 #include "qpen.h"
 #include "qstylehelper_p.h"
+#include "qguicommon_p.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -34,18 +35,21 @@ namespace QStyleHelper {
 QString uniqueName(const QString &key, const QStyleOption *option, const QSize &size)
 {
     const QStyleOptionComplex *complexOption = qstyleoption_cast<const QStyleOptionComplex *>(option);
-    QString tmp = key + HexString<uint>(option->state)
-                      + HexString<uint>(option->direction)
-                      + HexString<uint>(complexOption ? uint(complexOption->activeSubControls) : 0u)
-                      + HexString<quint64>(option->palette.cacheKey())
-                      + HexString<uint>(size.width())
-                      + HexString<uint>(size.height());
+    QString tmp = key + qHexString(
+        "_%d_%d_%d_%lld_%d_%d",
+        static_cast<int>(option->state),
+        static_cast<int>(option->direction),
+        static_cast<int>(complexOption ? int(complexOption->activeSubControls) : 0u),
+        option->palette.cacheKey(),
+        size.width(),
+        size.height()
+    );
 
 #ifndef QT_NO_SPINBOX
     if (const QStyleOptionSpinBox *spinBox = qstyleoption_cast<const QStyleOptionSpinBox *>(option)) {
-        tmp = tmp + HexString<uint>(spinBox->buttonSymbols)
-                  + HexString<uint>(spinBox->stepEnabled)
-                  + QLatin1Char(spinBox->frame ? '1' : '0');
+        tmp += QLatin1Char('_') + QChar(static_cast<uint>(spinBox->buttonSymbols));
+        tmp += QLatin1Char('_') + QChar(static_cast<uint>(spinBox->stepEnabled));
+        tmp += QLatin1Char('_') + QChar(static_cast<uint>(spinBox->frame ? '1' : '0'));
     }
 #endif // QT_NO_SPINBOX
     return tmp;

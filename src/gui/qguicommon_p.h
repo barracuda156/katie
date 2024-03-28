@@ -6,6 +6,7 @@
 #include "qtabwidget.h"
 #include "qmap.h"
 #include "qdrawhelper_p.h"
+#include "qcorecommon_p.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -41,6 +42,9 @@ static const QRgb qt_blackrgba = qRgba(0, 0, 0, 255);
 // same as QColor(Qt::color1).rgb() and QColor(Qt::black).rgb()
 static const QRgb qt_blackrgb = qRgb(0, 0, 0);
 
+static const qreal inv_dist_to_plane = 1. / 1024.;
+// use the same rounding as in qrasterizer.cpp (6 bit fixed point)
+static const qreal aliasedCoordinateDelta = 0.5 - 0.015625;
 
 inline static const QVector<QRgb>& monoColorTable()
 {
@@ -131,10 +135,16 @@ inline static QTabBar::Shape tabBarShapeFrom(QTabWidget::TabShape shape, QTabWid
 }
 #endif // QT_NO_TABWIDGET
 
-static const qreal inv_dist_to_plane = 1. / 1024.;
-
-// use the same rounding as in qrasterizer.cpp (6 bit fixed point)
-static const qreal aliasedCoordinateDelta = 0.5 - 0.015625;
+// converts an integer values to an unique string token
+inline static QString qHexString(const char *format, ...)
+{
+    va_list ap;
+    va_start(ap, format);
+    QSTACKARRAY(char, hexbuf, 1024);
+    ::vsnprintf(hexbuf, sizeof(hexbuf), format, ap);
+    va_end(ap);
+    return QString::fromLatin1(hexbuf);
+}
 
 QT_END_NAMESPACE
 

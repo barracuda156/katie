@@ -55,21 +55,6 @@ namespace QStyleHelper
 #endif //QT_NO_DIAL
 }
 
-// internal helper. Converts an integer value to an unique string token
-template <typename T>
-        struct HexString
-{
-    inline HexString(const T t)
-        : val(t)
-    {}
-
-    inline operator const QChar() const {
-        const char *c = reinterpret_cast<const char *>(&val);
-        return QChar(qChecksum(c, sizeof(T)));
-    }
-    const T val;
-};
-
 QT_END_NAMESPACE
 
 #endif // QSTYLEHELPER_P_H

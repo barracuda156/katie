@@ -50,6 +50,7 @@
 #include "qlocale.h"
 #include "qdialog.h"
 #include "qmath.h"
+#include "qguicommon_p.h"
 
 #include <limits.h>
 #include <float.h>
@@ -959,22 +960,6 @@ QPixmap QItemDelegate::decoration(const QStyleOptionViewItem &option, const QVar
     return qvariant_cast<QPixmap>(variant);
 }
 
-// hacky but faster version of "QString::sprintf("%d-%d", i, enabled)"
-static QString qPixmapSerial(quint64 i, bool enabled)
-{
-    ushort arr[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '-', ushort('0' + enabled) };
-    ushort *ptr = &arr[16];
-
-    while (i > 0) {
-        // hey - it's our internal representation, so use the ascii character after '9'
-        // instead of 'a' for hex
-        *(--ptr) = '0' + i % 16;
-        i >>= 4;
-    }
-
-    return QString((const QChar *)ptr, int(&arr[sizeof(arr) / sizeof(ushort)] - ptr));
-}
-
 /*!
   \internal
   Returns the selected version of the given \a pixmap using the given \a palette.
@@ -983,7 +968,11 @@ static QString qPixmapSerial(quint64 i, bool enabled)
 */
 QPixmap *QItemDelegate::selected(const QPixmap &pixmap, const QPalette &palette, bool enabled) const
 {
-    QString key = qPixmapSerial(pixmap.cacheKey(), enabled);
+    const QString key = qHexString(
+        "qt_itemdelegate_%lld_%d",
+        pixmap.cacheKey(),
+        static_cast<int>(enabled)
+    );
     QPixmap *pm = QPixmapCache::find(key);
     if (!pm) {
         QImage img = pixmap.toImage().convertToFormat(QImage::Format_ARGB32_Premultiplied);

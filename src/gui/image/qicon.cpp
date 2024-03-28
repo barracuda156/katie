@@ -223,17 +223,21 @@ QPixmap QPixmapIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::St
     if (!actualSize.isNull() && (actualSize.width() > size.width() || actualSize.height() > size.height()))
         actualSize.scale(size, Qt::KeepAspectRatio);
 
-    QString key = QLatin1String("qt_")
-                  + HexString<quint64>(pm.cacheKey())
-                  + HexString<uint>(pe ? pe->mode : QIcon::Normal)
-                  + HexString<quint64>(QApplication::palette().cacheKey())
-                  + HexString<uint>(actualSize.width())
-                  + HexString<uint>(actualSize.height());
+    const QString key = qHexString(
+        "qt_icon_%lld_%d_%lld_%d_%d",
+        pm.cacheKey(),
+        static_cast<int>(pe ? pe->mode : QIcon::Normal),
+        QApplication::palette().cacheKey(),
+        actualSize.width(),
+        actualSize.height()
+    );
+    const QString key2 = key + QLatin1Char('_') + QChar(static_cast<uint>(mode));
 
     if (mode == QIcon::Active) {
-        if (QPixmapCache::find(key + HexString<uint>(mode), pm))
+        if (QPixmapCache::find(key2, pm))
             return pm; // horray
-        if (QPixmapCache::find(key + HexString<uint>(QIcon::Normal), pm)) {
+        const QString key3 = key + QLatin1Char('_') + QChar(static_cast<uint>(QIcon::Normal));
+        if (QPixmapCache::find(key + key3, pm)) {
             QStyleOption opt(0);
             opt.palette = QApplication::palette();
             QPixmap active = QApplication::style()->generatedIconPixmap(QIcon::Active, pm, &opt);
@@ -242,7 +246,7 @@ QPixmap QPixmapIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::St
         }
     }
 
-    if (!QPixmapCache::find(key + HexString<uint>(mode), pm)) {
+    if (!QPixmapCache::find(key2, pm)) {
         if (pm.size() != actualSize)
             pm = pm.scaled(actualSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         if (pe && pe->mode != mode && mode != QIcon::Normal) {
@@ -252,7 +256,7 @@ QPixmap QPixmapIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::St
             if (!generated.isNull())
                 pm = generated;
         }
-        QPixmapCache::insert(key + HexString<uint>(mode), pm);
+        QPixmapCache::insert(key2, pm);
     }
     return pm;
 }

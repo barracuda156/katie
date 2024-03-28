@@ -429,11 +429,13 @@ QPixmap QIconLoaderEngineEntry::pixmap(const QSize &size, QIcon::Mode mode, QIco
     }
 
     int actualSize = qMin(size.width(), size.height());
-    QString key = QLatin1String("$qt_theme_")
-                  + HexString<qint64>(m_basePixmap.cacheKey())
-                  + HexString<int>(mode)
-                  + HexString<qint64>(qApp->palette().cacheKey())
-                  + HexString<int>(actualSize);
+    const QString key = qHexString(
+        "qt_theme_%lld_%d_%lld_%d",
+        m_basePixmap.cacheKey(),
+        static_cast<int>(mode),
+        qApp->palette().cacheKey(),
+        actualSize
+    );
 
     QPixmap cachedPixmap;
     if (QPixmapCache::find(key, &cachedPixmap)) {
