@@ -154,12 +154,12 @@ void QWidgetBackingStore::endPaint(const QRegion &cleaned, QWindowSurface *windo
 {
 #ifndef QT_NO_DEBUG
     if (!beginPaintInfo->wasFlushed)
-        windowSurface->endPaint(cleaned);
+        windowSurface->endPaint();
     else
         QWidgetBackingStore::unflushPaint(tlw, cleaned);
 #else
     Q_UNUSED(beginPaintInfo);
-    windowSurface->endPaint(cleaned);
+    windowSurface->endPaint();
 #endif
 
     flush();

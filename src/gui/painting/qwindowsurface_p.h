@@ -63,8 +63,8 @@ public:
 
     bool scroll(const QRegion &area, int dx, int dy);
 
-    void beginPaint(const QRegion &);
-    void endPaint(const QRegion &);
+    void beginPaint(const QRegion &region);
+    void endPaint();
 
     QPoint offset(const QWidget *widget) const;
     inline QRect rect(const QWidget *widget) const;

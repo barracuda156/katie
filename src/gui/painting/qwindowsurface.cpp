@@ -160,7 +160,7 @@ QPaintDevice *QWindowSurface::paintDevice()
 
     \sa endPaint(), paintDevice()
 */
-void QWindowSurface::beginPaint(const QRegion &rgn)
+void QWindowSurface::beginPaint(const QRegion &region)
 {
 #if defined(Q_WS_X11) && !defined(QT_NO_XRENDER)
     if (!qt_widget_private(window())->isOpaque && window()->testAttribute(Qt::WA_TranslucentBackground)) {
@@ -168,22 +168,21 @@ void QWindowSurface::beginPaint(const QRegion &rgn)
         p.setCompositionMode(QPainter::CompositionMode_Source);
         p.setPen(Qt::NoPen);
         p.setBrush(QBrush(Qt::transparent));
-        p.drawRects(rgn.rects());
+        p.drawRects(region.rects());
     }
 #else
-    Q_UNUSED(rgn);
+    Q_UNUSED(region);
 #endif
 }
 
 /*!
-    This function is called after painting onto the surface has ended,
-    with the \a region in which the painting was performed.
+    This function is called after painting onto the surface has ended.
 
     \sa beginPaint(), paintDevice()
 */
-void QWindowSurface::endPaint(const QRegion &)
+void QWindowSurface::endPaint()
 {
-//     QApplication::syncX();
+    // QApplication::syncX();
 }
 
 /*!
