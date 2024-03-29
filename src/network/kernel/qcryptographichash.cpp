@@ -198,6 +198,10 @@ QByteArray QCryptographicHash::result() const
 */
 QByteArray QCryptographicHash::hash(const QByteArray &data)
 {
+    if (Q_UNLIKELY(data.isEmpty())) {
+        qWarning("QCryptographicHash::hash called without any data");
+        return QByteArray();
+    }
     QCryptographicHashPrivate kathash;
     kathash.update(data.constData(), data.length());
     return kathash.result();
