@@ -303,7 +303,7 @@ void qScanConvert(QScanConverter &d, bool allVertical)
                     d.m_active.at(j+1) = d.m_active.at(j);
                 d.m_active.at(j+1) = l;
             } else {
-                d.m_active << &d.m_lines.at(line);
+                d.m_active.add(&d.m_lines.at(line));
             }
         }
 

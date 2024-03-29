@@ -160,18 +160,18 @@ void QOutlineMapper::endOutline()
         if (m_txop == QTransform::TxTranslate) {
             for (int i=0; i<m_elements.size(); ++i) {
                 const QPointF &e = m_elements.at(i);
-                m_elements_dev << QPointF(e.x() + m_dx, e.y() + m_dy);
+                m_elements_dev.add(QPointF(e.x() + m_dx, e.y() + m_dy));
             }
         } else if (m_txop == QTransform::TxScale) {
             for (int i=0; i<m_elements.size(); ++i) {
                 const QPointF &e = m_elements.at(i);
-                m_elements_dev << QPointF(m_m11 * e.x() + m_dx, m_m22 * e.y() + m_dy);
+                m_elements_dev.add(QPointF(m_m11 * e.x() + m_dx, m_m22 * e.y() + m_dy));
             }
         } else if (m_txop < QTransform::TxProject) {
             for (int i=0; i<m_elements.size(); ++i) {
                 const QPointF &e = m_elements.at(i);
-                m_elements_dev << QPointF(m_m11 * e.x() + m_m21 * e.y() + m_dx,
-                                          m_m22 * e.y() + m_m12 * e.x() + m_dy);
+                m_elements_dev.add(QPointF(m_m11 * e.x() + m_m21 * e.y() + m_dx,
+                                           m_m22 * e.y() + m_m12 * e.x() + m_dy));
             }
         } else {
             const QVectorPath vp((qreal *)m_elements.data(), m_elements.size(), m_element_types.size() ? m_element_types.data() : 0);
@@ -228,39 +228,51 @@ void QOutlineMapper::convertElements(const QPointF *elements,
             switch (*types) {
             case QPainterPath::MoveToElement:
                 {
-                    QT_FT_Vector pt_fixed = { qreal_to_fixed_26_6(e->x()),
-                                              qreal_to_fixed_26_6(e->y()) };
+                    QT_FT_Vector pt_fixed = {
+                        qreal_to_fixed_26_6(e->x()),
+                        qreal_to_fixed_26_6(e->y())
+                    };
                     if (i != 0)
-                        m_contours << m_points.size() - 1;
-                    m_points << pt_fixed;
-                    m_tags <<  QT_FT_CURVE_TAG_ON;
+                        m_contours.add(m_points.size() - 1);
+                    m_points.add(pt_fixed);
+                    m_tags.add(QT_FT_CURVE_TAG_ON);
                 }
                 break;
 
             case QPainterPath::LineToElement:
                 {
-                    QT_FT_Vector pt_fixed = { qreal_to_fixed_26_6(e->x()),
-                                              qreal_to_fixed_26_6(e->y()) };
-                    m_points << pt_fixed;
-                    m_tags << QT_FT_CURVE_TAG_ON;
+                    QT_FT_Vector pt_fixed = {
+                        qreal_to_fixed_26_6(e->x()),
+                        qreal_to_fixed_26_6(e->y())
+                    };
+                    m_points.add(pt_fixed);
+                    m_tags.add(QT_FT_CURVE_TAG_ON);
                 }
                 break;
 
             case QPainterPath::CurveToElement:
                 {
-                    QT_FT_Vector cp1_fixed = { qreal_to_fixed_26_6(e->x()),
-                                               qreal_to_fixed_26_6(e->y()) };
+                    QT_FT_Vector cp1_fixed = {
+                        qreal_to_fixed_26_6(e->x()),
+                        qreal_to_fixed_26_6(e->y())
+                    };
                     ++e;
-                    QT_FT_Vector cp2_fixed = { qreal_to_fixed_26_6((e)->x()),
-                                               qreal_to_fixed_26_6((e)->y()) };
+                    QT_FT_Vector cp2_fixed = {
+                        qreal_to_fixed_26_6((e)->x()),
+                        qreal_to_fixed_26_6((e)->y())
+                    };
                     ++e;
-                    QT_FT_Vector ep_fixed = { qreal_to_fixed_26_6((e)->x()),
-                                              qreal_to_fixed_26_6((e)->y()) };
+                    QT_FT_Vector ep_fixed = {
+                        qreal_to_fixed_26_6((e)->x()),
+                        qreal_to_fixed_26_6((e)->y())
+                    };
 
-                    m_points << cp1_fixed << cp2_fixed << ep_fixed;
-                    m_tags << QT_FT_CURVE_TAG_CUBIC
-                           << QT_FT_CURVE_TAG_CUBIC
-                           << QT_FT_CURVE_TAG_ON;
+                    m_points.add(cp1_fixed);
+                    m_points.add(cp2_fixed);
+                    m_points.add(ep_fixed);
+                    m_tags.add(QT_FT_CURVE_TAG_CUBIC);
+                    m_tags.add(QT_FT_CURVE_TAG_CUBIC);
+                    m_tags.add(QT_FT_CURVE_TAG_ON);
 
                     types += 2;
                     i += 2;
@@ -277,16 +289,18 @@ void QOutlineMapper::convertElements(const QPointF *elements,
         const QPointF *last = elements + element_count;
         const QPointF *e = elements;
         while (e < last) {
-            QT_FT_Vector pt_fixed = { qreal_to_fixed_26_6(e->x()),
-                                      qreal_to_fixed_26_6(e->y()) };
-            m_points << pt_fixed;
-            m_tags << QT_FT_CURVE_TAG_ON;
+            QT_FT_Vector pt_fixed = {
+                qreal_to_fixed_26_6(e->x()),
+                qreal_to_fixed_26_6(e->y())
+            };
+            m_points.add(pt_fixed);
+            m_tags.add(QT_FT_CURVE_TAG_ON);
             ++e;
         }
     }
 
     // close the very last subpath
-    m_contours << m_points.size() - 1;
+    m_contours.add(m_points.size() - 1);
 
     m_outline.n_contours = m_contours.size();
     m_outline.n_points = m_points.size();

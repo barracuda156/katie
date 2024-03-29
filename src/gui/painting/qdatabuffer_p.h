@@ -106,8 +106,6 @@ public:
         qSwap(buffer, other.buffer);
     }
 
-    inline QDataBuffer &operator<<(const Type &t) { add(t); return *this; }
-
 private:
     int capacity;
     int siz;

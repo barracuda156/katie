@@ -118,8 +118,8 @@ public:
 #endif
         closeSubpath();
         m_subpath_start = m_elements.size();
-        m_elements << pt;
-        m_element_types << QPainterPath::MoveToElement;
+        m_elements.add(pt);
+        m_element_types.add(QPainterPath::MoveToElement);
     }
 
     inline void lineTo(const QPointF &pt) {
@@ -127,17 +127,19 @@ public:
         printf("QOutlineMapper::lineTo() (%f, %f)\n", pt.x(), pt.y());
 #endif
         m_elements.add(pt);
-        m_element_types << QPainterPath::LineToElement;
+        m_element_types.add(QPainterPath::LineToElement);
     }
 
     inline void curveTo(const QPointF &cp1, const QPointF &cp2, const QPointF &ep) {
 #ifdef QT_DEBUG_CONVERT
         printf("QOutlineMapper::curveTo() (%f, %f)\n", ep.x(), ep.y());
 #endif
-        m_elements << cp1 << cp2 << ep;
-        m_element_types << QPainterPath::CurveToElement
-                        << QPainterPath::CurveToDataElement
-                        << QPainterPath::CurveToDataElement;
+        m_elements.add(cp1);
+        m_elements.add(cp2);
+        m_elements.add(ep);
+        m_element_types.add(QPainterPath::CurveToElement);
+        m_element_types.add(QPainterPath::CurveToDataElement);
+        m_element_types.add(QPainterPath::CurveToDataElement);
     }
 
     inline void closeSubpath() {
@@ -156,7 +158,7 @@ public:
                 if (m_element_types.size())
                     lineTo(pt);
                 else
-                    m_elements << pt;
+                    m_elements.add(pt);
 
             }
         }

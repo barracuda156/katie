@@ -334,7 +334,7 @@ inline const QPointF &QPathSegments::pointAt(int i) const
 
 inline int QPathSegments::addPoint(const QPointF &point)
 {
-    m_points << point;
+    m_points.add(point);
     return m_points.size() - 1;
 }
 
@@ -375,7 +375,7 @@ inline int QPathSegments::intersections() const
 
 inline void QPathSegments::addIntersection(int index, const Intersection &intersection)
 {
-    m_intersections << intersection;
+    m_intersections.add(intersection);
 
     Segment &segment = m_segments.at(index);
     if (segment.intersection < 0) {
@@ -428,7 +428,7 @@ inline int QWingedEdge::vertexCount() const
 
 inline int QWingedEdge::addVertex(const QPointF &p)
 {
-    m_vertices << p;
+    m_vertices.add(p);
     return m_vertices.size() - 1;
 }
 

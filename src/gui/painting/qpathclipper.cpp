@@ -741,9 +741,9 @@ void QPathSegments::mergePoints()
             Q_ASSERT(finder.result() != -1);
 
             if (finder.result() >= mergedPoints.size())
-                mergedPoints << m_points.at(i);
+                mergedPoints.add(m_points.at(i));
 
-            pointIndices << finder.result();
+            pointIndices.add(finder.result());
         }
 
         for (int i = 0; i < m_segments.size(); ++i) {
@@ -776,7 +776,7 @@ void QWingedEdge::intersectAndAdd()
 
         const QPathSegments::Intersection *isect = m_segments.intersectionAt(i);
         while (isect) {
-            intersections << *isect;
+            intersections.add(*isect);
 
             if (isect->next) {
                 isect += isect->next;
@@ -902,24 +902,24 @@ void QPathSegments::addPath(const QPainterPath &path)
         if (i > 0 && comparePoints(m_points.at(lastMoveTo), currentPoint))
             current = lastMoveTo;
         else
-            m_points << currentPoint;
+            m_points.add(currentPoint);
 
         switch (path.elementAt(i).type) {
         case QPainterPath::MoveToElement:
             if (hasMoveTo && last != lastMoveTo && !comparePoints(m_points.at(last), m_points.at(lastMoveTo)))
-                m_segments << Segment(m_pathId, last, lastMoveTo);
+                m_segments.add(Segment(m_pathId, last, lastMoveTo));
             hasMoveTo = true;
             last = lastMoveTo = current;
             break;
         case QPainterPath::LineToElement:
-            m_segments << Segment(m_pathId, last, current);
+            m_segments.add(Segment(m_pathId, last, current));
             last = current;
             break;
         case QPainterPath::CurveToElement:
             {
                 QBezier bezier = QBezier::fromPoints(m_points.at(last), path.elementAt(i), path.elementAt(i+1), path.elementAt(i+2));
                 if (isLine(bezier)) {
-                    m_segments << Segment(m_pathId, last, current);
+                    m_segments.add(Segment(m_pathId, last, current));
                 } else {
                     QRectF bounds = bezier.bounds();
 
@@ -933,13 +933,13 @@ void QPathSegments::addPath(const QPainterPath &path)
                         currentPoint = bezier.pointAt(t * one_over_threshold_minus_1);
 
                         int index = m_points.size();
-                        m_segments << Segment(m_pathId, last, index);
+                        m_segments.add(Segment(m_pathId, last, index));
                         last = index;
 
-                        m_points << currentPoint;
+                        m_points.add(currentPoint);
                     }
 
-                    m_segments << Segment(m_pathId, last, current);
+                    m_segments.add(Segment(m_pathId, last, current));
                 }
             }
             last = current;
@@ -952,7 +952,7 @@ void QPathSegments::addPath(const QPainterPath &path)
     }
 
     if (hasMoveTo && last != lastMoveTo && !comparePoints(m_points.at(last), m_points.at(lastMoveTo)))
-        m_segments << Segment(m_pathId, last, lastMoveTo);
+        m_segments.add(Segment(m_pathId, last, lastMoveTo));
 
     for (int i = firstSegment; i < m_segments.size(); ++i) {
         const QLineF line = lineAt(i);
@@ -1166,7 +1166,7 @@ int QWingedEdge::addEdge(int fi, int si)
     if (common >= 0)
         return common;
 
-    m_edges << QPathEdge(fi, si);
+    m_edges.add(QPathEdge(fi, si));
 
     int ei = m_edges.size() - 1;
 
@@ -1249,7 +1249,7 @@ int QWingedEdge::insert(const QPathVertex &vertex)
         }
     }
 
-    m_vertices << vertex;
+    m_vertices.add(vertex);
     return m_vertices.size() - 1;
 }
 
