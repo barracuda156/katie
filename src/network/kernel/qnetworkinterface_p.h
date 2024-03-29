@@ -60,7 +60,7 @@ public:
     ~QNetworkInterfacePrivate()
     { }
 
-    int index;                  // interface index, if know
+    int index; // interface index, if known
     QNetworkInterface::InterfaceFlags flags;
 
     QString name;

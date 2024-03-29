@@ -84,18 +84,6 @@ static QHostAddress addressFromSockaddr(sockaddr *sa)
 
 }
 
-static QNetworkInterface::InterfaceFlags convertFlags(uint rawFlags)
-{
-    QNetworkInterface::InterfaceFlags flags = 0;
-    flags |= (rawFlags & IFF_UP) ? QNetworkInterface::IsUp : QNetworkInterface::InterfaceFlag(0);
-    flags |= (rawFlags & IFF_RUNNING) ? QNetworkInterface::IsRunning : QNetworkInterface::InterfaceFlag(0);
-    flags |= (rawFlags & IFF_BROADCAST) ? QNetworkInterface::CanBroadcast : QNetworkInterface::InterfaceFlag(0);
-    flags |= (rawFlags & IFF_LOOPBACK) ? QNetworkInterface::IsLoopBack : QNetworkInterface::InterfaceFlag(0);
-    flags |= (rawFlags & IFF_POINTOPOINT) ? QNetworkInterface::IsPointToPoint : QNetworkInterface::InterfaceFlag(0);
-    flags |= (rawFlags & IFF_MULTICAST) ? QNetworkInterface::CanMulticast : QNetworkInterface::InterfaceFlag(0);
-    return flags;
-}
-
 QList<QNetworkInterfacePrivate *> QNetworkInterfacePrivate::scan()
 {
     QList<QNetworkInterfacePrivate *> interfaces;
@@ -119,10 +107,28 @@ QList<QNetworkInterfacePrivate *> QNetworkInterfacePrivate::scan()
         }
 
         if (!iface) {
-            iface = new QNetworkInterfacePrivate;
+            iface = new QNetworkInterfacePrivate();
             iface->index = ifindex;
             iface->name = QString::fromLatin1(ifiter->ifa_name);
-            iface->flags = convertFlags(ifiter->ifa_flags);
+            iface->flags = 0;
+            if (ifiter->ifa_flags & IFF_UP) {
+                iface->flags |= QNetworkInterface::IsUp;
+            }
+            if (ifiter->ifa_flags & IFF_RUNNING) {
+                iface->flags |= QNetworkInterface::IsRunning;
+            }
+            if (ifiter->ifa_flags & IFF_BROADCAST) {
+                iface->flags |= QNetworkInterface::CanBroadcast;
+            }
+            if (ifiter->ifa_flags & IFF_LOOPBACK) {
+                iface->flags |= QNetworkInterface::IsLoopBack;
+            }
+            if (ifiter->ifa_flags & IFF_POINTOPOINT) {
+                iface->flags |= QNetworkInterface::IsPointToPoint;
+            }
+            if (ifiter->ifa_flags & IFF_MULTICAST) {
+                iface->flags |= QNetworkInterface::CanMulticast;
+            }
             interfaces.append(iface);
         }
 
