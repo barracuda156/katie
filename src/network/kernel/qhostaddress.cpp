@@ -34,6 +34,8 @@
 
 QT_BEGIN_NAMESPACE
 
+static const char addrscopeseparator = '%';
+
 QHostAddressPrivate::QHostAddressPrivate()
     : protocol(QAbstractSocket::UnknownNetworkLayerProtocol)
 {
@@ -214,21 +216,33 @@ void QHostAddress::clear()
 */
 bool QHostAddress::setAddress(const QByteArray &address)
 {
+    // compat
+    QByteArray scope;
+    QByteArray fixedaddress(address.trimmed());
+    if (fixedaddress.contains(':')) {
+        const int indexofpercent = fixedaddress.indexOf(addrscopeseparator);
+        if (indexofpercent >= 0) {
+            scope = fixedaddress.mid(indexofpercent + 1, fixedaddress.size() - indexofpercent - 1);
+            fixedaddress = fixedaddress.mid(0, indexofpercent);
+        }
+    }
     int result = 0;
 #ifndef QT_NO_IPV6
     struct in6_addr inaddripv6;
-    result = inet_pton(AF_INET6, address.constData(), &inaddripv6);
+    result = inet_pton(AF_INET6, fixedaddress.constData(), &inaddripv6);
     if (result == 1) {
         d->protocol = QAbstractSocket::IPv6Protocol;
-        d->ipString = address;
+        d->ipString = fixedaddress;
+        d->scopeId = scope;
         return true;
     }
 #endif
     struct in_addr inaddripv4;
-    result = inet_pton(AF_INET, address.constData(), &inaddripv4);
+    result = inet_pton(AF_INET, fixedaddress.constData(), &inaddripv4);
     if (result == 1) {
         d->protocol = QAbstractSocket::IPv4Protocol;
-        d->ipString = address;
+        d->ipString = fixedaddress;
+        d->scopeId.clear();
         return true;
     }
     return false;
@@ -281,6 +295,9 @@ QAbstractSocket::NetworkLayerProtocol QHostAddress::protocol() const
 */
 QByteArray QHostAddress::toString() const
 {
+    if (d->protocol == QAbstractSocket::IPv6Protocol && !d->scopeId.isEmpty()) {
+        return d->ipString + addrscopeseparator + d->scopeId;
+    }
     return d->ipString;
 }
 
@@ -398,13 +415,9 @@ QDataStream &operator<<(QDataStream &out, const QHostAddress &address)
         case QAbstractSocket::UnknownNetworkLayerProtocol: {
             break;
         }
-        case QAbstractSocket::IPv4Protocol: {
-            out << address.toString();
-            break;
-        }
+        case QAbstractSocket::IPv4Protocol:
         case QAbstractSocket::IPv6Protocol: {
             out << address.toString();
-            out << address.scopeId();
             break;
         }
     }
@@ -431,16 +444,12 @@ QDataStream &operator>>(QDataStream &in, QHostAddress &address)
             QByteArray ipv4;
             in >> ipv4;
             address.setAddress(ipv4);
-            address.setScopeId(QByteArray());
             break;
         }
         case QAbstractSocket::IPv6Protocol: {
             QByteArray ipv6;
-            QByteArray scope;
             in >> ipv6;
-            in >> scope;
             address.setAddress(ipv6);
-            address.setScopeId(scope);
             break;
         }
         default: {

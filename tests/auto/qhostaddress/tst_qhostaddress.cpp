@@ -49,10 +49,10 @@ public slots:
     void init();
     void cleanup();
 private slots:
-    void constructor_QString_data();
-    void constructor_QString();
-    void setAddress_QString_data();
-    void setAddress_QString();
+    void constructor_QByteArray_data();
+    void constructor_QByteArray();
+    void setAddress_QByteArray_data();
+    void setAddress_QByteArray();
     void specialAddresses_data();
     void specialAddresses();
     void compare_data();
@@ -96,15 +96,16 @@ void tst_QHostAddress::cleanup()
     // No cleanup is required.
 }
 
-void tst_QHostAddress::constructor_QString_data()
+void tst_QHostAddress::constructor_QByteArray_data()
 {
-    setAddress_QString_data();
+    setAddress_QByteArray_data();
 }
 
-void tst_QHostAddress::constructor_QString()
+void tst_QHostAddress::constructor_QByteArray()
 {
     QFETCH(QByteArray, address);
     QFETCH(bool, ok);
+    QFETCH(QByteArray, resAddr);
     QFETCH(int, protocol);
 
     QHostAddress hostAddr(address);
@@ -116,7 +117,7 @@ void tst_QHostAddress::constructor_QString()
     }
 
     if (ok)
-        QTEST(hostAddr.toString(), "resAddr");
+        QTEST(hostAddr.toString(), resAddr);
 
     if ( protocol == 4 ) {
         QVERIFY( hostAddr.protocol() == QAbstractSocket::IPv4Protocol || hostAddr.protocol() == QAbstractSocket::UnknownNetworkLayerProtocol );
@@ -130,14 +131,14 @@ void tst_QHostAddress::constructor_QString()
     }
 }
 
-void tst_QHostAddress::setAddress_QString_data()
+void tst_QHostAddress::setAddress_QByteArray_data()
 {
     QTest::addColumn<QByteArray>("address");
     QTest::addColumn<bool>("ok");
     QTest::addColumn<QByteArray>("resAddr");
     QTest::addColumn<int>("protocol"); // 4: IPv4, 6: IPv6, other: undefined
 
-    //next we fill it with data
+    // next fill it with data
     QTest::newRow("ip4_00")  << QByteArray("127.0.0.1") << (bool)true << QByteArray("127.0.0.1") << 4;
     QTest::newRow("ip4_01")  << QByteArray("255.3.2.1") << (bool)true << QByteArray("255.3.2.1") << 4;
     QTest::newRow("ip4_03")  << QByteArray(" 255.3.2.1") << (bool)true << QByteArray("255.3.2.1") << 4;
@@ -202,7 +203,7 @@ void tst_QHostAddress::setAddress_QString_data()
 
 }
 
-void tst_QHostAddress::setAddress_QString()
+void tst_QHostAddress::setAddress_QByteArray()
 {
     QFETCH(QByteArray, address);
     QFETCH(bool, ok);

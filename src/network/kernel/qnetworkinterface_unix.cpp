@@ -134,13 +134,15 @@ QList<QNetworkInterfacePrivate *> QNetworkInterfacePrivate::scan()
 
         QNetworkAddressEntry entry;
         entry.d->address = addressFromSockaddr(ifiter->ifa_addr);
-        if (entry.ip().isNull())
+        if (entry.ip().isNull()) {
             // could not parse the address
             continue;
+        }
 
         entry.d->netmask = addressFromSockaddr(ifiter->ifa_netmask);
-        if (iface->flags & QNetworkInterface::CanBroadcast)
+        if (iface->flags & QNetworkInterface::CanBroadcast) {
             entry.d->broadcast = addressFromSockaddr(ifiter->ifa_broadaddr);
+        }
 
         iface->addressEntries << entry;
 
