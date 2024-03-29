@@ -969,8 +969,9 @@ QPixmap QItemDelegate::decoration(const QStyleOptionViewItem &option, const QVar
 QPixmap *QItemDelegate::selected(const QPixmap &pixmap, const QPalette &palette, bool enabled) const
 {
     const QByteArray key = qHexString(
-        "qt_itemdelegate_%lld_%d",
+        "qt_itemdelegate_%lld_%lld_%d",
         pixmap.cacheKey(),
+        palette.cacheKey(),
         static_cast<int>(enabled)
     );
     QPixmap *pm = QPixmapCache::find(key);
