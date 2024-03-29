@@ -289,11 +289,8 @@ void QWindowSurface::setGeometry(const QRect &rect)
             return;
         }
 
-        QImage *oldImage = d_ptr->image;
-
+        delete d_ptr->image;
         d_ptr->image = new QImage(width, height, format);
-
-        delete oldImage;
     }
 }
 
