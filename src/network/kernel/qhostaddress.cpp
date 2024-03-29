@@ -130,23 +130,28 @@ QHostAddress::QHostAddress(SpecialAddress address)
             break;
         }
         case QHostAddress::Broadcast: {
-            setAddress(QByteArray("255.255.255.255"));
+            d->protocol = QAbstractSocket::IPv4Protocol;
+            d->ipString = QByteArray("255.255.255.255");
             break;
         }
         case QHostAddress::LocalHost: {
-            setAddress(QByteArray("127.0.0.1"));
+            d->protocol = QAbstractSocket::IPv4Protocol;
+            d->ipString = QByteArray("127.0.0.1");
             break;
         }
         case QHostAddress::LocalHostIPv6: {
-            setAddress(QByteArray("::1"));
+            d->protocol = QAbstractSocket::IPv6Protocol;
+            d->ipString = QByteArray("::1");
             break;
         }
         case QHostAddress::Any: {
-            setAddress(QByteArray("0.0.0.0"));
+            d->protocol = QAbstractSocket::IPv4Protocol;
+            d->ipString = QByteArray("0.0.0.0");
             break;
         }
         case QHostAddress::AnyIPv6: {
-            setAddress(QByteArray("::"));
+            d->protocol = QAbstractSocket::IPv6Protocol;
+            d->ipString = QByteArray("::");
             break;
         }
     }
