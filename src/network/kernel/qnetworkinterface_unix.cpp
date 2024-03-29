@@ -64,19 +64,19 @@ static QHostAddress addressFromSockaddr(sockaddr *sa)
         return address;
 
     if (sa->sa_family == AF_INET)
-        address.setAddress(htonl(((sockaddr_in *)sa)->sin_addr.s_addr));
+        address.setAddress(sa);
 #ifndef QT_NO_IPV6
     else if (sa->sa_family == AF_INET6) {
-        address.setAddress(((sockaddr_in6 *)sa)->sin6_addr.s6_addr);
+        address.setAddress(sa);
         int scope = ((sockaddr_in6 *)sa)->sin6_scope_id;
         if (scope) {
 #ifndef QT_NO_IPV6IFNAME
             QSTACKARRAY(char, scopeid, IFNAMSIZ);
             if (::if_indextoname(scope, scopeid) != 0) {
-                address.setScopeId(QString::fromLatin1(scopeid));
+                address.setScopeId(QByteArray(scopeid));
             } else
 #endif
-                address.setScopeId(QString::number(scope));
+                address.setScopeId(QByteArray::number(scope));
         }
     }
 #endif
@@ -127,14 +127,14 @@ QList<QNetworkInterfacePrivate *> QNetworkInterfacePrivate::scan()
         }
 
         QNetworkAddressEntry entry;
-        entry.setIp(addressFromSockaddr(ifiter->ifa_addr));
+        entry.d->address = addressFromSockaddr(ifiter->ifa_addr);
         if (entry.ip().isNull())
             // could not parse the address
             continue;
 
-        entry.setNetmask(addressFromSockaddr(ifiter->ifa_netmask));
+        entry.d->netmask = addressFromSockaddr(ifiter->ifa_netmask);
         if (iface->flags & QNetworkInterface::CanBroadcast)
-            entry.setBroadcast(addressFromSockaddr(ifiter->ifa_broadaddr));
+            entry.d->broadcast = addressFromSockaddr(ifiter->ifa_broadaddr);
 
         iface->addressEntries << entry;
 

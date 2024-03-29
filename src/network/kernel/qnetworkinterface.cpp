@@ -30,35 +30,6 @@
 
 QT_BEGIN_NAMESPACE
 
-static QList<QNetworkInterfacePrivate *> postProcess(QList<QNetworkInterfacePrivate *> list)
-{
-    // Some platforms report a netmask but don't report a broadcast address
-    // Go through all available addresses and calculate the broadcast address
-    // from the IP and the netmask
-    //
-    // This is an IPv4-only thing -- IPv6 has no concept of broadcasts
-    // The math is:
-    //    broadcast = IP | ~netmask
-
-    QList<QNetworkInterfacePrivate *>::Iterator it = list.begin();
-    for ( ; it != list.end(); ++it) {
-        QList<QNetworkAddressEntry>::Iterator addr_it = (*it)->addressEntries.begin();
-        const QList<QNetworkAddressEntry>::Iterator addr_end = (*it)->addressEntries.end();
-        for ( ; addr_it != addr_end; ++addr_it) {
-            if (addr_it->ip().protocol() != QAbstractSocket::IPv4Protocol)
-                continue;
-
-            if (!addr_it->netmask().isNull() && addr_it->broadcast().isNull()) {
-                QHostAddress bcast = addr_it->ip();
-                bcast = QHostAddress(bcast.toIPv4Address() | ~addr_it->netmask().toIPv4Address());
-                addr_it->setBroadcast(bcast);
-            }
-        }
-    }
-
-    return list;
-}
-
 /*!
     \class QNetworkAddressEntry
     \brief The QNetworkAddressEntry class stores one IP address
@@ -139,15 +110,6 @@ QHostAddress QNetworkAddressEntry::ip() const
 }
 
 /*!
-    Sets the IP address the QNetworkAddressEntry object contains to \a
-    newIp.
-*/
-void QNetworkAddressEntry::setIp(const QHostAddress &newIp)
-{
-    d->address = newIp;
-}
-
-/*!
     Returns the netmask associated with the IP address. The
     netmask is expressed in the form of an IP address, such as
     255.255.0.0.
@@ -166,58 +128,6 @@ QHostAddress QNetworkAddressEntry::netmask() const
 }
 
 /*!
-    Sets the netmask that this QNetworkAddressEntry object contains to
-    \a newNetmask. Setting the netmask also sets the prefix length to
-    match the new netmask.
-
-    \sa setPrefixLength()
-*/
-void QNetworkAddressEntry::setNetmask(const QHostAddress &newNetmask)
-{
-    if (newNetmask.protocol() != ip().protocol()) {
-        d->netmask = QNetmaskAddress();
-        return;
-    }
-
-    d->netmask.setAddress(newNetmask);
-}
-
-/*!
-    \since 4.5
-    Returns the prefix length of this IP address. The prefix length
-    matches the number of bits set to 1 in the netmask (see
-    netmask()). For IPv4 addresses, the value is between 0 and 32. For
-    IPv6 addresses, it's contained between 0 and 128 and is the
-    preferred form of representing addresses.
-
-    This function returns -1 if the prefix length could not be
-    determined (i.e., netmask() returns a null QHostAddress()).
-
-    \sa netmask()
-*/
-int QNetworkAddressEntry::prefixLength() const
-{
-    return d->netmask.prefixLength();
-}
-
-/*!
-    \since 4.5
-    Sets the prefix length of this IP address to \a length. The value
-    of \a length must be valid for this type of IP address: between 0
-    and 32 for IPv4 addresses, between 0 and 128 for IPv6
-    addresses. Setting to any invalid value is equivalent to setting
-    to -1, which means "no prefix length".
-
-    Setting the prefix length also sets the netmask (see netmask()).
-
-    \sa setNetmask()
-*/
-void QNetworkAddressEntry::setPrefixLength(int length)
-{
-    d->netmask.setPrefixLength(d->address.protocol(), length);
-}
-
-/*!
     Returns the broadcast address associated with the IPv4
     address and netmask. It can usually be derived from those two by
     setting to 1 the bits of the IP address where the netmask contains
@@ -233,15 +143,6 @@ void QNetworkAddressEntry::setPrefixLength(int length)
 QHostAddress QNetworkAddressEntry::broadcast() const
 {
     return d->broadcast;
-}
-
-/*!
-    Sets the broadcast IP address of this QNetworkAddressEntry object
-    to \a newBroadcast.
-*/
-void QNetworkAddressEntry::setBroadcast(const QHostAddress &newBroadcast)
-{
-    d->broadcast = newBroadcast;
 }
 
 /*!
@@ -446,8 +347,7 @@ QNetworkInterface QNetworkInterface::interfaceFromIndex(int index)
 QList<QNetworkInterface> QNetworkInterface::allInterfaces()
 {
     QList<QNetworkInterface> result;
-    QList<QNetworkInterfacePrivate *> list = postProcess(QNetworkInterfacePrivate::scan());
-    foreach (QNetworkInterfacePrivate* priv, list) {
+    foreach (QNetworkInterfacePrivate* priv, QNetworkInterfacePrivate::scan()) {
         QNetworkInterface iface;
         iface.d = QSharedDataPointer<QNetworkInterfacePrivate>(priv);
         result << iface;

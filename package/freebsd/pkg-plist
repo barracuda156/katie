@@ -814,7 +814,6 @@ include/katie/QtNetwork/QAbstractSocket
 include/katie/QtNetwork/QCryptographicHash
 include/katie/QtNetwork/QHostAddress
 include/katie/QtNetwork/QHostInfo
-include/katie/QtNetwork/QIPv6Address
 include/katie/QtNetwork/QLocalServer
 include/katie/QtNetwork/QLocalSocket
 include/katie/QtNetwork/QNetworkAddressEntry
@@ -822,7 +821,6 @@ include/katie/QtNetwork/QNetworkInterface
 include/katie/QtNetwork/QTcpServer
 include/katie/QtNetwork/QTcpSocket
 include/katie/QtNetwork/QUdpSocket
-include/katie/QtNetwork/Q_IPV6ADDR
 include/katie/QtNetwork/QtNetwork
 include/katie/QtNetwork/qabstractsocket.h
 include/katie/QtNetwork/qcryptographichash.h

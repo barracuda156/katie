@@ -246,9 +246,7 @@ incmap = {
         'QtEvents': 'qevent.h',
     },
     'QtNetwork': {
-        'QIPv6Address': 'qhostaddress.h',
         'QNetworkAddressEntry': 'qnetworkinterface.h',
-        'Q_IPV6ADDR': 'qhostaddress.h',
     },
     'QtTest': {
         'QEventSizeOfChecker': 'qtestspontaneevent.h',

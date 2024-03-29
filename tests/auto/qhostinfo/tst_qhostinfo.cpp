@@ -194,22 +194,22 @@ void tst_QHostInfo::lookupIPv6()
 
 void tst_QHostInfo::reverseLookup_data()
 {
-    QTest::addColumn<QString>("address");
+    QTest::addColumn<QByteArray>("address");
     QTest::addColumn<QStringList>("hostNames");
     QTest::addColumn<int>("err");
 
-    QTest::newRow("qt-project.org") << QString("87.238.53.172") << QStringList(QString("tufsla.qtproject.c.bitbit.net")) << 0;
+    QTest::newRow("qt-project.org") << QByteArray("87.238.53.172") << QStringList(QString("tufsla.qtproject.c.bitbit.net")) << 0;
 
-    QTest::newRow("gitorious.org") << QString("87.238.52.168") << QStringList(QString("gitorious.org")) << 0;
+    QTest::newRow("gitorious.org") << QByteArray("87.238.52.168") << QStringList(QString("gitorious.org")) << 0;
     if (!ipv6Available)
-        QTest::newRow("bogus-name") << QString("1.2..4") << QStringList() << 1;
+        QTest::newRow("bogus-name") << QByteArray("1.2..4") << QStringList() << 1;
     else
-        QTest::newRow("bogus-name") << QString("1::2::::4") << QStringList() << 1;
+        QTest::newRow("bogus-name") << QByteArray("1::2::::4") << QStringList() << 1;
 }
 
 void tst_QHostInfo::reverseLookup()
 {
-    QFETCH(QString, address);
+    QFETCH(QByteArray, address);
     QFETCH(QStringList, hostNames);
     QFETCH(int, err);
 
@@ -219,7 +219,7 @@ void tst_QHostInfo::reverseLookup()
         QVERIFY(hostNames.contains(info.hostName()));
         QCOMPARE(info.addresses().first(), QHostAddress(address));
     } else {
-        QCOMPARE(info.hostName(), address);
+        QCOMPARE(info.hostName().toLatin1(), address);
         QCOMPARE(info.error(), QHostInfo::HostNotFound);
     }
 

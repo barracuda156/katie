@@ -38,19 +38,17 @@ QT_BEGIN_NAMESPACE
 #include "qhostaddress.h"
 #include "qabstractsocket.h"
 
-class QNetmaskAddress: public QHostAddress
+class QHostAddressPrivate
 {
-    int length;
 public:
-    QNetmaskAddress() : QHostAddress(), length(-1) { }
+    QHostAddressPrivate();
 
-    bool setAddress(const QString &address);
-    bool setAddress(const QHostAddress &address);
+    QAbstractSocket::NetworkLayerProtocol protocol;
+    QByteArray ipString;
+    QByteArray scopeId;
 
-    int prefixLength() const;
-    void setPrefixLength(QAbstractSocket::NetworkLayerProtocol proto, int len);
+    friend class QHostAddress;
 };
-
 
 QT_END_NAMESPACE
 

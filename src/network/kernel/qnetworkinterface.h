@@ -33,6 +33,8 @@ QT_BEGIN_NAMESPACE
 template<typename T> class QList;
 
 class QNetworkAddressEntryPrivate;
+class QNetworkInterfacePrivate;
+
 class Q_NETWORK_EXPORT QNetworkAddressEntry
 {
 public:
@@ -45,21 +47,15 @@ public:
     { return !(*this == other); }
 
     QHostAddress ip() const;
-    void setIp(const QHostAddress &newIp);
-
     QHostAddress netmask() const;
-    void setNetmask(const QHostAddress &newNetmask);
-    int prefixLength() const;
-    void setPrefixLength(int length);
-
     QHostAddress broadcast() const;
-    void setBroadcast(const QHostAddress &newBroadcast);
 
 private:
+    friend QNetworkInterfacePrivate;
+
     QScopedPointer<QNetworkAddressEntryPrivate> d;
 };
 
-class QNetworkInterfacePrivate;
 class Q_NETWORK_EXPORT QNetworkInterface
 {
 public:

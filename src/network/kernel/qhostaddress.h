@@ -29,21 +29,9 @@
 
 struct sockaddr;
 
-
 QT_BEGIN_NAMESPACE
 
-
 class QHostAddressPrivate;
-
-class Q_NETWORK_EXPORT QIPv6Address
-{
-public:
-    inline quint8 &operator [](int index) { return c[index]; }
-    inline quint8 operator [](int index) const { return c[index]; }
-    quint8 c[16];
-};
-
-typedef QIPv6Address Q_IPV6ADDR;
 
 class Q_NETWORK_EXPORT QHostAddress
 {
@@ -58,60 +46,38 @@ public:
     };
 
     QHostAddress();
-    explicit QHostAddress(quint32 ip4Addr);
-    explicit QHostAddress(quint8 *ip6Addr);
-    explicit QHostAddress(const Q_IPV6ADDR &ip6Addr);
     explicit QHostAddress(const sockaddr *sockaddr);
-    explicit QHostAddress(const QString &address);
+    explicit QHostAddress(const QByteArray &address);
     QHostAddress(const QHostAddress &copy);
     QHostAddress(SpecialAddress address);
     ~QHostAddress();
 
     QHostAddress &operator=(const QHostAddress &other);
-    QHostAddress &operator=(const QString &address);
+    QHostAddress &operator=(const QByteArray &address);
 
-    void setAddress(quint32 ip4Addr);
-    void setAddress(quint8 *ip6Addr);
-    void setAddress(const Q_IPV6ADDR &ip6Addr);
     void setAddress(const sockaddr *sockaddr);
-    bool setAddress(const QString &address);
+    bool setAddress(const QByteArray &address);
 
     QAbstractSocket::NetworkLayerProtocol protocol() const;
-    quint32 toIPv4Address() const;
-    Q_IPV6ADDR toIPv6Address() const;
 
-    QString toString() const;
+    QByteArray toString() const;
 
-    QString scopeId() const;
-    void setScopeId(const QString &id);
+    QByteArray scopeId() const;
+    void setScopeId(const QByteArray &id);
 
     bool operator ==(const QHostAddress &address) const;
-    bool operator ==(SpecialAddress address) const;
     inline bool operator !=(const QHostAddress &address) const
-    { return !operator==(address); }
-    inline bool operator !=(SpecialAddress address) const
     { return !operator==(address); }
     bool isNull() const;
     void clear();
 
-
-    bool isInSubnet(const QHostAddress &subnet, int netmask) const;
-    bool isInSubnet(const QPair<QHostAddress, int> &subnet) const;
-
-    static QPair<QHostAddress, int> parseSubnet(const QString &subnet);
-
 private:
-    friend class QNetmaskAddress;
     QScopedPointer<QHostAddressPrivate> d;
 };
-
-inline bool operator ==(QHostAddress::SpecialAddress address1, const QHostAddress &address2)
-{ return address2 == address1; }
 
 #ifndef QT_NO_DEBUG_STREAM
 Q_NETWORK_EXPORT QDebug operator<<(QDebug, const QHostAddress &);
 #endif
-
 
 Q_NETWORK_EXPORT uint qHash(const QHostAddress &key);
 

@@ -1080,7 +1080,7 @@ void QAbstractSocket::connectToHost(const QString &hostName, quint16 port,
     emit stateChanged(d->state);
 
     QHostAddress temp;
-    if (temp.setAddress(hostName)) {
+    if (temp.setAddress(hostName.toLatin1())) {
         QHostInfo info;
         info.d->err = QHostInfo::NoError;
         info.d->errorStr = QCoreApplication::translate("QHostInfo", "Unknown error");

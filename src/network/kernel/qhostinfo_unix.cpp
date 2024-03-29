@@ -65,7 +65,8 @@ QHostInfo QHostInfoPrivate::fromName(const QString &hostName)
     results.d->errorStr = QCoreApplication::translate("QHostInfo", "Unknown error");
 
     QHostAddress address;
-    if (address.setAddress(hostName)) {
+    if (address.setAddress(hostName.toLatin1())) {
+        const QByteArray addressStr = address.toString();
 #if defined(QHOSTINFO_DEBUG)
         qDebug("QHostInfoPrivate::fromName(%s) looking up address...",
                hostName.toLatin1().constData());
@@ -83,7 +84,9 @@ QHostInfo QHostInfoPrivate::fromName(const QString &hostName)
             saSize = sizeof(sa4);
             ::memset(&sa4, 0, sizeof(sa4));
             sa4.sin_family = AF_INET;
-            sa4.sin_addr.s_addr = htonl(address.toIPv4Address());
+            struct in_addr ia;
+            inet_pton(AF_INET, addressStr.constData(), &ia);
+            sa4.sin_addr = ia;
         }
 #ifndef QT_NO_IPV6
         else {
@@ -91,7 +94,9 @@ QHostInfo QHostInfoPrivate::fromName(const QString &hostName)
             saSize = sizeof(sa6);
             ::memset(&sa6, 0, sizeof(sa6));
             sa6.sin6_family = AF_INET6;
-            ::memcpy(sa6.sin6_addr.s6_addr, address.toIPv6Address().c, sizeof(sa6.sin6_addr.s6_addr));
+            struct in6_addr ia6;
+            inet_pton(AF_INET6, addressStr.constData(), &ia6);
+            sa6.sin6_addr = ia6;
         }
 #endif
 
@@ -184,16 +189,16 @@ QHostInfo QHostInfoPrivate::fromName(const QString &hostName)
                 qDebug() << "getaddrinfo node: flags:" << node->ai_flags << "family:" << node->ai_family << "ai_socktype:" << node->ai_socktype << "ai_protocol:" << node->ai_protocol << "ai_addrlen:" << node->ai_addrlen;
 #endif
             if (node->ai_family == AF_INET) {
-                QHostAddress addr(ntohl(((sockaddr_in *) node->ai_addr)->sin_addr.s_addr));
+                QHostAddress addr(node->ai_addr);
                 if (!addresses.contains(addr))
                     addresses.append(addr);
             }
 #ifndef QT_NO_IPV6
             else if (node->ai_family == AF_INET6) {
                 sockaddr_in6 *sa6 = (sockaddr_in6 *) node->ai_addr;
-                QHostAddress addr(sa6->sin6_addr.s6_addr);
+                QHostAddress addr(node->ai_addr);
                 if (sa6->sin6_scope_id)
-                    addr.setScopeId(QString::number(sa6->sin6_scope_id));
+                    addr.setScopeId(QByteArray::number(sa6->sin6_scope_id));
                 if (!addresses.contains(addr))
                     addresses.append(addr);
             }
