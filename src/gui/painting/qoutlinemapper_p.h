@@ -173,7 +173,7 @@ public:
     QT_FT_Outline *convertPath(const QPainterPath &path);
     QT_FT_Outline *convertPath(const QVectorPath &path);
 
-    inline QPainterPath::ElementType *elementTypes() const { return m_element_types.size() == 0 ? 0 : m_element_types.data(); }
+    inline const QPainterPath::ElementType *elementTypes() const { return m_element_types.size() == 0 ? 0 : m_element_types.data(); }
 
 public:
     QDataBuffer<QPainterPath::ElementType> m_element_types;
