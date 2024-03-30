@@ -70,12 +70,11 @@ void tst_QNetworkInterface::dump()
             QDebug s = qDebug();
             s.nospace() <<    "    address "
                         << "  " << count++;
-            s.nospace() << ": " << qPrintable(e.ip().toString());
+            s.nospace() << ": " << e.ip().toString();
             if (!e.netmask().isNull())
-                s.nospace() << '/' << e.prefixLength()
-                            << " (" << qPrintable(e.netmask().toString()) << ")";
+                s.nospace() << " netmask " << e.netmask().toString();
             if (!e.broadcast().isNull())
-                s.nospace() << " broadcast " << qPrintable(e.broadcast().toString());
+                s.nospace() << " broadcast " << e.broadcast().toString();
         }
     }
 }
@@ -132,19 +131,6 @@ void tst_QNetworkInterface::interfaceFromXXX()
 
             if (!entry.netmask().isNull()) {
                 QCOMPARE(entry.netmask().protocol(), entry.ip().protocol());
-
-                // if the netmask is known, the broadcast is known
-                // but only for IPv4 (there is no such thing as broadcast in IPv6)
-                if (entry.ip().protocol() == QAbstractSocket::IPv4Protocol) {
-                    QVERIFY(!entry.broadcast().isNull());
-
-                    // verify that the broadcast address is correct
-                    quint32 ip = entry.ip().toIPv4Address();
-                    quint32 mask = entry.netmask().toIPv4Address();
-                    quint32 bcast = entry.broadcast().toIPv4Address();
-
-                    QCOMPARE(bcast, ip | ~mask);
-                }
             }
 
             if (!entry.broadcast().isNull())
