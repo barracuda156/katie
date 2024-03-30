@@ -82,9 +82,10 @@ QHostInfo QHostInfoPrivate::fromName(const QString &hostName)
         if (address.protocol() == QAbstractSocket::IPv4Protocol) {
             sa = (sockaddr *)&sa4;
             saSize = sizeof(sa4);
-            ::memset(&sa4, 0, sizeof(sa4));
+            ::memset(&sa4, 0, saSize);
             sa4.sin_family = AF_INET;
             struct in_addr ia;
+            ::memset(&ia, 0, sizeof(ia));
             inet_pton(AF_INET, addressStr.constData(), &ia);
             sa4.sin_addr = ia;
         }
@@ -92,9 +93,10 @@ QHostInfo QHostInfoPrivate::fromName(const QString &hostName)
         else {
             sa = (sockaddr *)&sa6;
             saSize = sizeof(sa6);
-            ::memset(&sa6, 0, sizeof(sa6));
+            ::memset(&sa6, 0, saSize);
             sa6.sin6_family = AF_INET6;
             struct in6_addr ia6;
+            ::memset(&ia6, 0, sizeof(ia6));
             inet_pton(AF_INET6, addressStr.constData(), &ia6);
             sa6.sin6_addr = ia6;
         }

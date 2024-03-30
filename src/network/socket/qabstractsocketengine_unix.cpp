@@ -285,7 +285,7 @@ bool QAbstractSocketEnginePrivate::nativeConnect(const QHostAddress &addr, quint
     struct sockaddr_in6 sockAddrIPv6;
 
     if (addr.protocol() == QAbstractSocket::IPv6Protocol) {
-        memset(&sockAddrIPv6, 0, sizeof(sockAddrIPv6));
+        ::memset(&sockAddrIPv6, 0, sizeof(sockAddrIPv6));
         sockAddrIPv6.sin6_family = AF_INET6;
         sockAddrIPv6.sin6_port = htons(port);
 
@@ -298,6 +298,7 @@ bool QAbstractSocketEnginePrivate::nativeConnect(const QHostAddress &addr, quint
         }
 #endif
         struct in6_addr inAddrIPv6;
+        ::memset(&inAddrIPv6, 0, sizeof(inAddrIPv6));
         inet_pton(AF_INET6, addrStr.constData(), &inAddrIPv6);
         sockAddrIPv6.sin6_addr = inAddrIPv6;
 
@@ -306,10 +307,11 @@ bool QAbstractSocketEnginePrivate::nativeConnect(const QHostAddress &addr, quint
     } else
 #endif
     if (addr.protocol() == QAbstractSocket::IPv4Protocol) {
-        memset(&sockAddrIPv4, 0, sizeof(sockAddrIPv4));
+        ::memset(&sockAddrIPv4, 0, sizeof(sockAddrIPv4));
         sockAddrIPv4.sin_family = AF_INET;
         sockAddrIPv4.sin_port = htons(port);
         struct in_addr inAddrIPv4;
+        ::memset(&inAddrIPv4, 0, sizeof(inAddrIPv4));
         inet_pton(AF_INET, addrStr.constData(), &inAddrIPv4);
         sockAddrIPv4.sin_addr = inAddrIPv4;
 
@@ -397,7 +399,7 @@ bool QAbstractSocketEnginePrivate::nativeBind(const QHostAddress &address, quint
 
     if (address.protocol() == QAbstractSocket::IPv6Protocol) {
         const QByteArray scopeid = address.scopeId();
-        memset(&sockAddrIPv6, 0, sizeof(sockAddrIPv6));
+        ::memset(&sockAddrIPv6, 0, sizeof(sockAddrIPv6));
         sockAddrIPv6.sin6_family = AF_INET6;
         sockAddrIPv6.sin6_port = htons(port);
         bool ok = false;
@@ -408,6 +410,7 @@ bool QAbstractSocketEnginePrivate::nativeBind(const QHostAddress &address, quint
         }
 #endif
         struct in6_addr inAddrIPv6;
+        ::memset(&inAddrIPv6, 0, sizeof(inAddrIPv6));
         inet_pton(AF_INET6, addrStr.constData(), &inAddrIPv6);
         sockAddrIPv6.sin6_addr = inAddrIPv6;
         sockAddrSize = sizeof(sockAddrIPv6);
@@ -415,10 +418,11 @@ bool QAbstractSocketEnginePrivate::nativeBind(const QHostAddress &address, quint
     } else
 #endif
     if (address.protocol() == QAbstractSocket::IPv4Protocol) {
-        memset(&sockAddrIPv4, 0, sizeof(sockAddrIPv4));
+        ::memset(&sockAddrIPv4, 0, sizeof(sockAddrIPv4));
         sockAddrIPv4.sin_family = AF_INET;
         sockAddrIPv4.sin_port = htons(port);
         struct in_addr inAddrIPv4;
+        ::memset(&inAddrIPv4, 0, sizeof(inAddrIPv4));
         inet_pton(AF_INET, addrStr.constData(), &inAddrIPv4);
         sockAddrIPv4.sin_addr = inAddrIPv4;
         sockAddrSize = sizeof(sockAddrIPv4);
@@ -532,9 +536,10 @@ static bool multicastMembershipHelper(QAbstractSocketEnginePrivate *d,
         sockOpt = how6;
         sockArg = &mreq6;
         sockArgSize = sizeof(mreq6);
-        memset(&mreq6, 0, sizeof(mreq6));
+        ::memset(&mreq6, 0, sizeof(mreq6));
         mreq6.ipv6mr_interface = interface.index();
         struct in6_addr ia6;
+        ::memset(&ia6, 0, sizeof(ia6));
         inet_pton(AF_INET6, groupAddressStr.constData(), &ia6);
         mreq6.ipv6mr_multiaddr = ia6;
     } else
@@ -544,8 +549,9 @@ static bool multicastMembershipHelper(QAbstractSocketEnginePrivate *d,
         sockOpt = how4;
         sockArg = &mreq4;
         sockArgSize = sizeof(mreq4);
-        memset(&mreq4, 0, sizeof(mreq4));
+        ::memset(&mreq4, 0, sizeof(mreq4));
         struct in_addr ia;
+        ::memset(&ia, 0, sizeof(ia));
         inet_pton(AF_INET, groupAddressStr.constData(), &ia);
         mreq4.imr_multiaddr = ia;
 
@@ -554,7 +560,7 @@ static bool multicastMembershipHelper(QAbstractSocketEnginePrivate *d,
             if (!addressEntries.isEmpty()) {
                 QHostAddress firstIP = addressEntries.first().ip();
                 const QByteArray firstIPStr = firstIP.toString(QHostAddress::RemoveScope);
-                struct in_addr ia;
+                ::memset(&ia, 0, sizeof(ia));
                 inet_pton(AF_INET, firstIPStr.constData(), &ia);
                 mreq4.imr_interface = ia;
             } else {
@@ -672,6 +678,7 @@ bool QAbstractSocketEnginePrivate::nativeSetMulticastInterface(const QNetworkInt
             const QHostAddress &ip = entry.ip();
             if (ip.protocol() == QAbstractSocket::IPv4Protocol) {
                 const QByteArray ipStr = ip.toString(QHostAddress::RemoveScope);
+                ::memset(&v, 0, sizeof(v));
                 inet_pton(AF_INET, ipStr.constData(), &v);
                 int r = ::setsockopt(socketDescriptor, IPPROTO_IP, IP_MULTICAST_IF, &v, sizeof(v));
                 if (r != -1)
@@ -681,6 +688,7 @@ bool QAbstractSocketEnginePrivate::nativeSetMulticastInterface(const QNetworkInt
         return false;
     }
 
+    ::memset(&v, 0, sizeof(v));
     v.s_addr = INADDR_ANY;
     return (::setsockopt(socketDescriptor, IPPROTO_IP, IP_MULTICAST_IF, &v, sizeof(v)) != -1);
 }
@@ -797,6 +805,7 @@ qint64 QAbstractSocketEnginePrivate::nativeSendDatagram(const char *data, qint64
         sockAddrIPv6.sin6_port = htons(port);
 
         struct in6_addr ia6;
+        ::memset(&ia6, 0, sizeof(ia6));
         inet_pton(AF_INET6, hostStr.constData(), &ia6);
         sockAddrIPv6.sin6_addr = ia6;
         const QByteArray scopeid = host.scopeId();
@@ -816,6 +825,7 @@ qint64 QAbstractSocketEnginePrivate::nativeSendDatagram(const char *data, qint64
         sockAddrIPv4.sin_family = AF_INET;
         sockAddrIPv4.sin_port = htons(port);
         struct in_addr ia;
+        ::memset(&ia, 0, sizeof(ia));
         inet_pton(AF_INET, hostStr.constData(), &ia);
         sockAddrIPv4.sin_addr = ia;
         sockAddrSize = sizeof(sockAddrIPv4);
