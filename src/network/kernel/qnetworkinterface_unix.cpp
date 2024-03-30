@@ -25,7 +25,6 @@
 #include "qalgorithms.h"
 #include "qnet_unix_p.h"
 #include "qplatformdefs.h"
-#include "qcorecommon_p.h"
 
 #ifndef QT_NO_NETWORKINTERFACE
 
@@ -56,7 +55,7 @@ QList<QNetworkInterfacePrivate *> QNetworkInterfacePrivate::scan()
         return interfaces;
     }
 
-    int socket = qt_safe_socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
+    const int socket = qt_safe_socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
     struct ifaddrs *ifiter = nullptr;
     for (ifiter = iflist; ifiter; ifiter = ifiter->ifa_next) {
         QNetworkInterfacePrivate *iface = nullptr;

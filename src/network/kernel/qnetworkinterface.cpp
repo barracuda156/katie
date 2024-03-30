@@ -169,8 +169,7 @@ QHostAddress QNetworkAddressEntry::broadcast() const
     Not all operating systems support reporting all features. Only the
     IPv4 addresses are guaranteed to be listed by this class in all
     platforms. In particular, IPv6 address listing is only supported
-    on Windows XP and more recent versions, Linux, MacOS X and the
-    BSDs.
+    on Linux and the BSDs, hardware address only on Linux.
 
     \sa QNetworkAddressEntry
 */
@@ -277,12 +276,9 @@ QNetworkInterface::InterfaceFlags QNetworkInterface::flags() const
 }
 
 /*!
-    Returns the low-level hardware address for this interface. On
-    Ethernet interfaces, this will be a MAC address in string
-    representation, separated by colons.
+    Returns the low-level hardware address for this interface.
 
-    Other interface types may have other types of hardware
-    addresses. Implementations should not depend on this function
+    Implementations should not depend on this function
     returning a valid MAC address.
 */
 QString QNetworkInterface::hardwareAddress() const
