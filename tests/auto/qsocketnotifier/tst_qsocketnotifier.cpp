@@ -24,6 +24,7 @@
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QSocketNotifier>
+#include <QtCore/QScopedPointer>
 #include <QtCore/QTimer>
 #include <QtNetwork/QTcpServer>
 #include <QtNetwork/QTcpSocket>

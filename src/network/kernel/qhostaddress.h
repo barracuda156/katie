@@ -22,9 +22,7 @@
 #ifndef QHOSTADDRESS_H
 #define QHOSTADDRESS_H
 
-#include <QtCore/qpair.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qscopedpointer.h>
+#include <QtCore/qbytearray.h>
 #include <QtNetwork/qabstractsocket.h>
 
 struct sockaddr;
@@ -79,7 +77,7 @@ public:
     { return !operator==(address); }
 
 private:
-    QScopedPointer<QHostAddressPrivate> d;
+    QHostAddressPrivate *d;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(QHostAddress::FormattingOptions)
 

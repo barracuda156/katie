@@ -122,8 +122,11 @@ QHostAddress::QHostAddress(const QByteArray &address)
     Constructs a copy of the given \a address.
 */
 QHostAddress::QHostAddress(const QHostAddress &address)
-    : d(new QHostAddressPrivate(*address.d.data()))
+    : d(new QHostAddressPrivate())
 {
+    d->protocol = address.d->protocol;
+    d->ipString = address.d->ipString;
+    d->scopeId = address.d->scopeId;
 }
 
 /*!
@@ -169,6 +172,7 @@ QHostAddress::QHostAddress(SpecialAddress address)
 */
 QHostAddress::~QHostAddress()
 {
+    delete d;
 }
 
 /*!
@@ -177,7 +181,9 @@ QHostAddress::~QHostAddress()
 */
 QHostAddress &QHostAddress::operator=(const QHostAddress &address)
 {
-    *d.data() = *address.d.data();
+    d->protocol = address.d->protocol;
+    d->ipString = address.d->ipString;
+    d->scopeId = address.d->scopeId;
     return *this;
 }
 
