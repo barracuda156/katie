@@ -45,6 +45,12 @@ public:
         AnyIPv6
     };
 
+    enum FormattingOption {
+        None = 0x0,
+        RemoveScope = 0x1,
+    };
+    Q_DECLARE_FLAGS(FormattingOptions, FormattingOption)
+
     QHostAddress();
     explicit QHostAddress(const sockaddr *sockaddr);
     explicit QHostAddress(const QByteArray &address);
@@ -60,7 +66,7 @@ public:
 
     QAbstractSocket::NetworkLayerProtocol protocol() const;
 
-    QByteArray toString() const;
+    QByteArray toString(FormattingOptions options = None) const;
 
     QByteArray scopeId() const;
     void setScopeId(const QByteArray &id);
@@ -74,6 +80,7 @@ public:
 private:
     QScopedPointer<QHostAddressPrivate> d;
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS(QHostAddress::FormattingOptions)
 
 #ifndef QT_NO_DEBUG_STREAM
 Q_NETWORK_EXPORT QDebug operator<<(QDebug, const QHostAddress &);

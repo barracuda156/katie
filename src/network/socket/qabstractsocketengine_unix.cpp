@@ -275,7 +275,7 @@ bool QAbstractSocketEnginePrivate::nativeConnect(const QHostAddress &addr, quint
     qDebug("QAbstractSocketEnginePrivate::nativeConnect() : %d ", socketDescriptor);
 #endif
 
-    const QByteArray addrStr = addr.toString();
+    const QByteArray addrStr = addr.toString(QHostAddress::RemoveScope);
 
     struct sockaddr_in sockAddrIPv4;
     struct sockaddr *sockAddrPtr = 0;
@@ -386,7 +386,7 @@ bool QAbstractSocketEnginePrivate::nativeConnect(const QHostAddress &addr, quint
 
 bool QAbstractSocketEnginePrivate::nativeBind(const QHostAddress &address, quint16 port)
 {
-    const QByteArray addrStr = address.toString();
+    const QByteArray addrStr = address.toString(QHostAddress::RemoveScope);
 
     struct sockaddr_in sockAddrIPv4;
     struct sockaddr *sockAddrPtr = 0;
@@ -516,7 +516,7 @@ static bool multicastMembershipHelper(QAbstractSocketEnginePrivate *d,
                                       const QHostAddress &groupAddress,
                                       const QNetworkInterface &interface)
 {
-    const QByteArray groupAddressStr = groupAddress.toString();
+    const QByteArray groupAddressStr = groupAddress.toString(QHostAddress::RemoveScope);
 
     int level = 0;
     int sockOpt = 0;
@@ -553,7 +553,7 @@ static bool multicastMembershipHelper(QAbstractSocketEnginePrivate *d,
             QList<QNetworkAddressEntry> addressEntries = interface.addressEntries();
             if (!addressEntries.isEmpty()) {
                 QHostAddress firstIP = addressEntries.first().ip();
-                const QByteArray firstIPStr = firstIP.toString();
+                const QByteArray firstIPStr = firstIP.toString(QHostAddress::RemoveScope);
                 struct in_addr ia;
                 inet_pton(AF_INET, firstIPStr.constData(), &ia);
                 mreq4.imr_interface = ia;
@@ -671,7 +671,7 @@ bool QAbstractSocketEnginePrivate::nativeSetMulticastInterface(const QNetworkInt
             const QNetworkAddressEntry &entry = entries.at(i);
             const QHostAddress &ip = entry.ip();
             if (ip.protocol() == QAbstractSocket::IPv4Protocol) {
-                const QByteArray ipStr = ip.toString();
+                const QByteArray ipStr = ip.toString(QHostAddress::RemoveScope);
                 inet_pton(AF_INET, ipStr.constData(), &v);
                 int r = ::setsockopt(socketDescriptor, IPPROTO_IP, IP_MULTICAST_IF, &v, sizeof(v));
                 if (r != -1)
@@ -783,7 +783,7 @@ qint64 QAbstractSocketEnginePrivate::nativeReceiveDatagram(char *data, qint64 ma
 qint64 QAbstractSocketEnginePrivate::nativeSendDatagram(const char *data, qint64 len,
                                                    const QHostAddress &host, quint16 port)
 {
-    const QByteArray hostStr = host.toString();
+    const QByteArray hostStr = host.toString(QHostAddress::RemoveScope);
 
     struct sockaddr_in sockAddrIPv4;
     struct sockaddr *sockAddrPtr = 0;

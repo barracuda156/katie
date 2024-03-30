@@ -66,7 +66,7 @@ QHostInfo QHostInfoPrivate::fromName(const QString &hostName)
 
     QHostAddress address;
     if (address.setAddress(hostName.toLatin1())) {
-        const QByteArray addressStr = address.toString();
+        const QByteArray addressStr = address.toString(QHostAddress::RemoveScope);
 #if defined(QHOSTINFO_DEBUG)
         qDebug("QHostInfoPrivate::fromName(%s) looking up address...",
                hostName.toLatin1().constData());
@@ -129,8 +129,10 @@ QHostInfo QHostInfoPrivate::fromName(const QString &hostName)
             results.d->errorStr = QString::fromLocal8Bit(::gai_strerror(result));
         }
 
-        if (results.hostName().isEmpty())
+        if (results.hostName().isEmpty()) {
+            // hostname is not exactly valid with scope, internally it is handled tho
             results.d->hostName = address.toString();
+        }
         results.d->addrs.append(address);
 #if defined(QHOSTINFO_DEBUG)
         dumpHostResult(hostName, results);

@@ -324,11 +324,13 @@ QAbstractSocket::NetworkLayerProtocol QHostAddress::protocol() const
 
     For example, if the address is the IPv4 address 127.0.0.1, the
     returned string is "127.0.0.1". For IPv6 the string format will 
-    follow the RFC5952 recommendation.
+    follow the RFC5952 recommendation only if \a options includes
+    QHostAddress::RemoveScope.
 */
-QByteArray QHostAddress::toString() const
+QByteArray QHostAddress::toString(FormattingOptions options) const
 {
-    if (d->protocol == QAbstractSocket::IPv6Protocol && !d->scopeId.isEmpty()) {
+    if (!(options & QHostAddress::RemoveScope) &&
+        d->protocol == QAbstractSocket::IPv6Protocol && !d->scopeId.isEmpty()) {
         return d->ipString + addrscopeseparator + d->scopeId;
     }
     return d->ipString;
