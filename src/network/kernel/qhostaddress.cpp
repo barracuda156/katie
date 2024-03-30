@@ -102,8 +102,6 @@ QHostAddress::QHostAddress(const QByteArray &address)
 }
 
 /*!
-    \fn QHostAddress::QHostAddress(const sockaddr *sockaddr)
-
     Constructs an IPv4 or IPv6 address using the address specified by
     the native structure \a sockaddr.
 
@@ -259,34 +257,30 @@ bool QHostAddress::setAddress(const QByteArray &address)
 }
 
 /*!
-    \fn void QHostAddress::setAddress(const sockaddr *sockaddr)
-    \overload
-
     Sets the IPv4 or IPv6 address specified by the native structure \a
     sockaddr.  Returns true and sets the address if the address was
     successfully parsed; otherwise returns false.
 */
-void QHostAddress::setAddress(const struct sockaddr *sockaddr)
+bool QHostAddress::setAddress(const struct sockaddr *sockaddr)
 {
     if (!sockaddr) {
         clear();
-        return;
+        return false;
     }
     if (sockaddr->sa_family == AF_INET) {
         QSTACKARRAY(char, ntopbuffer, INET_ADDRSTRLEN + 1);
-        if (inet_ntop(AF_INET, &((sockaddr_in *)sockaddr)->sin_addr, ntopbuffer, INET_ADDRSTRLEN) != NULL) {
+        const sockaddr_in* si4 = (const sockaddr_in *)sockaddr;
+        if (inet_ntop(AF_INET, &si4->sin_addr, ntopbuffer, INET_ADDRSTRLEN) != NULL) {
             d->protocol = QAbstractSocket::IPv4Protocol;
             d->ipString = ntopbuffer;
             d->scopeId.clear();
-        } else {
-            clear();
+            return true;
         }
-        return;
     }
 #ifndef QT_NO_IPV6
     if (sockaddr->sa_family == AF_INET6) {
         QSTACKARRAY(char, ntopbuffer, INET6_ADDRSTRLEN + 1);
-        const sockaddr_in6* si6 = (sockaddr_in6 *)sockaddr;
+        const sockaddr_in6* si6 = (const sockaddr_in6 *)sockaddr;
         if (inet_ntop(AF_INET6, &(si6->sin6_addr), ntopbuffer, INET6_ADDRSTRLEN) != NULL) {
             d->protocol = QAbstractSocket::IPv6Protocol;
             d->ipString = ntopbuffer;
@@ -302,13 +296,12 @@ void QHostAddress::setAddress(const struct sockaddr *sockaddr)
                     d->scopeId = QByteArray::number(si6->sin6_scope_id);
                 }
             }
-        } else {
-            clear();
+            return true;
         }
-        return;
     }
 #endif
     clear();
+    return false;
 }
 
 /*!

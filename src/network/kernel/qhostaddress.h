@@ -61,7 +61,7 @@ public:
     QHostAddress &operator=(const QHostAddress &other);
     QHostAddress &operator=(const QByteArray &address);
 
-    void setAddress(const sockaddr *sockaddr);
+    bool setAddress(const sockaddr *sockaddr);
     bool setAddress(const QByteArray &address);
 
     QAbstractSocket::NetworkLayerProtocol protocol() const;
