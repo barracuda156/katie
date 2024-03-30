@@ -58,8 +58,7 @@ QHostAddressPrivate::QHostAddressPrivate()
     and QUdpSocket to connect to a host or to set up a server.
 
     A host address is set with setAddress(), and retrieved with
-    toIPv4Address(), toIPv6Address(), or toString(). You can check the
-    type with protocol().
+    toString(). You can check the type with protocol().
 
     \note Please note that QHostAddress does not do DNS lookups.
     QHostInfo is needed for that.
