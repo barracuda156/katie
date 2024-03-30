@@ -46,16 +46,6 @@
 
 QT_BEGIN_NAMESPACE
 
-static QString makeHwAddress(const uchar *data)
-{
-    QSTACKARRAY(char, snprintfbuf, 18);
-    ::snprintf(snprintfbuf, sizeof(snprintfbuf),
-        "%02hX:%02hX:%02hX:%02hX:%02hX:%02hX",
-        ushort(data[0]), ushort(data[1]), ushort(data[2]), ushort(data[3]), ushort(data[4]), ushort(data[5])
-    );
-    return QString::fromLatin1(snprintfbuf, sizeof(snprintfbuf) - 1);
-}
-
 QList<QNetworkInterfacePrivate *> QNetworkInterfacePrivate::scan()
 {
     QList<QNetworkInterfacePrivate *> interfaces;
@@ -125,7 +115,7 @@ QList<QNetworkInterfacePrivate *> QNetworkInterfacePrivate::scan()
             ::memcpy(req.ifr_name, ifiter->ifa_name, sizeof(req.ifr_name) - 1);
             // Get the HW address
             if (::ioctl(socket, SIOCGIFHWADDR, &req) >= 0) {
-                iface->hardwareAddress = makeHwAddress((uchar *)req.ifr_addr.sa_data);
+                iface->hardwareAddress = QHostAddress(&req.ifr_addr).toString(QHostAddress::RemoveScope);
             }
         }
 #endif // SIOCGIFHWADDR
