@@ -555,7 +555,7 @@ bool QApplicationPrivate::x11_apply_settings()
 
     QPalette pal = qt_guiPlatformPlugin()->palette();
     if (pal != QPalette()) {
-        QApplicationPrivate::setSystemPalette(pal);
+        QApplication::setPalette(pal);
     }
 
     QString stylename;
@@ -1112,22 +1112,6 @@ void qt_init(QApplicationPrivate *priv, Display *display,
     qt_x11Data->compositingManagerRunning = XGetSelectionOwner(qt_x11Data->display, qt_x11Data->compositorAtom);
 
     QApplicationPrivate::x11_apply_settings();
-
-    // be smart about the size of the default font. most X servers have font
-    // 12 point available at 2 resolutions:
-    //     75dpi (12 pixels) and 100dpi (17 pixels).
-    // At 95 DPI, a 12 point font should be 16 pixels tall - in which case a 17
-    // pixel font is a closer match than a 12 pixel font
-    int ptsz = (qt_x11Data->use_xrender
-                ? 9
-                : (int) (((QX11Info::appDpiY() >= 95 ? 17. : 12.) *
-                            72. / (float) QX11Info::appDpiY()) + 0.5));
-
-    if (!QApplicationPrivate::sys_font) {
-        // no font from settings, provide a fallback
-        QFont f(QFont::lastResortFamily(), ptsz);
-        QApplicationPrivate::setSystemFont(f);
-    }
 }
 
 /*****************************************************************************

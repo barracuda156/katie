@@ -132,14 +132,10 @@ public:
     static QWidgetList *popupWidgets;
     static QStyle *app_style;
     static QPalette *app_pal;
-    static QPalette *sys_pal;
-    static QPalette *set_pal;
 
 private:
     static QFont *app_font; // private for a reason! Always use QApplication::font() instead!
 public:
-    static QFont *sys_font;
-    static QFont *set_font;
     static QWidget *focus_widget;
     static QWidget *hidden_focus_widget;
     static QWidget *active_window;
@@ -154,10 +150,6 @@ public:
     static bool animate_ui;
     static bool fade_menu;
     static bool fade_tooltip;
-
-    static void setSystemPalette(const QPalette &pal);
-    static void setPalette_helper(const QPalette &palette, const char* className, bool clearWidgetPaletteHash);
-    static void setSystemFont(const QFont &font);
 
 #if defined(Q_WS_X11)
     static void applyX11SpecificCommandLineArguments(QWidget *main_widget);

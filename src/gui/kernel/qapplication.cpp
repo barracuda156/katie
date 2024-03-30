@@ -299,13 +299,9 @@ QString QApplicationPrivate::styleSheet;           // default application styles
 QPointer<QWidget> QApplicationPrivate::leaveAfterRelease = 0;
 
 QPalette *QApplicationPrivate::app_pal = 0;        // default application palette
-QPalette *QApplicationPrivate::sys_pal = 0;        // default system palette
-QPalette *QApplicationPrivate::set_pal = 0;        // default palette set by programmer
 
 Q_GLOBAL_STATIC(QMutex, applicationFontMutex)
 QFont *QApplicationPrivate::app_font = 0;        // default application font
-QFont *QApplicationPrivate::sys_font = 0;        // default system font
-QFont *QApplicationPrivate::set_font = 0;        // default font set by programmer
 
 QIcon *QApplicationPrivate::app_icon = 0;
 QWidget *QApplicationPrivate::focus_widget = 0;        // has keyboard input focus
@@ -660,10 +656,6 @@ QApplication::~QApplication()
 
     delete QApplicationPrivate::app_pal;
     QApplicationPrivate::app_pal = 0;
-    delete QApplicationPrivate::sys_pal;
-    QApplicationPrivate::sys_pal = 0;
-    delete QApplicationPrivate::set_pal;
-    QApplicationPrivate::set_pal = 0;
     app_palettes()->clear();
 
     {
@@ -671,10 +663,6 @@ QApplication::~QApplication()
         delete QApplicationPrivate::app_font;
         QApplicationPrivate::app_font = 0;
     }
-    delete QApplicationPrivate::sys_font;
-    QApplicationPrivate::sys_font = 0;
-    delete QApplicationPrivate::set_font;
-    QApplicationPrivate::set_font = 0;
     app_fonts()->clear();
 
     delete QApplicationPrivate::app_style;
@@ -867,10 +855,7 @@ QStyle *QApplication::style()
     // take ownership of the style
     QApplicationPrivate::app_style->setParent(qApp);
 
-    if (!QApplicationPrivate::sys_pal)
-        QApplicationPrivate::setSystemPalette(QApplicationPrivate::app_style->standardPalette());
-    if (QApplicationPrivate::set_pal) // repolish set palette with the new style
-        QApplication::setPalette(*QApplicationPrivate::set_pal);
+    QApplication::setPalette(QApplicationPrivate::app_style->standardPalette());
 
 #ifndef QT_NO_STYLE_STYLESHEET
     if (!QApplicationPrivate::styleSheet.isEmpty()) {
@@ -937,17 +922,8 @@ void QApplication::setStyle(QStyle *style)
         QApplicationPrivate::app_style = style;
     QApplicationPrivate::app_style->setParent(qApp); // take ownership
 
-    // take care of possible palette requirements of certain gui
-    // styles. Do it before polishing the application since the style
-    // might call QApplication::setPalette() itself
-    if (QApplicationPrivate::set_pal) {
-        QApplication::setPalette(*QApplicationPrivate::set_pal);
-    } else if (QApplicationPrivate::sys_pal) {
-        QApplicationPrivate::setPalette_helper(*QApplicationPrivate::sys_pal, /*className=*/0, /*clearWidgetPaletteHash=*/false);
-    } else if (!QApplicationPrivate::sys_pal) {
-        // Initialize the sys_pal if it hasn't happened yet...
-        QApplicationPrivate::setSystemPalette(QApplicationPrivate::app_style->standardPalette());
-    }
+    // Initialize the sys_pal if it hasn't happened yet...
+    QApplication::setPalette(QApplicationPrivate::app_style->standardPalette());
 
     // initialize the application with the new style
     QApplicationPrivate::app_style->polish(qApp);
@@ -1099,7 +1075,28 @@ QPalette QApplication::palette(const char *className)
     return *QApplicationPrivate::app_pal;
 }
 
-void QApplicationPrivate::setPalette_helper(const QPalette &palette, const char* className, bool clearWidgetPaletteHash)
+/*!
+    Changes the default application palette to \a palette.
+
+    If \a className is passed, the change applies only to widgets that inherit
+    \a className (as reported by QObject::inherits()). If \a className is left
+    0, the change affects all widgets, thus overriding any previously set class
+    specific palettes.
+
+    The palette may be changed according to the current GUI style in
+    QStyle::polish().
+
+    \warning Do not use this function in conjunction with \l{Qt Style Sheets}.
+    When using style sheets, the palette of a widget can be customized using
+    the "color", "background-color", "selection-color",
+    "selection-background-color" and "alternate-background-color".
+
+    \note Some styles do not use the palette for all drawing.
+
+    \sa QWidget::setPalette(), palette(), QStyle::polish()
+*/
+
+void QApplication::setPalette(const QPalette &palette, const char* className)
 {
     QPalette pal = palette;
 
@@ -1117,8 +1114,7 @@ void QApplicationPrivate::setPalette_helper(const QPalette &palette, const char*
             *QApplicationPrivate::app_pal = pal;
         if (hash && hash->size()) {
             all = true;
-            if (clearWidgetPaletteHash)
-                hash->clear();
+            hash->clear();
         }
     } else if (hash) {
         hash->insert(className, pal);
@@ -1143,52 +1139,6 @@ void QApplicationPrivate::setPalette_helper(const QPalette &palette, const char*
         }
 #endif //QT_NO_GRAPHICSVIEW
     }
-    if (!className && (!QApplicationPrivate::sys_pal || !palette.isCopyOf(*QApplicationPrivate::sys_pal))) {
-        if (!QApplicationPrivate::set_pal)
-            QApplicationPrivate::set_pal = new QPalette(palette);
-        else
-            *QApplicationPrivate::set_pal = palette;
-    }
-}
-
-/*!
-    Changes the default application palette to \a palette.
-
-    If \a className is passed, the change applies only to widgets that inherit
-    \a className (as reported by QObject::inherits()). If \a className is left
-    0, the change affects all widgets, thus overriding any previously set class
-    specific palettes.
-
-    The palette may be changed according to the current GUI style in
-    QStyle::polish().
-
-    \warning Do not use this function in conjunction with \l{Qt Style Sheets}.
-    When using style sheets, the palette of a widget can be customized using
-    the "color", "background-color", "selection-color",
-    "selection-background-color" and "alternate-background-color".
-
-    \note Some styles do not use the palette for all drawing.
-
-    \sa QWidget::setPalette(), palette(), QStyle::polish()
-*/
-
-void QApplication::setPalette(const QPalette &palette, const char* className)
-{
-    QApplicationPrivate::setPalette_helper(palette, className, /*clearWidgetPaletteHash=*/ true);
-}
-
-
-
-void QApplicationPrivate::setSystemPalette(const QPalette &pal)
-{
-    if (!sys_pal)
-        sys_pal = new QPalette(pal);
-    else
-        *sys_pal = pal;
-
-
-    if (!QApplicationPrivate::set_pal)
-        QApplication::setPalette(*sys_pal);
 }
 
 /*!
@@ -1200,7 +1150,18 @@ QFont QApplication::font()
 {
     QMutexLocker locker(applicationFontMutex());
     if (!QApplicationPrivate::app_font) {
-        QApplicationPrivate::app_font = new QFont(QFont::lastResortFamily());
+        // be smart about the size of the default font. most X servers have font
+        // 12 point available at 2 resolutions:
+        //     75dpi (12 pixels) and 100dpi (17 pixels).
+        // At 95 DPI, a 12 point font should be 16 pixels tall - in which case a 17
+        // pixel font is a closer match than a 12 pixel font
+        int ptsz = 0;
+        if (qt_x11Data && qt_x11Data->use_xrender) {
+            ptsz = 9;
+        } else {
+            ptsz = qRound(((QX11Info::appDpiY() >= 95 ? 17.0 : 12.0) * 72.0 / (float) QX11Info::appDpiY()) + 0.5);
+        }
+        QApplicationPrivate::app_font = new QFont(QFont::lastResortFamily(), ptsz);
     }
     return *QApplicationPrivate::app_font;
 }
@@ -1303,25 +1264,6 @@ void QApplication::setFont(const QFont &font, const char *className)
         }
 #endif //QT_NO_GRAPHICSVIEW
     }
-    if (!className && (!QApplicationPrivate::sys_font || !font.isCopyOf(*QApplicationPrivate::sys_font))) {
-        if (!QApplicationPrivate::set_font)
-            QApplicationPrivate::set_font = new QFont(font);
-        else
-            *QApplicationPrivate::set_font = font;
-    }
-}
-
-/*! \internal
-*/
-void QApplicationPrivate::setSystemFont(const QFont &font)
-{
-     if (!sys_font)
-        sys_font = new QFont(font);
-    else
-        *sys_font = font;
-
-    if (!QApplicationPrivate::set_font)
-        QApplication::setFont(*sys_font);
 }
 
 /*! \internal
