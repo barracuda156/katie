@@ -22,15 +22,13 @@
 #ifndef QNETWORKINTERFACE_H
 #define QNETWORKINTERFACE_H
 
+#include <QtCore/qlist.h>
 #include <QtCore/qshareddata.h>
-#include <QtCore/qscopedpointer.h>
 #include <QtNetwork/qhostaddress.h>
 
 #ifndef QT_NO_NETWORKINTERFACE
 
 QT_BEGIN_NAMESPACE
-
-template<typename T> class QList;
 
 class QNetworkAddressEntryPrivate;
 class QNetworkInterfacePrivate;
@@ -42,6 +40,7 @@ public:
     QNetworkAddressEntry(const QNetworkAddressEntry &other);
     QNetworkAddressEntry &operator=(const QNetworkAddressEntry &other);
     ~QNetworkAddressEntry();
+
     bool operator==(const QNetworkAddressEntry &other) const;
     inline bool operator!=(const QNetworkAddressEntry &other) const
     { return !(*this == other); }
@@ -53,7 +52,7 @@ public:
 private:
     friend QNetworkInterfacePrivate;
 
-    QScopedPointer<QNetworkAddressEntryPrivate> d;
+    QNetworkAddressEntryPrivate *d;
 };
 
 class Q_NETWORK_EXPORT QNetworkInterface

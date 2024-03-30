@@ -51,7 +51,7 @@ QT_BEGIN_NAMESPACE
     Constructs an empty QNetworkAddressEntry object.
 */
 QNetworkAddressEntry::QNetworkAddressEntry()
-    : d(new QNetworkAddressEntryPrivate)
+    : d(new QNetworkAddressEntryPrivate())
 {
 }
 
@@ -60,8 +60,11 @@ QNetworkAddressEntry::QNetworkAddressEntry()
     object \a other.
 */
 QNetworkAddressEntry::QNetworkAddressEntry(const QNetworkAddressEntry &other)
-    : d(new QNetworkAddressEntryPrivate(*other.d.data()))
+    : d(new QNetworkAddressEntryPrivate())
 {
+    d->address = other.d->address;
+    d->netmask = other.d->netmask;
+    d->broadcast = other.d->broadcast;
 }
 
 /*!
@@ -69,7 +72,9 @@ QNetworkAddressEntry::QNetworkAddressEntry(const QNetworkAddressEntry &other)
 */
 QNetworkAddressEntry &QNetworkAddressEntry::operator=(const QNetworkAddressEntry &other)
 {
-    *d.data() = *other.d.data();
+    d->address = other.d->address;
+    d->netmask = other.d->netmask;
+    d->broadcast = other.d->broadcast;
     return *this;
 }
 
@@ -78,6 +83,7 @@ QNetworkAddressEntry &QNetworkAddressEntry::operator=(const QNetworkAddressEntry
 */
 QNetworkAddressEntry::~QNetworkAddressEntry()
 {
+    delete d;
 }
 
 /*!
@@ -86,11 +92,11 @@ QNetworkAddressEntry::~QNetworkAddressEntry()
 */
 bool QNetworkAddressEntry::operator==(const QNetworkAddressEntry &other) const
 {
-    if (d == other.d) return true;
-    if (!d || !other.d) return false;
-    return d->address == other.d->address &&
+    return (
+        d->address == other.d->address &&
         d->netmask == other.d->netmask &&
-        d->broadcast == other.d->broadcast;
+        d->broadcast == other.d->broadcast
+    );
 }
 
 /*!

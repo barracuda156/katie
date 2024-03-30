@@ -55,17 +55,15 @@ public:
 class QNetworkInterfacePrivate: public QSharedData
 {
 public:
-    QNetworkInterfacePrivate() : index(0), flags(0)
-    { }
-    ~QNetworkInterfacePrivate()
-    { }
+    QNetworkInterfacePrivate()
+        : index(0), flags(0)
+    {
+    }
 
     int index; // interface index, if known
     QNetworkInterface::InterfaceFlags flags;
-
     QString name;
     QString hardwareAddress;
-
     QList<QNetworkAddressEntry> addressEntries;
 
     static QList<QNetworkInterfacePrivate *> scan();
