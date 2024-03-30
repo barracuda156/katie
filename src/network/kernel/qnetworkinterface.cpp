@@ -375,23 +375,6 @@ QList<QHostAddress> QNetworkInterface::allAddresses()
 }
 
 #ifndef QT_NO_DEBUG_STREAM
-static inline QDebug flagsDebug(QDebug debug, QNetworkInterface::InterfaceFlags flags)
-{
-    if (flags & QNetworkInterface::IsUp)
-        debug.nospace() << "IsUp ";
-    if (flags & QNetworkInterface::IsRunning)
-        debug.nospace() << "IsRunning ";
-    if (flags & QNetworkInterface::CanBroadcast)
-        debug.nospace() << "CanBroadcast ";
-    if (flags & QNetworkInterface::IsLoopBack)
-        debug.nospace() << "IsLoopBack ";
-    if (flags & QNetworkInterface::IsPointToPoint)
-        debug.nospace() << "IsPointToPoint ";
-    if (flags & QNetworkInterface::CanMulticast)
-        debug.nospace() << "CanMulticast ";
-    return debug.nospace();
-}
-
 static inline QDebug operator<<(QDebug debug, const QNetworkAddressEntry &entry)
 {
     debug.nospace() << "(address = " << entry.ip();
@@ -408,7 +391,19 @@ QDebug operator<<(QDebug debug, const QNetworkInterface &networkInterface)
     debug.nospace() << "QNetworkInterface(name = " << networkInterface.name()
                     << ", hardware address = " << networkInterface.hardwareAddress()
                     << ", flags = ";
-    flagsDebug(debug, networkInterface.flags());
+    const QNetworkInterface::InterfaceFlags flags = networkInterface.flags();
+    if (flags & QNetworkInterface::IsUp)
+        debug.nospace() << "IsUp ";
+    if (flags & QNetworkInterface::IsRunning)
+        debug.nospace() << "IsRunning ";
+    if (flags & QNetworkInterface::CanBroadcast)
+        debug.nospace() << "CanBroadcast ";
+    if (flags & QNetworkInterface::IsLoopBack)
+        debug.nospace() << "IsLoopBack ";
+    if (flags & QNetworkInterface::IsPointToPoint)
+        debug.nospace() << "IsPointToPoint ";
+    if (flags & QNetworkInterface::CanMulticast)
+        debug.nospace() << "CanMulticast ";
     debug.nospace() << ", entries = " << networkInterface.addressEntries() << ")\n";
     return debug.space();
 }
