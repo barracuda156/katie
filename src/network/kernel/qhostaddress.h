@@ -61,6 +61,9 @@ public:
     QHostAddress &operator=(const QHostAddress &other);
     QHostAddress &operator=(const QByteArray &address);
 
+    bool isNull() const;
+    void clear();
+
     bool setAddress(const sockaddr *sockaddr);
     bool setAddress(const QByteArray &address);
 
@@ -74,8 +77,6 @@ public:
     bool operator ==(const QHostAddress &address) const;
     inline bool operator !=(const QHostAddress &address) const
     { return !operator==(address); }
-    bool isNull() const;
-    void clear();
 
 private:
     QScopedPointer<QHostAddressPrivate> d;

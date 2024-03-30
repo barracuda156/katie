@@ -96,18 +96,6 @@ QHostAddress::QHostAddress()
 }
 
 /*!
-    Constructs an IPv4 or IPv6 address based on the string \a address
-    (e.g., "127.0.0.1").
-
-    \sa setAddress()
-*/
-QHostAddress::QHostAddress(const QByteArray &address)
-    : d(new QHostAddressPrivate())
-{
-    setAddress(address);
-}
-
-/*!
     Constructs an IPv4 or IPv6 address using the address specified by
     the native structure \a sockaddr.
 
@@ -117,6 +105,18 @@ QHostAddress::QHostAddress(const struct sockaddr *sockaddr)
     : d(new QHostAddressPrivate())
 {
     setAddress(sockaddr);
+}
+
+/*!
+    Constructs an IPv4 or IPv6 address based on the string \a address
+    (e.g., "127.0.0.1").
+
+    \sa setAddress()
+*/
+QHostAddress::QHostAddress(const QByteArray &address)
+    : d(new QHostAddressPrivate())
+{
+    setAddress(address);
 }
 
 /*!
@@ -195,12 +195,14 @@ QHostAddress &QHostAddress::operator=(const QByteArray &address)
 }
 
 /*!
-    \fn bool QHostAddress::operator!=(const QHostAddress &other) const
-    \since 4.2
-
-    Returns true if this host address is not the same as the \a other
-    address given; otherwise returns false.
+    Returns true if this host address is null (INADDR_ANY or in6addr_any).
+    The default constructor creates a null address, and that address is
+    not valid for any host or interface.
 */
+bool QHostAddress::isNull() const
+{
+    return (d->protocol == QAbstractSocket::UnknownNetworkLayerProtocol);
+}
 
 /*!
     Sets the host address to 0.0.0.0.
@@ -210,49 +212,6 @@ void QHostAddress::clear()
     d->protocol = QAbstractSocket::UnknownNetworkLayerProtocol;
     d->ipString.clear();
     d->scopeId.clear();
-}
-
-/*!
-    \overload
-
-    Sets the IPv4 or IPv6 address specified by the string
-    representation specified by \a address (e.g. "127.0.0.1").
-    Returns true and sets the address if the address was successfully
-    parsed; otherwise returns false.
-*/
-bool QHostAddress::setAddress(const QByteArray &address)
-{
-    // compat
-    QByteArray scope;
-    QByteArray fixedaddress(address.trimmed());
-    if (fixedaddress.contains(':')) {
-        const int indexofpercent = fixedaddress.indexOf(addrscopeseparator);
-        if (indexofpercent >= 0) {
-            scope = fixedaddress.mid(indexofpercent + 1, fixedaddress.size() - indexofpercent - 1);
-            fixedaddress = fixedaddress.mid(0, indexofpercent);
-        }
-    }
-    int result = 0;
-#ifndef QT_NO_IPV6
-    struct in6_addr inaddripv6;
-    result = inet_pton(AF_INET6, fixedaddress.constData(), &inaddripv6);
-    if (result == 1) {
-        d->protocol = QAbstractSocket::IPv6Protocol;
-        d->ipString = fixedaddress;
-        d->scopeId = scope;
-        return true;
-    }
-#endif
-    struct in_addr inaddripv4;
-    result = inet_pton(AF_INET, fixedaddress.constData(), &inaddripv4);
-    if (result == 1) {
-        d->protocol = QAbstractSocket::IPv4Protocol;
-        d->ipString = fixedaddress;
-        d->scopeId.clear();
-        return true;
-    }
-    clear();
-    return false;
 }
 
 /*!
@@ -299,6 +258,49 @@ bool QHostAddress::setAddress(const struct sockaddr *sockaddr)
         }
     }
 #endif
+    clear();
+    return false;
+}
+
+/*!
+    \overload
+
+    Sets the IPv4 or IPv6 address specified by the string
+    representation specified by \a address (e.g. "127.0.0.1").
+    Returns true and sets the address if the address was successfully
+    parsed; otherwise returns false.
+*/
+bool QHostAddress::setAddress(const QByteArray &address)
+{
+    // compat
+    QByteArray scope;
+    QByteArray fixedaddress(address.trimmed());
+    if (fixedaddress.contains(':')) {
+        const int indexofpercent = fixedaddress.indexOf(addrscopeseparator);
+        if (indexofpercent >= 0) {
+            scope = fixedaddress.mid(indexofpercent + 1, fixedaddress.size() - indexofpercent - 1);
+            fixedaddress = fixedaddress.mid(0, indexofpercent);
+        }
+    }
+    int result = 0;
+#ifndef QT_NO_IPV6
+    struct in6_addr inaddripv6;
+    result = inet_pton(AF_INET6, fixedaddress.constData(), &inaddripv6);
+    if (result == 1) {
+        d->protocol = QAbstractSocket::IPv6Protocol;
+        d->ipString = fixedaddress;
+        d->scopeId = scope;
+        return true;
+    }
+#endif
+    struct in_addr inaddripv4;
+    result = inet_pton(AF_INET, fixedaddress.constData(), &inaddripv4);
+    if (result == 1) {
+        d->protocol = QAbstractSocket::IPv4Protocol;
+        d->ipString = fixedaddress;
+        d->scopeId.clear();
+        return true;
+    }
     clear();
     return false;
 }
@@ -404,14 +406,12 @@ bool QHostAddress::operator==(const QHostAddress &other) const
 }
 
 /*!
-    Returns true if this host address is null (INADDR_ANY or in6addr_any).
-    The default constructor creates a null address, and that address is
-    not valid for any host or interface.
+    \fn bool QHostAddress::operator!=(const QHostAddress &other) const
+    \since 4.2
+
+    Returns true if this host address is not the same as the \a other
+    address given; otherwise returns false.
 */
-bool QHostAddress::isNull() const
-{
-    return (d->protocol == QAbstractSocket::UnknownNetworkLayerProtocol);
-}
 
 #ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug d, const QHostAddress &address)
@@ -460,23 +460,18 @@ QDataStream &operator<<(QDataStream &out, const QHostAddress &address)
 */
 QDataStream &operator>>(QDataStream &in, QHostAddress &address)
 {
-    qint8 prot;
+    qint8 prot = QAbstractSocket::UnknownNetworkLayerProtocol;
     in >> prot;
     switch (QAbstractSocket::NetworkLayerProtocol(prot)) {
         case QAbstractSocket::UnknownNetworkLayerProtocol: {
             address.clear();
             break;
         }
-        case QAbstractSocket::IPv4Protocol: {
-            QByteArray ipv4;
-            in >> ipv4;
-            address.setAddress(ipv4);
-            break;
-        }
+        case QAbstractSocket::IPv4Protocol:
         case QAbstractSocket::IPv6Protocol: {
-            QByteArray ipv6;
-            in >> ipv6;
-            address.setAddress(ipv6);
+            QByteArray ip;
+            in >> ip;
+            address.setAddress(ip);
             break;
         }
         default: {
@@ -489,5 +484,3 @@ QDataStream &operator>>(QDataStream &in, QHostAddress &address)
 #endif //QT_NO_DATASTREAM
 
 QT_END_NAMESPACE
-
-
