@@ -71,7 +71,6 @@ class QHostInfoCache
 {
 public:
     QHostInfoCache();
-    const int max_age; // seconds
 
     QHostInfo get(const QString &name, bool *valid) const;
     void put(const QString &name, const QHostInfo &info);
