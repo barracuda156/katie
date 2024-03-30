@@ -292,6 +292,36 @@ QPixmap &QPixmap::operator=(const QPixmap &pixmap)
 */
 
 /*!
+    Returns true if this image and the given \a image have the same
+    contents; otherwise returns false.
+
+    The comparison can be slow, unless there is some obvious
+    difference (e.g. different size or format), in which case the
+    function will return quickly.
+
+    \sa operator=()
+*/
+bool QPixmap::operator==(const QPixmap &pixmap) const
+{
+    return toImage() == pixmap.toImage();
+}
+
+/*!
+    Returns true if this pixmap and the given \a pixmap have different
+    contents; otherwise returns false.
+
+    The comparison can be slow, unless there is some obvious
+    difference, such as different widths, in which case the function
+    will return quickly.
+
+    \sa operator=()
+*/
+bool QPixmap::operator!=(const QPixmap &pixmap) const
+{
+    return !(*this == pixmap);
+}
+
+/*!
    Returns the pixmap as a QVariant.
 */
 QPixmap::operator QVariant() const

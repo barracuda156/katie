@@ -33,7 +33,6 @@
 #include <QtTest/qtestmouse.h>
 #include <QtTest/qtestkeyboard.h>
 #include <QtGui/qicon.h>
-#include <QtGui/qpixmap.h>
 
 
 QT_BEGIN_NAMESPACE
@@ -48,13 +47,6 @@ inline bool qCompare(QIcon const &t1, QIcon const &t2, const char *actual, const
     QTEST_ASSERT(sizeof(QIcon) == QT_POINTER_SIZE);
     return qCompare<void *>(*reinterpret_cast<void * const *>(&t1),
                    *reinterpret_cast<void * const *>(&t2), actual, expected, file, line);
-}
-
-template<>
-inline bool qCompare(QPixmap const &t1, QPixmap const &t2, const char *actual, const char *expected,
-                    const char *file, int line)
-{
-    return qCompare(t1.toImage(), t2.toImage(), actual, expected, file, line);
 }
 
 }

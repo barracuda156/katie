@@ -374,7 +374,7 @@ private:
     void emitFontFamily(const QString &family);
 
     void emitBackgroundAttribute(const QTextFormat &format);
-    QString findUrlForImage(const QTextDocument *doc, qint64 cacheKey, bool isPixmap);
+    QString findUrlForImage(const QTextDocument *doc, const QBrush &brush);
 
     QString html;
     QTextCharFormat defaultCharFormat;

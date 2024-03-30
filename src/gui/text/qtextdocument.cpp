@@ -2490,28 +2490,29 @@ void QTextHtmlExporter::emitBlock(const QTextBlock &block)
 
 extern bool qHasPixmapTexture(const QBrush& brush);
 
-QString QTextHtmlExporter::findUrlForImage(const QTextDocument *doc, qint64 cacheKey, bool isPixmap)
+QString QTextHtmlExporter::findUrlForImage(const QTextDocument *doc, const QBrush &brush)
 {
     QString url;
     if (!doc)
         return url;
 
     if (QTextDocument *parent = qobject_cast<QTextDocument *>(doc->parent()))
-        return findUrlForImage(parent, cacheKey, isPixmap);
+        return findUrlForImage(parent, brush);
 
     if (doc && doc->docHandle()) {
+        const bool isPixmap = qHasPixmapTexture(brush);
         QTextDocumentPrivate *priv = doc->docHandle();
         QMap<QUrl, QVariant>::const_iterator it = priv->cachedResources.constBegin();
         for (; it != priv->cachedResources.constEnd(); ++it) {
 
             const QVariant &v = it.value();
             if (v.type() == QVariant::Image && !isPixmap) {
-                if (qvariant_cast<QImage>(v).cacheKey() == cacheKey)
+                if (qvariant_cast<QImage>(v) == brush.textureImage())
                     break;
             }
 
             if (v.type() == QVariant::Pixmap && isPixmap) {
-                if (qvariant_cast<QPixmap>(v).cacheKey() == cacheKey)
+                if (qvariant_cast<QPixmap>(v) == brush.texture())
                     break;
             }
         }
@@ -2541,10 +2542,7 @@ void QTextHtmlExporter::emitBackgroundAttribute(const QTextFormat &format)
         if (brush.style() == Qt::SolidPattern) {
             emitAttribute("bgcolor", brush.color().name());
         } else if (brush.style() == Qt::TexturePattern) {
-            const bool isPixmap = qHasPixmapTexture(brush);
-            const qint64 cacheKey = isPixmap ? brush.texture().cacheKey() : brush.textureImage().cacheKey();
-
-            const QString url = findUrlForImage(doc, cacheKey, isPixmap);
+            const QString url = findUrlForImage(doc, brush);
 
             if (!url.isEmpty())
                 emitAttribute("background", url);

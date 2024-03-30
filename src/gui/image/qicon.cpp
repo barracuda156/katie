@@ -241,8 +241,9 @@ QPixmap QPixmapIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::St
             QStyleOption opt(0);
             opt.palette = QApplication::palette();
             QPixmap active = QApplication::style()->generatedIconPixmap(QIcon::Active, pm, &opt);
-            if (pm.cacheKey() == active.cacheKey())
+            if (pm == active) {
                 return pm;
+            }
         }
     }
 

@@ -113,8 +113,7 @@ static bool compare(const QVariantPrivate *a, const QVariantPrivate *b)
         return v_cast<QCursor>(a)->shape() == v_cast<QCursor>(b)->shape();
 #endif
     case QVariant::Bitmap:
-        return v_cast<QBitmap>(a)->cacheKey()
-            == v_cast<QBitmap>(b)->cacheKey();
+        return *v_cast<QBitmap>(a) == *v_cast<QBitmap>(b);
     case QVariant::Polygon:
         return *v_cast<QPolygon>(a) == *v_cast<QPolygon>(b);
     case QVariant::Region:
@@ -122,7 +121,7 @@ static bool compare(const QVariantPrivate *a, const QVariantPrivate *b)
     case QVariant::Font:
         return *v_cast<QFont>(a) == *v_cast<QFont>(b);
     case QVariant::Pixmap:
-        return v_cast<QPixmap>(a)->cacheKey() == v_cast<QPixmap>(b)->cacheKey();
+        return *v_cast<QPixmap>(a) == *v_cast<QPixmap>(b);
     case QVariant::Image:
         return *v_cast<QImage>(a) == *v_cast<QImage>(b);
     case QVariant::Brush:

@@ -857,9 +857,6 @@ void tst_QDataStream::stream_QBrush_data()
 
 void tst_QDataStream::stream_QBrush()
 {
-    if (QString(QTest::currentDataTag()).endsWith("6"))
-        QSKIP("Custom brushes don't seem to be supported with QDataStream", SkipSingle);
-
     STREAM_IMPL(QBrush);
 }
 

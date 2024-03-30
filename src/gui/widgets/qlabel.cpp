@@ -303,7 +303,7 @@ void QLabel::clear()
 void QLabel::setPixmap(const QPixmap &pixmap)
 {
     Q_D(QLabel);
-    if (!d->pixmap || d->pixmap->cacheKey() != pixmap.cacheKey()) {
+    if (!d->pixmap || *d->pixmap != pixmap) {
         d->clearContents();
         d->pixmap = new QPixmap(pixmap);
     }
