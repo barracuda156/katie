@@ -116,8 +116,9 @@ void tst_QHostAddress::constructor_QByteArray()
         QVERIFY(hostAddr.isNull() != ok);
     }
 
-    if (ok)
-        QTEST(hostAddr.toString(), resAddr);
+    if (ok) {
+        QCOMPARE(hostAddr.toString(), resAddr);
+    }
 
     if ( protocol == 4 ) {
         QVERIFY( hostAddr.protocol() == QAbstractSocket::IPv4Protocol || hostAddr.protocol() == QAbstractSocket::UnknownNetworkLayerProtocol );
@@ -139,67 +140,67 @@ void tst_QHostAddress::setAddress_QByteArray_data()
     QTest::addColumn<int>("protocol"); // 4: IPv4, 6: IPv6, other: undefined
 
     // next fill it with data
-    QTest::newRow("ip4_00")  << QByteArray("127.0.0.1") << (bool)true << QByteArray("127.0.0.1") << 4;
-    QTest::newRow("ip4_01")  << QByteArray("255.3.2.1") << (bool)true << QByteArray("255.3.2.1") << 4;
-    QTest::newRow("ip4_03")  << QByteArray(" 255.3.2.1") << (bool)true << QByteArray("255.3.2.1") << 4;
-    QTest::newRow("ip4_04")  << QByteArray("255.3.2.1\r ") << (bool)true << QByteArray("255.3.2.1") << 4;
-    QTest::newRow("ip4_05")  << QByteArray("0.0.0.0") << (bool)true << QByteArray("0.0.0.0") << 4;
+    QTest::newRow("ip4_00")  << QByteArray("127.0.0.1") << true << QByteArray("127.0.0.1") << 4;
+    QTest::newRow("ip4_01")  << QByteArray("255.3.2.1") << true << QByteArray("255.3.2.1") << 4;
+    QTest::newRow("ip4_03")  << QByteArray(" 255.3.2.1") << true << QByteArray("255.3.2.1") << 4;
+    QTest::newRow("ip4_04")  << QByteArray("255.3.2.1\r ") << true << QByteArray("255.3.2.1") << 4;
+    QTest::newRow("ip4_05")  << QByteArray("0.0.0.0") << true << QByteArray("0.0.0.0") << 4;
 
     // for the format of IPv6 addresses see also RFC 5952
-    QTest::newRow("ip6_00")  << QByteArray("FEDC:BA98:7654:3210:FEDC:BA98:7654:3210") << (bool)true << QByteArray("FEDC:BA98:7654:3210:FEDC:BA98:7654:3210") << 6;
-    QTest::newRow("ip6_01")  << QByteArray("1080:0000:0000:0000:0008:0800:200C:417A") << (bool)true << QByteArray("1080::8:800:200C:417A") << 6;
-    QTest::newRow("ip6_02")  << QByteArray("1080:0:0:0:8:800:200C:417A") << (bool)true << QByteArray("1080::8:800:200C:417A") << 6;
-    QTest::newRow("ip6_03")  << QByteArray("1080::8:800:200C:417A") << (bool)true << QByteArray("1080::8:800:200C:417A") << 6;
-    QTest::newRow("ip6_04")  << QByteArray("FF01::43") << (bool)true << QByteArray("FF01::43") << 6;
-    QTest::newRow("ip6_05")  << QByteArray("::1") << (bool)true << QByteArray("::1") << 6;
-    QTest::newRow("ip6_06")  << QByteArray("1::") << (bool)true << QByteArray("1::") << 6;
-    QTest::newRow("ip6_07")  << QByteArray("::") << (bool)true << QByteArray("::") << 6;
-    QTest::newRow("ip6_08")  << QByteArray("0:0:0:0:0:0:13.1.68.3") << (bool)true << QByteArray("::D01:4403") << 6;
-    QTest::newRow("ip6_09")  << QByteArray("::13.1.68.3") << (bool)true <<  QByteArray("::D01:4403") << 6;
-    QTest::newRow("ip6_10")  << QByteArray("0:0:0:0:0:FFFF:129.144.52.38") << (bool)true << QByteArray("::FFFF:8190:3426") << 6;
-    QTest::newRow("ip6_11")  << QByteArray("::FFFF:129.144.52.38") << (bool)true << QByteArray("::FFFF:8190:3426") << 6;
-    QTest::newRow("ip6_12")  << QByteArray("1::FFFF:129.144.52.38") << (bool)true << QByteArray("1::FFFF:8190:3426") << 6;
-    QTest::newRow("ip6_13")  << QByteArray("A:B::D:E") << (bool)true << QByteArray("A:B::D:E") << 6;
-    QTest::newRow("ip6_14")  << QByteArray("1080:0:1:0:8:800:200C:417A") << (bool)true << QByteArray("1080:0:1:0:8:800:200C:417A") << 6;
-    QTest::newRow("ip6_15")  << QByteArray("1080:0:1:0:8:800:200C:0") << (bool)true << QByteArray("1080:0:1:0:8:800:200C:0") << 6;
-    QTest::newRow("ip6_16")  << QByteArray("1080:0:1:0:8:800:0:0") << (bool)true << QByteArray("1080:0:1:0:8:800::") << 6;
-    QTest::newRow("ip6_17")  << QByteArray("1080:0:0:0:8:800:0:0") << (bool)true << QByteArray("1080::8:800:0:0") << 6;
-    QTest::newRow("ip6_18")  << QByteArray("0:1:1:1:8:800:0:0") << (bool)true << QByteArray("0:1:1:1:8:800::") << 6;
-    QTest::newRow("ip6_19")  << QByteArray("0:1:1:1:8:800:0:1") << (bool)true << QByteArray("0:1:1:1:8:800:0:1") << 6;
+    QTest::newRow("ip6_00")  << QByteArray("FEDC:BA98:7654:3210:FEDC:BA98:7654:3210") << true << QByteArray("FEDC:BA98:7654:3210:FEDC:BA98:7654:3210") << 6;
+    QTest::newRow("ip6_01")  << QByteArray("1080:0000:0000:0000:0008:0800:200C:417A") << true << QByteArray("1080::8:800:200C:417A") << 6;
+    QTest::newRow("ip6_02")  << QByteArray("1080:0:0:0:8:800:200C:417A") << true << QByteArray("1080::8:800:200C:417A") << 6;
+    QTest::newRow("ip6_03")  << QByteArray("1080::8:800:200C:417A") << true << QByteArray("1080::8:800:200C:417A") << 6;
+    QTest::newRow("ip6_04")  << QByteArray("FF01::43") << true << QByteArray("FF01::43") << 6;
+    QTest::newRow("ip6_05")  << QByteArray("::1") << true << QByteArray("::1") << 6;
+    QTest::newRow("ip6_06")  << QByteArray("1::") << true << QByteArray("1::") << 6;
+    QTest::newRow("ip6_07")  << QByteArray("::") << true << QByteArray("::") << 6;
+    QTest::newRow("ip6_08")  << QByteArray("0:0:0:0:0:0:13.1.68.3") << true << QByteArray("::D01:4403") << 6;
+    QTest::newRow("ip6_09")  << QByteArray("::13.1.68.3") << true <<  QByteArray("::D01:4403") << 6;
+    QTest::newRow("ip6_10")  << QByteArray("0:0:0:0:0:FFFF:129.144.52.38") << true << QByteArray("::FFFF:8190:3426") << 6;
+    QTest::newRow("ip6_11")  << QByteArray("::FFFF:129.144.52.38") << true << QByteArray("::FFFF:8190:3426") << 6;
+    QTest::newRow("ip6_12")  << QByteArray("1::FFFF:129.144.52.38") << true << QByteArray("1::FFFF:8190:3426") << 6;
+    QTest::newRow("ip6_13")  << QByteArray("A:B::D:E") << true << QByteArray("A:B::D:E") << 6;
+    QTest::newRow("ip6_14")  << QByteArray("1080:0:1:0:8:800:200C:417A") << true << QByteArray("1080:0:1:0:8:800:200C:417A") << 6;
+    QTest::newRow("ip6_15")  << QByteArray("1080:0:1:0:8:800:200C:0") << true << QByteArray("1080:0:1:0:8:800:200C:0") << 6;
+    QTest::newRow("ip6_16")  << QByteArray("1080:0:1:0:8:800:0:0") << true << QByteArray("1080:0:1:0:8:800::") << 6;
+    QTest::newRow("ip6_17")  << QByteArray("1080:0:0:0:8:800:0:0") << true << QByteArray("1080::8:800:0:0") << 6;
+    QTest::newRow("ip6_18")  << QByteArray("0:1:1:1:8:800:0:0") << true << QByteArray("0:1:1:1:8:800::") << 6;
+    QTest::newRow("ip6_19")  << QByteArray("0:1:1:1:8:800:0:1") << true << QByteArray("0:1:1:1:8:800:0:1") << 6;
 
-    QTest::newRow("error_00")  << QByteArray("foobarcom") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_01")  << QByteArray("foo.bar.com") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_02")  << QByteArray("") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_03")  << QByteArray() << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_04")  << QByteArray(" \t\r") << (bool)false << QByteArray() << 0;
+    QTest::newRow("error_00")  << QByteArray("foobarcom") << false << QByteArray() << 0;
+    QTest::newRow("error_01")  << QByteArray("foo.bar.com") << false << QByteArray() << 0;
+    QTest::newRow("error_02")  << QByteArray("") << false << QByteArray() << 0;
+    QTest::newRow("error_03")  << QByteArray() << false << QByteArray() << 0;
+    QTest::newRow("error_04")  << QByteArray(" \t\r") << false << QByteArray() << 0;
 
-    QTest::newRow("error_ip4_00")  << QByteArray("256.9.9.9") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip4_01")  << QByteArray("-1.9.9.9") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip4_02")  << QByteArray("123.0.0") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip4_03")  << QByteArray("123.0.0.0.0") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip4_04")  << QByteArray("255.2 3.2.1") << (bool)false << QByteArray() << 0;
+    QTest::newRow("error_ip4_00")  << QByteArray("256.9.9.9") << false << QByteArray() << 0;
+    QTest::newRow("error_ip4_01")  << QByteArray("-1.9.9.9") << false << QByteArray() << 0;
+    QTest::newRow("error_ip4_02")  << QByteArray("123.0.0") << false << QByteArray() << 0;
+    QTest::newRow("error_ip4_03")  << QByteArray("123.0.0.0.0") << false << QByteArray() << 0;
+    QTest::newRow("error_ip4_04")  << QByteArray("255.2 3.2.1") << false << QByteArray() << 0;
 
-    QTest::newRow("error_ip6_00")  << QByteArray(":") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_01")  << QByteArray(":::") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_02")  << QByteArray("::AAAA:") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_03")  << QByteArray(":AAAA::") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_04")  << QByteArray("FFFF:::129.144.52.38") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_05")  << QByteArray("FEDC:BA98:7654:3210:FEDC:BA98:7654:3210:1234") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_06")  << QByteArray("129.144.52.38::") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_07")  << QByteArray("::129.144.52.38:129.144.52.38") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_08")  << QByteArray(":::129.144.52.38") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_09")  << QByteArray("1FEDC:BA98:7654:3210:FEDC:BA98:7654:3210") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_10")  << QByteArray("::FFFFFFFF") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_11")  << QByteArray("::EFGH") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_12")  << QByteArray("ABCD:ABCD:ABCD") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_13")  << QByteArray("::ABCD:ABCD::") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_14")  << QByteArray("1::2::3") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_15")  << QByteArray("1:2:::") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_16")  << QByteArray(":::1:2") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_17")  << QByteArray("1:::2") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_18")  << QByteArray("FEDC::7654:3210:FEDC:BA98::3210") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_19")  << QByteArray("ABCD:ABCD:ABCD:1.2.3.4") << (bool)false << QByteArray() << 0;
-    QTest::newRow("error_ip6_20")  << QByteArray("ABCD::ABCD::ABCD:1.2.3.4") << (bool)false << QByteArray() << 0;
+    QTest::newRow("error_ip6_00")  << QByteArray(":") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_01")  << QByteArray(":::") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_02")  << QByteArray("::AAAA:") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_03")  << QByteArray(":AAAA::") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_04")  << QByteArray("FFFF:::129.144.52.38") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_05")  << QByteArray("FEDC:BA98:7654:3210:FEDC:BA98:7654:3210:1234") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_06")  << QByteArray("129.144.52.38::") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_07")  << QByteArray("::129.144.52.38:129.144.52.38") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_08")  << QByteArray(":::129.144.52.38") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_09")  << QByteArray("1FEDC:BA98:7654:3210:FEDC:BA98:7654:3210") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_10")  << QByteArray("::FFFFFFFF") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_11")  << QByteArray("::EFGH") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_12")  << QByteArray("ABCD:ABCD:ABCD") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_13")  << QByteArray("::ABCD:ABCD::") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_14")  << QByteArray("1::2::3") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_15")  << QByteArray("1:2:::") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_16")  << QByteArray(":::1:2") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_17")  << QByteArray("1:::2") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_18")  << QByteArray("FEDC::7654:3210:FEDC:BA98::3210") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_19")  << QByteArray("ABCD:ABCD:ABCD:1.2.3.4") << false << QByteArray() << 0;
+    QTest::newRow("error_ip6_20")  << QByteArray("ABCD::ABCD::ABCD:1.2.3.4") << false << QByteArray() << 0;
 
 }
 
@@ -213,8 +214,9 @@ void tst_QHostAddress::setAddress_QByteArray()
     QHostAddress hostAddr;
     QVERIFY(hostAddr.setAddress(address) == ok);
 
-    if (ok)
-        QTEST(hostAddr.toString(), resAddr);
+    if (ok) {
+        QCOMPARE(hostAddr.toString(), resAddr);
+    }
 
     if ( protocol == 4 ) {
         QVERIFY( hostAddr.protocol() == QAbstractSocket::IPv4Protocol || hostAddr.protocol() == QAbstractSocket::UnknownNetworkLayerProtocol );
