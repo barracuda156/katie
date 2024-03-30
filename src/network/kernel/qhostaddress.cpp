@@ -72,12 +72,18 @@ QHostAddressPrivate::QHostAddressPrivate()
 
 /*! \enum QHostAddress::SpecialAddress
 
-    \value Null The null address object. Equivalent to QHostAddress().
-    \value LocalHost The IPv4 localhost address. Equivalent to QHostAddress("127.0.0.1").
-    \value LocalHostIPv6 The IPv6 localhost address. Equivalent to QHostAddress("::1").
-    \value Broadcast The IPv4 broadcast address. Equivalent to QHostAddress("255.255.255.255").
-    \value Any The IPv4 any-address. Equivalent to QHostAddress("0.0.0.0").
-    \value AnyIPv6 The IPv6 any-address. Equivalent to QHostAddress("::").
+    \value Null           The null address object. Equivalent to QHostAddress().
+    \value LocalHost      The IPv4 localhost address. Equivalent to QHostAddress("127.0.0.1").
+    \value LocalHostIPv6  The IPv6 localhost address. Equivalent to QHostAddress("::1").
+    \value Broadcast      The IPv4 broadcast address. Equivalent to QHostAddress("255.255.255.255").
+    \value Any            The IPv4 any-address. Equivalent to QHostAddress("0.0.0.0").
+    \value AnyIPv6        The IPv6 any-address. Equivalent to QHostAddress("::").
+*/
+
+/*! \enum QHostAddress::FormattingOption
+
+    \value None         No formatting option.
+    \value RemoveScope  Remove the scope, relevant only for IPv6 addresses.
 */
 
 /*!  Constructs a host address object with the IP address 0.0.0.0.
@@ -191,13 +197,6 @@ QHostAddress &QHostAddress::operator=(const QByteArray &address)
 /*!
     \fn bool QHostAddress::operator!=(const QHostAddress &other) const
     \since 4.2
-
-    Returns true if this host address is not the same as the \a other
-    address given; otherwise returns false.
-*/
-
-/*!
-    \fn bool QHostAddress::operator!=(SpecialAddress other) const
 
     Returns true if this host address is not the same as the \a other
     address given; otherwise returns false.
