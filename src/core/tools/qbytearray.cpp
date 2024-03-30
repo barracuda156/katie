@@ -26,7 +26,6 @@
 #include "qlocale.h"
 #include "qlocale_p.h"
 #include "qlocale_tools_p.h"
-#include "qscopedpointer.h"
 #include "qdatastream.h"
 #include "qplatformdefs.h"
 #include "qcorecommon_p.h"
