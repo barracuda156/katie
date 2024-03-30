@@ -39,7 +39,7 @@
 #include <arpa/inet.h>
 
 #ifndef QT_NO_IPV6IFNAME
-#include <net/if.h>
+#  include <net/if.h>
 #endif
 
 #ifdef Q_OS_SOLARIS
@@ -59,13 +59,6 @@ static inline void qt_socket_getPortAndAddress(const struct sockaddr_storage *ss
         const struct sockaddr_in6 *si6 = (const struct sockaddr_in6 *)ss;
         if (addr) {
             addr->setAddress((const struct sockaddr *) ss);
-#ifndef QT_NO_IPV6IFNAME
-            QSTACKARRAY(char, scopeid, IFNAMSIZ);
-            if (::if_indextoname(si6->sin6_scope_id, scopeid)) {
-                addr->setScopeId(QByteArray(scopeid));
-            } else
-#endif
-            addr->setScopeId(QByteArray::number(si6->sin6_scope_id));
         }
         if (port)
             *port = ntohs(si6->sin6_port);
@@ -296,12 +289,13 @@ bool QAbstractSocketEnginePrivate::nativeConnect(const QHostAddress &addr, quint
         sockAddrIPv6.sin6_family = AF_INET6;
         sockAddrIPv6.sin6_port = htons(port);
 
-        QString scopeid = addr.scopeId();
+        const QByteArray scopeid = addr.scopeId();
         bool ok = false;
         sockAddrIPv6.sin6_scope_id = scopeid.toInt(&ok);
 #ifndef QT_NO_IPV6IFNAME
-        if (!ok)
-            sockAddrIPv6.sin6_scope_id = ::if_nametoindex(scopeid.toLatin1());
+        if (!ok) {
+            sockAddrIPv6.sin6_scope_id = ::if_nametoindex(scopeid.constData());
+        }
 #endif
         struct in6_addr inAddrIPv6;
         inet_pton(AF_INET6, addrStr.constData(), &inAddrIPv6);
@@ -406,10 +400,12 @@ bool QAbstractSocketEnginePrivate::nativeBind(const QHostAddress &address, quint
         memset(&sockAddrIPv6, 0, sizeof(sockAddrIPv6));
         sockAddrIPv6.sin6_family = AF_INET6;
         sockAddrIPv6.sin6_port = htons(port);
+        bool ok = false;
+        sockAddrIPv6.sin6_scope_id = scopeid.toInt(&ok);
 #ifndef QT_NO_IPV6IFNAME
-        sockAddrIPv6.sin6_scope_id = ::if_nametoindex(scopeid.constData());
-#else
-        sockAddrIPv6.sin6_scope_id = scopeid.toInt();
+        if (!ok) {
+            sockAddrIPv6.sin6_scope_id = ::if_nametoindex(scopeid.constData());
+        }
 #endif
         struct in6_addr inAddrIPv6;
         inet_pton(AF_INET6, addrStr.constData(), &inAddrIPv6);
@@ -803,12 +799,13 @@ qint64 QAbstractSocketEnginePrivate::nativeSendDatagram(const char *data, qint64
         struct in6_addr ia6;
         inet_pton(AF_INET6, hostStr.constData(), &ia6);
         sockAddrIPv6.sin6_addr = ia6;
-        QString scopeid = host.scopeId();
-        bool ok;
+        const QByteArray scopeid = host.scopeId();
+        bool ok = false;
         sockAddrIPv6.sin6_scope_id = scopeid.toInt(&ok);
 #ifndef QT_NO_IPV6IFNAME
-        if (!ok)
-            sockAddrIPv6.sin6_scope_id = ::if_nametoindex(scopeid.toLatin1());
+        if (!ok) {
+            sockAddrIPv6.sin6_scope_id = ::if_nametoindex(scopeid.constData());
+        }
 #endif
         sockAddrSize = sizeof(sockAddrIPv6);
         sockAddrPtr = (struct sockaddr *)&sockAddrIPv6;

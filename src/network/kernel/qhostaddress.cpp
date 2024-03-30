@@ -32,6 +32,10 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 
+#ifndef QT_NO_IPV6IFNAME
+#  include <net/if.h>
+#endif
+
 QT_BEGIN_NAMESPACE
 
 static const char addrscopeseparator = '%';
@@ -250,6 +254,7 @@ bool QHostAddress::setAddress(const QByteArray &address)
         d->scopeId.clear();
         return true;
     }
+    clear();
     return false;
 }
 
@@ -263,24 +268,47 @@ bool QHostAddress::setAddress(const QByteArray &address)
 */
 void QHostAddress::setAddress(const struct sockaddr *sockaddr)
 {
-    clear();
+    if (!sockaddr) {
+        clear();
+        return;
+    }
     if (sockaddr->sa_family == AF_INET) {
         QSTACKARRAY(char, ntopbuffer, INET_ADDRSTRLEN + 1);
         if (inet_ntop(AF_INET, &((sockaddr_in *)sockaddr)->sin_addr, ntopbuffer, INET_ADDRSTRLEN) != NULL) {
             d->protocol = QAbstractSocket::IPv4Protocol;
             d->ipString = ntopbuffer;
+            d->scopeId.clear();
+        } else {
+            clear();
         }
         return;
     }
 #ifndef QT_NO_IPV6
     if (sockaddr->sa_family == AF_INET6) {
         QSTACKARRAY(char, ntopbuffer, INET6_ADDRSTRLEN + 1);
-        if (inet_ntop(AF_INET6, &((sockaddr_in6 *)sockaddr)->sin6_addr, ntopbuffer, INET6_ADDRSTRLEN) != NULL) {
+        const sockaddr_in6* si6 = (sockaddr_in6 *)sockaddr;
+        if (inet_ntop(AF_INET6, &(si6->sin6_addr), ntopbuffer, INET6_ADDRSTRLEN) != NULL) {
             d->protocol = QAbstractSocket::IPv6Protocol;
             d->ipString = ntopbuffer;
+            d->scopeId.clear();
+            if (si6->sin6_scope_id) {
+#ifndef QT_NO_IPV6IFNAME
+                QSTACKARRAY(char, indexofnamebuffer, IFNAMSIZ);
+                if (::if_indextoname(si6->sin6_scope_id, indexofnamebuffer)) {
+                    d->scopeId = indexofnamebuffer;
+                }
+#endif
+                if (d->scopeId.isEmpty()) {
+                    d->scopeId = QByteArray::number(si6->sin6_scope_id);
+                }
+            }
+        } else {
+            clear();
         }
+        return;
     }
 #endif
+    clear();
 }
 
 /*!
