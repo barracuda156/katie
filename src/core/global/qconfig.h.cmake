@@ -178,7 +178,6 @@
 #cmakedefine QT_NO_IMAGEFORMAT_XPM
 #cmakedefine QT_NO_IMAGE_HEURISTIC_MASK
 #cmakedefine QT_NO_IPV6
-#cmakedefine QT_NO_IPV6IFNAME
 #cmakedefine QT_NO_LCDNUMBER
 #cmakedefine QT_NO_LIBRARY
 #cmakedefine QT_NO_LOCALSERVER

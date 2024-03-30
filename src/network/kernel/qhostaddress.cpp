@@ -30,10 +30,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
-
-#ifndef QT_NO_IPV6IFNAME
-#  include <net/if.h>
-#endif
+#include <net/if.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -236,12 +233,10 @@ bool QHostAddress::setAddress(const struct sockaddr *sockaddr)
             d->ipString = ntopbuffer;
             d->scopeId.clear();
             if (si6->sin6_scope_id) {
-#ifndef QT_NO_IPV6IFNAME
                 QSTACKARRAY(char, indexofnamebuffer, IFNAMSIZ);
                 if (::if_indextoname(si6->sin6_scope_id, indexofnamebuffer)) {
                     d->scopeId = indexofnamebuffer;
                 }
-#endif
                 if (d->scopeId.isEmpty()) {
                     d->scopeId = QByteArray::number(si6->sin6_scope_id);
                 }
