@@ -188,18 +188,6 @@ QHostAddress &QHostAddress::operator=(const QHostAddress &address)
 }
 
 /*!
-    Assigns the host address \a address to this object, and returns a
-    reference to this object.
-
-    \sa setAddress()
-*/
-QHostAddress &QHostAddress::operator=(const QByteArray &address)
-{
-    setAddress(address);
-    return *this;
-}
-
-/*!
     Returns true if this host address is null (INADDR_ANY or in6addr_any).
     The default constructor creates a null address, and that address is
     not valid for any host or interface.

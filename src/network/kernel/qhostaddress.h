@@ -57,7 +57,6 @@ public:
     ~QHostAddress();
 
     QHostAddress &operator=(const QHostAddress &other);
-    QHostAddress &operator=(const QByteArray &address);
 
     bool isNull() const;
     void clear();

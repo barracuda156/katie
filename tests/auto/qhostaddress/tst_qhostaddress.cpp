@@ -300,10 +300,10 @@ void tst_QHostAddress::compare()
 void tst_QHostAddress::assignment()
 {
     QHostAddress address;
-    address = "127.0.0.1";
+    address = QHostAddress("127.0.0.1");
     QCOMPARE(address, QHostAddress("127.0.0.1"));
 
-    address = "::1";
+    address = QHostAddress("::1");
     QCOMPARE(address, QHostAddress("::1"));
 
     QHostAddress addr("4.2.2.1");
