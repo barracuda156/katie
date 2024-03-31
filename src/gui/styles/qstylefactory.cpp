@@ -46,10 +46,9 @@ Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, stylesloader, (QString::fromLatin1("/s
     styles are either built-in or dynamically loaded from a style
     plugin (see QStylePlugin).
 
-    The valid keys can be retrieved using the keys()
-    function. Typically they include "windows", "motif",
-    "plastique" and "cleanlooks".  Note that keys are case
-    insensitive.
+    The valid keys can be retrieved using the keys() function.
+    Typically they include "windows" and "cleanlooks". Note that keys
+    are case-insensitive.
 
     \sa QStyle
 */
@@ -67,14 +66,14 @@ Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, stylesloader, (QString::fromLatin1("/s
 */
 QStyle *QStyleFactory::create(const QString& key)
 {
-#ifndef QT_NO_STYLE_WINDOWS
-    if (key.compare(QLatin1String("Windows"), Qt::CaseInsensitive) == 0) {
-        return new QWindowsStyle();
-    }
-#endif
 #ifndef QT_NO_STYLE_CLEANLOOKS
     if (key.compare(QLatin1String("Cleanlooks"), Qt::CaseInsensitive) == 0) {
         return new QCleanlooksStyle();
+    }
+#endif
+#ifndef QT_NO_STYLE_WINDOWS
+    if (key.compare(QLatin1String("Windows"), Qt::CaseInsensitive) == 0) {
+        return new QWindowsStyle();
     }
 #endif
 #if !defined(QT_NO_LIBRARY)
@@ -105,11 +104,11 @@ QStringList QStyleFactory::keys()
 #else
     QStringList list;
 #endif
-#ifndef QT_NO_STYLE_WINDOWS
-    list << QLatin1String("Windows");
-#endif
 #ifndef QT_NO_STYLE_CLEANLOOKS
     list << QLatin1String("Cleanlooks");
+#endif
+#ifndef QT_NO_STYLE_WINDOWS
+    list << QLatin1String("Windows");
 #endif
     return list;
 }
