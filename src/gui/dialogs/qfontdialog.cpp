@@ -318,7 +318,21 @@ QFontDialog::~QFontDialog()
 QFont QFontDialog::getFont(bool *ok, const QFont &initial, QWidget *parent, const QString &title,
                            FontDialogOptions options)
 {
-    return QFontDialogPrivate::getFont(ok, initial, parent, title, options);
+    QFontDialog dlg(parent);
+    dlg.setOptions(options);
+    dlg.setCurrentFont(initial);
+    if (!title.isEmpty()) {
+        dlg.setWindowTitle(title);
+    }
+
+    int ret = (dlg.exec() || (options & QFontDialog::NoButtons));
+    if (ok) {
+        *ok = !!ret;
+    }
+    if (ret) {
+        return dlg.selectedFont();
+    }
+    return initial;
 }
 
 /*!
@@ -344,26 +358,7 @@ QFont QFontDialog::getFont(bool *ok, const QFont &initial, QWidget *parent, cons
 QFont QFontDialog::getFont(bool *ok, QWidget *parent)
 {
     QFont initial;
-    return QFontDialogPrivate::getFont(ok, initial, parent, QString(), 0);
-}
-
-QFont QFontDialogPrivate::getFont(bool *ok, const QFont &initial, QWidget *parent,
-                                  const QString &title, QFontDialog::FontDialogOptions options)
-{
-    QFontDialog dlg(parent);
-    dlg.setOptions(options);
-    dlg.setCurrentFont(initial);
-    if (!title.isEmpty())
-        dlg.setWindowTitle(title);
-
-    int ret = (dlg.exec() || (options & QFontDialog::NoButtons));
-    if (ok)
-        *ok = !!ret;
-    if (ret) {
-        return dlg.selectedFont();
-    } else {
-        return initial;
-    }
+    return QFontDialog::getFont(ok, initial, parent, QString(), 0);
 }
 
 /*!

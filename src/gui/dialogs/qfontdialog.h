@@ -44,7 +44,7 @@ class Q_GUI_EXPORT QFontDialog : public QDialog
 
 public:
     enum FontDialogOption {
-        NoButtons           = 0x00000001,
+        NoButtons = 0x00000001,
     };
 
     Q_DECLARE_FLAGS(FontDialogOptions, FontDialogOption)

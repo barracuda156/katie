@@ -62,9 +62,6 @@ public:
     void updateStyles();
     void updateSizes();
 
-    static QFont getFont(bool *ok, const QFont &initial, QWidget *parent,
-                         const QString &title, QFontDialog::FontDialogOptions options);
-
     void init();
     void _q_sizeChanged(const QString &);
     void _q_familyHighlighted(int);
