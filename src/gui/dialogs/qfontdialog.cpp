@@ -810,7 +810,7 @@ bool QFontDialog::testOption(FontDialogOption option) const
     \brief the various options that affect the look and feel of the dialog
     \since 4.5
 
-    By default, all options are disabled.
+    By default, QFontDialog::AllFonts is set.
 
     Options should be set before showing the dialog. Setting them while the
     dialog is visible is not guaranteed to have an immediate effect on the
