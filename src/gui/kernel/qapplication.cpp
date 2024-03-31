@@ -832,25 +832,23 @@ QStyle *QApplication::style()
         return 0;
     }
 
-    if (!QApplicationPrivate::app_style) {
-        QString style;
-        if (!QApplicationPrivate::styleOverride.isEmpty()) {
-            style = QApplicationPrivate::styleOverride;
-        } else {
-            style = QApplicationPrivate::desktopStyleKey();
-        }
+    QString style;
+    if (!QApplicationPrivate::styleOverride.isEmpty()) {
+        style = QApplicationPrivate::styleOverride;
+    } else {
+        style = QApplicationPrivate::desktopStyleKey();
+    }
 
-        QApplicationPrivate::app_style = QStyleFactory::create(style);
-        if (!QApplicationPrivate::app_style) {
-            foreach (const QString &style, QStyleFactory::keys()) {
-                if ((QApplicationPrivate::app_style = QStyleFactory::create(style)))
-                    break;
-            }
+    QApplicationPrivate::app_style = QStyleFactory::create(style);
+    if (!QApplicationPrivate::app_style) {
+        foreach (const QString &style, QStyleFactory::keys()) {
+            if ((QApplicationPrivate::app_style = QStyleFactory::create(style)))
+                break;
         }
-        if (!QApplicationPrivate::app_style) {
-            Q_ASSERT(!"No styles available!");
-            return 0;
-        }
+    }
+    if (!QApplicationPrivate::app_style) {
+        Q_ASSERT(!"No styles available!");
+        return nullptr;
     }
     // take ownership of the style
     QApplicationPrivate::app_style->setParent(qApp);
@@ -984,9 +982,9 @@ void QApplication::setStyle(QStyle *style)
 QStyle* QApplication::setStyle(const QString& style)
 {
     QStyle *s = QStyleFactory::create(style);
-    if (!s)
-        return 0;
-
+    if (!s) {
+        return nullptr;
+    }
     setStyle(s);
     return s;
 }
