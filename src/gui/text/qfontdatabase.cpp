@@ -189,6 +189,9 @@ static FcPattern* patternForFont(const QString &family, const QString &style, co
         return nullptr;
     }
 
+    FcPatternAddBool(pattern, FC_OUTLINE, true);
+    FcPatternAddBool(pattern, FC_SCALABLE, true);
+
     QString parsedfamily, parsedfoundry;
     QFontDatabasePrivate::parseFontName(family, parsedfoundry, parsedfamily);
 
@@ -404,9 +407,6 @@ static FcPattern* patternForRequest(const QFontDef &request)
             pitch_value = FC_MONO;
         FcPatternAddInteger(pattern, FC_SPACING, pitch_value);
     }
-
-    FcPatternAddBool(pattern, FC_OUTLINE, true);
-    FcPatternAddBool(pattern, FC_SCALABLE, true);
 
     const double size_value = qMax(qreal(1.), request.pixelSize);
     FcPatternAddDouble(pattern, FC_PIXEL_SIZE, size_value);
@@ -662,12 +662,14 @@ QStringList QFontDatabase::families() const
         return result;
     }
 
+    FcPatternAddBool(pattern, FC_OUTLINE, true);
+    FcPatternAddBool(pattern, FC_SCALABLE, true);
+
     FcObjectSet* os = FcObjectSetCreate();
     if (Q_UNLIKELY(!os)) {
         FcPatternDestroy(pattern);
         return result;
     }
-    FcObjectSetAdd(os, FC_SCALABLE);
     FcObjectSetAdd(os, FC_FAMILY);
     FcObjectSetAdd(os, FC_FOUNDRY);
     FcFontSet* fonts = FcFontList(NULL, pattern, os);
@@ -680,12 +682,7 @@ QStringList QFontDatabase::families() const
     for (int i = 0; i < fonts->nfont; i++) {
         FcChar8* family_value = nullptr;
         FcChar8* foundry_value = nullptr;
-        FcBool scalable_value = FcFalse;
 
-        FcPatternGetBool(fonts->fonts[i], FC_SCALABLE, 0, &scalable_value);
-        if (scalable_value != FcTrue) {
-            continue;
-        }
         if (FcPatternGetString(fonts->fonts[i], FC_FAMILY, 0, &family_value) != FcResultMatch) {
             continue;
         }
@@ -746,13 +743,15 @@ QStringList QFontDatabase::styles(const QString &family) const
     if (Q_UNLIKELY(!os)) {
         return result;
     }
-    FcObjectSetAdd(os, FC_SCALABLE);
     FcObjectSetAdd(os, FC_FAMILY);
     FcObjectSetAdd(os, FC_STYLE);
     pattern = FcPatternCreate();
     if (Q_UNLIKELY(!pattern)) {
         return result;
     }
+
+    FcPatternAddBool(pattern, FC_OUTLINE, true);
+    FcPatternAddBool(pattern, FC_SCALABLE, true);
 
     // the only way to get all font family styles is to query all fonts
     FcFontSet *fonts = FcFontList(NULL, pattern, os);
@@ -763,12 +762,7 @@ QStringList QFontDatabase::styles(const QString &family) const
     }
     for (int i = 0; i < fonts->nfont; i++) {
         FcChar8* style_value = nullptr;
-        FcBool scalable_value = FcFalse;
 
-        FcPatternGetBool(fonts->fonts[i], FC_SCALABLE, 0, &scalable_value);
-        if (scalable_value != FcTrue) {
-            continue;
-        }
         if (FcPatternGetString(fonts->fonts[i], FC_FAMILY, 0, &family_value) != FcResultMatch) {
             continue;
         }
