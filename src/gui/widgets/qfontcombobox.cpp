@@ -66,10 +66,6 @@ void QFontFamilyDelegate::paint(QPainter *painter,
                                 const QModelIndex &index) const
 {
     QString text = index.data(Qt::DisplayRole).toString();
-    QFont font(option.font);
-    QFont systemfont = fdb.font(font.family(), font.styleName(), font.pointSize());
-    font.setPointSize(systemfont.pointSize() * 3 / 2);
-    font.setFamily(text);
 
     QRect r = option.rect;
 
@@ -93,12 +89,7 @@ void QFontFamilyDelegate::paint(QPainter *painter,
     else
         r.setLeft(r.left() + actualSize.width() + 4);
 
-    QFont old = painter->font();
-    painter->setFont(font);
-
     painter->drawText(r, Qt::AlignVCenter|Qt::AlignLeft|Qt::TextSingleLine, text);
-
-    painter->setFont(old);
 
     if (option.state & QStyle::State_Selected)
         painter->restore();
@@ -110,11 +101,8 @@ QSize QFontFamilyDelegate::sizeHint(const QStyleOptionViewItem &option,
 {
     QString text = index.data(Qt::DisplayRole).toString();
     QFont font(option.font);
-    // font.setFamily(text);
-    QFont systemfont = fdb.font(font.family(), font.styleName(), font.pointSize());
-    font.setPointSize(systemfont.pointSize() * 3/2);
     QFontMetrics fontMetrics(font);
-    return QSize(fontMetrics.width(text), fontMetrics.height());
+    return fontMetrics.size(Qt::TextSingleLine, text);
 }
 
 
