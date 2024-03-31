@@ -44,9 +44,11 @@ class Q_GUI_EXPORT QFontDialog : public QDialog
 
 public:
     enum FontDialogOption {
-        NoButtons = 0x00000001,
+        NoButtons = 0x01,
+        ScalableFonts = 0x2,
+        MonospacedFonts = 0x4,
+        AllFonts = (ScalableFonts | MonospacedFonts)
     };
-
     Q_DECLARE_FLAGS(FontDialogOptions, FontDialogOption)
 
     explicit QFontDialog(QWidget *parent = nullptr);
@@ -71,7 +73,7 @@ public:
     void open(QObject *receiver, const char *member);
 
     static QFont getFont(bool *ok, const QFont &initial, QWidget *parent = nullptr,
-                        const QString &title = QString(), FontDialogOptions options = 0);
+                        const QString &title = QString(), FontDialogOptions options = AllFonts);
     static QFont getFont(bool *ok, QWidget *parent = nullptr);
 
 
@@ -82,9 +84,6 @@ Q_SIGNALS:
 protected:
     void changeEvent(QEvent *event);
     void done(int result);
-
-private:
-    // ### Qt 5: make protected
     bool eventFilter(QObject *object, QEvent *event);
 
     Q_DISABLE_COPY(QFontDialog)
@@ -95,7 +94,6 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_sizeHighlighted(int))
     Q_PRIVATE_SLOT(d_func(), void _q_updateSample())
 };
-
 Q_DECLARE_OPERATORS_FOR_FLAGS(QFontDialog::FontDialogOptions)
 
 #endif // QT_NO_FONTDIALOG

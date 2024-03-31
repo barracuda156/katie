@@ -56,7 +56,12 @@ class QFontDialogPrivate : public QDialogPrivate
     Q_DECLARE_PUBLIC(QFontDialog)
 
 public:
-    inline QFontDialogPrivate() { }
+    inline QFontDialogPrivate()
+        : size(0),
+        smoothScalable(false),
+        opts(QFontDialog::AllFonts)
+    {
+    }
 
     void updateFamilies();
     void updateStyles();

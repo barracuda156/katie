@@ -207,9 +207,6 @@ void QFontDialogPrivate::init()
     sampleEdit->setText(QLatin1String("AaBbYyZz"));
     hbox->addWidget(sampleEdit);
 
-    size = 0;
-    smoothScalable = false;
-
     QObject::connect(familyList, SIGNAL(highlighted(int)), q, SLOT(_q_familyHighlighted(int)));
     QObject::connect(styleList, SIGNAL(highlighted(int)), q, SLOT(_q_styleHighlighted(int)));
     QObject::connect(sizeList, SIGNAL(highlighted(int)), q, SLOT(_q_sizeHighlighted(int)));
@@ -419,6 +416,22 @@ void QFontDialogPrivate::updateFamilies()
 
     QStringList familyNames = fdb.families();
 
+    const bool scalable = (opts & QFontDialog::ScalableFonts);
+    const bool mono = (opts & QFontDialog::MonospacedFonts);
+    if (!scalable || !mono) {
+        QMutableListIterator<QString> familyIter(familyNames);
+        while (familyIter.hasNext()) {
+            const QString family = familyIter.next();
+            if (scalable && !fdb.isScalable(family)) {
+                familyIter.remove();
+                continue;
+            }
+            if (mono && !fdb.isFixedPitch(family)) {
+                familyIter.remove();
+            }
+        }
+    }
+
     familyList->model()->setStringList(familyNames);
 
     QString foundryName1, familyName1, foundryName2, familyName2;
@@ -464,8 +477,9 @@ void QFontDialogPrivate::updateFamilies()
         familyList->setCurrentItem(0);
     familyEdit->setText(familyList->currentText());
     if (q->style()->styleHint(QStyle::SH_FontDialog_SelectAssociatedText, 0, q)
-            && familyList->hasFocus())
+        && familyList->hasFocus()) {
         familyEdit->selectAll();
+    }
 
     updateStyles();
 }
@@ -758,6 +772,9 @@ QFont QFontDialog::selectedFont() const
     of a font dialog.
 
     \value NoButtons Don't display \gui{OK} and \gui{Cancel} buttons. (Useful for "live dialogs".)
+    \value ScalableFonts Show scalable fonts
+    \value MonospacedFonts Show monospaced fonts
+    \value AllFonts Show scalable and monospaced fonts
 
     \sa options, setOption(), testOption()
 */
@@ -771,8 +788,9 @@ QFont QFontDialog::selectedFont() const
 void QFontDialog::setOption(FontDialogOption option, bool on)
 {
     Q_D(QFontDialog);
-    if (!(d->opts & option) != !on)
+    if (!(d->opts & option) != !on) {
         setOptions(d->opts ^ option);
+    }
 }
 
 /*!
@@ -784,7 +802,7 @@ void QFontDialog::setOption(FontDialogOption option, bool on)
 bool QFontDialog::testOption(FontDialogOption option) const
 {
     Q_D(const QFontDialog);
-    return (d->opts & option) != 0;
+    return (d->opts & option);
 }
 
 /*!
@@ -803,13 +821,12 @@ bool QFontDialog::testOption(FontDialogOption option) const
 void QFontDialog::setOptions(FontDialogOptions options)
 {
     Q_D(QFontDialog);
-
-    FontDialogOptions changed = (options ^ d->opts);
-    if (!changed)
+    if (d->opts == options) {
         return;
-
+    }
     d->opts = options;
     d->buttonBox->setVisible(!(options & NoButtons));
+    d->updateFamilies();
 }
 
 QFontDialog::FontDialogOptions QFontDialog::options() const
@@ -879,8 +896,9 @@ void QFontDialog::done(int result)
     if (result == Accepted) {
         // We check if this is the same font we had before, if so we emit currentFontChanged
         QFont selectedFont = currentFont();
-        if(selectedFont != d->selectedFont)
+        if (selectedFont != d->selectedFont) {
             emit(currentFontChanged(selectedFont));
+        }
         d->selectedFont = selectedFont;
         emit fontSelected(d->selectedFont);
     } else
