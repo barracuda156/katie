@@ -109,7 +109,10 @@ QSize QFontFamilyDelegate::sizeHint(const QStyleOptionViewItem &option,
 class QFontComboBoxPrivate : public QComboBoxPrivate
 {
 public:
-    inline QFontComboBoxPrivate() { filters = QFontComboBox::AllFonts; }
+    inline QFontComboBoxPrivate()
+        : filters(QFontComboBox::AllFonts)
+    {
+    }
 
     QFontComboBox::FontFilters filters;
     QFont currentFont;
