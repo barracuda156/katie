@@ -1698,10 +1698,12 @@ QMenu *QLineEdit::createStandardContextMenu()
 
     if (!isReadOnly()) {
         action = popup->addAction(QLineEdit::tr("&Undo") + ACCEL_KEY(QKeySequence::Undo));
+        action->setIcon(QIcon::fromTheme("edit-undo"));
         action->setEnabled(d->control->isUndoAvailable());
         connect(action, SIGNAL(triggered()), SLOT(undo()));
 
         action = popup->addAction(QLineEdit::tr("&Redo") + ACCEL_KEY(QKeySequence::Redo));
+        action->setIcon(QIcon::fromTheme("edit-redo"));
         action->setEnabled(d->control->isRedoAvailable());
         connect(action, SIGNAL(triggered()), SLOT(redo()));
 
@@ -1711,18 +1713,21 @@ QMenu *QLineEdit::createStandardContextMenu()
 #ifndef QT_NO_CLIPBOARD
     if (!isReadOnly()) {
         action = popup->addAction(QLineEdit::tr("Cu&t") + ACCEL_KEY(QKeySequence::Cut));
+        action->setIcon(QIcon::fromTheme("edit-cut"));
         action->setEnabled(!d->control->isReadOnly() && d->control->hasSelectedText()
                 && d->control->echoMode() == QLineEdit::Normal);
         connect(action, SIGNAL(triggered()), SLOT(cut()));
     }
 
     action = popup->addAction(QLineEdit::tr("&Copy") + ACCEL_KEY(QKeySequence::Copy));
+    action->setIcon(QIcon::fromTheme("edit-copy"));
     action->setEnabled(d->control->hasSelectedText()
             && d->control->echoMode() == QLineEdit::Normal);
     connect(action, SIGNAL(triggered()), SLOT(copy()));
 
     if (!isReadOnly()) {
         action = popup->addAction(QLineEdit::tr("&Paste") + ACCEL_KEY(QKeySequence::Paste));
+        action->setIcon(QIcon::fromTheme("edit-paste"));
         action->setEnabled(!d->control->isReadOnly() && !QApplication::clipboard()->text().isEmpty());
         connect(action, SIGNAL(triggered()), SLOT(paste()));
     }
@@ -1730,6 +1735,7 @@ QMenu *QLineEdit::createStandardContextMenu()
 
     if (!isReadOnly()) {
         action = popup->addAction(QLineEdit::tr("Delete"));
+        action->setIcon(QIcon::fromTheme("edit-delete"));
         action->setEnabled(!d->control->isReadOnly() && !d->control->text().isEmpty() && d->control->hasSelectedText());
         connect(action, SIGNAL(triggered()), d->control, SLOT(_q_deleteSelected()));
     }
@@ -1738,6 +1744,7 @@ QMenu *QLineEdit::createStandardContextMenu()
         popup->addSeparator();
 
     action = popup->addAction(QLineEdit::tr("Select All") + ACCEL_KEY(QKeySequence::SelectAll));
+    action->setIcon(QIcon::fromTheme("edit-select-all"));
     action->setEnabled(!d->control->text().isEmpty() && !d->control->allSelected());
     d->selectAllAction = action;
     connect(action, SIGNAL(triggered()), SLOT(selectAll()));

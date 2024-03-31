@@ -1834,17 +1834,21 @@ QMenu *QTextControl::createStandardContextMenu(const QPointF &pos, QWidget *pare
 
     if (d->interactionFlags & Qt::TextEditable) {
         a = menu->addAction(tr("&Undo") + ACCEL_KEY(QKeySequence::Undo), this, SLOT(undo()));
+        a->setIcon(QIcon::fromTheme("edit-undo"));
         a->setEnabled(d->doc->isUndoAvailable());
         a = menu->addAction(tr("&Redo") + ACCEL_KEY(QKeySequence::Redo), this, SLOT(redo()));
+        a->setIcon(QIcon::fromTheme("edit-redo"));
         a->setEnabled(d->doc->isRedoAvailable());
         menu->addSeparator();
 
         a = menu->addAction(tr("Cu&t") + ACCEL_KEY(QKeySequence::Cut), this, SLOT(cut()));
+        a->setIcon(QIcon::fromTheme("edit-cut"));
         a->setEnabled(d->cursor.hasSelection());
     }
 
     if (showTextSelectionActions) {
         a = menu->addAction(tr("&Copy") + ACCEL_KEY(QKeySequence::Copy), this, SLOT(copy()));
+        a->setIcon(QIcon::fromTheme("edit-copy"));
         a->setEnabled(d->cursor.hasSelection());
     }
 
@@ -1858,9 +1862,11 @@ QMenu *QTextControl::createStandardContextMenu(const QPointF &pos, QWidget *pare
     if (d->interactionFlags & Qt::TextEditable) {
 #if !defined(QT_NO_CLIPBOARD)
         a = menu->addAction(tr("&Paste") + ACCEL_KEY(QKeySequence::Paste), this, SLOT(paste()));
+        a->setIcon(QIcon::fromTheme("edit-paste"));
         a->setEnabled(canPaste());
 #endif
         a = menu->addAction(tr("Delete"), this, SLOT(_q_deleteSelected()));
+        a->setIcon(QIcon::fromTheme("edit-delete"));
         a->setEnabled(d->cursor.hasSelection());
     }
 
@@ -1868,6 +1874,7 @@ QMenu *QTextControl::createStandardContextMenu(const QPointF &pos, QWidget *pare
     if (showTextSelectionActions) {
         menu->addSeparator();
         a = menu->addAction(tr("Select All") + ACCEL_KEY(QKeySequence::SelectAll), this, SLOT(selectAll()));
+        a->setIcon(QIcon::fromTheme("edit-select-all"));
         a->setEnabled(!d->doc->isEmpty());
     }
 
