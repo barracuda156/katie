@@ -235,7 +235,8 @@ QFontComboBox::QFontComboBox(QWidget *parent)
 {
     Q_D(QFontComboBox);
     d->currentFont = font();
-    setEditable(true);
+    // fonts can be relative or absolute paths but this widget is not suitable for choosing such
+    setEditable(false);
 
     QStringListModel *m = new QStringListModel(this);
     setModel(m);
