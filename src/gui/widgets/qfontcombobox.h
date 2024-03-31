@@ -46,9 +46,7 @@ public:
     enum FontFilter {
         AllFonts = 0,
         ScalableFonts = 0x1,
-        NonScalableFonts = 0x2,
-        MonospacedFonts = 0x4,
-        ProportionalFonts = 0x8
+        MonospacedFonts = 0x2
     };
     Q_DECLARE_FLAGS(FontFilters, FontFilter)
 

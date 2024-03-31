@@ -127,8 +127,9 @@ public:
 void QFontComboBoxPrivate::_q_updateModel()
 {
     Q_Q(QFontComboBox);
-    const int scalableMask = (QFontComboBox::ScalableFonts | QFontComboBox::NonScalableFonts);
-    const int spacingMask = (QFontComboBox::ProportionalFonts | QFontComboBox::MonospacedFonts);
+    const bool all = (filters == QFontComboBox::AllFonts);
+    const bool scalable = (filters & QFontComboBox::ScalableFonts);
+    const bool mono = (filters & QFontComboBox::MonospacedFonts);
 
     QStringListModel *m = qobject_cast<QStringListModel *>(q->model());
     if (!m)
@@ -142,13 +143,11 @@ void QFontComboBoxPrivate::_q_updateModel()
     QFont sf = fdb.font(currentFont.family(), currentFont.styleName(), currentFont.pointSize());
 
     for (int i = 0; i < list.size(); ++i) {
-        if ((filters & scalableMask) && (filters & scalableMask) != scalableMask) {
-            if (bool(filters & QFontComboBox::ScalableFonts) != fdb.isScalable(list.at(i)))
-                continue;
+        if (!all && scalable && !fdb.isScalable(list.at(i))) {
+            continue;
         }
-        if ((filters & spacingMask) && (filters & spacingMask) != spacingMask) {
-            if (bool(filters & QFontComboBox::MonospacedFonts) != fdb.isFixedPitch(list.at(i)))
-                continue;
+        if (!all && mono && !fdb.isFixedPitch(list.at(i))) {
+            continue;
         }
         result += list.at(i);
         if (list.at(i) == sf.family() || list.at(i).startsWith(sf.family() + QLatin1String(" [")))
@@ -257,9 +256,7 @@ QFontComboBox::~QFontComboBox()
 
   \value AllFonts Show all fonts
   \value ScalableFonts Show scalable fonts
-  \value NonScalableFonts Show non scalable fonts
   \value MonospacedFonts Show monospaced fonts
-  \value ProportionalFonts Show proportional fonts
 */
 
 /*!
