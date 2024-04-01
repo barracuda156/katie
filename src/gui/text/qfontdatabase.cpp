@@ -1058,25 +1058,6 @@ void QFontDatabasePrivate::parseFontName(const QString &name, QString &foundry, 
         foundry.clear();
         family = name;
     }
-
-    // capitalize the family/foundry names
-    bool space = true;
-    QChar *s = family.data();
-    int len = family.length();
-    while(len--) {
-        if (space) *s = s->toUpper();
-        space = s->isSpace();
-        ++s;
-    }
-
-    space = true;
-    s = foundry.data();
-    len = foundry.length();
-    while(len--) {
-        if (space) *s = s->toUpper();
-        space = s->isSpace();
-        ++s;
-    }
 }
 
 /*!
