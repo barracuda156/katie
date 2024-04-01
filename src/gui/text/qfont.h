@@ -157,8 +157,6 @@ public:
     FT_Face freetypeFace() const;
 #endif
 
-    QString key() const;
-
     QString toString() const;
     bool fromString(const QString &);
 

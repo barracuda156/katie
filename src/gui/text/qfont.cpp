@@ -1163,18 +1163,6 @@ static inline void set_font_bits(quint8 bits, QFontPrivate *f)
 }
 #endif
 
-
-/*!
-    Returns the font's key, a textual representation of a font. It is
-    typically used as the key for a cache or dictionary of fonts.
-
-    \sa QMap
-*/
-QString QFont::key() const
-{
-    return toString();
-}
-
 /*!
     Returns a description of the font. The description is a
     comma-separated list of the attributes, perfectly suited for use
@@ -1216,8 +1204,9 @@ bool QFont::fromString(const QString &descrip)
     }
 
     setFamily(l[0]);
-    if (count > 1)
+    if (count > 1) {
         setStyleName(l[1]);
+    }
     if (count > 2) {
         const double l2 = l[2].toDouble();
         if (l2 > 0.0) {
