@@ -285,13 +285,13 @@ void tst_QFont::toString_fromString_data()
     QTest::addColumn<QString>("expectedstring");
 
     // actual font families
-    QTest::newRow("FreeSans") << QString("FreeSans,10,-1,50,1,0,0,0") << QString("FreeSans,10,-1,50,1,0,0,0");
-    QTest::newRow("FreeSans [GNU ]") << QString("FreeSans [GNU ],5,-1,99,0,1,0,0") << QString("FreeSans [GNU ],5,-1,99,0,1,0,0");
-    QTest::newRow("FreeMono") << QString("FreeMono,5,-1,999,0,0,1,0") << QString("FreeMono,5,-1,99,0,0,1,0");
-    QTest::newRow("FreeSans") << QString("FreeSans,10,-1,50,2,3,4,5") << QString("FreeSans,10,-1,50,2,1,1,1");
+    QTest::newRow("FreeSans") << QString("FreeSans,,10,-1,50,1,0,0,0") << QString("FreeSans,,10,-1,50,1,0,0,0");
+    QTest::newRow("FreeSans [GNU ]") << QString("FreeSans [GNU ],,5,-1,99,0,1,0,0") << QString("FreeSans [GNU ],,5,-1,99,0,1,0,0");
+    QTest::newRow("FreeMono") << QString("FreeMono,,5,-1,999,0,0,1,0") << QString("FreeMono,,5,-1,99,0,0,1,0");
+    QTest::newRow("FreeSans") << QString("FreeSans,,10,-1,50,2,3,4,5") << QString("FreeSans,,10,-1,50,2,1,1,1");
     // aliases
-    QTest::newRow("Sans Serif") << QString("Sans Serif,123,-1,50,0,0,0,0") << QString("Sans Serif,123,-1,50,0,0,0,0");
-    QTest::newRow("Monospace") << QString("Monospace,10,666,50,0,0,0,0") << QString("Monospace,-1,666,50,0,0,0,0");
+    QTest::newRow("Sans Serif") << QString("Sans Serif,,123,-1,50,0,0,0,0") << QString("Sans Serif,,123,-1,50,0,0,0,0");
+    QTest::newRow("Monospace") << QString("Monospace,,10,666,50,0,0,0,0") << QString("Monospace,,-1,666,50,0,0,0,0");
 }
 
 void tst_QFont::toString_fromString()

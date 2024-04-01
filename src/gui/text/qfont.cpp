@@ -1186,6 +1186,7 @@ QString QFont::toString() const
 {
     const QLatin1Char comma(',');
     return family() + comma +
+        styleName() + comma +
         QString::number(     pointSizeF()) + comma +
         QString::number(      pixelSize()) + comma +
         QString::number(         weight()) + comma +
@@ -1208,23 +1209,30 @@ bool QFont::fromString(const QString &descrip)
     QStringList l(descrip.split(QLatin1Char(',')));
 
     int count = l.count();
-    if (Q_UNLIKELY(!count || count > 8)) {
+    if (Q_UNLIKELY(count <= 0 || count > 9)) {
         qWarning("QFont::fromString: Invalid description '%s'",
                  descrip.isEmpty() ? "(empty)" : descrip.toLatin1().data());
         return false;
     }
 
     setFamily(l[0]);
-    if (count > 1 && l[1].toDouble() > 0.0)
-        setPointSizeF(l[1].toDouble());
-    if (count == 8) {
-        if (l[2].toInt() > 0)
-            setPixelSize(l[2].toInt());
-        setWeight(qMax(qMin(99, l[3].toInt()), 0));
-        setStyle(static_cast<QFont::Style>(l[4].toInt()));
-        setUnderline(l[5].toInt());
-        setStrikeOut(l[6].toInt());
-        setFixedPitch(l[7].toInt());
+    if (count > 1)
+        setStyleName(l[1]);
+    if (count > 2) {
+        const double l2 = l[2].toDouble();
+        if (l2 > 0.0) {
+            setPointSizeF(l2);
+        }
+    if (count == 9) {
+        const int l3 = l[3].toInt();
+        if (l3 > 0)
+            setPixelSize(l3);
+        }
+        setWeight(qMax(qMin(99, l[4].toInt()), 0));
+        setStyle(static_cast<QFont::Style>(l[5].toInt()));
+        setUnderline(l[6].toInt());
+        setStrikeOut(l[7].toInt());
+        setFixedPitch(l[8].toInt());
 
         if (!d->request.fixedPitch) // assume 'false' fixedPitch equals default
             d->request.ignorePitch = true;
