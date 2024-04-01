@@ -50,7 +50,7 @@ struct QFontDef
 {
     inline QFontDef()
         : pointSize(-1.0), pixelSize(-1),
-          fixedPitch(false), style(QFont::StyleNormal), weight(50), stretch(QFont::Unstretched),
+          fixedPitch(false), style(QFont::StyleNormal), weight(QFont::Normal), stretch(QFont::Unstretched),
           ignorePitch(true), hintingPreference(QFont::PreferDefaultHinting)
     {
     }

@@ -60,34 +60,40 @@ static inline bool isWeightBold(const int weight)
 
 static inline double qt_pixelSize(double pointSize, int dpi)
 {
-    if (pointSize < 0)
-        return -1.;
-    if (dpi == 75) // the stupid 75 dpi setting on X11
+    if (pointSize < 0) {
+        return -1.0;
+    }
+    if (dpi == 75) {
+        // the stupid 75 dpi setting on X11
         dpi = 72;
+    }
     return ((pointSize * dpi) / 72.0);
 }
 
 static inline double qt_pointSize(double pixelSize, int dpi)
 {
-    if (pixelSize < 0)
-        return -1.;
-    if (dpi == 75) // the stupid 75 dpi setting on X11
+    if (pixelSize < 0) {
+        return -1.0;
+    }
+    if (dpi == 75) {
+        // the stupid 75 dpi setting on X11
         dpi = 72;
-    return (pixelSize * 72. / double(dpi));
+    }
+    return (pixelSize * 72.0 / double(dpi));
 }
 
 #ifndef QT_NO_FONTCONFIG
 static inline int getFCWeight(int fc_weight)
 {
-    if (fc_weight <= (FC_WEIGHT_LIGHT + FC_WEIGHT_MEDIUM) / 2)
+    if (fc_weight <= FC_WEIGHT_LIGHT) {
         return QFont::Light;
-    else if (fc_weight <= (FC_WEIGHT_MEDIUM + FC_WEIGHT_DEMIBOLD) / 2)
+    } else if (fc_weight <= FC_WEIGHT_MEDIUM) {
         return QFont::Normal;
-    else if (fc_weight <= (FC_WEIGHT_DEMIBOLD + FC_WEIGHT_BOLD) / 2)
+    } else if (fc_weight <= FC_WEIGHT_DEMIBOLD) {
         return QFont::DemiBold;
-    else if (fc_weight <= (FC_WEIGHT_BOLD + FC_WEIGHT_BLACK) / 2)
+    } else if (fc_weight <= FC_WEIGHT_BOLD) {
         return QFont::Bold;
-
+    }
     return QFont::Black;
 }
 
@@ -396,46 +402,56 @@ enum { SpecialCharCount = sizeof(specialCharsTbl) / sizeof(uint) };
 // --------------------------------------------------------------------------------------
 static FcPattern* patternForRequest(const QFontDef &request)
 {
-    FcPattern* pattern = patternForFont(request.family, request.styleName, false);
+    QString requeststyle = request.styleName;
+    if (request.weight != QFont::Normal || request.style != QFont::StyleNormal
+        || request.stretch == QFont::Unstretched) {
+        // when weight, style or stretch has been specified override the style because it makes no
+        // sense otherwise, e.g. there is "Book" style for which weight and slant may make sense
+        // but not for "Bold Oblique". because weight can be any integer (which makes things even
+        // worse) it is not the style name that overrides weight and such here
+        requeststyle.clear();
+    }
+
+    FcPattern* pattern = patternForFont(request.family, requeststyle, false);
     if (Q_UNLIKELY(!pattern)) {
         return nullptr;
     }
 
     if (!request.ignorePitch) {
         int pitch_value = FC_PROPORTIONAL;
-        if (request.fixedPitch)
+        if (request.fixedPitch) {
             pitch_value = FC_MONO;
+        }
         FcPatternAddInteger(pattern, FC_SPACING, pitch_value);
     }
 
     const double size_value = qMax(qreal(1.), request.pixelSize);
     FcPatternAddDouble(pattern, FC_PIXEL_SIZE, size_value);
 
-    if (request.styleName.isEmpty()) {
+    if (requeststyle.isEmpty()) {
         int weight_value = FC_WEIGHT_BLACK;
-        if (request.weight == 0)
+        if (request.weight == 0) {
             weight_value = FC_WEIGHT_MEDIUM;
-        else if (request.weight < (QFont::Light + QFont::Normal) / 2)
+        } else if (request.weight <= QFont::Light) {
             weight_value = FC_WEIGHT_LIGHT;
-        else if (request.weight < (QFont::Normal + QFont::DemiBold) / 2)
+        } else if (request.weight <= QFont::Normal) {
             weight_value = FC_WEIGHT_MEDIUM;
-        else if (request.weight < (QFont::DemiBold + QFont::Bold) / 2)
+        } else if (request.weight < QFont::DemiBold) {
             weight_value = FC_WEIGHT_DEMIBOLD;
-        else if (request.weight < (QFont::Bold + QFont::Black) / 2)
+        } else if (request.weight <= QFont::Bold) {
             weight_value = FC_WEIGHT_BOLD;
+        }
         FcPatternAddInteger(pattern, FC_WEIGHT, weight_value);
 
         int slant_value = FC_SLANT_ROMAN;
-        if (request.style == QFont::StyleItalic)
+        if (request.style == QFont::StyleItalic) {
             slant_value = FC_SLANT_ITALIC;
-        else if (request.style == QFont::StyleOblique)
+        } else if (request.style == QFont::StyleOblique) {
             slant_value = FC_SLANT_OBLIQUE;
+        }
         FcPatternAddInteger(pattern, FC_SLANT, slant_value);
 
-        int stretch = request.stretch;
-        if (!stretch)
-            stretch = QFont::Unstretched;
-        FcPatternAddInteger(pattern, FC_WIDTH, stretch);
+        FcPatternAddInteger(pattern, FC_WIDTH, request.stretch);
     }
 
     FcConfigSubstitute(NULL, pattern, FcMatchPattern);
