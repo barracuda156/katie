@@ -404,7 +404,7 @@ static FcPattern* patternForRequest(const QFontDef &request)
 {
     QString requeststyle = request.styleName;
     if (request.weight != QFont::Normal || request.style != QFont::StyleNormal
-        || request.stretch == QFont::Unstretched) {
+        || request.stretch != QFont::Unstretched) {
         // when weight, style or stretch has been specified override the style because it makes no
         // sense otherwise, e.g. there is "Book" style for which weight and slant may make sense
         // but not for "Bold Oblique". because weight can be any integer (which makes things even
