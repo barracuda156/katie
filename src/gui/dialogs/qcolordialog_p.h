@@ -94,7 +94,6 @@ public:
     QColorDialog::ColorDialogOptions opts;
     QPointer<QObject> receiverToDisconnectOnClose;
     QByteArray memberToDisconnectOnClose;
-    bool nativeDialogInUse;
 };
 
 QT_END_NAMESPACE

@@ -221,68 +221,6 @@ int QGuiPlatformPlugin::platformHint(PlatformHint hint)
     return ret;
 }
 
-void QGuiPlatformPlugin::fileDialogDelete(QFileDialog *)
-{
-}
-
-bool QGuiPlatformPlugin::fileDialogSetVisible(QFileDialog *, bool)
-{
-    return false;
-}
-
-QDialog::DialogCode QGuiPlatformPlugin::fileDialogResultCode(QFileDialog *)
-{
-    return QDialog::Rejected;
-}
-
-void QGuiPlatformPlugin::fileDialogSetDirectory(QFileDialog *, const QString &)
-{
-}
-
-QString QGuiPlatformPlugin::fileDialogDirectory(const QFileDialog *) const
-{
-    return QString();
-}
-
-void QGuiPlatformPlugin::fileDialogSelectFile(QFileDialog *, const QString &)
-{
-}
-
-QStringList QGuiPlatformPlugin::fileDialogSelectedFiles(const QFileDialog *) const
-{
-    return QStringList();
-}
-
-void QGuiPlatformPlugin::fileDialogSetFilter(QFileDialog *)
-{
-}
-
-void QGuiPlatformPlugin::fileDialogSetNameFilters(QFileDialog *, const QStringList &)
-{
-}
-
-void QGuiPlatformPlugin::fileDialogSelectNameFilter(QFileDialog *, const QString &)
-{
-}
-
-QString QGuiPlatformPlugin::fileDialogSelectedNameFilter(const QFileDialog *) const
-{
-    return QString();
-}
-
-void QGuiPlatformPlugin::colorDialogDelete(QColorDialog *)
-{
-}
-
-bool QGuiPlatformPlugin::colorDialogSetVisible(QColorDialog *, bool)
-{
-    return false;
-}
-
-void QGuiPlatformPlugin::colorDialogSetCurrentColor(QColorDialog *, const QColor &)
-{
-}
-
 QT_END_NAMESPACE
 
 #include "moc_qguiplatformplugin.h"

@@ -186,26 +186,7 @@ public:
     bool fileNameLabelExplicitlySat;
     QStringList nameFilters;
 
-    // Members for using native dialogs:
-    bool nativeDialogInUse;
-    // setVisible_sys returns true if it ends up showing a native
-    // dialog. Returning false means that a non-native dialog must be
-    // used instead.
-    bool canBeNativeDialog();
-    bool setVisible_sys(bool visible);
-    void deleteNativeDialog_sys();
-    QDialog::DialogCode dialogResultCode_sys();
-
-    void setDirectory_sys(const QString &directory);
-    QString directory_sys() const;
-    void selectFile_sys(const QString &filename);
-    QStringList selectedFiles_sys() const;
-    void setFilter_sys();
-    void setNameFilters_sys(const QStringList &filters);
-    void selectNameFilter_sys(const QString &filter);
-    QString selectedNameFilter_sys() const;
     //////////////////////////////////////////////
-
     QScopedPointer<Ui_QFileDialog> qFileDialogUi;
 
     QString acceptLabel;
@@ -295,61 +276,6 @@ inline QModelIndex QFileDialogPrivate::mapFromSource(const QModelIndex &index) c
 inline QString QFileDialogPrivate::rootPath() const
 {
     return model->rootPath();
-}
-
-inline void QFileDialogPrivate::deleteNativeDialog_sys()
-{
-    qt_guiPlatformPlugin()->fileDialogDelete(q_func());
-}
-
-inline bool QFileDialogPrivate::setVisible_sys(bool visible)
-{
-    return qt_guiPlatformPlugin()->fileDialogSetVisible(q_func(), visible);
-}
-
-inline QDialog::DialogCode QFileDialogPrivate::dialogResultCode_sys()
-{
-    return qt_guiPlatformPlugin()->fileDialogResultCode(q_func());
-}
-
-inline void QFileDialogPrivate::setDirectory_sys(const QString &directory)
-{
-    qt_guiPlatformPlugin()->fileDialogSetDirectory(q_func(), directory);
-}
-
-inline QString QFileDialogPrivate::directory_sys() const
-{
-    return qt_guiPlatformPlugin()->fileDialogDirectory(q_func());
-}
-
-inline void QFileDialogPrivate::selectFile_sys(const QString &filename)
-{
-    qt_guiPlatformPlugin()->fileDialogSelectFile(q_func(), filename);
-}
-
-inline QStringList QFileDialogPrivate::selectedFiles_sys() const
-{
-    return qt_guiPlatformPlugin()->fileDialogSelectedFiles(q_func());
-}
-
-inline void QFileDialogPrivate::setFilter_sys()
-{
-    qt_guiPlatformPlugin()->fileDialogSetFilter(q_func());
-}
-
-inline void QFileDialogPrivate::setNameFilters_sys(const QStringList &filters)
-{
-    qt_guiPlatformPlugin()->fileDialogSetNameFilters(q_func(), filters);
-}
-
-inline void QFileDialogPrivate::selectNameFilter_sys(const QString &filter)
-{
-    qt_guiPlatformPlugin()->fileDialogSelectNameFilter(q_func(), filter);
-}
-
-inline QString QFileDialogPrivate::selectedNameFilter_sys() const
-{
-    return qt_guiPlatformPlugin()->fileDialogSelectedNameFilter(q_func());
 }
 
 QT_END_NAMESPACE

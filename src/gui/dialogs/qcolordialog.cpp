@@ -1307,8 +1307,6 @@ void QColorDialogPrivate::init(const QColor &initial)
     q->setSizeGripEnabled(false);
     q->setWindowTitle(QColorDialog::tr("Select Color"));
 
-    nativeDialogInUse = false;
-
     nextCust = 0;
     QVBoxLayout *mainLay = new QVBoxLayout(q);
     // there's nothing in this dialog that benefits from sizing up
@@ -1502,9 +1500,6 @@ void QColorDialog::setCurrentColor(const QColor &color)
     d->setCurrentColor(color.rgb());
     d->selectColor(color);
     d->setCurrentAlpha(color.alpha());
-
-    if (d->nativeDialogInUse)
-        qt_guiPlatformPlugin()->colorDialogSetCurrentColor(this, color);
 }
 
 QColor QColorDialog::currentColor() const
@@ -1635,16 +1630,6 @@ void QColorDialog::setVisible(bool visible)
     if (visible)
         d->selectedQColor = QColor();
 
-    if (qt_guiPlatformPlugin()->colorDialogSetVisible(this, visible)) {
-        d->nativeDialogInUse = true;
-        // Set WA_DontShowOnScreen so that QDialog::setVisible(visible) below
-        // updates the state correctly, but skips showing the non-native version:
-        setAttribute(Qt::WA_DontShowOnScreen);
-    } else {
-        d->nativeDialogInUse = false;
-        setAttribute(Qt::WA_DontShowOnScreen, false);
-    }
-
     QDialog::setVisible(visible);
 }
 
@@ -1735,10 +1720,6 @@ QRgb QColorDialog::getRgba(QRgb initial, bool *ok, QWidget *parent)
 
 QColorDialog::~QColorDialog()
 {
-    Q_D(QColorDialog);
-    if (d->nativeDialogInUse)
-        qt_guiPlatformPlugin()->colorDialogDelete(this);
-
 }
 
 

@@ -53,22 +53,6 @@ public:
     virtual QIcon systemIcon(const QString &name);
     virtual QIcon fileSystemIcon(const QFileInfo &name);
     virtual int platformHint(PlatformHint hint);
-
-    virtual void fileDialogDelete(QFileDialog *);
-    virtual bool fileDialogSetVisible(QFileDialog *, bool);
-    virtual QDialog::DialogCode fileDialogResultCode(QFileDialog *);
-    virtual void fileDialogSetDirectory(QFileDialog *, const QString &);
-    virtual QString fileDialogDirectory(const QFileDialog *) const;
-    virtual void fileDialogSelectFile(QFileDialog *, const QString &);
-    virtual QStringList fileDialogSelectedFiles(const QFileDialog *) const;
-    virtual void fileDialogSetFilter(QFileDialog *);
-    virtual void fileDialogSetNameFilters(QFileDialog *, const QStringList &);
-    virtual void fileDialogSelectNameFilter(QFileDialog *, const QString &);
-    virtual QString fileDialogSelectedNameFilter(const QFileDialog *) const;
-
-    virtual void colorDialogDelete(QColorDialog *);
-    virtual bool colorDialogSetVisible(QColorDialog *, bool);
-    virtual void colorDialogSetCurrentColor(QColorDialog *, const QColor &);
 };
 
 // internal
