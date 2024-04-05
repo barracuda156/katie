@@ -71,7 +71,7 @@ public:
 
 Q_SIGNALS:
     void dateTimeChanged(const QDateTime &date);
-    void timeChanged(const QTime &date);
+    void timeChanged(const QTime &time);
     void dateChanged(const QDate &date);
 
 public Q_SLOTS:
