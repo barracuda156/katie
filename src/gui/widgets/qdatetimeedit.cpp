@@ -101,6 +101,7 @@ void QDateTimeEditPrivate::init(const QDateTime &datetime, const bool showdate, 
     m_layout->addWidget(m_timebox);
     m_datebutton = new QToolButton(q);
     m_datebutton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    m_datebutton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_datebutton->setIcon(QIcon::fromTheme("x-office-calendar", QIcon::fromTheme("text-calendar")));
     m_layout->addWidget(m_datebutton);
     q->setLayout(m_layout);
