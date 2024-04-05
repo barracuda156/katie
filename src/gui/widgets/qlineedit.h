@@ -39,7 +39,6 @@ class QLineEditPrivate;
 class QCompleter;
 class QStyleOptionFrame;
 class QAbstractSpinBox;
-class QDateTimeEdit;
 
 class Q_GUI_EXPORT QLineEdit : public QWidget
 {
