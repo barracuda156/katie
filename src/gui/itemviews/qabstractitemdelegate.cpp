@@ -209,7 +209,7 @@ QWidget *QAbstractItemDelegate::createEditor(QWidget *,
                                              const QStyleOptionViewItem &,
                                              const QModelIndex &) const
 {
-    return 0;
+    return nullptr;
 }
 
 /*!
@@ -284,26 +284,6 @@ bool QAbstractItemDelegate::editorEvent(QEvent *,
 }
 
 /*!
-    \obsolete
-
-    Use QFontMetrics::elidedText() instead.
-
-    \oldcode
-        QFontMetrics fm = ...
-        QString str = QAbstractItemDelegate::elidedText(fm, width, mode, text);
-    \newcode
-        QFontMetrics fm = ...
-        QString str = fm.elidedText(text, mode, width);
-    \endcode
-*/
-
-QString QAbstractItemDelegate::elidedText(const QFontMetrics &fontMetrics, int width,
-                                          Qt::TextElideMode mode, const QString &text)
-{
-    return fontMetrics.elidedText(text, mode, width);
-}
-
-/*!
     \since 4.3
     Whenever a help event occurs, this function is called with the \a event
     \a view \a option and the \a index that corresponds to the item where the
@@ -326,35 +306,41 @@ bool QAbstractItemDelegate::helpEvent(QHelpEvent *event,
 {
     Q_UNUSED(option);
 
-    if (!event || !view)
+    if (!event || !view) {
         return false;
+    }
     switch (event->type()) {
 #ifndef QT_NO_TOOLTIP
-    case QEvent::ToolTip: {
-        QHelpEvent *he = static_cast<QHelpEvent*>(event);
-        QVariant tooltip = index.data(Qt::ToolTipRole);
-        if (tooltip.canConvert<QString>()) {
-            QToolTip::showText(he->globalPos(), tooltip.toString(), view);
-            return true;
+        case QEvent::ToolTip: {
+            QHelpEvent *he = static_cast<QHelpEvent*>(event);
+            QVariant tooltip = index.data(Qt::ToolTipRole);
+            if (tooltip.canConvert<QString>()) {
+                QToolTip::showText(he->globalPos(), tooltip.toString(), view);
+                return true;
+            }
+            break;
         }
-        break;}
 #endif
 #ifndef QT_NO_WHATSTHIS
-    case QEvent::QueryWhatsThis: {
-        if (index.data(Qt::WhatsThisRole).isValid())
-            return true;
-        break; }
-    case QEvent::WhatsThis: {
-        QHelpEvent *he = static_cast<QHelpEvent*>(event);
-        QVariant whatsthis = index.data(Qt::WhatsThisRole);
-        if (whatsthis.canConvert<QString>()) {
-            QWhatsThis::showText(he->globalPos(), whatsthis.toString(), view);
-            return true;
+        case QEvent::QueryWhatsThis: {
+            if (index.data(Qt::WhatsThisRole).isValid()) {
+                return true;
+            }
+            break;
         }
-        break ; }
+        case QEvent::WhatsThis: {
+            QHelpEvent *he = static_cast<QHelpEvent*>(event);
+            QVariant whatsthis = index.data(Qt::WhatsThisRole);
+            if (whatsthis.canConvert<QString>()) {
+                QWhatsThis::showText(he->globalPos(), whatsthis.toString(), view);
+                return true;
+            }
+            break;
+        }
 #endif
-    default:
-        break;
+        default: {
+            break;
+        }
     }
     return false;
 }
