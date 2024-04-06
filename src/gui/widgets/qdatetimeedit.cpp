@@ -22,29 +22,61 @@
 #include "qdatetimeedit_p.h"
 #include "qdatetimeedit.h"
 #include "qwidgetaction.h"
+#include "qlineedit.h"
 
 #ifndef QT_NO_DATETIMEEDIT
 
 QT_BEGIN_NAMESPACE
 
-const QTime getTime(const int value)
+static QTime getTime(const int value)
 {
     return QDateTime::fromTime_t(value).time();
 }
 
-const int getTime_t(const QTime &value)
+static int getTime_t(const QTime &value)
 {
     return QDateTime(QDATETIMEEDIT_DATE_INITIAL, value).toTime_t();
 }
 
-QDateTimeBox::QDateTimeBox(QDateTimeEdit *parent)
-    : QSpinBox(parent),
-    m_datetimeedit(parent)
+static QValidator::State validateTime(const QLocale &locale, QString &input, int &pos)
 {
+    const QTime time = locale.toTime(input, QLocale::ShortFormat);
+    if (!time.isValid()) {
+        // try to auto-correct "1:53:25" to "10:53:25" when two digits have been selected ala
+        // "fixup", the fixup could be done based on the cursor position but meh
+        QString inputwithzero = input;
+        inputwithzero.insert(pos, locale.zeroDigit());
+        const QTime timewithzero = locale.toTime(inputwithzero, QLocale::ShortFormat);
+        if (timewithzero.isValid()) {
+            input = inputwithzero;
+            pos += 1;
+            return QValidator::Acceptable;
+        }
+        return QValidator::Invalid;
+    }
+    return QValidator::Acceptable;
+}
+
+QTimeValidator::QTimeValidator(QObject *parent)
+    : QValidator(parent)
+{
+}
+
+QValidator::State QTimeValidator::validate(QString &input, int &pos) const
+{
+    return validateTime(locale(), input, pos);
+}
+
+QTimeBox::QTimeBox(QDateTimeEdit *parent)
+    : QSpinBox(parent),
+    m_datetimeedit(parent),
+    m_validator(nullptr)
+{
+    m_validator = new QTimeValidator(this);
     updateLocale(m_datetimeedit->locale());
 }
 
-void QDateTimeBox::updateLocale(const QLocale &locale)
+void QTimeBox::updateLocale(const QLocale &locale)
 {
     const QString timeformat = locale.timeFormat(QLocale::ShortFormat);
     if (!timeformat.contains(QLatin1String("ss"))) {
@@ -52,23 +84,21 @@ void QDateTimeBox::updateLocale(const QLocale &locale)
     } else {
         setSingleStep(1);
     }
+    m_validator->setLocale(locale);
+    lineEdit()->setValidator(m_validator);
 }
 
-QValidator::State QDateTimeBox::validate(QString &input, int &pos) const
+QValidator::State QTimeBox::validate(QString &input, int &pos) const
 {
-    const QTime time = m_datetimeedit->locale().toTime(input, QLocale::ShortFormat);
-    if (!time.isValid()) {
-        return QValidator::Invalid;
-    }
-    return QValidator::Acceptable;
+    return validateTime(m_datetimeedit->locale(), input, pos);
 }
 
-int QDateTimeBox::valueFromText(const QString &text) const
+int QTimeBox::valueFromText(const QString &text) const
 {
     return getTime_t(m_datetimeedit->locale().toTime(text, QLocale::ShortFormat));
 }
 
-QString QDateTimeBox::textFromValue(int value) const
+QString QTimeBox::textFromValue(int value) const
 {
     return m_datetimeedit->locale().toString(getTime(value), QLocale::ShortFormat);
 }
@@ -96,7 +126,7 @@ void QDateTimeEditPrivate::init(const QDateTime &datetime, const bool showdate, 
     m_showdate = showdate;
     m_showtime = showtime;
     m_layout = new QHBoxLayout(q);
-    m_timebox = new QDateTimeBox(q);
+    m_timebox = new QTimeBox(q);
     m_layout->addWidget(m_timebox);
     m_datebutton = new QToolButton(q);
     m_datebutton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);

@@ -45,11 +45,21 @@
 
 QT_BEGIN_NAMESPACE
 
-class QDateTimeBox : public QSpinBox
+class QTimeValidator : public QValidator
 {
     Q_OBJECT
 public:
-    QDateTimeBox(QDateTimeEdit *parent);
+    QTimeValidator(QObject *parent);
+
+protected:
+    QValidator::State validate(QString &input, int &pos) const final;
+};
+
+class QTimeBox : public QSpinBox
+{
+    Q_OBJECT
+public:
+    QTimeBox(QDateTimeEdit *parent);
 
     void updateLocale(const QLocale &locale);
 
@@ -60,6 +70,7 @@ protected:
 
 private:
     const QDateTimeEdit* m_datetimeedit;
+    QTimeValidator* m_validator;
 };
 
 class QDateTimeEditPrivate : public QWidgetPrivate
@@ -87,7 +98,7 @@ private:
     bool m_showdate;
     bool m_showtime;
     QHBoxLayout *m_layout;
-    QDateTimeBox *m_timebox;
+    QTimeBox *m_timebox;
     QToolButton *m_datebutton;
     QMenu* m_datemenu;
     QWidgetAction* m_dateaction;
