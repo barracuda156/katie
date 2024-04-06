@@ -40,7 +40,7 @@ const int getTime_t(const QTime &value)
 QDateTimeBox::QDateTimeBox(QWidget *parent)
     : QSpinBox(parent)
 {
-    QDateTimeEdit* datetimeedit = qobject_cast<QDateTimeEdit*>(parent);
+    const QDateTimeEdit* datetimeedit = qobject_cast<QDateTimeEdit*>(parent);
     updateLocale(datetimeedit->locale());
 }
 
@@ -54,7 +54,7 @@ void QDateTimeBox::updateLocale(const QLocale &locale)
 
 QValidator::State QDateTimeBox::validate(QString &input, int &pos) const
 {
-    QDateTimeEdit* datetimeedit = qobject_cast<QDateTimeEdit*>(parent());
+    const QDateTimeEdit* datetimeedit = qobject_cast<QDateTimeEdit*>(parent());
     const QTime time = datetimeedit->locale().toTime(input, QLocale::ShortFormat);
     if (!time.isValid()) {
         return QValidator::Invalid;
@@ -64,13 +64,13 @@ QValidator::State QDateTimeBox::validate(QString &input, int &pos) const
 
 int QDateTimeBox::valueFromText(const QString &text) const
 {
-    QDateTimeEdit* datetimeedit = qobject_cast<QDateTimeEdit*>(parent());
+    const QDateTimeEdit* datetimeedit = qobject_cast<QDateTimeEdit*>(parent());
     return getTime_t(datetimeedit->locale().toTime(text, QLocale::ShortFormat));
 }
 
 QString QDateTimeBox::textFromValue(int value) const
 {
-    QDateTimeEdit* datetimeedit = qobject_cast<QDateTimeEdit*>(parent());
+    const QDateTimeEdit* datetimeedit = qobject_cast<QDateTimeEdit*>(parent());
     return datetimeedit->locale().toString(getTime(value), QLocale::ShortFormat);
 }
 
@@ -127,19 +127,15 @@ void QDateTimeEditPrivate::updateWidgets(const QDateTime &datetime)
 {
     Q_ASSERT(m_showdate || m_showtime);
     if (m_showdate) {
-        const QDate mindate = minimumdate.date();
-        const QDate maxdate = maximumdate.date();
-        calendarwidget->setMinimumDate(mindate);
-        calendarwidget->setMaximumDate(maxdate);
+        calendarwidget->setMinimumDate(minimumdate.date());
+        calendarwidget->setMaximumDate(maximumdate.date());
         m_datebutton->show();
     } else {
         m_datebutton->hide();
     }
     if (m_showtime) {
-        const QTime mintime = minimumdate.time();
-        const QTime maxtime = maximumdate.time();
-        m_timebox->setMinimum(getTime_t(mintime));
-        m_timebox->setMaximum(getTime_t(maxtime));
+        m_timebox->setMinimum(getTime_t(minimumdate.time()));
+        m_timebox->setMaximum(getTime_t(maximumdate.time()));
         m_timebox->show();
     } else {
         m_timebox->hide();
@@ -151,8 +147,7 @@ void QDateTimeEditPrivate::updateWidgets(const QDateTime &datetime)
         updateButton(curdate);
     }
     if (m_showtime) {
-        const QTime curtime = datetime.time();
-        m_timebox->setValue(getTime_t(curtime));
+        m_timebox->setValue(getTime_t(datetime.time()));
         m_datebutton->setToolButtonStyle(Qt::ToolButtonIconOnly);
     } else {
         m_datebutton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -190,9 +185,8 @@ void QDateTimeEditPrivate::setCalendar(QCalendarWidget *calendar)
 
 QDateTime QDateTimeEditPrivate::currentDateTime() const
 {
-    const QDate curdate = calendarwidget ? calendarwidget->selectedDate() : QDATETIMEEDIT_DATE_INITIAL;
     return QDateTime(
-        curdate,
+        calendarwidget ? calendarwidget->selectedDate() : QDATETIMEEDIT_DATE_INITIAL,
         getTime(m_timebox->value())
     );
 }
