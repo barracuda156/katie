@@ -571,6 +571,7 @@ QStringList QColor::colorNames()
 {
 #ifndef QT_NO_COLORNAMES
     QStringList result;
+    result.reserve(RGBTblSize);
     for (qint16 i = 0; i < RGBTblSize; i++) {
         result << QString::fromLatin1(RGBTbl[i].name);
     }
