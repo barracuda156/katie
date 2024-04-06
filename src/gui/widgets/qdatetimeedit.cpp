@@ -291,7 +291,7 @@ QDateTimeEdit::QDateTimeEdit(QWidget *parent)
     : QWidget(*new QDateTimeEditPrivate(), parent, 0)
 {
     Q_D(QDateTimeEdit);
-    d->init(QDateTime(QDATETIMEEDIT_DATE_INITIAL, QTime()), true, true);
+    d->init(QDateTime(QDATETIMEEDIT_DATE_INITIAL, QDATETIMEEDIT_TIME_MIN), true, true);
 }
 
 /*!
@@ -315,7 +315,7 @@ QDateTimeEdit::QDateTimeEdit(const QDate &date, QWidget *parent)
     : QWidget(*new QDateTimeEditPrivate(), parent, 0)
 {
     Q_D(QDateTimeEdit);
-    d->init(QDateTime(date, QTime()), true, false);
+    d->init(QDateTime(date, QDATETIMEEDIT_TIME_MIN), true, false);
 }
 
 /*!
@@ -653,7 +653,7 @@ bool QDateTimeEdit::event(QEvent *event)
   Constructs an empty time editor with a \a parent.
 */
 QTimeEdit::QTimeEdit(QWidget *parent)
-    : QDateTimeEdit(QTime(), parent)
+    : QDateTimeEdit(QDATETIMEEDIT_TIME_MIN, parent)
 {
 }
 
