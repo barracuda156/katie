@@ -37,11 +37,11 @@ const int getTime_t(const QTime &value)
     return QDateTime(QDATETIMEEDIT_DATE_INITIAL, value).toTime_t();
 }
 
-QDateTimeBox::QDateTimeBox(QWidget *parent)
-    : QSpinBox(parent)
+QDateTimeBox::QDateTimeBox(QDateTimeEdit *parent)
+    : QSpinBox(parent),
+    m_datetimeedit(parent)
 {
-    const QDateTimeEdit* datetimeedit = qobject_cast<QDateTimeEdit*>(parent);
-    updateLocale(datetimeedit->locale());
+    updateLocale(m_datetimeedit->locale());
 }
 
 void QDateTimeBox::updateLocale(const QLocale &locale)
@@ -49,13 +49,14 @@ void QDateTimeBox::updateLocale(const QLocale &locale)
     const QString timeformat = locale.timeFormat(QLocale::ShortFormat);
     if (!timeformat.contains(QLatin1String("ss"))) {
         setSingleStep(60);
+    } else {
+        setSingleStep(1);
     }
 }
 
 QValidator::State QDateTimeBox::validate(QString &input, int &pos) const
 {
-    const QDateTimeEdit* datetimeedit = qobject_cast<QDateTimeEdit*>(parent());
-    const QTime time = datetimeedit->locale().toTime(input, QLocale::ShortFormat);
+    const QTime time = m_datetimeedit->locale().toTime(input, QLocale::ShortFormat);
     if (!time.isValid()) {
         return QValidator::Invalid;
     }
@@ -64,14 +65,12 @@ QValidator::State QDateTimeBox::validate(QString &input, int &pos) const
 
 int QDateTimeBox::valueFromText(const QString &text) const
 {
-    const QDateTimeEdit* datetimeedit = qobject_cast<QDateTimeEdit*>(parent());
-    return getTime_t(datetimeedit->locale().toTime(text, QLocale::ShortFormat));
+    return getTime_t(m_datetimeedit->locale().toTime(text, QLocale::ShortFormat));
 }
 
 QString QDateTimeBox::textFromValue(int value) const
 {
-    const QDateTimeEdit* datetimeedit = qobject_cast<QDateTimeEdit*>(parent());
-    return datetimeedit->locale().toString(getTime(value), QLocale::ShortFormat);
+    return m_datetimeedit->locale().toString(getTime(value), QLocale::ShortFormat);
 }
 
 /*!
@@ -683,5 +682,6 @@ QDateEdit::QDateEdit(const QDate &date, QWidget *parent)
 QT_END_NAMESPACE
 
 #include "moc_qdatetimeedit.h"
+#include "moc_qdatetimeedit_p.h"
 
 #endif // QT_NO_DATETIMEEDIT

@@ -47,8 +47,9 @@ QT_BEGIN_NAMESPACE
 
 class QDateTimeBox : public QSpinBox
 {
+    Q_OBJECT
 public:
-    QDateTimeBox(QWidget *parent);
+    QDateTimeBox(QDateTimeEdit *parent);
 
     void updateLocale(const QLocale &locale);
 
@@ -56,6 +57,9 @@ protected:
     QValidator::State validate(QString &input, int &pos) const final;
     int valueFromText(const QString &text) const final;
     QString textFromValue(int value) const final;
+
+private:
+    const QDateTimeEdit* m_datetimeedit;
 };
 
 class QDateTimeEditPrivate : public QWidgetPrivate
