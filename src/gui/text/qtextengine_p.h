@@ -441,8 +441,8 @@ public:
 
     struct SpecialData {
         QList<QTextLayout::FormatRange> addFormats;
-        QStdVector<int> addFormatIndices;
-        QStdVector<int> resolvedFormatIndices;
+        QVector<int> addFormatIndices;
+        QVector<int> resolvedFormatIndices;
     };
     SpecialData *specialData;
 
