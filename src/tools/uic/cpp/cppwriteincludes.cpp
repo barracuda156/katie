@@ -446,7 +446,6 @@ static const struct ClassTblData {
     { QLatin1String("QTextBlockFormat"), QLatin1String("QtGui/qtextformat.h") },
     { QLatin1String("QTextBlockGroup"), QLatin1String("QtGui/qtextobject.h") },
     { QLatin1String("QTextBlockUserData"), QLatin1String("QtGui/qtextobject.h") },
-    { QLatin1String("QTextBoundaryFinder"), QLatin1String("QtCore/qtextboundaryfinder.h") },
     { QLatin1String("QTextBrowser"), QLatin1String("QtGui/qtextbrowser.h") },
     { QLatin1String("QTextCharFormat"), QLatin1String("QtGui/qtextformat.h") },
     { QLatin1String("QTextCodec"), QLatin1String("QtCore/qtextcodec.h") },

@@ -45,7 +45,6 @@ set(CORE_PUBLIC_HEADERS
     QDataStream
     QScopedValueRollback
     QAbstractItemModel
-    QTextBoundaryFinder
     QTimer
     QElapsedTimer
     QUrl
@@ -210,7 +209,6 @@ set(CORE_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstring.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstringlist.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstringmatcher.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtextboundaryfinder.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtimeline.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qvector.h
@@ -302,7 +300,6 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstring.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstringlist.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qstringmatcher.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtextboundaryfinder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtimeline.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qvector.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer_unix.cpp

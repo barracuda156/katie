@@ -461,7 +461,6 @@ classlist = [
     "QTextBlockFormat",
     "QTextBlockGroup",
     "QTextBlockUserData",
-    "QTextBoundaryFinder",
     "QTextBrowser",
     "QTextCharFormat",
     "QTextCodec",
