@@ -58,11 +58,10 @@ QFreetypeFace::QFreetypeFace(const QFontEngine::FaceId &face_id)
     : face(nullptr),
     library(nullptr)
 {
-    FT_Init_FreeType(&library);
-
     if (face_id.filename.isEmpty()) {
         return;
     }
+    FT_Init_FreeType(&library);
 
     if (FT_New_Face(library, face_id.filename, face_id.index, &face) != 0) {
         return;
@@ -73,8 +72,12 @@ QFreetypeFace::QFreetypeFace(const QFontEngine::FaceId &face_id)
 
 QFreetypeFace::~QFreetypeFace()
 {
-    FT_Done_Face(face);
-    FT_Done_FreeType(library);
+    if (face) {
+        FT_Done_Face(face);
+    }
+    if (library) {
+        FT_Done_FreeType(library);
+    }
 }
 
 void QFreetypeFace::addGlyphToPath(const FT_Outline &outline, const QFixedPoint &point, QPainterPath *path)
@@ -174,7 +177,6 @@ QFontEngineFT::QFontEngineFT(const QFontDef &fd, FcPattern *pattern)
 
     // FcPatternPrint(pattern);
     FcChar8 *fileName;
-
     FcPatternGetString(pattern, FC_FILE, 0, &fileName);
     face_id.filename = (const char *)fileName;
 
@@ -243,24 +245,22 @@ void QFontEngineFT::init()
 
 QFontEngineFT::~QFontEngineFT()
 {
-    if (freetype) {
-        GlyphCache::const_iterator iter = glyphcache.begin();
-        GlyphCache::const_iterator iterend = glyphcache.end();
-        while (iter != iterend) {
-            QFontGlyph* gcache = iter->second;
+    GlyphCache::const_iterator iter = glyphcache.begin();
+    GlyphCache::const_iterator iterend = glyphcache.end();
+    while (iter != iterend) {
+        QFontGlyph* gcache = iter->second;
 #ifdef QT_MEMCPY_FT_OUTLINE
-            ::free(gcache->outline.contours);
-            ::free(gcache->outline.points);
-            ::free(gcache->outline.tags);
+        ::free(gcache->outline.contours);
+        ::free(gcache->outline.points);
+        ::free(gcache->outline.tags);
 #else
-            FT_Outline_Done(freetype->library, &(gcache->outline));
+        FT_Outline_Done(freetype->library, &(gcache->outline));
 #endif
-            delete gcache;
-            iter++;
-        }
-
-        delete freetype;
+        delete gcache;
+        iter++;
     }
+
+    delete freetype;
 }
 
 bool QFontEngineFT::loadGlyph(glyph_t glyph) const
