@@ -76,8 +76,6 @@ protected:
 
 private:
     Q_DISABLE_COPY(QSyntaxHighlighter)
-    Q_PRIVATE_SLOT(d_func(), void _q_reformatBlocks(int from, int charsRemoved, int charsAdded))
-    Q_PRIVATE_SLOT(d_func(), void _q_delayedRehighlight())
 };
 
 QT_END_NAMESPACE
