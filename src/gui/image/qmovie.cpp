@@ -128,8 +128,6 @@
 #include "qobject_p.h"
 #include "qdebug.h"
 
-#define QMOVIE_INVALID_DELAY -1
-
 QT_BEGIN_NAMESPACE
 
 class QMoviePrivate : public QObjectPrivate
@@ -388,33 +386,44 @@ QColor QMovie::backgroundColor() const
 }
 
 /*!
-    Returns the current state of QMovie.
+    \since 4.1
 
-    \sa MovieState, stateChanged()
+    Returns the scaled size of frames.
+
+    \sa QImageReader::scaledSize()
 */
-QMovie::MovieState QMovie::state() const
+QSize QMovie::scaledSize() const
 {
     Q_D(const QMovie);
-    return d->movieState;
+    return d->reader->scaledSize();
 }
 
 /*!
-    Returns the current frame as a QImage.
+    \since 4.1
+
+    Sets the scaled frame size to \a size.
+
+    \sa QImageReader::setScaledSize()
 */
-QImage QMovie::currentImage() const
+void QMovie::setScaledSize(const QSize &size)
 {
-    Q_D(const QMovie);
-    return d->currentImage;
+    Q_D(QMovie);
+    d->reader->setScaledSize(size);
 }
 
 /*!
-    Returns true if the movie is valid (e.g., the image data is readable and
-    the image format is supported); otherwise returns false.
+    Returns the number of times the movie will loop before it finishes.
+    If the movie will only play once (no looping), loopCount returns 0.
+    If the movie loops forever, loopCount returns -1.
+
+    Note that, if the image data comes from a sequential device (e.g. a
+    socket), QMovie can only loop the movie if the cacheMode is set to
+    QMovie::CacheAll.
 */
-bool QMovie::isValid() const
+int QMovie::loopCount() const
 {
     Q_D(const QMovie);
-    return d->reader->canRead();
+    return d->reader->loopCount();
 }
 
 /*!
@@ -450,18 +459,33 @@ int QMovie::currentFrameNumber() const
 }
 
 /*!
-    Returns the number of times the movie will loop before it finishes.
-    If the movie will only play once (no looping), loopCount returns 0.
-    If the movie loops forever, loopCount returns -1.
+    Returns the current state of QMovie.
 
-    Note that, if the image data comes from a sequential device (e.g. a
-    socket), QMovie can only loop the movie if the cacheMode is set to
-    QMovie::CacheAll.
+    \sa MovieState, stateChanged()
 */
-int QMovie::loopCount() const
+QMovie::MovieState QMovie::state() const
 {
     Q_D(const QMovie);
-    return d->reader->loopCount();
+    return d->movieState;
+}
+
+/*!
+    Returns the current frame as a QImage.
+*/
+QImage QMovie::currentImage() const
+{
+    Q_D(const QMovie);
+    return d->currentImage;
+}
+
+/*!
+    Returns true if the movie is valid (e.g., the image data is readable and
+    the image format is supported); otherwise returns false.
+*/
+bool QMovie::isValid() const
+{
+    Q_D(const QMovie);
+    return d->reader->canRead();
 }
 
 /*!
@@ -498,32 +522,6 @@ void QMovie::stop()
         return;
     }
     d->done();
-}
-
-/*!
-    \since 4.1
-
-    Returns the scaled size of frames.
-
-    \sa QImageReader::scaledSize()
-*/
-QSize QMovie::scaledSize() const
-{
-    Q_D(const QMovie);
-    return d->reader->scaledSize();
-}
-
-/*!
-    \since 4.1
-
-    Sets the scaled frame size to \a size.
-
-    \sa QImageReader::setScaledSize()
-*/
-void QMovie::setScaledSize(const QSize &size)
-{
-    Q_D(QMovie);
-    d->reader->setScaledSize(size);
 }
 
 /*!

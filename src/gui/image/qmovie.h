@@ -74,19 +74,19 @@ public:
     void setBackgroundColor(const QColor &color);
     QColor backgroundColor() const;
 
-    MovieState state() const;
-
-    QImage currentImage() const;
-
-    bool isValid() const;
+    QSize scaledSize() const;
+    void setScaledSize(const QSize &size);
 
     int loopCount() const;
     int frameCount() const;
     int nextFrameDelay() const;
     int currentFrameNumber() const;
 
-    QSize scaledSize() const;
-    void setScaledSize(const QSize &size);
+    MovieState state() const;
+
+    QImage currentImage() const;
+
+    bool isValid() const;
 
 Q_SIGNALS:
     void started();
