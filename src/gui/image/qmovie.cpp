@@ -42,19 +42,11 @@
 
     \snippet doc/src/snippets/code/src_gui_image_qmovie.cpp 0
 
-    Whenever a new frame is available in the movie, QMovie will emit
-    updated(). If the size of the frame changes, resized() is emitted. You can
-    call currentImage() or currentPixmap() to get a copy of the current
-    frame. When the movie is done, QMovie emits finished(). If any error
-    occurs during playback (i.e, the image file is corrupt), QMovie will emit
-    error().
-
-    You can control the speed of the movie playback by calling setSpeed(),
-    which takes the percentage of the original speed as an argument. Pause the
-    movie by calling setPaused(true). QMovie will then enter \l Paused state
-    and emit stateChanged(). If you call setPaused(false), QMovie will reenter
-    \l Running state and start the movie again. To stop the movie, call
-    stop().
+    Whenever the frame changes, QMovie will emit frameChanged(). currentImage()
+    can be used to get a copy of the current frame. When the movie is done,
+    QMovie emits finished(). If any error occurs during playback (i.e, the image
+    file is corrupt), QMovie will emit error(). When QMovie state changes, QMovie
+    will emit stateChanged(). To stop the movie, call stop().
 
     Certain animation formats allow you to set the background color. You can
     call setBackgroundColor() to set the color, or backgroundColor() to
@@ -83,42 +75,13 @@
     state, and the state it enters after stop() has been called or the movie
     is finished.
 
-    \value Paused The movie is paused, and QMovie stops emitting updated() or
-    resized(). This state is entered after calling pause() or
-    setPaused(true). The current frame number it kept, and the movie will
-    continue with the next frame when unpause() or setPaused(false) is called.
-
     \value Running The movie is running.
-*/
-
-/*! \enum QMovie::CacheMode
-
-    This enum describes the different cache modes of QMovie.
-
-    \value CacheNone No frames are cached (the default).
-
-    \value CacheAll All frames are cached.
 */
 
 /*! \fn void QMovie::started()
 
     This signal is emitted after QMovie::start() has been called, and QMovie
     has entered QMovie::Running state.
-*/
-
-/*! \fn void QMovie::resized(const QSize &size)
-
-    This signal is emitted when the current frame has been resized to \a
-    size. This effect is sometimes used in animations as an alternative to
-    replacing the frame. You can call currentImage() or currentPixmap() to get a
-    copy of the updated frame.
-*/
-
-/*! \fn void QMovie::updated(const QRect &rect)
-
-    This signal is emitted when the rect \a rect in the current frame has been
-    updated. You can call currentImage() or currentPixmap() to get a copy of the
-    updated frame.
 */
 
 /*! \fn void QMovie::frameChanged(int frameNumber)
@@ -158,50 +121,16 @@
 #include "qmovie.h"
 #include "qimage.h"
 #include "qimagereader.h"
-#include "qpixmap.h"
-#include "qrect.h"
-#include "qelapsedtimer.h"
 #include "qtimer.h"
-#include "qpair.h"
-#include "qmap.h"
+#include "qcolor.h"
 #include "qlist.h"
 #include "qbuffer.h"
-#include "qdir.h"
 #include "qobject_p.h"
+#include "qdebug.h"
 
 #define QMOVIE_INVALID_DELAY -1
 
 QT_BEGIN_NAMESPACE
-
-class QFrameInfo
-{
-public:
-    QPixmap pixmap;
-    int delay;
-    bool endMark;
-    inline QFrameInfo(bool endMark)
-        : pixmap(QPixmap()), delay(QMOVIE_INVALID_DELAY), endMark(endMark)
-    { }
-    
-    inline QFrameInfo()
-        : pixmap(QPixmap()), delay(QMOVIE_INVALID_DELAY), endMark(false)
-    { }
-    
-    inline QFrameInfo(const QPixmap &pixmap, int delay)
-        : pixmap(pixmap), delay(delay), endMark(false)
-    { }
-    
-    inline bool isValid()
-    {
-        return endMark || !(pixmap.isNull() && (delay == QMOVIE_INVALID_DELAY));
-    }
-    
-    inline bool isEndMarker()
-    { return endMark; }
-    
-    static inline QFrameInfo endMarker()
-    { return QFrameInfo(true); }
-};
 
 class QMoviePrivate : public QObjectPrivate
 {
@@ -209,342 +138,76 @@ class QMoviePrivate : public QObjectPrivate
 
 public:
     QMoviePrivate(QMovie *qq);
-    bool isDone();
-    bool next();
-    int speedAdjustedDelay(int delay) const;
-    bool isValid() const;
-    bool jumpToFrame(int frameNumber);
-    int frameCount() const;
-    bool jumpToNextFrame();
-    QFrameInfo infoForFrame(int frameNumber);
-    void reset();
 
-    inline void enterState(QMovie::MovieState newState) {
-        movieState = newState;
-        emit q_func()->stateChanged(newState);
-    }
-
-    // private slots
+    void begin();
+    void done();
+    void readerError(const QImageReader::ImageReaderError error);
     void _q_loadNextFrame();
-    void _q_loadNextFrame(bool starting);
 
+    int loopCount;
     QImageReader *reader;
-    int speed;
     QMovie::MovieState movieState;
-    QRect frameRect;
-    QPixmap currentPixmap;
-    int currentFrameNumber;
-    int nextFrameNumber;
-    int greatestFrameNumber;
-    int nextDelay;
-    int playCounter;
-    qint64 initialDevicePos;
-    QMovie::CacheMode cacheMode;
-    bool haveReadAll;
-    bool isFirstIteration;
-    QMap<int, QFrameInfo> frameMap;
-    QString absoluteFilePath;
-
+    QImage currentImage;
     QTimer nextImageTimer;
 };
 
-/*! \internal
- */
 QMoviePrivate::QMoviePrivate(QMovie *qq)
-    : reader(0), speed(100), movieState(QMovie::NotRunning),
-      currentFrameNumber(-1), nextFrameNumber(0), greatestFrameNumber(-1),
-      nextDelay(0), playCounter(-1),
-      cacheMode(QMovie::CacheNone), haveReadAll(false), isFirstIteration(true)
+    : loopCount(-1),
+    reader(nullptr),
+    movieState(QMovie::NotRunning)
 {
     q_ptr = qq;
-    nextImageTimer.setSingleShot(true);
 }
 
-/*! \internal
- */
-void QMoviePrivate::reset()
-{
-    nextImageTimer.stop();
-    if (reader->device())
-        initialDevicePos = reader->device()->pos();
-    currentFrameNumber = -1;
-    nextFrameNumber = 0;
-    greatestFrameNumber = -1;
-    nextDelay = 0;
-    playCounter = -1;
-    haveReadAll = false;
-    isFirstIteration = true;
-    frameMap.clear();
-}
-
-/*! \internal
- */
-bool QMoviePrivate::isDone()
-{
-    return (playCounter == 0);
-}
-
-/*!
-    \internal
-
-    Given the original \a delay, this function returns the
-    actual number of milliseconds to delay according to
-    the current speed. E.g. if the speed is 200%, the
-    result will be half of the original delay.
-*/
-int QMoviePrivate::speedAdjustedDelay(int delay) const
-{
-    return int( (qint64(delay) * qint64(100) ) / qint64(speed) );
-}
-
-/*!
-    \internal
-
-    Returns the QFrameInfo for the given \a frameNumber.
-
-    If the frame number is invalid, an invalid QFrameInfo is
-    returned.
-
-    If the end of the animation has been reached, a
-    special end marker QFrameInfo is returned.
-
-*/
-QFrameInfo QMoviePrivate::infoForFrame(int frameNumber)
-{
-    if (frameNumber < 0)
-        return QFrameInfo(); // Invalid
-
-    if (haveReadAll && (frameNumber > greatestFrameNumber)) {
-        if (frameNumber == greatestFrameNumber+1)
-            return QFrameInfo::endMarker();
-        return QFrameInfo(); // Invalid
-    }
-
-    if (cacheMode == QMovie::CacheNone) {
-        if (frameNumber != currentFrameNumber+1) {
-            // Non-sequential frame access
-            if (!reader->jumpToImage(frameNumber)) {
-                if (frameNumber == 0) {
-                    // Special case: Attempt to "rewind" so we can loop
-                    // ### This could be implemented as QImageReader::rewind()
-                    if (reader->device()->isSequential())
-                        return QFrameInfo(); // Invalid
-                    QString fileName = reader->fileName();
-                    QByteArray format = reader->format();
-                    QIODevice *device = reader->device();
-                    QColor bgColor = reader->backgroundColor();
-                    QSize scaledSize = reader->scaledSize();
-                    delete reader;
-                    if (fileName.isEmpty())
-                        reader = new QImageReader(device, format);
-                    else
-                        reader = new QImageReader(absoluteFilePath, format);
-                    (void)reader->canRead(); // Provoke a device->open() call
-                    reader->device()->seek(initialDevicePos);
-                    reader->setBackgroundColor(bgColor);
-                    reader->setScaledSize(scaledSize);
-                } else {
-                    return QFrameInfo(); // Invalid
-                }
-            }
-        }
-        if (reader->canRead()) {
-            // reader says we can read. Attempt to actually read image
-            QImage anImage = reader->read();
-            if (anImage.isNull()) {
-                // Reading image failed.
-                return QFrameInfo(); // Invalid
-            }
-            if (frameNumber > greatestFrameNumber)
-                greatestFrameNumber = frameNumber;
-            QPixmap aPixmap = QPixmap::fromImage(anImage);
-            int aDelay = reader->nextImageDelay();
-            return QFrameInfo(aPixmap, aDelay);
-        } else if (frameNumber != 0) {
-            // We've read all frames now. Return an end marker
-            haveReadAll = true;
-            return QFrameInfo::endMarker();
-        } else {
-            // No readable frames
-            haveReadAll = true;
-            return QFrameInfo();
-        }
-    }
-
-    // CacheMode == CacheAll
-    if (frameNumber > greatestFrameNumber) {
-        // Frame hasn't been read from file yet. Try to do it
-        for (int i = greatestFrameNumber + 1; i <= frameNumber; ++i) {
-            if (reader->canRead()) {
-                // reader says we can read. Attempt to actually read image
-                QImage anImage = reader->read();
-                if (anImage.isNull()) {
-                    // Reading image failed.
-                    return QFrameInfo(); // Invalid
-                }
-                greatestFrameNumber = i;
-                QPixmap aPixmap = QPixmap::fromImage(anImage);
-                int aDelay = reader->nextImageDelay();
-                QFrameInfo info(aPixmap, aDelay);
-                // Cache it!
-                frameMap.insert(i, info);
-                if (i == frameNumber) {
-                    return info;
-                }
-            } else {
-                // We've read all frames now. Return an end marker
-                haveReadAll = true;
-                return QFrameInfo::endMarker();
-            }
-        }
-    }
-    // Return info for requested (cached) frame
-    return frameMap.value(frameNumber);
-}
-
-/*!
-    \internal
-
-    Attempts to advance the animation to the next frame.
-    If successful, currentFrameNumber, currentPixmap and
-    nextDelay are updated accordingly, and true is returned.
-    Otherwise, false is returned.
-    When false is returned, isDone() can be called to
-    determine whether the animation ended gracefully or
-    an error occurred when reading the frame.
-*/
-bool QMoviePrivate::next()
-{
-    QElapsedTimer time;
-    time.start();
-    QFrameInfo info = infoForFrame(nextFrameNumber);
-    if (!info.isValid())
-        return false;
-    if (info.isEndMarker()) {
-        // We reached the end of the animation.
-        if (isFirstIteration) {
-            if (nextFrameNumber == 0) {
-                // No frames could be read at all (error).
-                return false;
-            }
-            // End of first iteration. Initialize play counter
-            playCounter = reader->loopCount();
-            isFirstIteration = false;
-        }
-        // Loop as appropriate
-        if (playCounter != 0) {
-            if (playCounter != -1) // Infinite?
-                playCounter--;     // Nope
-            nextFrameNumber = 0;
-            return next();
-        }
-        // Loop no more. Done
-        return false;
-    }
-    // Image and delay OK, update internal state
-    currentFrameNumber = nextFrameNumber++;
-    QSize scaledSize = reader->scaledSize();
-    if (scaledSize.isValid() && (scaledSize != info.pixmap.size()))
-        currentPixmap = info.pixmap.scaled(scaledSize);
-    else
-        currentPixmap = info.pixmap;
-    nextDelay = speedAdjustedDelay(info.delay);
-    // Adjust delay according to the time it took to read the frame
-    int processingTime = time.elapsed();
-    if (processingTime > nextDelay)
-        nextDelay = 0;
-    else
-        nextDelay = nextDelay - processingTime;
-    return true;
-}
-
-/*! \internal
- */
-void QMoviePrivate::_q_loadNextFrame()
-{
-    _q_loadNextFrame(false);
-}
-
-void QMoviePrivate::_q_loadNextFrame(bool starting)
+void QMoviePrivate::begin()
 {
     Q_Q(QMovie);
-    if (next()) {
-        if (starting && movieState == QMovie::NotRunning) {
-            enterState(QMovie::Running);
-            emit q->started();
-        }
+    loopCount = reader->loopCount();
+    _q_loadNextFrame();
+    nextImageTimer.start();
+    movieState = QMovie::Running;
+    emit q->started();
+    emit q->stateChanged(QMovie::Running);
+}
 
-        if (frameRect.size() != currentPixmap.rect().size()) {
-            frameRect = currentPixmap.rect();
-            emit q->resized(frameRect.size());
-        }
+void QMoviePrivate::done()
+{
+    Q_Q(QMovie);
+    nextImageTimer.stop();
+    movieState = QMovie::NotRunning;
+    emit q->finished();
+    emit q->stateChanged(QMovie::NotRunning);
+}
 
-        emit q->updated(frameRect);
-        emit q->frameChanged(currentFrameNumber);
+void QMoviePrivate::readerError(const QImageReader::ImageReaderError error)
+{
+    Q_Q(QMovie);
+    done();
+    emit q->error(reader->error());
+}
 
-        if (movieState == QMovie::Running)
-            nextImageTimer.start(nextDelay);
-    } else {
-        // Could not read another frame
-        if (!isDone()) {
-            emit q->error(reader->error());
-        }
-
-        // Graceful finish
-        if (movieState != QMovie::Paused) {
-            nextFrameNumber = 0;
-            isFirstIteration = true;
-            playCounter = -1;
-            enterState(QMovie::NotRunning);
-            emit q->finished();
+void QMoviePrivate::_q_loadNextFrame()
+{
+    Q_Q(QMovie);
+    if (!reader->read(&currentImage)) {
+        currentImage = QImage();
+        readerError(reader->error());
+        return;
+    }
+    const int currentframe = reader->currentImageNumber();
+    emit q->frameChanged(currentframe);
+    nextImageTimer.setInterval(reader->nextImageDelay());
+    if (currentframe >= reader->imageCount()) {
+        loopCount++;
+        if (loopCount == 0 || loopCount < reader->loopCount()) {
+            // infinite loop or not done looping
+            if (!reader->jumpToImage(0)) {
+                readerError(reader->error());
+            }
+        } else {
+            done();
         }
     }
-}
-
-/*!
-    \internal
-*/
-bool QMoviePrivate::isValid() const
-{
-    return (greatestFrameNumber >= 0) // have we seen valid data
-        || reader->canRead(); // or does the reader see valid data
-}
-
-/*!
-    \internal
-*/
-bool QMoviePrivate::jumpToFrame(int frameNumber)
-{
-    if (frameNumber < 0)
-        return false;
-    if (currentFrameNumber == frameNumber)
-        return true;
-    nextFrameNumber = frameNumber;
-    if (movieState == QMovie::Running)
-        nextImageTimer.stop();
-    _q_loadNextFrame();
-    return (nextFrameNumber == currentFrameNumber+1);
-}
-
-/*!
-    \internal
-*/
-int QMoviePrivate::frameCount() const
-{
-    int result;
-    if ((result = reader->imageCount()) != 0)
-        return result;
-    if (haveReadAll)
-        return greatestFrameNumber+1;
-    return 0; // Don't know
-}
-
-/*!
-    \internal
-*/
-bool QMoviePrivate::jumpToNextFrame()
-{
-    return jumpToFrame(currentFrameNumber+1);
 }
 
 /*!
@@ -557,7 +220,7 @@ QMovie::QMovie(QObject *parent)
     : QObject(*new QMoviePrivate(this), parent)
 {
     Q_D(QMovie);
-    d->reader = new QImageReader;
+    d->reader = new QImageReader();
     connect(&d->nextImageTimer, SIGNAL(timeout()), this, SLOT(_q_loadNextFrame()));
 }
 
@@ -574,7 +237,6 @@ QMovie::QMovie(QIODevice *device, const QByteArray &format, QObject *parent)
 {
     Q_D(QMovie);
     d->reader = new QImageReader(device, format);
-    d->initialDevicePos = device->pos();
     connect(&d->nextImageTimer, SIGNAL(timeout()), this, SLOT(_q_loadNextFrame()));
 }
 
@@ -590,10 +252,7 @@ QMovie::QMovie(const QString &fileName, const QByteArray &format, QObject *paren
     : QObject(*new QMoviePrivate(this), parent)
 {
     Q_D(QMovie);
-    d->absoluteFilePath = QDir(fileName).absolutePath();
     d->reader = new QImageReader(fileName, format);
-    if (d->reader->device())
-        d->initialDevicePos = d->reader->device()->pos();
     connect(&d->nextImageTimer, SIGNAL(timeout()), this, SLOT(_q_loadNextFrame()));
 }
 
@@ -615,8 +274,8 @@ QMovie::~QMovie()
 void QMovie::setDevice(QIODevice *device)
 {
     Q_D(QMovie);
+    stop();
     d->reader->setDevice(device);
-    d->reset();
 }
 
 /*!
@@ -640,9 +299,8 @@ QIODevice *QMovie::device() const
 void QMovie::setFileName(const QString &fileName)
 {
     Q_D(QMovie);
-    d->absoluteFilePath = QDir(fileName).absolutePath();
+    stop();
     d->reader->setFileName(fileName);
-    d->reset();
 }
 
 /*!
@@ -671,6 +329,7 @@ QString QMovie::fileName() const
 void QMovie::setFormat(const QByteArray &format)
 {
     Q_D(QMovie);
+    stop();
     d->reader->setFormat(format);
 }
 
@@ -722,57 +381,12 @@ QMovie::MovieState QMovie::state() const
 }
 
 /*!
-    Returns the rect of the last frame. If no frame has yet been updated, an
-    invalid QRect is returned.
-
-    \sa currentImage(), currentPixmap()
-*/
-QRect QMovie::frameRect() const
-{
-    Q_D(const QMovie);
-    return d->frameRect;
-}
-
-/*! \fn QImage QMovie::framePixmap() const
-
-    Use currentPixmap() instead.
-*/
-
-/*! \fn void QMovie::pause()
-
-    Use setPaused(true) instead.
-*/
-
-/*! \fn void QMovie::unpause()
-
-    Use setPaused(false) instead.
-*/
-
-/*!
-    Returns the current frame as a QPixmap.
-
-    \sa currentImage(), updated()
-*/
-QPixmap QMovie::currentPixmap() const
-{
-    Q_D(const QMovie);
-    return d->currentPixmap;
-}
-
-/*! \fn QImage QMovie::frameImage() const
-
-    Use currentImage() instead.
-*/
-
-/*!
     Returns the current frame as a QImage.
-
-    \sa currentPixmap(), updated()
 */
 QImage QMovie::currentImage() const
 {
     Q_D(const QMovie);
-    return d->currentPixmap.toImage();
+    return d->currentImage;
 }
 
 /*!
@@ -782,44 +396,8 @@ QImage QMovie::currentImage() const
 bool QMovie::isValid() const
 {
     Q_D(const QMovie);
-    return d->isValid();
+    return d->reader->canRead();
 }
-
-/*! \fn bool QMovie::running() const
-
-    Use state() instead.
-*/
-
-/*! \fn bool QMovie::isNull() const
-
-    Use isValid() instead.
-*/
-
-/*! \fn int QMovie::frameNumber() const
-
-    Use currentFrameNumber() instead.
-*/
-
-/*! \fn bool QMovie::paused() const
-
-    Use state() instead.
-*/
-
-/*! \fn bool QMovie::finished() const
-
-    Use state() instead.
-*/
-
-/*! \fn void QMovie::restart()
-
-    Use stop() and start() instead.
-*/
-
-/*!
-    \fn void QMovie::step()
-
-    Use jumpToNextFrame() instead.
-*/
 
 /*!
     Returns the number of frames in the movie.
@@ -830,7 +408,7 @@ bool QMovie::isValid() const
 int QMovie::frameCount() const
 {
     Q_D(const QMovie);
-    return d->frameCount();
+    return d->reader->imageCount();
 }
 
 /*!
@@ -840,7 +418,7 @@ int QMovie::frameCount() const
 int QMovie::nextFrameDelay() const
 {
     Q_D(const QMovie);
-    return d->nextDelay;
+    return d->reader->nextImageDelay();
 }
 
 /*!
@@ -850,7 +428,7 @@ int QMovie::nextFrameDelay() const
 int QMovie::currentFrameNumber() const
 {
     Q_D(const QMovie);
-    return d->currentFrameNumber;
+    return d->reader->currentImageNumber();
 }
 
 /*!
@@ -859,17 +437,7 @@ int QMovie::currentFrameNumber() const
 bool QMovie::jumpToNextFrame()
 {
     Q_D(QMovie);
-    return d->jumpToNextFrame();
-}
-
-/*!
-    Jumps to frame number \a frameNumber. Returns true on success; otherwise
-    returns false.
-*/
-bool QMovie::jumpToFrame(int frameNumber)
-{
-    Q_D(QMovie);
-    return d->jumpToFrame(frameNumber);
+    return d->reader->jumpToNextImage();
 }
 
 /*!
@@ -888,68 +456,20 @@ int QMovie::loopCount() const
 }
 
 /*!
-    If \a paused is true, QMovie will enter \l Paused state and emit
-    stateChanged(Paused); otherwise it will enter \l Running state and emit
-    stateChanged(Running).
-
-    \sa state()
-*/
-void QMovie::setPaused(bool paused)
-{
-    Q_D(QMovie);
-    if (paused) {
-        if (d->movieState == NotRunning)
-            return;
-        d->enterState(Paused);
-        d->nextImageTimer.stop();
-    } else {
-        if (d->movieState == Running)
-            return;
-        d->enterState(Running);
-        d->nextImageTimer.start(nextFrameDelay());
-    }
-}
-
-/*!
-    \property QMovie::speed
-    \brief the movie's speed
-
-    The speed is measured in percentage of the original movie speed.
-    The default speed is 100%.
-    Example:
-
-    \snippet doc/src/snippets/code/src_gui_image_qmovie.cpp 1
-*/
-void QMovie::setSpeed(int percentSpeed)
-{
-    Q_D(QMovie);
-    d->speed = percentSpeed;
-}
-
-int QMovie::speed() const
-{
-    Q_D(const QMovie);
-    return d->speed;
-}
-
-/*!
     Starts the movie. QMovie will enter \l Running state, and start emitting
     updated() and resized() as the movie progresses.
 
-    If QMovie is in the \l Paused state, this function is equivalent
-    to calling setPaused(false). If QMovie is already in the \l
-    Running state, this function does nothing.
+    If QMovie is already in the \l Running state, this function does nothing.
 
-    \sa stop(), setPaused()
+    \sa stop()
 */
 void QMovie::start()
 {
     Q_D(QMovie);
-    if (d->movieState == NotRunning) {
-        d->_q_loadNextFrame(true);
-    } else if (d->movieState == Paused) {
-        setPaused(false);
+    if (d->movieState == QMovie::Running) {
+        return;
     }
+    d->begin();
 }
 
 /*!
@@ -960,16 +480,15 @@ void QMovie::start()
     If QMovie is already in the \l NotRunning state, this function
     does nothing.
 
-    \sa start(), setPaused()
+    \sa start()
 */
 void QMovie::stop()
 {
     Q_D(QMovie);
-    if (d->movieState == NotRunning)
+    if (d->movieState == QMovie::NotRunning) {
         return;
-    d->enterState(NotRunning);
-    d->nextImageTimer.stop();
-    d->nextFrameNumber = 0;
+    }
+    d->done();
 }
 
 /*!
@@ -1017,39 +536,6 @@ QList<QByteArray> QMovie::supportedFormats()
             it.remove();
     }
     return list;
-}
-
-/*!
-    \property QMovie::cacheMode
-    \brief the movie's cache mode
-
-    Caching frames can be useful when the underlying animation format handler
-    that QMovie relies on to decode the animation data does not support
-    jumping to particular frames in the animation, or even "rewinding" the
-    animation to the beginning (for looping). Furthermore, if the image data
-    comes from a sequential device, it is not possible for the underlying
-    animation handler to seek back to frames whose data has already been read
-    (making looping altogether impossible).
-
-    To aid in such situations, a QMovie object can be instructed to cache the
-    frames, at the added memory cost of keeping the frames in memory for the
-    lifetime of the object.
-
-    By default, this property is set to \l CacheNone.
-
-    \sa QMovie::CacheMode
-*/
-
-QMovie::CacheMode QMovie::cacheMode() const
-{
-    Q_D(const QMovie);
-    return d->cacheMode;
-}
-
-void QMovie::setCacheMode(CacheMode cacheMode)
-{
-    Q_D(QMovie);
-    d->cacheMode = cacheMode;
 }
 
 QT_END_NAMESPACE

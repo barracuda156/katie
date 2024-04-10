@@ -491,8 +491,8 @@ QSize QLabelPrivate::sizeForWidth(int w) const
     if (pixmap && !pixmap->isNull())
         br = pixmap->rect();
 #ifndef QT_NO_MOVIE
-    else if (movie && !movie->currentPixmap().isNull())
-        br = movie->currentPixmap().rect();
+    else if (movie && !movie->currentImage().isNull())
+        br = movie->currentImage().rect();
 #endif
     else if (isTextLabel) {
         int align = QStyle::visualAlignment(textDirection(), QFlag(this->align));
@@ -920,10 +920,11 @@ void QLabel::paintEvent(QPaintEvent *ev)
 
 #ifndef QT_NO_MOVIE
     if (d->movie) {
+        QPixmap pixmap = QPixmap::fromImage(d->movie->currentImage());
         if (d->scaledcontents)
-            style->drawItemPixmap(&painter, cr, align, d->movie->currentPixmap().scaled(cr.size()));
+            style->drawItemPixmap(&painter, cr, align, pixmap.scaled(cr.size()));
         else
-            style->drawItemPixmap(&painter, cr, align, d->movie->currentPixmap());
+            style->drawItemPixmap(&painter, cr, align, pixmap);
     }
     else
 #endif
@@ -1107,16 +1108,17 @@ void QLabelPrivate::_q_movieUpdated(const QRect& rect)
     Q_Q(QLabel);
     if (movie && movie->isValid()) {
         QRect r;
+        QPixmap pixmap = QPixmap::fromImage(movie->currentImage());
         if (scaledcontents) {
             QRect cr = q->contentsRect();
-            QRect pixmapRect(cr.topLeft(), movie->currentPixmap().size());
+            QRect pixmapRect(cr.topLeft(), pixmap.size());
             if (pixmapRect.isEmpty())
                 return;
             r.setRect(cr.left(), cr.top(),
                       (rect.width() * cr.width()) / pixmapRect.width(),
                       (rect.height() * cr.height()) / pixmapRect.height());
         } else {
-            r = q->style()->itemPixmapRect(q->contentsRect(), align, movie->currentPixmap());
+            r = q->style()->itemPixmapRect(q->contentsRect(), align, pixmap);
             r.translate(rect.x(), rect.y());
             r.setWidth(qMin(r.width(), rect.width()));
             r.setHeight(qMin(r.height(), rect.height()));

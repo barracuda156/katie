@@ -43,22 +43,16 @@ class QRect;
 class QSize;
 
 class QMoviePrivate;
+
 class Q_GUI_EXPORT QMovie : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(QMovie)
-    Q_ENUMS(MovieState CacheMode)
-    Q_PROPERTY(int speed READ speed WRITE setSpeed)
-    Q_PROPERTY(CacheMode cacheMode READ cacheMode WRITE setCacheMode)
+    Q_ENUMS(MovieState)
 public:
     enum MovieState {
         NotRunning,
-        Paused,
         Running
-    };
-    enum CacheMode {
-        CacheNone,
-        CacheAll
     };
 
     QMovie(QObject *parent = nullptr);
@@ -82,30 +76,20 @@ public:
 
     MovieState state() const;
 
-    QRect frameRect() const;
     QImage currentImage() const;
-    QPixmap currentPixmap() const;
 
     bool isValid() const;
 
-    bool jumpToFrame(int frameNumber);
     int loopCount() const;
     int frameCount() const;
     int nextFrameDelay() const;
     int currentFrameNumber() const;
 
-    int speed() const;
-
     QSize scaledSize() const;
     void setScaledSize(const QSize &size);
 
-    CacheMode cacheMode() const;
-    void setCacheMode(CacheMode mode);
-
 Q_SIGNALS:
     void started();
-    void resized(const QSize &size);
-    void updated(const QRect &rect);
     void stateChanged(QMovie::MovieState state);
     void error(QImageReader::ImageReaderError error);
     void finished();
@@ -114,18 +98,14 @@ Q_SIGNALS:
 public Q_SLOTS:
     void start();
     bool jumpToNextFrame();
-    void setPaused(bool paused);
     void stop();
-    void setSpeed(int percentSpeed);
 
 private:
     Q_DISABLE_COPY(QMovie)
     Q_PRIVATE_SLOT(d_func(), void _q_loadNextFrame())
-
 };
 
 QT_END_NAMESPACE
-
 
 #endif // QT_NO_MOVIE
 
