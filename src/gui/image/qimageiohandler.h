@@ -67,7 +67,6 @@ public:
     virtual bool supportsOption(ImageOption option) const;
 
     // incremental loading
-    virtual bool jumpToNextImage();
     virtual bool jumpToImage(int imageNumber);
     virtual int loopCount() const;
     virtual int imageCount() const;

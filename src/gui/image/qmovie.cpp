@@ -141,7 +141,8 @@ public:
 
     void begin();
     void done();
-    void readerError(const QImageReader::ImageReaderError error);
+    bool loadCurrentFrame();
+
     void _q_loadNextFrame();
 
     int loopCount;
@@ -162,12 +163,32 @@ QMoviePrivate::QMoviePrivate(QMovie *qq)
 void QMoviePrivate::begin()
 {
     Q_Q(QMovie);
+    loopCount = -1;
+    if (!reader->jumpToImage(0)) {
+        emit q->error(reader->error());
+        return;
+    }
     loopCount = reader->loopCount();
-    _q_loadNextFrame();
+    if (!loadCurrentFrame()) {
+        return;
+    }
     nextImageTimer.start();
     movieState = QMovie::Running;
     emit q->started();
     emit q->stateChanged(QMovie::Running);
+}
+
+bool QMoviePrivate::loadCurrentFrame()
+{
+    Q_Q(QMovie);
+    if (!reader->read(&currentImage)) {
+        currentImage = QImage();
+        done();
+        emit q->error(reader->error());
+        return false;
+    }
+    emit q->frameChanged(reader->currentImageNumber());
+    return true;
 }
 
 void QMoviePrivate::done()
@@ -179,34 +200,31 @@ void QMoviePrivate::done()
     emit q->stateChanged(QMovie::NotRunning);
 }
 
-void QMoviePrivate::readerError(const QImageReader::ImageReaderError error)
-{
-    Q_Q(QMovie);
-    done();
-    emit q->error(reader->error());
-}
-
 void QMoviePrivate::_q_loadNextFrame()
 {
     Q_Q(QMovie);
-    if (!reader->read(&currentImage)) {
-        currentImage = QImage();
-        readerError(reader->error());
+    if (!loadCurrentFrame()) {
         return;
     }
-    const int currentframe = reader->currentImageNumber();
-    emit q->frameChanged(currentframe);
+    const int framecount = reader->imageCount();
+    int nextframe = (reader->currentImageNumber() + 1);
+    // qDebug() << Q_FUNC_INFO << framecount << nextframe << loopCount;
     nextImageTimer.setInterval(reader->nextImageDelay());
-    if (currentframe >= reader->imageCount()) {
-        loopCount++;
-        if (loopCount == 0 || loopCount < reader->loopCount()) {
-            // infinite loop or not done looping
-            if (!reader->jumpToImage(0)) {
-                readerError(reader->error());
-            }
+    if (framecount > 0 && nextframe >= framecount) {
+        if (loopCount == 0) {
+            // infinite loop
+            nextframe = 0;
+        } else if (loopCount < reader->loopCount()) {
+            // not done looping
+            loopCount++;
         } else {
             done();
+            return;
         }
+    }
+    if (!reader->jumpToImage(nextframe)) {
+        done();
+        emit q->error(reader->error());
     }
 }
 
@@ -429,15 +447,6 @@ int QMovie::currentFrameNumber() const
 {
     Q_D(const QMovie);
     return d->reader->currentImageNumber();
-}
-
-/*!
-    Jumps to the next frame. Returns true on success; otherwise returns false.
-*/
-bool QMovie::jumpToNextFrame()
-{
-    Q_D(QMovie);
-    return d->reader->jumpToNextImage();
 }
 
 /*!

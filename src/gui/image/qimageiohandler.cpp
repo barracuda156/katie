@@ -354,17 +354,6 @@ int QImageIOHandler::imageCount() const
 }
 
 /*!
-   For image formats that support animation, this function jumps to the
-   next image.
-
-   The default implementation does nothing, and returns false.
-*/
-bool QImageIOHandler::jumpToNextImage()
-{
-    return false;
-}
-
-/*!
    For image formats that support animation, this function jumps to the image
    whose sequence number is \a imageNumber. The next call to read() will
    attempt to read this image.

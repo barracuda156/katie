@@ -97,7 +97,6 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void start();
-    bool jumpToNextFrame();
     void stop();
 
 private:

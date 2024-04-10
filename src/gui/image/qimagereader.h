@@ -78,7 +78,6 @@ public:
     QImage read();
     bool read(QImage *image);
 
-    bool jumpToNextImage();
     bool jumpToImage(int imageNumber);
     int loopCount() const;
     int imageCount() const;

@@ -676,31 +676,13 @@ bool QImageReader::read(QImage *image)
 }
 
 /*!
-   For image formats that support animation, this function steps over the
-   current image, returning true if successful or false if there is no
-   following image in the animation.
-
-   The default implementation calls read(), then discards the resulting
-   image, but the image handler may have a more efficient way of implementing
-   this operation.
-
-   \sa jumpToImage(), QImageIOHandler::jumpToNextImage()
-*/
-bool QImageReader::jumpToNextImage()
-{
-    if (!d->initHandler())
-        return false;
-    return d->handler->jumpToNextImage();
-}
-
-/*!
    For image formats that support animation, this function skips to the image
    whose sequence number is \a imageNumber, returning true if successful
    or false if the corresponding image cannot be found.
 
    The next call to read() will attempt to read this image.
 
-   \sa jumpToNextImage(), QImageIOHandler::jumpToImage()
+   \sa QImageIOHandler::jumpToImage()
 */
 bool QImageReader::jumpToImage(int imageNumber)
 {
