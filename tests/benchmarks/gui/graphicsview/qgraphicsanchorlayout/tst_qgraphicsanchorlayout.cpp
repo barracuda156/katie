@@ -61,14 +61,12 @@ public:
 
 static QGraphicsWidget *createItem(const QSizeF &minimum = QSizeF(100.0, 100.0),
                                    const QSizeF &preferred = QSize(150.0, 100.0),
-                                   const QSizeF &maximum = QSizeF(200.0, 100.0),
-                                   const QString &name = QString())
+                                   const QSizeF &maximum = QSizeF(200.0, 100.0))
 {
     QGraphicsWidget *w = new RectWidget;
     w->setMinimumSize(minimum);
     w->setPreferredSize(preferred);
     w->setMaximumSize(maximum);
-    w->setData(0, name);
     return w;
 }
 
@@ -107,13 +105,13 @@ void tst_QGraphicsAnchorLayout::s60_hard_complex()
     QSizeF pref(50, 10);
     QSizeF max(100, 10);
 
-    QGraphicsWidget *a = createItem(min, pref, max, "a");
-    QGraphicsWidget *b = createItem(min, pref, max, "b");
-    QGraphicsWidget *c = createItem(min, pref, max, "c");
-    QGraphicsWidget *d = createItem(min, pref, max, "d");
-    QGraphicsWidget *e = createItem(min, pref, max, "e");
-    QGraphicsWidget *f = createItem(min, pref, max, "f");
-    QGraphicsWidget *g = createItem(min, pref, max, "g");
+    QGraphicsWidget *a = createItem(min, pref, max);
+    QGraphicsWidget *b = createItem(min, pref, max);
+    QGraphicsWidget *c = createItem(min, pref, max);
+    QGraphicsWidget *d = createItem(min, pref, max);
+    QGraphicsWidget *e = createItem(min, pref, max);
+    QGraphicsWidget *f = createItem(min, pref, max);
+    QGraphicsWidget *g = createItem(min, pref, max);
 
     QGraphicsAnchorLayout *l = new QGraphicsAnchorLayout;
     l->setContentsMargins(0, 0, 0, 0);
@@ -185,10 +183,10 @@ static QGraphicsLayout* createLayouts(int whichLayout)
     QSizeF pref(50, 10);
     QSizeF max(100, 10);
 
-    QGraphicsWidget *a = createItem(min, pref, max, "a");
-    QGraphicsWidget *b = createItem(min, pref, max, "b");
-    QGraphicsWidget *c = createItem(min, pref, max, "c");
-    QGraphicsWidget *d = createItem(min, pref, max, "d");
+    QGraphicsWidget *a = createItem(min, pref, max);
+    QGraphicsWidget *b = createItem(min, pref, max);
+    QGraphicsWidget *c = createItem(min, pref, max);
+    QGraphicsWidget *d = createItem(min, pref, max);
 
     QGraphicsLayout *l;
     if (whichLayout == 0) {
@@ -320,10 +318,10 @@ void tst_QGraphicsAnchorLayout::linearVsAnchorNested()
     QSizeF pref(80, 80);
     QSizeF max(150, 150);
 
-    QGraphicsWidget *a = createItem(min, pref, max, "a");
-    QGraphicsWidget *b = createItem(min, pref, max, "b");
-    QGraphicsWidget *c = createItem(min, pref, max, "c");
-    QGraphicsWidget *d = createItem(min, pref, max, "d");
+    QGraphicsWidget *a = createItem(min, pref, max);
+    QGraphicsWidget *b = createItem(min, pref, max);
+    QGraphicsWidget *c = createItem(min, pref, max);
+    QGraphicsWidget *d = createItem(min, pref, max);
 
     QGraphicsLayout *layout;
 

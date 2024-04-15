@@ -431,8 +431,6 @@ public:
     QGraphicsItem::GraphicsItemFlags flags;
     uint ancestorFlags;
 
-    QMap<int, QVariant> datastore;
-
     QGraphicsItem *q_ptr;
 };
 

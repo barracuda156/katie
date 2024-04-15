@@ -83,7 +83,6 @@ void tst_QGraphicsLayout::invalidate()
 
     RectWidget *window = new RectWidget(0, Qt::Window);
     window->setGeometryCalls = &setGeometryCalls;
-    window->setData(0, QString(QLatin1Char('a')));
 
     scene.addItem(window);
     RectWidget *leaf = 0;
@@ -93,7 +92,6 @@ void tst_QGraphicsLayout::invalidate()
         QGraphicsLinearLayout *l = new QGraphicsLinearLayout(parent);
         l->setContentsMargins(0,0,0,0);
         RectWidget *child = new RectWidget;
-        child->setData(0, QString(QChar('a' + i)));
         child->setGeometryCalls = &setGeometryCalls;
         l->addItem(child);
         parent = child;

@@ -236,15 +236,6 @@
     function sceneEventFilter(). You can remove item event filters by calling
     removeSceneEventFilter().
 
-    \section1 Custom Data
-
-    Sometimes it's useful to register custom data with an item, be it a custom
-    item, or a standard item. You can call setData() on any item to store data
-    in it using a key-value pair (the key being an integer, and the value is a
-    QVariant). To get custom data from an item, call data(). This
-    functionality is completely untouched by Qt itself; it is provided for the
-    user's convenience.
-
     \sa QGraphicsScene, QGraphicsView, {Graphics View Framework}
 */
 
@@ -5969,40 +5960,6 @@ bool QGraphicsItem::isUnderMouse() const
             return true;
     }
     return false;
-}
-
-/*!
-    Returns this item's custom data for the key \a key as a QVariant.
-
-    Custom item data is useful for storing arbitrary properties in any
-    item. Example:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsitem.cpp 11
-
-    Qt does not use this feature for storing data; it is provided solely
-    for the convenience of the user.
-
-    \sa setData()
-*/
-QVariant QGraphicsItem::data(int key) const
-{
-    Q_D(const QGraphicsItem);
-    return d->datastore.value(key);
-}
-
-/*!
-    Sets this item's custom data for the key \a key to \a value.
-
-    Custom item data is useful for storing arbitrary properties for any
-    item. Qt does not use this feature for storing data; it is provided solely
-    for the convenience of the user.
-
-    \sa data()
-*/
-void QGraphicsItem::setData(int key, const QVariant &value)
-{
-    Q_D(QGraphicsItem);
-    d->datastore[key] = value;
 }
 
 /*!

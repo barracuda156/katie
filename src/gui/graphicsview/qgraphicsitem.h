@@ -363,10 +363,6 @@ public:
     QGraphicsItem *commonAncestorItem(const QGraphicsItem *other) const;
     bool isUnderMouse() const;
 
-    // Custom data
-    QVariant data(int key) const;
-    void setData(int key, const QVariant &value);
-
     enum {
         Type = 1,
         UserType = 65536
