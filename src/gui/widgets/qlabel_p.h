@@ -66,7 +66,6 @@ public:
     QString text;
     QPixmap  *pixmap;
     QPixmap *scaledpixmap;
-    QImage *cachedimage;
 #ifndef QT_NO_MOVIE
     QPointer<QMovie> movie;
     void _q_movieUpdated(const QRect&);

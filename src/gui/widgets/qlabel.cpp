@@ -41,7 +41,6 @@ QLabelPrivate::QLabelPrivate()
     margin(0),
     pixmap(nullptr),
     scaledpixmap(nullptr),
-    cachedimage(nullptr),
     align(Qt::AlignLeft | Qt::AlignVCenter),
     indent(-1),
     scaledcontents(false),
@@ -990,10 +989,8 @@ void QLabel::paintEvent(QPaintEvent *ev)
         QPixmap pix;
         if (d->scaledcontents) {
             if (!d->scaledpixmap || d->scaledpixmap->size() != cr.size()) {
-                if (!d->cachedimage)
-                    d->cachedimage = new QImage(d->pixmap->toImage());
                 delete d->scaledpixmap;
-                d->scaledpixmap = new QPixmap(QPixmap::fromImage(d->cachedimage->scaled(cr.size(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation)));
+                d->scaledpixmap = new QPixmap(d->pixmap->scaled(cr.size() ,Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
             }
             pix = *d->scaledpixmap;
         } else
@@ -1180,8 +1177,6 @@ void QLabelPrivate::clearContents()
 
     delete scaledpixmap;
     scaledpixmap = 0;
-    delete cachedimage;
-    cachedimage = 0;
     delete pixmap;
     pixmap = 0;
 
@@ -1305,8 +1300,6 @@ void QLabel::setScaledContents(bool enable)
     if (!enable) {
         delete d->scaledpixmap;
         d->scaledpixmap = 0;
-        delete d->cachedimage;
-        d->cachedimage = 0;
     }
     update(contentsRect());
 }
