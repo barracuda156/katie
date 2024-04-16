@@ -45,7 +45,6 @@ private slots:
 
     // task-specific tests below me:
     void task183108_clear();
-    void task228728_cssselector();
 };
 
 tst_QAbstractSpinBox::tst_QAbstractSpinBox()
@@ -128,18 +127,6 @@ void tst_QAbstractSpinBox::task183108_clear()
     QCOMPARE(sbox->text(), QString());
 
     delete sbox;
-}
-
-void tst_QAbstractSpinBox::task228728_cssselector()
-{
-#ifndef QT_NO_STYLE_STYLESHEET
-    //QAbstractSpinBox does some call to stylehint into his constructor.
-    //so while the stylesheet want to access property, it should not crash
-    qApp->setStyleSheet("[alignment=\"1\"], [text=\"foo\"] { color:black; }" );
-    QSpinBox box;
-#else // QT_NO_STYLE_STYLESHEET
-    QSKIP("Katie compiled without stylesheet support (QT_NO_STYLE_STYLESHEET)", SkipAll);
-#endif // QT_NO_STYLE_STYLESHEET
 }
 
 QTEST_MAIN(tst_QAbstractSpinBox)

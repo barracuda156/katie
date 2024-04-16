@@ -76,11 +76,8 @@ QT_BEGIN_NAMESPACE
     call QWidget::setWhatsThis() or QAction::setWhatsThis().
 
     The text can be either rich text or plain text. If you specify a
-    rich text formatted string, it will be rendered using the default
-    stylesheet, making it possible to embed images in the displayed
-    text. To be as fast as possible, the default stylesheet uses a
-    simple method to determine whether the text can be rendered as
-    plain text. See Qt::mightBeRichText() for details.
+    rich text formatted string, it is possible to embed images in the
+    displayed text.
 
     \snippet doc/src/snippets/whatsthis/whatsthis.cpp 0
 

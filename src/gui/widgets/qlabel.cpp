@@ -25,14 +25,14 @@
 #include "qabstractbutton.h"
 #include "qstyle.h"
 #include "qstyleoption.h"
-#include <limits.h>
 #include "qaction.h"
 #include "qclipboard.h"
 #include "qdebug.h"
 #include "qurl.h"
 #include "qlabel_p.h"
-#include "qstylesheetstyle_p.h"
 #include "qmath.h"
+
+#include <limits.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -931,11 +931,6 @@ void QLabel::paintEvent(QPaintEvent *ev)
         QRectF lr = d->layoutRect().toAlignedRect();
         QStyleOption opt;
         opt.initFrom(this);
-#ifndef QT_NO_STYLE_STYLESHEET
-        if (QStyleSheetStyle* cssStyle = qobject_cast<QStyleSheetStyle*>(style)) {
-            cssStyle->styleSheetPalette(this, &opt, &opt.palette);
-        }
-#endif
         if (d->control) {
 #ifndef QT_NO_SHORTCUT
             const bool underline = (bool)style->styleHint(QStyle::SH_UnderlineShortcut, 0, this, 0);

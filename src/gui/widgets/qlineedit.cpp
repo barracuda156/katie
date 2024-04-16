@@ -45,7 +45,6 @@
 #include "qtextedit.h"
 #include "qtextedit_p.h"
 #include "qabstractitemview.h"
-#include "qstylesheetstyle_p.h"
 
 #ifndef QT_NO_SHORTCUT
 #include "qapplication_p.h"
@@ -1557,11 +1556,6 @@ void QLineEdit::paintEvent(QPaintEvent *)
     QPoint topLeft = lineRect.topLeft() - QPoint(d->hscroll, d->control->ascent() - fm.ascent());
 
     // draw text, selections and cursors
-#ifndef QT_NO_STYLE_STYLESHEET
-    if (QStyleSheetStyle* cssStyle = qobject_cast<QStyleSheetStyle*>(style())) {
-        cssStyle->styleSheetPalette(this, &panel, &pal);
-    }
-#endif
     p.setPen(pal.text().color());
 
     int flags = QLineControl::DrawText;

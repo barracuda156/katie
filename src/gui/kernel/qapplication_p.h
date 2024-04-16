@@ -159,9 +159,6 @@ public:
 
     static QString styleOverride;
 
-#ifndef QT_NO_STYLE_STYLESHEET
-    static QString styleSheet;
-#endif
     static QPointer<QWidget> leaveAfterRelease;
     static QWidget *pickMouseReceiver(QWidget *candidate, const QPoint &globalPos, QPoint &pos,
                                       QEvent::Type type, Qt::MouseButtons buttons,

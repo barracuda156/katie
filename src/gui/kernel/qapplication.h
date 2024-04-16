@@ -58,9 +58,6 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
     Q_PROPERTY(int startDragTime  READ startDragTime WRITE setStartDragTime)
     Q_PROPERTY(int startDragDistance  READ startDragDistance WRITE setStartDragDistance)
     Q_PROPERTY(bool quitOnLastWindowClosed  READ quitOnLastWindowClosed WRITE setQuitOnLastWindowClosed)
-#ifndef QT_NO_STYLE_STYLESHEET
-    Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
-#endif
     Q_PROPERTY(bool autoSipEnabled READ autoSipEnabled WRITE setAutoSipEnabled)
 
 public:
@@ -183,12 +180,7 @@ Q_SIGNALS:
     void saveStateRequest(QSessionManager &sessionManager);
 #endif
 
-public:
-    QString styleSheet() const;
 public Q_SLOTS:
-#ifndef QT_NO_STYLE_STYLESHEET
-    void setStyleSheet(const QString& sheet);
-#endif
     void setAutoSipEnabled(const bool enabled);
     bool autoSipEnabled() const;
     static void closeAllWindows();

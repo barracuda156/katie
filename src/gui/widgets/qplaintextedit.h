@@ -36,13 +36,10 @@
 
 QT_BEGIN_NAMESPACE
 
-
-class QStyleSheet;
 class QTextDocument;
 class QMenu;
 class QPlainTextEditPrivate;
 class QMimeData;
-
 
 class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
 {

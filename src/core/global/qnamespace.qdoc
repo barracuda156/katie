@@ -794,9 +794,6 @@
     \value WA_ShowModal \e{This attribute has been deprecated.} Use
     QWidget::windowModality instead.
 
-    \value WA_StyleSheet Indicates that the widget is styled using a
-    \l{Qt Style Sheets}{style sheet}.
-
     \value WA_TranslucentBackground Indicates that the widget should have a
     translucent background, i.e., any non-opaque regions of the widgets will be
     translucent because the widget will have an alpha channel. Setting this

@@ -196,7 +196,6 @@
 #cmakedefine QT_NO_STRINGLISTMODEL
 #cmakedefine QT_NO_STYLE_CLEANLOOKS
 #cmakedefine QT_NO_STYLE_PROXY
-#cmakedefine QT_NO_STYLE_STYLESHEET
 #cmakedefine QT_NO_STYLE_WINDOWS
 #cmakedefine QT_NO_SYNTAXHIGHLIGHTER
 #cmakedefine QT_NO_TEMPORARYFILE
@@ -328,11 +327,6 @@
 // QCleanLooksStyle
 #if !defined(QT_NO_STYLE_CLEANLOOKS) && defined(QT_NO_STYLE_WINDOWS)
 #  define QT_NO_STYLE_CLEANLOOKS
-#endif
-
-// QStyleSheetStyle
-#if !defined(QT_NO_STYLE_STYLESHEET) && (defined(QT_NO_STYLE_WINDOWS) || defined(QT_NO_PROPERTIES) || defined(QT_NO_CSSPARSER))
-#  define QT_NO_STYLE_STYLESHEET
 #endif
 
 // QColorDialog

@@ -41,7 +41,6 @@
 #include "qwidget.h"
 #include "qdnd_p.h"
 #include "qdebug.h"
-#include "qstylesheetstyle_p.h"
 #include "qstyle_p.h"
 #include "qmessagebox.h"
 #include "qgraphicsproxywidget.h"
@@ -293,9 +292,6 @@ Qt::KeyboardModifiers QApplicationPrivate::modifier_buttons = Qt::NoModifier;
 QStyle *QApplicationPrivate::app_style = 0;        // default application style
 QString QApplicationPrivate::styleOverride;        // style override
 
-#ifndef QT_NO_STYLE_STYLESHEET
-QString QApplicationPrivate::styleSheet;           // default application stylesheet
-#endif
 QPointer<QWidget> QApplicationPrivate::leaveAfterRelease = 0;
 
 QPalette *QApplicationPrivate::app_pal = 0;        // default application palette
@@ -371,12 +367,6 @@ void QApplicationPrivate::process_cmdline()
                 is_session_restored = true;
             }
 #endif
-#ifndef QT_NO_STYLE_STYLESHEET
-        } else if (qstrcmp(argv[i], "-stylesheet") == 0 && i < argc - 1) {
-            styleSheet = QLatin1String("file:///") + QString::fromLocal8Bit(argv[++i]);
-        } else if (qstrncmp(argv[i], "-stylesheet=", 12) == 0) {
-            styleSheet = QLatin1String("file:///") + QString::fromLocal8Bit(argv[i] + 7);
-#endif
         } else if (qstrcmp(argv[i], "-reverse") == 0) {
             force_reverse = true;
             QApplication::setLayoutDirection(Qt::RightToLeft);
@@ -429,11 +419,6 @@ void QApplicationPrivate::process_cmdline()
             additional styles or have additional styles as plugins these will
             be available to the \c -style command line option.
         \o  -style \e style, is the same as listed above.
-        \o  -stylesheet= \e stylesheet, sets the application \l styleSheet. The
-            value must be a path to a file that contains the Style Sheet.
-            \note Relative URLs in the Style Sheet file are relative to the
-            Style Sheet file's path.
-        \o  -stylesheet \e stylesheet, is the same as listed above.
         \o  -session= \e session, restores the application from an earlier
             \l{Session Management}{session}.
         \o  -session \e session, is the same as listed above.
@@ -760,17 +745,6 @@ QWidget *QApplication::widgetAt(const QPoint &p)
 */
 
 /*!
-    \property QApplication::styleSheet
-    \brief the application style sheet
-    \since 4.2
-
-    By default, this property returns an empty string unless the user specifies
-    the \c{-stylesheet} option on the command line when running the application.
-
-    \sa QWidget::setStyle(), {Qt Style Sheets}
-*/
-
-/*!
     \property QApplication::autoSipEnabled
     \since 4.5
     \brief toggles automatic SIP (software input panel) visibility
@@ -791,32 +765,6 @@ bool QApplication::autoSipEnabled() const
 {
     return QApplicationPrivate::autoSipEnabled;
 }
-
-#ifndef QT_NO_STYLE_STYLESHEET
-
-QString QApplication::styleSheet() const
-{
-    return QApplicationPrivate::styleSheet;
-}
-
-void QApplication::setStyleSheet(const QString& styleSheet)
-{
-    QApplicationPrivate::styleSheet = styleSheet;
-    QStyleSheetStyle *proxy = qobject_cast<QStyleSheetStyle*>(QApplicationPrivate::app_style);
-    if (styleSheet.isEmpty()) { // application style sheet removed
-        if (!proxy)
-            return; // there was no stylesheet before
-        setStyle(proxy->base);
-    } else if (proxy) { // style sheet update, just repolish
-        proxy->repolish(qApp);
-    } else { // stylesheet set the first time
-        QStyleSheetStyle *newProxy = new QStyleSheetStyle(QApplicationPrivate::app_style);
-        QApplicationPrivate::app_style->setParent(newProxy);
-        setStyle(newProxy);
-    }
-}
-
-#endif // QT_NO_STYLE_STYLESHEET
 
 /*!
     Returns the application's style object.
@@ -855,12 +803,7 @@ QStyle *QApplication::style()
 
     QApplication::setPalette(QApplicationPrivate::app_style->standardPalette());
 
-#ifndef QT_NO_STYLE_STYLESHEET
-    if (!QApplicationPrivate::styleSheet.isEmpty()) {
-        qApp->setStyleSheet(QApplicationPrivate::styleSheet);
-    } else
-#endif
-        QApplicationPrivate::app_style->polish(qApp);
+    QApplicationPrivate::app_style->polish(qApp);
 
     return QApplicationPrivate::app_style;
 }
@@ -909,15 +852,7 @@ void QApplication::setStyle(QStyle *style)
 
     QStyle *old = QApplicationPrivate::app_style; // save
 
-#ifndef QT_NO_STYLE_STYLESHEET
-    if (!QApplicationPrivate::styleSheet.isEmpty() && !qobject_cast<QStyleSheetStyle *>(style)) {
-        // we have a stylesheet already and a new style is being set
-        QStyleSheetStyle *newProxy = new QStyleSheetStyle(style);
-        style->setParent(newProxy);
-        QApplicationPrivate::app_style = newProxy;
-    } else
-#endif // QT_NO_STYLE_STYLESHEET
-        QApplicationPrivate::app_style = style;
+    QApplicationPrivate::app_style = style;
     QApplicationPrivate::app_style->setParent(qApp); // take ownership
 
     // Initialize the sys_pal if it hasn't happened yet...
@@ -930,12 +865,9 @@ void QApplication::setStyle(QStyle *style)
     if (QApplicationPrivate::is_app_running && !QApplicationPrivate::is_app_closing) {
         foreach (QWidget *it1, all) {
             if (it1->windowType() != Qt::Desktop && it1->testAttribute(Qt::WA_WState_Polished)) {
-                if (it1->style() == QApplicationPrivate::app_style)
-                    QApplicationPrivate::app_style->polish(it1);                // repolish
-#ifndef QT_NO_STYLE_STYLESHEET
-                else
-                    it1->setStyleSheet(it1->styleSheet()); // touch
-#endif
+                if (it1->style() == QApplicationPrivate::app_style) {
+                    QApplicationPrivate::app_style->polish(it1); // repolish
+                }
             }
         }
 
@@ -948,11 +880,6 @@ void QApplication::setStyle(QStyle *style)
         }
     }
 
-#ifndef QT_NO_STYLE_STYLESHEET
-    if (QStyleSheetStyle *oldProxy = qobject_cast<QStyleSheetStyle *>(old)) {
-        oldProxy->deref();
-    } else
-#endif
     if (old && old->parent() == qApp) {
         delete old;
     }
@@ -1217,11 +1144,6 @@ QFont QApplication::font(const char *className)
     function lets you override the default font; but overriding may be a bad
     idea because, for example, some locales need extra large fonts to support
     their special characters.
-
-    \warning Do not use this function in conjunction with \l{Qt Style Sheets}.
-    The font of an application can be customized using the "font" style sheet
-    property. To set a bold font for all QPushButtons, set the application
-    styleSheet() as "QPushButton { font: bold }"
 
     \sa font(), fontMetrics(), QWidget::setFont()
 */

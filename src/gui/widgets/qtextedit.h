@@ -28,12 +28,8 @@
 
 #ifndef QT_NO_TEXTEDIT
 
-
-
 QT_BEGIN_NAMESPACE
 
-
-class QStyleSheet;
 class QTextDocument;
 class QMenu;
 class QTextEditPrivate;

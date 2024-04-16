@@ -69,7 +69,6 @@ private slots:
     void tearOff();
     void layoutDirection();
 
-    void task208001_stylesheet();
     void activeSubMenuPosition();
     void task242454_sizeHint();
     void task176201_clear();
@@ -564,18 +563,6 @@ void tst_QMenu::layoutDirection()
     win.menuBar()->setActiveAction(action);
     QTest::qWaitForWindowShown(&menu);
     QCOMPARE(menu.layoutDirection(), Qt::RightToLeft);
-}
-
-void tst_QMenu::task208001_stylesheet()
-{
-#ifndef QT_NO_STYLE_STYLESHEET
-    // test if it crash
-    QMainWindow main;
-    main.setStyleSheet("QMenu [title =\"File\"] { color: red;}");
-    main.menuBar()->addMenu("File");
-#else // QT_NO_STYLE_STYLESHEET
-    QSKIP("Katie compiled without stylesheet support (QT_NO_STYLE_STYLESHEET)", SkipAll);
-#endif // QT_NO_STYLE_STYLESHEET
 }
 
 void tst_QMenu::activeSubMenuPosition()

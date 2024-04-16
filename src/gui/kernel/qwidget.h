@@ -150,9 +150,6 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
     Q_PROPERTY(Qt::LayoutDirection layoutDirection READ layoutDirection WRITE setLayoutDirection RESET unsetLayoutDirection)
     Q_PROPERTY(Qt::WindowFlags windowFlags READ windowFlags WRITE setWindowFlags)
     Q_PROPERTY(bool autoFillBackground READ autoFillBackground WRITE setAutoFillBackground)
-#ifndef QT_NO_STYLE_STYLESHEET
-    Q_PROPERTY(QString styleSheet READ styleSheet WRITE setStyleSheet)
-#endif
     Q_PROPERTY(QLocale locale READ locale WRITE setLocale RESET unsetLocale)
 
 public:
@@ -287,13 +284,8 @@ public:
 
 public Q_SLOTS:
     void setWindowTitle(const QString &);
-#ifndef QT_NO_STYLE_STYLESHEET
-    void setStyleSheet(const QString& styleSheet);
-#endif
+
 public:
-#ifndef QT_NO_STYLE_STYLESHEET
-    QString styleSheet() const;
-#endif
     QString windowTitle() const;
     void setWindowIcon(const QIcon &icon);
     QIcon windowIcon() const;
@@ -583,7 +575,6 @@ private:
     friend class QWindowSurface;
     friend class QGraphicsProxyWidget;
     friend class QGraphicsProxyWidgetPrivate;
-    friend class QStyleSheetStyle;
 
 #ifdef Q_WS_X11
     friend void qt_net_update_user_time(QWidget *tlw, unsigned long timestamp);

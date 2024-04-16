@@ -33,8 +33,8 @@
 #include "qeffects_p.h"
 #include "qtextdocument.h"
 #include "qdebug.h"
-#include "qstylesheetstyle_p.h"
 #include "qbasictimer.h"
+
 #ifndef QT_NO_TOOLTIP
 
 QT_BEGIN_NAMESPACE
@@ -116,20 +116,6 @@ protected:
     void mouseMoveEvent(QMouseEvent *e);
     void resizeEvent(QResizeEvent *e);
 
-#ifndef QT_NO_STYLE_STYLESHEET
-public slots:
-    /** \internal
-      Cleanup the _q_stylesheet_parent propery.
-     */
-    void styleSheetParentDestroyed() {
-        setProperty("_q_stylesheet_parent", QVariant());
-        styleSheetParent = 0;
-    }
-
-private:
-    QWidget *styleSheetParent;
-#endif
-
 private:
     QWidget *widget;
     QRect rect;
@@ -138,11 +124,7 @@ private:
 QTipLabel *QTipLabel::instance = 0;
 
 QTipLabel::QTipLabel(const QString &text, QWidget *w)
-#ifndef QT_NO_STYLE_STYLESHEET
-    : QLabel(w, Qt::ToolTip | Qt::BypassGraphicsProxyWidget), styleSheetParent(0), widget(0)
-#else
     : QLabel(w, Qt::ToolTip | Qt::BypassGraphicsProxyWidget), widget(0)
-#endif
 {
     delete instance;
     instance = this;
@@ -168,14 +150,6 @@ void QTipLabel::restartExpireTimer()
 
 void QTipLabel::reuseTip(const QString &text)
 {
-#ifndef QT_NO_STYLE_STYLESHEET
-    if (styleSheetParent){
-        disconnect(styleSheetParent, SIGNAL(destroyed()),
-                   QTipLabel::instance, SLOT(styleSheetParentDestroyed()));
-        styleSheetParent = 0;
-    }
-#endif
-
     setWordWrap(Qt::mightBeRichText(text));
     setText(text);
     QFontMetrics fm(font());
@@ -294,22 +268,6 @@ int QTipLabel::getTipScreen(const QPoint &pos, QWidget *w)
 
 void QTipLabel::placeTip(const QPoint &pos, QWidget *w)
 {
-#ifndef QT_NO_STYLE_STYLESHEET
-    if (testAttribute(Qt::WA_StyleSheet) || (w && qobject_cast<QStyleSheetStyle *>(w->style()))) {
-        //the stylesheet need to know the real parent
-        QTipLabel::instance->setProperty("_q_stylesheet_parent", QVariant::fromValue(w));
-        //we force the style to be the QStyleSheetStyle, and force to clear the cache as well.
-        QTipLabel::instance->setStyleSheet(QLatin1String("/* */"));
-
-        // Set up for cleaning up this later...
-        QTipLabel::instance->styleSheetParent = w;
-        if (w) {
-            connect(w, SIGNAL(destroyed()),
-                QTipLabel::instance, SLOT(styleSheetParentDestroyed()));
-        }
-    }
-#endif //QT_NO_STYLE_STYLESHEET
-
     const QRect screen = QApplication::desktop()->screenGeometry(getTipScreen(pos, w));
     QPoint p = pos + QPoint(2, 16);
     if (p.x() + this->width() > screen.x() + screen.width())

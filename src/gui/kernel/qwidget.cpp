@@ -41,7 +41,6 @@
 #include "qtooltip.h"
 #include "qwhatsthis.h"
 #include "qdebug.h"
-#include "qstylesheetstyle_p.h"
 #include "qstyle_p.h"
 #include "qwindowsurface_p.h"
 #include "qbackingstore_p.h"
@@ -263,10 +262,6 @@ void QWidgetPrivate::scrollChildren(int dx, int dy)
 
     This property cannot be turned off (i.e., set to false) if a widget's
     parent has a static gradient for its background.
-
-    \warning Use this property with caution in conjunction with
-    \l{Qt Style Sheets}. When a widget has a style sheet with a valid
-    background or a border-image, this property is automatically disabled.
 
     By default, this property is false.
 
@@ -555,7 +550,6 @@ void QWidget::setAutoFillBackground(bool enabled)
     \row \i Look and feel \i
         style(),
         setStyle(),
-        \l styleSheet,
         \l cursor,
         \l font,
         \l palette,
@@ -607,19 +601,6 @@ void QWidget::setAutoFillBackground(bool enabled)
         setToolTip(), setWhatsThis()
 
     \endtable
-
-
-    \section1 Widget Style Sheets
-
-    In addition to the standard widget styles for each platform, widgets can
-    also be styled according to rules specified in a \l{styleSheet}
-    {style sheet}. This feature enables you to customize the appearance of
-    specific widgets to provide visual cues to users about their purpose. For
-    example, a button could be styled in a particular way to indicate that it
-    performs a destructive action.
-
-    The use of widget style sheets is described in more detail in the
-    \l{Qt Style Sheets} document.
 
 
     \section1 Transparency and Double Buffering
@@ -1224,11 +1205,6 @@ void QWidgetPrivate::deleteExtra()
 #ifndef QT_NO_CURSOR
         delete extra->curs;
 #endif
-#ifndef QT_NO_STYLE_STYLESHEET
-        // dereference the stylesheet style
-        if (QStyleSheetStyle *proxy = qobject_cast<QStyleSheetStyle *>(extra->style))
-            proxy->deref();
-#endif
         if (extra->topextra) {
             deleteTLSysExtra();
             extra->topextra->backingStore.destroy();
@@ -1351,8 +1327,7 @@ void QWidgetPrivate::propagatePaletteChange()
     QApplication::sendEvent(q, &pc);
     for (int i = 0; i < children.size(); ++i) {
         QWidget *w = qobject_cast<QWidget*>(children.at(i));
-        if (w && !w->testAttribute(Qt::WA_StyleSheet)
-            && (!w->isWindow() || w->testAttribute(Qt::WA_WindowPropagation))) {
+        if (w && (!w->isWindow() || w->testAttribute(Qt::WA_WindowPropagation))) {
             QWidgetPrivate *wd = w->d_func();
             wd->inheritedPaletteResolveMask = mask;
             wd->resolvePalette();
@@ -1911,58 +1886,6 @@ WId QWidget::effectiveWinId() const
     return realParent->internalWinId();
 }
 
-#ifndef QT_NO_STYLE_STYLESHEET
-
-/*!
-    \property QWidget::styleSheet
-    \brief the widget's style sheet
-    \since 4.2
-
-    The style sheet contains a textual description of customizations to the
-    widget's style, as described in the \l{Qt Style Sheets} document.
-
-    \warning Qt style sheets are currently not supported for custom QStyle
-    subclasses. We plan to address this in some future release.
-
-    \sa setStyle(), QApplication::styleSheet, {Qt Style Sheets}
-*/
-QString QWidget::styleSheet() const
-{
-    Q_D(const QWidget);
-    if (!d->extra)
-        return QString();
-    return d->extra->styleSheet;
-}
-
-void QWidget::setStyleSheet(const QString& styleSheet)
-{
-    Q_D(QWidget);
-    d->createExtra();
-
-    QStyleSheetStyle *proxy = qobject_cast<QStyleSheetStyle *>(d->extra->style);
-    d->extra->styleSheet = styleSheet;
-    if (styleSheet.isEmpty()) { // stylesheet removed
-        if (!proxy)
-            return;
-
-        d->inheritStyle();
-        return;
-    }
-
-    if (proxy) { // style sheet update
-        proxy->repolish(this);
-        return;
-    }
-
-    if (testAttribute(Qt::WA_SetStyle)) {
-        d->setStyle_helper(new QStyleSheetStyle(d->extra->style), true);
-    } else {
-        d->setStyle_helper(new QStyleSheetStyle(0), true);
-    }
-}
-
-#endif // QT_NO_STYLE_STYLESHEET
-
 /*!
     \sa QWidget::setStyle(), QApplication::setStyle(), QApplication::style()
 */
@@ -1991,9 +1914,6 @@ QStyle *QWidget::style() const
     applications should avoid it and use one consistent GUI style
     instead.
 
-    \warning Qt style sheets are currently not supported for custom QStyle
-    subclasses. We plan to address this in some future release.
-
     \sa style(), QStyle, QApplication::style(), QApplication::setStyle()
 */
 
@@ -2002,114 +1922,22 @@ void QWidget::setStyle(QStyle *style)
     Q_D(QWidget);
     setAttribute(Qt::WA_SetStyle, style != 0);
     d->createExtra();
-#ifndef QT_NO_STYLE_STYLESHEET
-    if (QStyleSheetStyle *proxy = qobject_cast<QStyleSheetStyle *>(style)) {
-        //if for some reason someone try to set a QStyleSheetStyle, ref it
-        //(this may happen for exemple in QButtonDialogBox which propagates its style)
-        proxy->ref();
-        d->setStyle_helper(style, false);
-    } else if (qobject_cast<QStyleSheetStyle *>(d->extra->style) || !qApp->styleSheet().isEmpty()) {
-        // if we have an application stylesheet or have a proxy already, propagate
-        d->setStyle_helper(new QStyleSheetStyle(style), true);
-    } else
-#endif
-        d->setStyle_helper(style, false);
-}
 
-void QWidgetPrivate::setStyle_helper(QStyle *newStyle, bool propagate)
-{
-    Q_Q(QWidget);
-    QStyle *oldStyle  = q->style();
-#ifndef QT_NO_STYLE_STYLESHEET
-    QWeakPointer<QStyle> origStyle;
-#endif
+    QStyle *oldStyle = this->style();
 
-    createExtra();
-
-#ifndef QT_NO_STYLE_STYLESHEET
-    origStyle = extra->style.data();
-#endif
-    extra->style = newStyle;
+    d->extra->style = style;
 
     // repolish
-    if (q->windowType() != Qt::Desktop) {
-        if (polished) {
-            oldStyle->unpolish(q);
-            q->style()->polish(q);
+    if (windowType() != Qt::Desktop) {
+        if (d->polished) {
+            oldStyle->unpolish(this);
+            this->style()->polish(this);
         }
     }
-
-    if (propagate) {
-        for (int i = 0; i < children.size(); ++i) {
-            QWidget *c = qobject_cast<QWidget*>(children.at(i));
-            if (c)
-                c->d_func()->inheritStyle();
-        }
-    }
-
-#ifndef QT_NO_STYLE_STYLESHEET
-    if (!qobject_cast<QStyleSheetStyle*>(newStyle)) {
-        if (const QStyleSheetStyle* cssStyle = qobject_cast<QStyleSheetStyle*>(origStyle.data())) {
-            cssStyle->clearWidgetFont(q);
-        }
-    }
-#endif
 
     QEvent e(QEvent::StyleChange);
-    QApplication::sendEvent(q, &e);
-
-#ifndef QT_NO_STYLE_STYLESHEET
-    // dereference the old stylesheet style
-    if (QStyleSheetStyle *proxy = qobject_cast<QStyleSheetStyle *>(origStyle.data()))
-        proxy->deref();
-#endif
+    QApplication::sendEvent(this, &e);
 }
-
-// Inherits style from the current parent and propagates it as necessary
-void QWidgetPrivate::inheritStyle()
-{
-#ifndef QT_NO_STYLE_STYLESHEET
-    Q_Q(QWidget);
-
-    QStyleSheetStyle *proxy = extra ? qobject_cast<QStyleSheetStyle *>(extra->style) : 0;
-
-    if (!q->styleSheet().isEmpty()) {
-        Q_ASSERT(proxy);
-        proxy->repolish(q);
-        return;
-    }
-
-    QStyle *origStyle = proxy ? proxy->base : (extra ? (QStyle*)extra->style : 0);
-    QWidget *parent = q->parentWidget();
-    QStyle *parentStyle = (parent && parent->d_func()->extra) ? (QStyle*)parent->d_func()->extra->style : 0;
-    // If we have stylesheet on app or parent has stylesheet style, we need
-    // to be running a proxy
-    if (!qApp->styleSheet().isEmpty() || qobject_cast<QStyleSheetStyle *>(parentStyle)) {
-        QStyle *newStyle = parentStyle;
-        if (q->testAttribute(Qt::WA_SetStyle))
-            newStyle = new QStyleSheetStyle(origStyle);
-        else if (QStyleSheetStyle *newProxy = qobject_cast<QStyleSheetStyle *>(parentStyle))
-            newProxy->ref();
-
-        setStyle_helper(newStyle, true);
-        return;
-    }
-
-    // So, we have no stylesheet on parent/app and we have an empty stylesheet
-    // we just need our original style back
-    if (origStyle == (extra ? (QStyle*)extra->style : 0)) // is it any different?
-        return;
-
-    // We could have inherited the proxy from our parent (which has a custom style)
-    // In such a case we need to start following the application style (i.e revert
-    // the propagation behavior of QStyleSheetStyle)
-    if (!q->testAttribute(Qt::WA_SetStyle))
-        origStyle = 0;
-
-    setStyle_helper(origStyle, true);
-#endif // QT_NO_STYLE_STYLESHEET
-}
-
 
 /*!
     \fn bool QWidget::isWindow() const
@@ -3643,15 +3471,7 @@ void QWidget::setForegroundRole(QPalette::ColorRole role)
     Vista style, depend on third party APIs to render the content of widgets,
     and these styles typically do not follow the palette. Because of this,
     assigning roles to a widget's palette is not guaranteed to change the
-    appearance of the widget. Instead, you may choose to apply a \l
-    styleSheet. You can refer to our Knowledge Base article
-    \l{http://qt.nokia.com/developer/knowledgebase/22}{here} for more
-    information.
-
-    \warning Do not use this function in conjunction with \l{Qt Style Sheets}.
-    When using style sheets, the palette of a widget can be customized using
-    the "color", "background-color", "selection-color",
-    "selection-background-color" and "alternate-background-color".
+    appearance of the widget.
 
     \sa QApplication::palette(), QWidget::font()
 */
@@ -3694,21 +3514,18 @@ QPalette QWidgetPrivate::naturalWidgetPalette(uint inheritedMask) const
 {
     Q_Q(const QWidget);
     QPalette naturalPalette = QApplication::palette(q);
-    if (!q->testAttribute(Qt::WA_StyleSheet)
-        && (!q->isWindow() || q->testAttribute(Qt::WA_WindowPropagation)
+    if ((!q->isWindow() || q->testAttribute(Qt::WA_WindowPropagation)
 #ifndef QT_NO_GRAPHICSVIEW
             || (extra && extra->proxyWidget)
 #endif //QT_NO_GRAPHICSVIEW
             )) {
         if (QWidget *p = q->parentWidget()) {
-            if (!p->testAttribute(Qt::WA_StyleSheet)) {
-                if (!naturalPalette.isCopyOf(QApplication::palette())) {
-                    QPalette inheritedPalette = p->palette();
-                    inheritedPalette.resolve(inheritedMask);
-                    naturalPalette = inheritedPalette.resolve(naturalPalette);
-                } else {
-                    naturalPalette = p->palette();
-                }
+            if (!naturalPalette.isCopyOf(QApplication::palette())) {
+                QPalette inheritedPalette = p->palette();
+                inheritedPalette.resolve(inheritedMask);
+                naturalPalette = inheritedPalette.resolve(naturalPalette);
+            } else {
+                naturalPalette = p->palette();
             }
         }
 #ifndef QT_NO_GRAPHICSVIEW
@@ -3800,13 +3617,6 @@ void QWidget::setFont(const QFont &font)
 {
     Q_D(QWidget);
 
-#ifndef QT_NO_STYLE_STYLESHEET
-    const QStyleSheetStyle* style;
-    if (d->extra && (style = qobject_cast<const QStyleSheetStyle*>(d->extra->style))) {
-        style->saveWidgetFont(this, font);
-    }
-#endif
-
     setAttribute(Qt::WA_SetFont, font.resolve() != 0);
 
     // Determine which font is inherited from this widget's ancestors and
@@ -3826,29 +3636,23 @@ void QWidget::setFont(const QFont &font)
     ancestors font request masks (i.e., which attributes from the parent
     widget's font are implicitly imposed on this widget by the user). Note
     that this font does not take into account the font set on \a w itself.
-
-    ### Stylesheet has a different font propagation mechanism. When a stylesheet
-        is applied, fonts are not propagated anymore
 */
 QFont QWidgetPrivate::naturalWidgetFont(uint inheritedMask) const
 {
     Q_Q(const QWidget);
     QFont naturalFont = QApplication::font(q);
-    if (!q->testAttribute(Qt::WA_StyleSheet)
-        && (!q->isWindow() || q->testAttribute(Qt::WA_WindowPropagation)
+    if ((!q->isWindow() || q->testAttribute(Qt::WA_WindowPropagation)
 #ifndef QT_NO_GRAPHICSVIEW
             || (extra && extra->proxyWidget)
 #endif //QT_NO_GRAPHICSVIEW
             )) {
         if (QWidget *p = q->parentWidget()) {
-            if (!p->testAttribute(Qt::WA_StyleSheet)) {
-                if (!naturalFont.isCopyOf(QApplication::font())) {
-                    QFont inheritedFont = p->font();
-                    inheritedFont.resolve(inheritedMask);
-                    naturalFont = inheritedFont.resolve(naturalFont);
-                } else {
-                    naturalFont = p->font();
-                }
+            if (!naturalFont.isCopyOf(QApplication::font())) {
+                QFont inheritedFont = p->font();
+                inheritedFont.resolve(inheritedMask);
+                naturalFont = inheritedFont.resolve(naturalFont);
+            } else {
+                naturalFont = p->font();
             }
         }
 #ifndef QT_NO_GRAPHICSVIEW
@@ -3890,9 +3694,6 @@ void QWidgetPrivate::resolveFont()
 void QWidgetPrivate::updateFont(const QFont &font)
 {
     Q_Q(QWidget);
-#ifndef QT_NO_STYLE_STYLESHEET
-    const QStyleSheetStyle* cssStyle = extra ? qobject_cast<const QStyleSheetStyle*>(extra->style) : nullptr;
-#endif
 
     QFont old = data.fnt;
     data.fnt = QFont(font, q);
@@ -3914,28 +3715,13 @@ void QWidgetPrivate::updateFont(const QFont &font)
 
     for (int i = 0; i < children.size(); ++i) {
         QWidget *w = qobject_cast<QWidget*>(children.at(i));
-        if (w) {
-            if (0) {
-#ifndef QT_NO_STYLE_STYLESHEET
-            } else if (w->testAttribute(Qt::WA_StyleSheet)) {
-                // Style sheets follow a different font propagation scheme.
-                if (cssStyle)
-                    cssStyle->updateStyleSheetFont(w);
-#endif
-            } else if ((!w->isWindow() || w->testAttribute(Qt::WA_WindowPropagation))) {
-                // Propagate font changes.
-                QWidgetPrivate *wd = w->d_func();
-                wd->inheritedFontResolveMask = newMask;
-                wd->resolveFont();
-            }
+        if (w && (!w->isWindow() || w->testAttribute(Qt::WA_WindowPropagation))) {
+            // Propagate font changes.
+            QWidgetPrivate *wd = w->d_func();
+            wd->inheritedFontResolveMask = newMask;
+            wd->resolveFont();
         }
     }
-
-#ifndef QT_NO_STYLE_STYLESHEET
-    if (cssStyle) {
-        cssStyle->updateStyleSheetFont(q);
-    }
-#endif
 
     QEvent e(QEvent::FontChange);
     QApplication::sendEvent(q, &e);
@@ -8164,8 +7950,7 @@ void QWidget::setParent(QWidget *parent, Qt::WindowFlags f)
 
     d->reparentFocusWidgets(oldtlw);
     setAttribute(Qt::WA_Resized, resized);
-    if (!testAttribute(Qt::WA_StyleSheet)
-        && (!parent || !parent->testAttribute(Qt::WA_StyleSheet))) {
+    if (parent) {
         d->resolveFont();
         d->resolvePalette();
     }
@@ -8182,7 +7967,6 @@ void QWidget::setParent(QWidget *parent, Qt::WindowFlags f)
             if (!testAttribute(Qt::WA_ForceUpdatesDisabled))
                 d->setUpdatesEnabled_helper(parent ? parent->updatesEnabled() : true);
         }
-        d->inheritStyle();
 
         // send and post remaining QObject events
         if (parent && d->sendChildEvents) {
