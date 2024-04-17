@@ -477,7 +477,6 @@ static const struct ClassTblData {
     { QLatin1String("QTextTableCellFormat"), QLatin1String("QtGui/qtextformat.h") },
     { QLatin1String("QTextTableFormat"), QLatin1String("QtGui/qtextformat.h") },
     { QLatin1String("QThread"), QLatin1String("QtCore/qthread.h") },
-    { QLatin1String("QThreadPool"), QLatin1String("QtCore/qthreadpool.h") },
     { QLatin1String("QTime"), QLatin1String("QtCore/qdatetime.h") },
     { QLatin1String("QTimeEdit"), QLatin1String("QtGui/qdatetimeedit.h") },
     { QLatin1String("QTimeLine"), QLatin1String("QtCore/qtimeline.h") },

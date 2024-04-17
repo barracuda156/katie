@@ -108,7 +108,6 @@ include/katie/QtCore/QRect
 include/katie/QtCore/QRectF
 include/katie/QtCore/QRegExp
 include/katie/QtCore/QReturnArgument
-include/katie/QtCore/QRunnable
 include/katie/QtCore/QScopedPointer
 include/katie/QtCore/QScopedPointerPodDeleter
 include/katie/QtCore/QScopedValueRollback
@@ -136,7 +135,6 @@ include/katie/QtCore/QTextConverter
 include/katie/QtCore/QTextStream
 include/katie/QtCore/QTextStreamFunction
 include/katie/QtCore/QThread
-include/katie/QtCore/QThreadPool
 include/katie/QtCore/QTime
 include/katie/QtCore/QTimeLine
 include/katie/QtCore/QTimer
@@ -226,7 +224,6 @@ include/katie/QtCore/qprocess.h
 include/katie/QtCore/qqueue.h
 include/katie/QtCore/qrect.h
 include/katie/QtCore/qregexp.h
-include/katie/QtCore/qrunnable.h
 include/katie/QtCore/qscopedpointer.h
 include/katie/QtCore/qscopedvaluerollback.h
 include/katie/QtCore/qsemaphore.h
@@ -246,7 +243,6 @@ include/katie/QtCore/qtemporaryfile.h
 include/katie/QtCore/qtextcodec.h
 include/katie/QtCore/qtextstream.h
 include/katie/QtCore/qthread.h
-include/katie/QtCore/qthreadpool.h
 include/katie/QtCore/qtimeline.h
 include/katie/QtCore/qtimer.h
 include/katie/QtCore/qtranslator.h

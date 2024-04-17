@@ -28,7 +28,6 @@ set(CORE_PUBLIC_HEADERS
     QDebug
     QFileInfo
     QDateTime
-    QThreadPool
     QSettings
     QStandardPaths
     QPlugin
@@ -74,7 +73,6 @@ set(CORE_PUBLIC_HEADERS
     QFile
     QCache
     QAbstractEventDispatcher
-    QRunnable
     QTimeLine
     QTextCodec
     QStringList
@@ -170,9 +168,6 @@ set(CORE_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/thread/qmutexpool_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/thread/qorderedmutexlocker_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/thread/qthread_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qrunnable.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qthreadpool.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qthreadpool_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qalgorithms.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbitarray.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbytearray.h
@@ -270,10 +265,8 @@ set(CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qlibrary_unix.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/thread/qatomic.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/thread/qmutex.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qrunnable.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/thread/qsemaphore.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/thread/qthread.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qthreadpool.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/thread/qthread_unix.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/thread/qwaitcondition_unix.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbitarray.cpp

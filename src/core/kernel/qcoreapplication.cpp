@@ -33,7 +33,6 @@
 #include "qhash.h"
 #include "qtextcodec.h"
 #include "qthread.h"
-#include "qthreadpool.h"
 #include "qstandardpaths.h"
 #include "qelapsedtimer.h"
 #include "qscopedpointer.h"
@@ -360,13 +359,6 @@ QCoreApplication::~QCoreApplication()
     self = 0;
     QCoreApplicationPrivate::is_app_closing = true;
     QCoreApplicationPrivate::is_app_running = false;
-
-#if !defined(QT_NO_THREAD)
-    // Synchronize and stop the global thread pool threads.
-    QThreadPool *globalThreadPool = QThreadPool::globalInstance();
-    if (globalThreadPool)
-        globalThreadPool->waitForDone();
-#endif
 
 #ifndef QT_NO_LIBRARY
     coreappdata()->app_librarypaths.clear();
