@@ -246,7 +246,8 @@ public:
     QEasingCurvePrivate()
         : type(QEasingCurve::Linear),
           per(s_defaultperiod), amp(s_defaultamplitude), over(s_defaultovershoot)
-    { }
+    {
+    }
 
     QEasingCurve::Type type;
     qreal per;
@@ -291,12 +292,10 @@ QEasingCurve::~QEasingCurve()
 */
 QEasingCurve &QEasingCurve::operator=(const QEasingCurve &other)
 {
-    if (*this != other) {
-        d_ptr->type = other.d_ptr->type;
-        d_ptr->per = other.d_ptr->per;
-        d_ptr->amp = other.d_ptr->amp;
-        d_ptr->over = other.d_ptr->over;
-    }
+    d_ptr->type = other.d_ptr->type;
+    d_ptr->per = other.d_ptr->per;
+    d_ptr->amp = other.d_ptr->amp;
+    d_ptr->over = other.d_ptr->over;
     return *this;
 }
 
@@ -308,9 +307,9 @@ bool QEasingCurve::operator==(const QEasingCurve &other) const
 {
     bool res = (d_ptr->type == other.d_ptr->type);
     if (res) {
-        res = qFuzzyCompare(period(), other.period()) &&
-              qFuzzyCompare(amplitude(), other.amplitude()) &&
-              qFuzzyCompare(overshoot(), other.overshoot());
+        res = qFuzzyCompare(d_ptr->per, other.d_ptr->per) &&
+              qFuzzyCompare(d_ptr->amp, other.d_ptr->amp) &&
+              qFuzzyCompare(d_ptr->over, other.d_ptr->over);
     }
     return res;
 }

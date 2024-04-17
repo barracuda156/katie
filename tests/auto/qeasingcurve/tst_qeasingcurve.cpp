@@ -23,20 +23,14 @@
 #include <QtTest/QtTest>
 
 #include <qeasingcurve.h>
+#include <qdebug.h>
 
-//TESTED_CLASS=
-//TESTED_FILES=
+// TESTED_CLASS=
+// TESTED_FILES=
 
-class tst_QEasingCurve : public QObject {
-  Q_OBJECT
-
-public:
-    tst_QEasingCurve();
-    virtual ~tst_QEasingCurve();
-
-public Q_SLOTS:
-    void init();
-    void cleanup();
+class tst_QEasingCurve : public QObject
+{
+    Q_OBJECT
 
 private slots:
     void type();
@@ -46,108 +40,89 @@ private slots:
     void operators();
     void properties();
     void metaTypes();
-
-protected:
 };
-
-tst_QEasingCurve::tst_QEasingCurve()
-{
-}
-
-tst_QEasingCurve::~tst_QEasingCurve()
-{
-}
-
-void tst_QEasingCurve::init()
-{
-}
-
-void tst_QEasingCurve::cleanup()
-{
-}
-#include <qdebug.h>
 
 void tst_QEasingCurve::type()
 {
     {
-    QEasingCurve curve(QEasingCurve::Linear);
-    QCOMPARE(curve.period(), 0.3);
-    QCOMPARE(curve.amplitude(), 1.0);
+        QEasingCurve curve(QEasingCurve::Linear);
+        QCOMPARE(curve.period(), 0.3);
+        QCOMPARE(curve.amplitude(), 1.0);
 
-    curve.setPeriod(5);
-    curve.setAmplitude(3);
-    QCOMPARE(curve.period(), 5.0);
-    QCOMPARE(curve.amplitude(), 3.0);
+        curve.setPeriod(5);
+        curve.setAmplitude(3);
+        QCOMPARE(curve.period(), 5.0);
+        QCOMPARE(curve.amplitude(), 3.0);
 
-    curve.setType(QEasingCurve::InElastic);
-    QCOMPARE(curve.period(), 5.0);
-    QCOMPARE(curve.amplitude(), 3.0);
+        curve.setType(QEasingCurve::InElastic);
+        QCOMPARE(curve.period(), 5.0);
+        QCOMPARE(curve.amplitude(), 3.0);
     }
 
     {
-    QEasingCurve curve(QEasingCurve::InElastic);
-    QCOMPARE(curve.period(), 0.3);
-    QCOMPARE(curve.amplitude(), 1.0);
-    curve.setAmplitude(2);
-    QCOMPARE(curve.type(), QEasingCurve::InElastic);
-    curve.setType(QEasingCurve::Linear);
+        QEasingCurve curve(QEasingCurve::InElastic);
+        QCOMPARE(curve.period(), 0.3);
+        QCOMPARE(curve.amplitude(), 1.0);
+        curve.setAmplitude(2);
+        QCOMPARE(curve.type(), QEasingCurve::InElastic);
+        curve.setType(QEasingCurve::Linear);
     }
 
     {
-    // check bounaries
-    QEasingCurve curve(QEasingCurve::InCubic);
-    QTest::ignoreMessage(QtWarningMsg, "QEasingCurve: Invalid curve type 9999");
-    curve.setType((QEasingCurve::Type)9999);
-    QCOMPARE(curve.type(), QEasingCurve::InCubic);
-    QTest::ignoreMessage(QtWarningMsg, "QEasingCurve: Invalid curve type -9999");
-    curve.setType((QEasingCurve::Type)-9999);
-    QCOMPARE(curve.type(), QEasingCurve::InCubic);
-    QTest::ignoreMessage(QtWarningMsg, QString::fromAscii("QEasingCurve: Invalid curve type %1")
-                        .arg(QEasingCurve::NCurveTypes).toLatin1().constData());
-    curve.setType(QEasingCurve::NCurveTypes);
-    QCOMPARE(curve.type(), QEasingCurve::InCubic);
-    QTest::ignoreMessage(QtWarningMsg, QString::fromAscii("QEasingCurve: Invalid curve type %1")
-                        .arg(-1).toLatin1().constData());
-    curve.setType((QEasingCurve::Type)-1);
-    QCOMPARE(curve.type(), QEasingCurve::InCubic);
-    curve.setType(QEasingCurve::Linear);
-    QCOMPARE(curve.type(), QEasingCurve::Linear);
-    curve.setType(QEasingCurve::CosineCurve);
-    QCOMPARE(curve.type(), QEasingCurve::CosineCurve);
+        // check bounaries
+        QEasingCurve curve(QEasingCurve::InCubic);
+        QTest::ignoreMessage(QtWarningMsg, "QEasingCurve: Invalid curve type 9999");
+        curve.setType((QEasingCurve::Type)9999);
+        QCOMPARE(curve.type(), QEasingCurve::InCubic);
+        QTest::ignoreMessage(QtWarningMsg, "QEasingCurve: Invalid curve type -9999");
+        curve.setType((QEasingCurve::Type)-9999);
+        QCOMPARE(curve.type(), QEasingCurve::InCubic);
+        QTest::ignoreMessage(QtWarningMsg, QString::fromAscii("QEasingCurve: Invalid curve type %1")
+                            .arg(QEasingCurve::NCurveTypes).toLatin1().constData());
+        curve.setType(QEasingCurve::NCurveTypes);
+        QCOMPARE(curve.type(), QEasingCurve::InCubic);
+        QTest::ignoreMessage(QtWarningMsg, QString::fromAscii("QEasingCurve: Invalid curve type %1")
+                            .arg(-1).toLatin1().constData());
+        curve.setType((QEasingCurve::Type)-1);
+        QCOMPARE(curve.type(), QEasingCurve::InCubic);
+        curve.setType(QEasingCurve::Linear);
+        QCOMPARE(curve.type(), QEasingCurve::Linear);
+        curve.setType(QEasingCurve::CosineCurve);
+        QCOMPARE(curve.type(), QEasingCurve::CosineCurve);
     }
 }
 
 void tst_QEasingCurve::propertyDefaults()
 {
     {
-    // checks if the defaults are correct, but also demonstrates a weakness with the API.
-    QEasingCurve curve(QEasingCurve::InElastic);
-    QCOMPARE(curve.period(), 0.3);
-    QCOMPARE(curve.amplitude(), 1.0);
-    QCOMPARE(curve.overshoot(), qreal(1.70158));
-    curve.setType(QEasingCurve::InBounce);
-    QCOMPARE(curve.period(), 0.3);
-    QCOMPARE(curve.amplitude(), 1.0);
-    QCOMPARE(curve.overshoot(), qreal(1.70158));
-    curve.setType(QEasingCurve::Linear);
-    QCOMPARE(curve.period(), 0.3);
-    QCOMPARE(curve.amplitude(), 1.0);
-    QCOMPARE(curve.overshoot(), qreal(1.70158));
-    curve.setType(QEasingCurve::InElastic);
-    QCOMPARE(curve.period(), 0.3);
-    QCOMPARE(curve.amplitude(), 1.0);
-    QCOMPARE(curve.overshoot(), qreal(1.70158));
-    curve.setPeriod(0.4);
-    curve.setAmplitude(0.6);
-    curve.setOvershoot(1.0);
-    curve.setType(QEasingCurve::Linear);
-    QCOMPARE(curve.period(), 0.4);
-    QCOMPARE(curve.amplitude(), 0.6);
-    QCOMPARE(curve.overshoot(), 1.0);
-    curve.setType(QEasingCurve::InElastic);
-    QCOMPARE(curve.period(), 0.4);
-    QCOMPARE(curve.amplitude(), 0.6);
-    QCOMPARE(curve.overshoot(), 1.0);
+        // checks if the defaults are correct, but also demonstrates a weakness with the API.
+        QEasingCurve curve(QEasingCurve::InElastic);
+        QCOMPARE(curve.period(), 0.3);
+        QCOMPARE(curve.amplitude(), 1.0);
+        QCOMPARE(curve.overshoot(), qreal(1.70158));
+        curve.setType(QEasingCurve::InBounce);
+        QCOMPARE(curve.period(), 0.3);
+        QCOMPARE(curve.amplitude(), 1.0);
+        QCOMPARE(curve.overshoot(), qreal(1.70158));
+        curve.setType(QEasingCurve::Linear);
+        QCOMPARE(curve.period(), 0.3);
+        QCOMPARE(curve.amplitude(), 1.0);
+        QCOMPARE(curve.overshoot(), qreal(1.70158));
+        curve.setType(QEasingCurve::InElastic);
+        QCOMPARE(curve.period(), 0.3);
+        QCOMPARE(curve.amplitude(), 1.0);
+        QCOMPARE(curve.overshoot(), qreal(1.70158));
+        curve.setPeriod(0.4);
+        curve.setAmplitude(0.6);
+        curve.setOvershoot(1.0);
+        curve.setType(QEasingCurve::Linear);
+        QCOMPARE(curve.period(), 0.4);
+        QCOMPARE(curve.amplitude(), 0.6);
+        QCOMPARE(curve.overshoot(), 1.0);
+        curve.setType(QEasingCurve::InElastic);
+        QCOMPARE(curve.period(), 0.4);
+        QCOMPARE(curve.amplitude(), 0.6);
+        QCOMPARE(curve.overshoot(), 1.0);
     }
 }
 
@@ -486,8 +461,7 @@ void tst_QEasingCurve::properties()
     amplitude = linear.amplitude();
     period = linear.period();
 
-    obj.setProperty("easing",
-                    qVariantFromValue(QEasingCurve(QEasingCurve::Linear)));
+    obj.setProperty("easing", qVariantFromValue(QEasingCurve(QEasingCurve::Linear)));
 
     easing = qvariant_cast<QEasingCurve>(obj.property("easing"));
     QCOMPARE(easing.type(), QEasingCurve::Linear);
@@ -500,8 +474,7 @@ void tst_QEasingCurve::metaTypes()
 {
     QVERIFY(QMetaType::type("QEasingCurve") == QMetaType::QEasingCurve);
 
-    QCOMPARE(QByteArray(QMetaType::typeName(QMetaType::QEasingCurve)),
-             QByteArray("QEasingCurve"));
+    QCOMPARE(QByteArray(QMetaType::typeName(QMetaType::QEasingCurve)), QByteArray("QEasingCurve"));
 
     QVERIFY(QMetaType::isRegistered(QMetaType::QEasingCurve));
 
