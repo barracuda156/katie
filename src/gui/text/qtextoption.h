@@ -76,7 +76,6 @@ private:
     Flags fflags;
     Qt::Alignment align;
     Qt::LayoutDirection direction;
-    bool design;
     qreal tab;
 };
 

@@ -28,30 +28,26 @@ QT_BEGIN_NAMESPACE
 /*!
     Constructs a text option with default properties for text.
     The text alignment property is set to Qt::AlignLeft. The
-    word wrap property is set to QTextOption::WordWrap. The
-    using of design metrics flag is set to false.
+    word wrap property is set to QTextOption::WordWrap.
 */
 QTextOption::QTextOption()
     : wordwrap(QTextOption::WordWrap),
     fflags(0),
     align(Qt::AlignLeft),
     direction(Qt::LayoutDirectionAuto),
-    design(false),
     tab(-1)
 {
 }
 
 /*!
     Constructs a text option with the given \a alignment for text.
-    The word wrap property is set to QTextOption::WordWrap. The using
-    of design metrics flag is set to false.
+    The word wrap property is set to QTextOption::WordWrap.
 */
 QTextOption::QTextOption(Qt::Alignment alignment)
     : wordwrap(QTextOption::WordWrap),
     fflags(0),
     align(alignment),
     direction(QApplication::layoutDirection()),
-    design(false),
     tab(-1)
 {
 }
@@ -73,7 +69,6 @@ QTextOption::QTextOption(const QTextOption &o)
     fflags(o.fflags),
     align(o.align),
     direction(o.direction),
-    design(o.design),
     tab(o.tab)
 {
 }
@@ -93,7 +88,6 @@ QTextOption &QTextOption::operator=(const QTextOption &o)
     fflags = o.fflags;
     align = o.align;
     direction = o.direction;
-    design = o.design;
     tab = o.tab;
     return *this;
 }
