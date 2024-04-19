@@ -123,9 +123,6 @@ QLabelPrivate::QLabelPrivate()
 
     \snippet doc/src/snippets/code/src_gui_widgets_qlabel.cpp 0
 
-    The properties and functions QLabel inherits from QFrame can also
-    be used to specify the widget frame to be used for any given label.
-
     A QLabel is often used as a label for an interactive widget. For
     this use QLabel provides a useful mechanism for adding an
     mnemonic (see QKeySequence) that will set the keyboard focus to
@@ -158,12 +155,12 @@ QLabelPrivate::QLabelPrivate()
     Constructs an empty label.
 
     The \a parent and widget flag \a f, arguments are passed
-    to the QFrame constructor.
+    to the QWidget constructor.
 
     \sa setAlignment(), setFrameStyle(), setIndent()
 */
 QLabel::QLabel(QWidget *parent, Qt::WindowFlags f)
-    : QFrame(*new QLabelPrivate(), parent, f)
+    : QWidget(*new QLabelPrivate(), parent, f)
 {
     Q_D(QLabel);
     d->init();
@@ -173,12 +170,12 @@ QLabel::QLabel(QWidget *parent, Qt::WindowFlags f)
     Constructs a label that displays the text, \a text.
 
     The \a parent and widget flag \a f, arguments are passed
-    to the QFrame constructor.
+    to the QWidget constructor.
 
     \sa setText(), setAlignment(), setFrameStyle(), setIndent()
 */
 QLabel::QLabel(const QString &text, QWidget *parent, Qt::WindowFlags f)
-        : QFrame(*new QLabelPrivate(), parent, f)
+    : QWidget(*new QLabelPrivate(), parent, f)
 {
     Q_D(QLabel);
     d->init();
@@ -496,15 +493,11 @@ QSize QLabelPrivate::sizeForWidth(int w) const
     else if (isTextLabel) {
         int align = QStyle::visualAlignment(textDirection(), QFlag(this->align));
         // Add indentation
-        int m = indent;
-
-        if (m < 0 && q->frameWidth()) // no indent, but we do have a frame
-            m = fm.width(QLatin1Char('x')) - margin*2;
-        if (m > 0) {
+        if (indent > 0) {
             if ((align & Qt::AlignLeft) || (align & Qt::AlignRight))
-                hextra += m;
+                hextra += indent;
             if ((align & Qt::AlignTop) || (align & Qt::AlignBottom))
-                vextra += m;
+                vextra += indent;
         }
 
         if (control) {
@@ -828,7 +821,7 @@ void QLabel::focusInEvent(QFocusEvent *ev)
         d->ensureTextControl();
         d->sendControlEvent(ev);
     }
-    QFrame::focusInEvent(ev);
+    QWidget::focusInEvent(ev);
 }
 
 /*!
@@ -849,7 +842,7 @@ void QLabel::focusOutEvent(QFocusEvent *ev)
         }
     }
 
-    QFrame::focusOutEvent(ev);
+    QWidget::focusOutEvent(ev);
 }
 
 /*!\reimp
@@ -859,7 +852,7 @@ bool QLabel::focusNextPrevChild(bool next)
     Q_D(QLabel);
     if (d->control && d->control->setFocusToNextOrPreviousAnchor(next))
         return true;
-    return QFrame::focusNextPrevChild(next);
+    return QWidget::focusNextPrevChild(next);
 }
 
 /*!\reimp
@@ -901,7 +894,7 @@ bool QLabel::event(QEvent *e)
         d->updateLabel();
     }
 
-    return QFrame::event(e);
+    return QWidget::event(e);
 }
 
 /*!\reimp
@@ -911,7 +904,6 @@ void QLabel::paintEvent(QPaintEvent *ev)
     Q_D(QLabel);
     QStyle *style = QWidget::style();
     QPainter painter(this);
-    drawFrame(&painter);
     QRect cr = contentsRect();
     cr.adjust(d->margin, d->margin, -d->margin, -d->margin);
     int align = QStyle::visualAlignment(d->isTextLabel ? d->textDirection()
@@ -1267,7 +1259,7 @@ void QLabel::changeEvent(QEvent *ev)
     } else if (ev->type() == QEvent::ContentsRectChange) {
         d->updateLabel();
     }
-    QFrame::changeEvent(ev);
+    QWidget::changeEvent(ev);
 }
 
 /*!
@@ -1327,18 +1319,15 @@ QRect QLabelPrivate::documentRect() const
     cr.adjust(margin, margin, -margin, -margin);
     const int align = QStyle::visualAlignment(isTextLabel ? textDirection()
                                                           : q->layoutDirection(), QFlag(this->align));
-    int m = indent;
-    if (m < 0 && q->frameWidth()) // no indent, but we do have a frame
-        m = q->fontMetrics().width(QLatin1Char('x')) / 2 - margin;
-    if (m > 0) {
+    if (indent > 0) {
         if (align & Qt::AlignLeft)
-            cr.setLeft(cr.left() + m);
+            cr.setLeft(cr.left() + indent);
         if (align & Qt::AlignRight)
-            cr.setRight(cr.right() - m);
+            cr.setRight(cr.right() - indent);
         if (align & Qt::AlignTop)
-            cr.setTop(cr.top() + m);
+            cr.setTop(cr.top() + indent);
         if (align & Qt::AlignBottom)
-            cr.setBottom(cr.bottom() - m);
+            cr.setBottom(cr.bottom() - indent);
     }
     return cr;
 }

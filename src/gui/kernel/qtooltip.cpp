@@ -133,7 +133,6 @@ QTipLabel::QTipLabel(const QString &text, QWidget *w)
     setPalette(QToolTip::palette());
     ensurePolished();
     setMargin(1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, this));
-    setFrameStyle(QFrame::NoFrame);
     setAlignment(Qt::AlignLeft);
     setIndent(1);
     qApp->installEventFilter(this);

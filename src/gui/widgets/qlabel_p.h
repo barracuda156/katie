@@ -47,7 +47,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class QLabelPrivate : public QFramePrivate
+class QLabelPrivate : public QWidgetPrivate
 {
     Q_DECLARE_PUBLIC(QLabel)
 public:

@@ -554,7 +554,6 @@ class QColorPicker : public QFrame
     Q_OBJECT
 public:
     QColorPicker(QWidget* parent);
-    ~QColorPicker();
 
 public slots:
     void setCol(int h, int s);
@@ -744,10 +743,6 @@ QColorPicker::QColorPicker(QWidget* parent)
 
     setAttribute(Qt::WA_NoSystemBackground);
     setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
-}
-
-QColorPicker::~QColorPicker()
-{
 }
 
 QSize QColorPicker::sizeHint() const

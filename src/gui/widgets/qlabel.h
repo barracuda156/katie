@@ -30,7 +30,7 @@ QT_BEGIN_NAMESPACE
 class QMovie;
 class QLabelPrivate;
 
-class Q_GUI_EXPORT QLabel : public QFrame
+class Q_GUI_EXPORT QLabel : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QString text READ text WRITE setText)
