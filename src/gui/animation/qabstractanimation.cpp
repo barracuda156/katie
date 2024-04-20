@@ -398,7 +398,7 @@ void QAbstractAnimationPrivate::setState(QAbstractAnimation::State newState)
     if (oldState == QAbstractAnimation::Running) {
         if (newState == QAbstractAnimation::Paused && hasRegisteredTimer)
             QUnifiedTimer::ensureTimerUpdate();
-        //the animation, is not running any more
+        // the animation is not running any more
         QUnifiedTimer::unregisterAnimation(q);
     } else if (newState == QAbstractAnimation::Running) {
         QUnifiedTimer::registerAnimation(q, isTopLevel);

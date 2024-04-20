@@ -114,12 +114,11 @@ private:
     QBasicTimer m_timer;
 };
 
-class Q_GUI_EXPORT QUnifiedTimer : public QObject
+class QUnifiedTimer : public QObject
 {
 public:
     QUnifiedTimer();
 
-    //XXX this is needed by dui
     static QUnifiedTimer *instance();
 
     static void registerAnimation(QAbstractAnimation *animation, bool isTopLevel);
