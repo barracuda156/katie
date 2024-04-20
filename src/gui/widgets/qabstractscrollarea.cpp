@@ -130,9 +130,9 @@ QT_BEGIN_NAMESPACE
 */
 
 QAbstractScrollAreaPrivate::QAbstractScrollAreaPrivate()
-    :hbar(0), vbar(0), vbarpolicy(Qt::ScrollBarAsNeeded), hbarpolicy(Qt::ScrollBarAsNeeded),
-     viewport(0), cornerWidget(0), left(0), top(0), right(0), bottom(0),
-     xoffset(0), yoffset(0), viewportFilter(0)
+    : hbar(0), vbar(0), vbarpolicy(Qt::ScrollBarAsNeeded), hbarpolicy(Qt::ScrollBarAsNeeded),
+    viewport(0), cornerWidget(0), left(0), top(0), right(0), bottom(0),
+    xoffset(0), yoffset(0), viewportFilter(0)
 {
 }
 
