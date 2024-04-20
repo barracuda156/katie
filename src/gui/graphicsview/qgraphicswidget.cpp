@@ -1375,9 +1375,17 @@ bool QGraphicsWidget::event(QEvent *event)
     case QEvent::FontChange:
     case QEvent::StyleChange:
     case QEvent::PaletteChange:
+    case QEvent::WindowTitleChange:
+    case QEvent::IconTextChange:
+    case QEvent::ModifiedChange:
+    case QEvent::MouseTrackingChange:
     case QEvent::ParentChange:
+    case QEvent::WindowStateChange:
+    case QEvent::LocaleChange:
     case QEvent::ContentsRectChange:
+    case QEvent::LanguageChange:
     case QEvent::LayoutDirectionChange:
+    case QEvent::KeyboardLayoutChange:
         changeEvent(event);
         break;
     case QEvent::Close:
