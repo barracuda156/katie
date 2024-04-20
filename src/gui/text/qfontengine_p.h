@@ -57,7 +57,7 @@ struct QGlyphLayout;
    )
 
 
-class Q_GUI_EXPORT QFontEngine
+class QFontEngine
 {
 public:
     enum Type {

@@ -77,7 +77,7 @@ private:
     Q_DISABLE_COPY(QFreetypeFace);
 };
 
-class Q_GUI_EXPORT QFontEngineFT : public QFontEngine
+class QFontEngineFT : public QFontEngine
 {
 public:
 #ifndef QT_NO_FONTCONFIG
