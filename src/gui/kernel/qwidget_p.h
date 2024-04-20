@@ -210,10 +210,9 @@ static inline bool bypassGraphicsProxyWidget(const QWidget *p)
     return false;
 }
 
-class Q_GUI_EXPORT QWidgetPrivate : public QObjectPrivate
+class QWidgetPrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QWidget)
-
 public:
     // *************************** Cross-platform ***************************************
     enum DrawWidgetFlags {
