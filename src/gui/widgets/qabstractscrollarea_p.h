@@ -64,8 +64,6 @@ public:
 
     void init();
     void layoutChildren();
-    // ### Fix for 4.4, talk to Bjoern E or Girish.
-    virtual void scrollBarPolicyChanged(Qt::Orientation, Qt::ScrollBarPolicy) {}
 
     void _q_hslide(int);
     void _q_vslide(int);

@@ -478,8 +478,6 @@ void QAbstractScrollArea::setVerticalScrollBarPolicy(Qt::ScrollBarPolicy policy)
     d->vbarpolicy = policy;
     if (isVisible())
         d->layoutChildren();
-    if (oldPolicy != d->vbarpolicy)
-        d->scrollBarPolicyChanged(Qt::Vertical, d->vbarpolicy);
 }
 
 
@@ -539,8 +537,6 @@ void QAbstractScrollArea::setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy polic
     d->hbarpolicy = policy;
     if (isVisible())
         d->layoutChildren();
-    if (oldPolicy != d->hbarpolicy)
-        d->scrollBarPolicyChanged(Qt::Horizontal, d->hbarpolicy);
 }
 
 /*!
