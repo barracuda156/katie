@@ -135,7 +135,8 @@ inline QDebug operator<<(QDebug debug, const QFlags<T> &flags)
                 debug.nospace() << '|';
             else
                 needSeparator = true;
-            debug.nospace() << "0x" << QByteArray::number(T(1 << i), 16);
+            const QByteArray flagnumber = QByteArray::number(T(1 << i), 16);
+            debug.nospace() << "0x" << flagnumber.constData();
         }
     }
     debug << ')';
