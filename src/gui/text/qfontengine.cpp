@@ -36,14 +36,9 @@ QT_BEGIN_NAMESPACE
 // QFontEngine
 
 QFontEngine::QFontEngine()
-    : QObject(),
-    ref(1)
+    : ref(1)
 {
     fsType = 0;
-}
-
-QFontEngine::~QFontEngine()
-{
 }
 
 QFixed QFontEngine::lineThickness() const
@@ -301,10 +296,6 @@ QByteArray QFontEngine::convertToPostscriptFontFamilyName(const QByteArray &fami
 
 QFontEngineBox::QFontEngineBox(int size)
     : _size(size)
-{
-}
-
-QFontEngineBox::~QFontEngineBox()
 {
 }
 

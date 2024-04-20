@@ -57,7 +57,7 @@ struct QGlyphLayout;
    )
 
 
-class Q_GUI_EXPORT QFontEngine : public QObject
+class Q_GUI_EXPORT QFontEngine
 {
 public:
     enum Type {
@@ -66,7 +66,6 @@ public:
     };
 
     QFontEngine();
-    virtual ~QFontEngine();
 
     // all of these are in unscaled metrics if the engine supports uncsaled metrics,
     // otherwise in design metrics
@@ -175,7 +174,6 @@ class QFontEngineBox : public QFontEngine
 {
 public:
     QFontEngineBox(int size);
-    ~QFontEngineBox();
 
     virtual bool stringToCMap(const QChar *str, int len, QGlyphLayout *glyphs, int *nglyphs, QTextEngine::ShaperFlags flags) const;
     virtual void recalcAdvances(QGlyphLayout *) const;

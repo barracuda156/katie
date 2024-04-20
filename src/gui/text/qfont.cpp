@@ -1329,11 +1329,13 @@ void QFontCache::clear()
     EngineCache::ConstIterator it = engineCache.constBegin(),
                                end = engineCache.constEnd();
     while (it != end) {
-        if (!it.value()->ref.deref())
-            delete it.value();
-        else
+        QFontEngine* engine = it.value();
+        if (!engine->ref.deref()) {
+            delete engine;
+        } else {
             FC_DEBUG("QFontCache::~QFontCache: engineData %p still has refcount %d",
-                        it.value(), int(it.value()->ref));
+                        engine, int(engine->ref));
+        }
         ++it;
     }
 
