@@ -2194,7 +2194,6 @@ void QTextCursor::insertFragment(const QTextDocumentFragment &fragment)
 */
 
 #ifndef QT_NO_TEXTHTMLPARSER
-
 void QTextCursor::insertHtml(const QString &html)
 {
     if (!d || !d->priv)
@@ -2202,7 +2201,6 @@ void QTextCursor::insertHtml(const QString &html)
     QTextDocumentFragment fragment = QTextDocumentFragment::fromHtml(html, d->priv->document());
     insertFragment(fragment);
 }
-
 #endif // QT_NO_TEXTHTMLPARSER
 
 /*!
