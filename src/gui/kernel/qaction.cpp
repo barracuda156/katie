@@ -59,13 +59,13 @@ static QString qt_strippedText(QString s)
 }
 
 
-QActionPrivate::QActionPrivate() : group(nullptr), enabled(true),
-                                   visible(true), checkable(false), checked(false), separator(false),
-                                   menuRole(QAction::TextHeuristicRole),
-                                   priority(QAction::NormalPriority)
+QActionPrivate::QActionPrivate()
+    : group(nullptr), enabled(true),
+    visible(true), checkable(false), checked(false), separator(false),
+    menuRole(QAction::TextHeuristicRole),
+    priority(QAction::NormalPriority)
 {
 #ifndef QT_NO_SHORTCUT
-    shortcutId = 0;
     shortcutContext = Qt::WindowShortcut;
     autorepeat = true;
 #endif
@@ -113,22 +113,42 @@ void QActionPrivate::sendDataChanged()
 void QActionPrivate::redoGrab(QShortcutMap &map)
 {
     Q_Q(QAction);
-    if (shortcutId)
-        map.removeShortcut(shortcutId, q);
+    for(int i = 0; i < shortcutIds.count(); ++i) {
+        if (const int id = shortcutIds.at(i))
+            map.removeShortcut(id, q);
+    }
+    shortcutIds.clear();
     if (shortcut.isEmpty())
         return;
-    shortcutId = map.addShortcut(q, shortcut, shortcutContext);
-    if (!enabled)
-        map.setShortcutEnabled(false, shortcutId, q);
-    if (!autorepeat)
-        map.setShortcutAutoRepeat(false, shortcutId, q);
+    for(int i = 0; i < shortcut.count(); ++i) {
+        const int key = shortcut[i];
+        if (key != 0)
+            shortcutIds.append(map.addShortcut(q, QKeySequence(key), shortcutContext));
+        else
+            shortcutIds.append(0);
+    }
+    if (!enabled) {
+        for(int i = 0; i < shortcutIds.count(); ++i) {
+            const int id = shortcutIds.at(i);
+            map.setShortcutEnabled(false, id, q);
+        }
+    }
+    if (!autorepeat) {
+        for(int i = 0; i < shortcutIds.count(); ++i) {
+            const int id = shortcutIds.at(i);
+            map.setShortcutAutoRepeat(false, id, q);
+        }
+    }
 }
 
 void QActionPrivate::setShortcutEnabled(bool enable, QShortcutMap &map)
 {
     Q_Q(QAction);
-    if (shortcutId)
-        map.setShortcutEnabled(enable, shortcutId, q);
+    for(int i = 0; i < shortcutIds.count(); ++i) {
+        if (const int id = shortcutIds.at(i)) {
+            map.setShortcutEnabled(enable, id, q);
+        }
+    }
 }
 #endif // QT_NO_SHORTCUT
 
@@ -465,8 +485,11 @@ QAction::~QAction()
     if (d->group)
         d->group->removeAction(this);
 #ifndef QT_NO_SHORTCUT
-    if (d->shortcutId && qApp) {
-        qApp->d_func()->shortcutMap.removeShortcut(d->shortcutId, this);
+    if (!d->shortcutIds.isEmpty() && qApp) {
+        for(int i = 0; i < d->shortcutIds.count(); ++i) {
+            const int id = d->shortcutIds.at(i);
+            qApp->d_func()->shortcutMap.removeShortcut(id, this);
+        }
     }
 #endif
 }
