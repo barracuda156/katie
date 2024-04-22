@@ -124,46 +124,11 @@ void QActionPrivate::redoGrab(QShortcutMap &map)
         map.setShortcutAutoRepeat(false, shortcutId, q);
 }
 
-void QActionPrivate::redoGrabAlternate(QShortcutMap &map)
-{
-    Q_Q(QAction);
-    for(int i = 0; i < alternateShortcutIds.count(); ++i) {
-        if (const int id = alternateShortcutIds.at(i))
-            map.removeShortcut(id, q);
-    }
-    alternateShortcutIds.clear();
-    if (alternateShortcuts.isEmpty())
-        return;
-    for(int i = 0; i < alternateShortcuts.count(); ++i) {
-        const QKeySequence& alternate = alternateShortcuts.at(i);
-        if (!alternate.isEmpty())
-            alternateShortcutIds.append(map.addShortcut(q, alternate, shortcutContext));
-        else
-            alternateShortcutIds.append(0);
-    }
-    if (!enabled) {
-        for(int i = 0; i < alternateShortcutIds.count(); ++i) {
-            const int id = alternateShortcutIds.at(i);
-            map.setShortcutEnabled(false, id, q);
-        }
-    }
-    if (!autorepeat) {
-        for(int i = 0; i < alternateShortcutIds.count(); ++i) {
-            const int id = alternateShortcutIds.at(i);
-            map.setShortcutAutoRepeat(false, id, q);
-        }
-    }
-}
-
 void QActionPrivate::setShortcutEnabled(bool enable, QShortcutMap &map)
 {
     Q_Q(QAction);
     if (shortcutId)
         map.setShortcutEnabled(enable, shortcutId, q);
-    for(int i = 0; i < alternateShortcutIds.count(); ++i) {
-        if (const int id = alternateShortcutIds.at(i))
-            map.setShortcutEnabled(enable, id, q);
-    }
 }
 #endif // QT_NO_SHORTCUT
 
@@ -390,52 +355,6 @@ void QAction::setShortcut(const QKeySequence &shortcut)
 }
 
 /*!
-    \since 4.2
-
-    Sets \a shortcuts as the list of shortcuts that trigger the
-    action. The first element of the list is the primary shortcut.
-
-    \sa shortcut
-*/
-void QAction::setShortcuts(const QList<QKeySequence> &shortcuts)
-{
-    Q_D(QAction);
-
-    QList <QKeySequence> listCopy = shortcuts;
-
-    QKeySequence primary;
-    if (!listCopy.isEmpty())
-        primary = listCopy.takeFirst();
-
-    if (d->shortcut == primary && d->alternateShortcuts == listCopy)
-        return;
-
-    QAPP_CHECK("setShortcuts");
-
-    d->shortcut = primary;
-    d->alternateShortcuts = listCopy;
-    d->redoGrab(qApp->d_func()->shortcutMap);
-    d->redoGrabAlternate(qApp->d_func()->shortcutMap);
-    d->sendDataChanged();
-}
-
-/*!
-    \since 4.2
-
-    Sets a platform dependent list of shortcuts based on the \a key.
-    The result of calling this function will depend on the currently running platform.
-    Note that more than one shortcut can assigned by this action.
-    If only the primary shortcut is required, use setShortcut instead.
-
-    \sa QKeySequence::keyBindings()
-*/
-void QAction::setShortcuts(QKeySequence::StandardKey key)
-{
-    QList <QKeySequence> list = QKeySequence::keyBindings(key);
-    setShortcuts(list);
-}
-
-/*!
     Returns the primary shortcut.
 
     \sa setShortcuts()
@@ -444,25 +363,6 @@ QKeySequence QAction::shortcut() const
 {
     Q_D(const QAction);
     return d->shortcut;
-}
-
-/*!
-    \since 4.2
-
-    Returns the list of shortcuts, with the primary shortcut as
-    the first element of the list.
-
-    \sa setShortcuts()
-*/
-QList<QKeySequence> QAction::shortcuts() const
-{
-    Q_D(const QAction);
-    QList <QKeySequence> shortcuts;
-    if (!d->shortcut.isEmpty())
-        shortcuts << d->shortcut;
-    if (!d->alternateShortcuts.isEmpty())
-        shortcuts << d->alternateShortcuts;
-    return shortcuts;
 }
 
 /*!
@@ -480,7 +380,6 @@ void QAction::setShortcutContext(Qt::ShortcutContext context)
     QAPP_CHECK("setShortcutContext");
     d->shortcutContext = context;
     d->redoGrab(qApp->d_func()->shortcutMap);
-    d->redoGrabAlternate(qApp->d_func()->shortcutMap);
     d->sendDataChanged();
 }
 
@@ -508,7 +407,6 @@ void QAction::setAutoRepeat(bool on)
     QAPP_CHECK("setAutoRepeat");
     d->autorepeat = on;
     d->redoGrab(qApp->d_func()->shortcutMap);
-    d->redoGrabAlternate(qApp->d_func()->shortcutMap);
     d->sendDataChanged();
 }
 
@@ -569,10 +467,6 @@ QAction::~QAction()
 #ifndef QT_NO_SHORTCUT
     if (d->shortcutId && qApp) {
         qApp->d_func()->shortcutMap.removeShortcut(d->shortcutId, this);
-        for(int i = 0; i < d->alternateShortcutIds.count(); ++i) {
-            const int id = d->alternateShortcutIds.at(i);
-            qApp->d_func()->shortcutMap.removeShortcut(id, this);
-        }
     }
 #endif
 }

@@ -61,14 +61,10 @@ public:
     QString tooltip;
     QString statustip;
     QString whatsthis;
-#ifndef QT_NO_SHORTCUT
-    QKeySequence shortcut;
-    QList<QKeySequence> alternateShortcuts;
-#endif
     QVariant userData;
 #ifndef QT_NO_SHORTCUT
+    QKeySequence shortcut;
     int shortcutId;
-    QList<int> alternateShortcutIds;
     Qt::ShortcutContext shortcutContext;
     bool autorepeat;
 #endif
@@ -89,7 +85,6 @@ public:
 #endif
 #ifndef QT_NO_SHORTCUT
     void redoGrab(QShortcutMap &map);
-    void redoGrabAlternate(QShortcutMap &map);
     void setShortcutEnabled(bool enable, QShortcutMap &map);
 #endif // QT_NO_SHORTCUT
 

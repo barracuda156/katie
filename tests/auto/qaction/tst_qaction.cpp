@@ -209,21 +209,13 @@ void tst_QAction::actionEvent()
     QCOMPARE(m_lastAction, &a);
 }
 
-//basic testing of standard keys
+// basic testing of standard keys
 void tst_QAction::setStandardKeys()
 {
     QAction act(0);
-    act.setShortcut(QKeySequence("CTRL+L"));
-    QList<QKeySequence> list;
-    act.setShortcuts(list);
-    act.setShortcuts(QKeySequence::Copy);
-    QVERIFY(act.shortcut() == act.shortcuts().first());
-
-    QList<QKeySequence> expected;
-    expected  << QKeySequence("CTRL+C") << QKeySequence("F16") << QKeySequence("CTRL+INSERT");
-    QVERIFY(act.shortcuts() == expected);
+    act.setShortcut(QKeySequence("CTRL+C"));
+    QVERIFY(act.shortcut() == QKeySequence(QKeySequence::Copy));
 }
-
 
 void tst_QAction::alternateShortcuts()
 {
@@ -234,8 +226,7 @@ void tst_QAction::alternateShortcuts()
     {
         QAction act(wid);
         wid->addAction(&act);
-        QList<QKeySequence> shlist = QList<QKeySequence>() << QKeySequence("CTRL+P") << QKeySequence("CTRL+A");
-        act.setShortcuts(shlist);
+        act.setShortcut(QKeySequence("CTRL+A"));
 
         QSignalSpy spy(&act, SIGNAL(triggered()));
 

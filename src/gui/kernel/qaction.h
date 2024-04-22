@@ -112,10 +112,6 @@ public:
     void setShortcut(const QKeySequence &shortcut);
     QKeySequence shortcut() const;
 
-    void setShortcuts(const QList<QKeySequence> &shortcuts);
-    void setShortcuts(QKeySequence::StandardKey);
-    QList<QKeySequence> shortcuts() const;
-
     void setShortcutContext(Qt::ShortcutContext context);
     Qt::ShortcutContext shortcutContext() const;
 
