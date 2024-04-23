@@ -152,6 +152,9 @@ int QShortcutMap::addShortcut(QObject *owner, const QKeySequence &key, Qt::Short
         << "QShortcutMap::addShortcut(" << owner << ", "
         << key << ", " << context << ") = " << d->currentId;
 #endif
+#if defined(Dump_QShortcutMap)
+    dumpMap();
+#endif
     return d->currentId;
 }
 
@@ -819,8 +822,11 @@ void QShortcutMap::dispatchEvent(QKeyEvent *e)
 void QShortcutMap::dumpMap() const
 {
     Q_D(const QShortcutMap);
-    for (int i = 0; i < d->sequences.size(); ++i)
-        qDebug().nospace() << &(d->sequences.at(i));
+    for (int i = 0; i < d->sequences.size(); ++i) {
+        qDebug() << "shortcut" << d->sequences.at(i).keyseq << d->sequences.at(i).context
+            << d->sequences.at(i).enabled << d->sequences.at(i).autorepeat << d->sequences.at(i).id
+            << d->sequences.at(i).owner;
+    }
 }
 #endif
 
