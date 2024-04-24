@@ -793,11 +793,14 @@ QKeySequence::~QKeySequence()
  */
 int QKeySequence::count() const
 {
-    if (!key1)
-        return 0;
-    if (!key2)
-        return 1;
-    return 2;
+    int result = 0;
+    if (key1 > 0) {
+        result++;
+    }
+    if (key2 > 0) {
+        result++;
+    }
+    return result;
 }
 
 
@@ -807,7 +810,7 @@ int QKeySequence::count() const
 */
 bool QKeySequence::isEmpty() const
 {
-    return (key1 <= 0);
+    return (key1 <= 0 && key2 <= 0);
 }
 
 
