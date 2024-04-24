@@ -33,26 +33,52 @@
 // We mean it.
 //
 
-#include "QtGui/qkeysequence.h"
+#include "qlist.h"
+#include "qkeysequence.h"
 
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_SHORTCUT
 
 class QKeyEvent;
-struct QShortcutEntry;
-class QShortcutMapPrivate;
 class QGraphicsWidget;
 class QWidget;
 class QAction;
 class QObject;
 
+/* \internal
+    Entry data for QShortcutMap
+    Contains:
+        Keysequence for entry
+        Pointer to parent owning the sequence
+*/
+struct QShortcutEntry
+{
+    QShortcutEntry()
+        : context(Qt::WindowShortcut), enabled(false), autorepeat(true), id(0), owner(nullptr)
+    {
+    }
+
+    QShortcutEntry(QObject *o, const QKeySequence &k, Qt::ShortcutContext c, int i, bool a)
+        : keyseq(k), context(c), enabled(true), autorepeat(a), id(i), owner(o)
+    {
+    }
+
+    bool operator<(const QShortcutEntry &f) const
+    { return keyseq < f.keyseq; }
+
+    QKeySequence keyseq;
+    Qt::ShortcutContext context;
+    bool enabled;
+    bool autorepeat;
+    int id;
+    QObject *owner;
+};
+
 class QShortcutMap
 {
-    Q_DECLARE_PRIVATE(QShortcutMap)
 public:
     QShortcutMap();
-    ~QShortcutMap();
 
     int addShortcut(QObject *owner, const QKeySequence &key, Qt::ShortcutContext context);
     int removeShortcut(int id, QObject *owner);
@@ -63,6 +89,8 @@ public:
     bool hasShortcutForKeySequence(const QKeySequence &seq) const;
 
 private:
+    Q_DISABLE_COPY(QShortcutMap);
+
     bool correctContext(const QShortcutEntry &item) const;
     bool correctWidgetContext(Qt::ShortcutContext context, QWidget *w, QWidget *active_window) const;
 #ifndef QT_NO_GRAPHICSVIEW
@@ -71,7 +99,9 @@ private:
 #ifndef QT_NO_ACTION
     bool correctContext(Qt::ShortcutContext context,QAction *a, QWidget *active_window) const;
 #endif
-    QShortcutMapPrivate* d_ptr;
+
+    int m_currentId;
+    QList<QShortcutEntry> m_shortcuts;
 };
 
 #endif // QT_NO_SHORTCUT

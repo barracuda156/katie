@@ -40,68 +40,13 @@ QT_BEGIN_NAMESPACE
 // To enable verbose output uncomment below
 // #define DEBUG_QSHORTCUTMAP
 
-/* \internal
-    Entry data for QShortcutMap
-    Contains:
-        Keysequence for entry
-        Pointer to parent owning the sequence
-*/
-struct QShortcutEntry
-{
-    QShortcutEntry()
-        : keyseq(0), context(Qt::WindowShortcut), enabled(false), autorepeat(true), id(0), owner(nullptr)
-    {
-    }
 
-    QShortcutEntry(QObject *o, const QKeySequence &k, Qt::ShortcutContext c, int i, bool a)
-        : keyseq(k), context(c), enabled(true), autorepeat(a), id(i), owner(o)
-    {
-    }
-
-    bool operator<(const QShortcutEntry &f) const
-    { return keyseq < f.keyseq; }
-
-    QKeySequence keyseq;
-    Qt::ShortcutContext context;
-    bool enabled;
-    bool autorepeat;
-    int id;
-    QObject *owner;
-};
-
-/* \internal
-    Private data for QShortcutMap
-*/
-class QShortcutMapPrivate
-{
-public:
-    QShortcutMapPrivate()
-        : currentId(0)
-    {
-    }
-
-    int currentId;
-    QList<QShortcutEntry> sequences;
-};
-
-
-/*! \internal
-    QShortcutMap constructor.
-*/
 QShortcutMap::QShortcutMap()
-    : d_ptr(new QShortcutMapPrivate())
+    : m_currentId(0)
 {
 }
 
-/*! \internal
-    QShortcutMap destructor.
-*/
-QShortcutMap::~QShortcutMap()
-{
-    delete d_ptr;
-}
-
-/*! \internal
+/*!
     Adds a shortcut to the global map.
     Returns the id of the newly added shortcut.
 */
@@ -109,49 +54,45 @@ int QShortcutMap::addShortcut(QObject *owner, const QKeySequence &key, Qt::Short
 {
     Q_ASSERT_X(owner, "QShortcutMap::addShortcut", "All shortcuts need an owner");
     Q_ASSERT_X(!key.isEmpty(), "QShortcutMap::addShortcut", "Cannot add keyless shortcuts to map");
-    Q_D(QShortcutMap);
 
-    QShortcutEntry newEntry(owner, key, context, --(d->currentId), true);
-    QList<QShortcutEntry>::iterator it = qUpperBound(d->sequences.begin(), d->sequences.end(), newEntry);
-    d->sequences.insert(it, newEntry); // Insert sorted
+    QShortcutEntry newEntry(owner, key, context, --(m_currentId), true);
+    QList<QShortcutEntry>::iterator it = qUpperBound(m_shortcuts.begin(), m_shortcuts.end(), newEntry);
+    m_shortcuts.insert(it, newEntry); // Insert sorted
 #if defined(DEBUG_QSHORTCUTMAP)
     qDebug().nospace()
         << "QShortcutMap::addShortcut(" << owner << ", "
-        << key << ", " << context << ") = " << d->currentId;
+        << key << ", " << context << ") = " << m_currentId;
 #endif
-    return d->currentId;
+    return m_currentId;
 }
 
-/*! \internal
-    Removes a shortcut from the global map.
-    If \a owner is 0, all entries in the map with the key sequence specified
-    is removed. If \a key is null, all sequences for \a owner is removed from
-    the map. If \a id is 0, all sequences owned by \a owner are removed.
-    Returns the number of sequences removed from the map.
+/*!
+    Removes a shortcut from the global map. If \a owner is 0, all entries in the map with the key
+    sequence specified is removed. If \a key is null, all shortcuts for \a owner is removed from
+    the map. If \a id is 0, all shortcuts owned by \a owner are removed. Returns the number of
+    shortcuts removed from the map.
 */
 
 int QShortcutMap::removeShortcut(int id, QObject *owner)
 {
-    Q_D(QShortcutMap);
     int itemsRemoved = 0;
     bool allOwners = (owner == 0);
     bool allIds = (id == 0);
 
     // Special case, remove everything
     if (allOwners && allIds) {
-        itemsRemoved = d->sequences.size();
-        d->sequences.clear();
+        itemsRemoved = m_shortcuts.size();
+        m_shortcuts.clear();
         return itemsRemoved;
     }
 
-    int i = d->sequences.size()-1;
-    while (i>=0)
-    {
-        const QShortcutEntry &entry = d->sequences.at(i);
+    int i = m_shortcuts.size()-1;
+    while (i >= 0) {
+        const QShortcutEntry &entry = m_shortcuts.at(i);
         int entryId = entry.id;
         if ((allOwners || entry.owner == owner)
             && (allIds || entry.id == id)) {
-            d->sequences.removeAt(i);
+            m_shortcuts.removeAt(i);
             ++itemsRemoved;
         }
         if (id == entryId)
@@ -165,27 +106,24 @@ int QShortcutMap::removeShortcut(int id, QObject *owner)
     return itemsRemoved;
 }
 
-/*! \internal
-    Changes the enable state of a shortcut to \a enable.
-    If \a owner is 0, all entries in the map with the key sequence specified
-    is removed. If \a key is null, all sequences for \a owner is removed from
-    the map. If \a id is 0, all key sequences owned by \a owner are changed.
-    Returns the number of sequences which are matched in the map.
+/*!
+    Changes the enable state of a shortcut to \a enable. If \a owner is 0, all entries in the map
+    with the key sequence specified is removed. If \a key is null, all shortcuts for \a owner is
+    removed from the map. If \a id is 0, all key shortcuts owned by \a owner are changed. Returns
+    the number of shortcuts which are matched in the map.
 */
 int QShortcutMap::setShortcutEnabled(bool enable, int id, QObject *owner)
 {
-    Q_D(QShortcutMap);
     int itemsChanged = 0;
     bool allOwners = (owner == 0);
     bool allIds = id == 0;
 
-    int i = d->sequences.size()-1;
-    while (i>=0)
-    {
-        QShortcutEntry entry = d->sequences.at(i);
+    int i = (m_shortcuts.size() - 1);
+    while (i >= 0) {
+        QShortcutEntry entry = m_shortcuts.at(i);
         if ((allOwners || entry.owner == owner)
             && (allIds || entry.id == id)) {
-            d->sequences[i].enabled = enable;
+            m_shortcuts[i].enabled = enable;
             ++itemsChanged;
         }
         if (id == entry.id)
@@ -200,27 +138,24 @@ int QShortcutMap::setShortcutEnabled(bool enable, int id, QObject *owner)
     return itemsChanged;
 }
 
-/*! \internal
-    Changes the auto repeat state of a shortcut to \a enable.
-    If \a owner is 0, all entries in the map with the key sequence specified
-    is removed. If \a key is null, all sequences for \a owner is removed from
-    the map. If \a id is 0, all key sequences owned by \a owner are changed.
-    Returns the number of sequences which are matched in the map.
+/*!
+    Changes the auto repeat state of a shortcut to \a enable. If \a owner is 0, all entries in the
+    map with the key sequence specified is removed. If \a key is null, all shortcuts for \a owner
+    is removed from the map. If \a id is 0, all key shortcuts owned by \a owner are changed.
+    Returns the number of shortcuts which are matched in the map.
 */
 int QShortcutMap::setShortcutAutoRepeat(bool on, int id, QObject *owner)
 {
-    Q_D(QShortcutMap);
     int itemsChanged = 0;
     bool allOwners = (owner == 0);
     bool allIds = (id == 0);
 
-    int i = d->sequences.size()-1;
-    while (i>=0)
-    {
-        QShortcutEntry entry = d->sequences.at(i);
+    int i = m_shortcuts.size()-1;
+    while (i >= 0) {
+        QShortcutEntry entry = m_shortcuts.at(i);
         if ((allOwners || entry.owner == owner)
             && (allIds || entry.id == id)) {
-                d->sequences[i].autorepeat = on;
+                m_shortcuts[i].autorepeat = on;
                 ++itemsChanged;
         }
         if (id == entry.id)
@@ -235,14 +170,12 @@ int QShortcutMap::setShortcutAutoRepeat(bool on, int id, QObject *owner)
     return itemsChanged;
 }
 
-/*! \internal
-    Uses ShortcutOverride event to see if any widgets want to override
-    the event. If not, sends a QShortcutEvent event.
+/*!
+    Uses ShortcutOverride event to see if any widgets want to override the event. If not, sends a
+    QShortcutEvent event.
 */
 bool QShortcutMap::tryShortcutEvent(QObject *o, QKeyEvent *e) const
 {
-    Q_D(const QShortcutMap);
-
     if (e->key() == Qt::Key_unknown) {
         return false;
     }
@@ -269,7 +202,7 @@ bool QShortcutMap::tryShortcutEvent(QObject *o, QKeyEvent *e) const
 #if defined(DEBUG_QSHORTCUTMAP)
     qDebug() << "looking for match for" << eventks;
 #endif
-    foreach (const QShortcutEntry &entry, d->sequences) {
+    foreach (const QShortcutEntry &entry, m_shortcuts) {
         if (!entry.enabled) {
             continue;
         }
@@ -321,13 +254,12 @@ bool QShortcutMap::tryShortcutEvent(QObject *o, QKeyEvent *e) const
     return matched;
 }
 
-/*! \internal
+/*!
     Determines if an enabled shortcut has a matcing key sequence.
 */
 bool QShortcutMap::hasShortcutForKeySequence(const QKeySequence &seq) const
 {
-    Q_D(const QShortcutMap);
-    foreach (const QShortcutEntry &entry, d->sequences) {
+    foreach (const QShortcutEntry &entry, m_shortcuts) {
         if (!entry.enabled) {
             continue;
         }
@@ -338,9 +270,8 @@ bool QShortcutMap::hasShortcutForKeySequence(const QKeySequence &seq) const
     return false;
 }
 
-/*! \internal
-    Returns true if the widget \a w is a logical sub window of the current
-    top-level widget.
+/*!
+    Returns true if the widget \a w is a logical sub window of the current top-level widget.
 */
 bool QShortcutMap::correctContext(const QShortcutEntry &item) const
 {
@@ -348,9 +279,8 @@ bool QShortcutMap::correctContext(const QShortcutEntry &item) const
 
     QWidget *active_window = QApplication::activeWindow();
 
-    // popups do not become the active window,
-    // so we fake it here to get the correct context
-    // for the shortcut system.
+    // popups do not become the active window so fake it here to get the correct context for the
+    // shortcut system.
     if (QApplication::activePopupWidget())
         active_window = QApplication::activePopupWidget();
 
@@ -390,7 +320,7 @@ bool QShortcutMap::correctWidgetContext(Qt::ShortcutContext context, QWidget *w,
         return tw == w;
     }
 
-    // Below is Qt::WindowShortcut context
+    // below is Qt::WindowShortcut context
     QWidget *tlw = w->window();
 #ifndef QT_NO_GRAPHICSVIEW
     if (QWExtra *topData = tlw->d_func()->extra) {
@@ -401,8 +331,7 @@ bool QShortcutMap::correctWidgetContext(Qt::ShortcutContext context, QWidget *w,
     }
 #endif
 
-    /* if a floating tool window is active, keep shortcuts on the
-     * parent working */
+    // if a floating tool window is active, keep shortcuts on the parent working
     if (active_window != tlw && active_window && active_window->windowType() == Qt::Tool && active_window->parentWidget()) {
         active_window = active_window->parentWidget()->window();
     }
@@ -410,8 +339,7 @@ bool QShortcutMap::correctWidgetContext(Qt::ShortcutContext context, QWidget *w,
     if (active_window  != tlw)
         return false;
 
-    /* if we live in a MDI subwindow, ignore the event if we are
-       not the active document window */
+    // if in a live MDI subwindow ignore the event if not the active document window
     const QWidget* sw = w;
     while (sw && !(sw->windowType() == Qt::SubWindow) && !sw->isWindow())
         sw = sw->parentWidget();
@@ -431,9 +359,8 @@ bool QShortcutMap::correctGraphicsWidgetContext(Qt::ShortcutContext context, QGr
         return false;
 
     if (context == Qt::ApplicationShortcut) {
-        // Applicationwide shortcuts are always reachable unless their owner
-        // is shadowed by modality. In QGV there's no modality concept, but we
-        // must still check if all views are shadowed.
+        // application-wide shortcuts are always reachable unless their owner is shadowed by
+        // modality, must check if all views are shadowed
         QList<QGraphicsView *> views = w->scene()->views();
         for (int i = 0; i < views.size(); ++i) {
             if (QApplicationPrivate::tryModalHelper(views.at(i)))
@@ -456,9 +383,9 @@ bool QShortcutMap::correctGraphicsWidgetContext(Qt::ShortcutContext context, QGr
         return false;
     }
 
-    // Below is Qt::WindowShortcut context
+    // below is Qt::WindowShortcut context
 
-    // Find the active view (if any).
+    // find the active view (if any).
     QList<QGraphicsView *> views = w->scene()->views();
     QGraphicsView *activeView = 0;
     for (int i = 0; i < views.size(); ++i) {
@@ -471,8 +398,8 @@ bool QShortcutMap::correctGraphicsWidgetContext(Qt::ShortcutContext context, QGr
     if (!activeView)
         return false;
 
-    // The shortcut is reachable if owned by a windowless widget, or if the
-    // widget's window is the same as the focus item's window.
+    // the shortcut is reachable if owned by a windowless widget or if the widget's window is the
+    // same as the focus item's window.
     QGraphicsWidget *a = w->scene()->activeWindow();
     return !w->window() || a == w->window();
 }
