@@ -992,25 +992,18 @@ QString QKeySequencePrivate::encodeString(int key, QKeySequence::SequenceFormat 
 */
 QKeySequence::SequenceMatch QKeySequence::matches(const QKeySequence &seq) const
 {
-    const int userN = count();
-    const int seqN = seq.count();
-
-    if (userN > seqN)
-        return SequenceMatch::NoMatch;
-
-    if (userN == 1) {
-        if (key1 != seq.key1)
-            return SequenceMatch::NoMatch;
-    } else if (userN == 2) {
-        if (key2 != seq.key2)
-            return SequenceMatch::NoMatch;
+    int match = SequenceMatch::NoMatch;
+    if (key1 != 0) {
+        if (key1 == seq.key1 || key1 == seq.key2) {
+            match++;
+        }
     }
-
-    // If equal in length, we have a potential ExactMatch sequence,
-    // else we already know it can only be partial.
-    if (userN == seqN)
-        return SequenceMatch::ExactMatch;
-    return SequenceMatch::PartialMatch;
+    if (key2 != 0) {
+        if (key2 == seq.key2 || key2 == seq.key1) {
+            match++;
+        }
+    }
+    return static_cast<QKeySequence::SequenceMatch>(match);
 }
 
 /*!

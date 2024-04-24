@@ -34,15 +34,10 @@
 //
 
 #include "QtGui/qkeysequence.h"
-#include "QtCore/qvector.h"
-#include "QtCore/qscopedpointer.h"
 
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_SHORTCUT
-
-// To enable dump output uncomment below
-//#define Dump_QShortcutMap
 
 class QKeyEvent;
 struct QShortcutEntry;
@@ -64,19 +59,11 @@ public:
     int setShortcutEnabled(bool enable, int id, QObject *owner);
     int setShortcutAutoRepeat(bool on, int id, QObject *owner);
 
-    void resetState();
-    QKeySequence::SequenceMatch nextState(QKeyEvent *e);
-    void dispatchEvent(QKeyEvent *e);
-    bool tryShortcutEvent(QObject *o, QKeyEvent *e);
-
-#ifdef Dump_QShortcutMap
-    void dumpMap() const;
-#endif
-
+    bool tryShortcutEvent(QObject *o, QKeyEvent *e) const;
     bool hasShortcutForKeySequence(const QKeySequence &seq) const;
 
-
 private:
+    bool correctContext(const QShortcutEntry &item) const;
     bool correctWidgetContext(Qt::ShortcutContext context, QWidget *w, QWidget *active_window) const;
 #ifndef QT_NO_GRAPHICSVIEW
     bool correctGraphicsWidgetContext(Qt::ShortcutContext context, QGraphicsWidget *w, QWidget *active_window) const;
@@ -84,13 +71,7 @@ private:
 #ifndef QT_NO_ACTION
     bool correctContext(Qt::ShortcutContext context,QAction *a, QWidget *active_window) const;
 #endif
-    QScopedPointer<QShortcutMapPrivate> d_ptr;
-
-    QKeySequence::SequenceMatch find(QKeyEvent *e);
-    QKeySequence::SequenceMatch matches(const QKeySequence &seq1, const QKeySequence &seq2) const;
-    void createNewSequences(QKeyEvent *e, QVector<QKeySequence> &ksl);
-    void clearSequence(QVector<QKeySequence> &ksl);
-    bool correctContext(const QShortcutEntry &item) const;
+    QShortcutMapPrivate* d_ptr;
 };
 
 #endif // QT_NO_SHORTCUT

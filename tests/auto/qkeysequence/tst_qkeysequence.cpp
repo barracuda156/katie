@@ -32,10 +32,6 @@ class tst_QKeySequence : public QObject
 {
     Q_OBJECT
 
-public:
-    tst_QKeySequence();
-    virtual ~tst_QKeySequence();
-
 private slots:
     void swap();
     void operatorQString_data();
@@ -59,23 +55,7 @@ private slots:
     void keyBindings();
     void i18nKeys_data();
     void i18nKeys();
-
-
-    void initTestCase();
 };
-
-tst_QKeySequence::tst_QKeySequence()
-{
-}
-
-tst_QKeySequence::~tst_QKeySequence()
-{
-
-}
-
-void tst_QKeySequence::initTestCase()
-{
-}
 
 void tst_QKeySequence::swap()
 {

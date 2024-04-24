@@ -64,7 +64,7 @@ public:
     QVariant userData;
 #ifndef QT_NO_SHORTCUT
     QKeySequence shortcut;
-    QList<int> shortcutIds;
+    int shortcutId;
     Qt::ShortcutContext shortcutContext;
     bool autorepeat;
 #endif
