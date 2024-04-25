@@ -52,18 +52,21 @@ class QMenuPrivate : public QWidgetPrivate
 {
     Q_DECLARE_PUBLIC(QMenu)
 public:
-    QMenuPrivate() : itemsDirty(0), maxIconWidth(0), tabWidth(0), ncols(0),
-                      collapsibleSeparators(true), activationRecursionGuard(false),
-                      hasHadMouse(false), aboutToHide(false), motions(0),
-                      currentAction(0),
-                      scroll(0), eventLoop(0), tearoff(false), tornoff(false), tearoffHighlighted(false),
-                      hasCheckableItems(false), sloppyDelayTimer(0), sloppyAction(0), doChildEffects(false)
-    { }
+    QMenuPrivate()
+        : itemsDirty(0), maxIconWidth(0), tabWidth(0), ncols(0),
+        collapsibleSeparators(true), activationRecursionGuard(false),
+        hasHadMouse(false), motions(0),
+        currentAction(0),
+        scroll(0), eventLoop(0), tearoff(false), tornoff(false), tearoffHighlighted(false),
+        hasCheckableItems(false), sloppyDelayTimer(0), sloppyAction(0), doChildEffects(false)
+    {
+    }
+
     ~QMenuPrivate()
     {
         delete scroll;
-
     }
+
     void init();
 
     static QMenuPrivate *get(QMenu *m) { return m->d_func(); }
@@ -92,7 +95,6 @@ public:
     static QMenu *mouseDown;
     QPoint mousePopupPos;
     bool hasHadMouse;
-    bool aboutToHide;
     int motions;
     QAction *currentAction;
     QBasicTimer menuDelayTimer;
@@ -122,11 +124,11 @@ public:
     void scrollMenu(QMenuScroller::ScrollDirection direction, bool page=false, bool active=false);
     void scrollMenu(QAction *action, QMenuScroller::ScrollLocation location, bool active=false);
 
-    //synchronous operation (ie exec())
+    // synchronous operation (ie exec())
     QEventLoop *eventLoop;
     QPointer<QAction> syncAction;
 
-    //search buffer
+    // search buffer
     QString searchBuffer;
     QBasicTimer searchBufferTimer;
 
@@ -142,7 +144,6 @@ public:
     virtual QList<QPointer<QWidget> > calcCausedStack() const;
     QMenuCaused causedPopup;
     void hideUpToMenuBar();
-    void hideMenu(QMenu *menu, bool justRegister = false);
 
     //index mappings
     inline QAction *actionAt(int i) const { return q_func()->actions().at(i); }

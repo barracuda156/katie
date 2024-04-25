@@ -2372,39 +2372,7 @@ void QComboBox::hidePopup()
 {
     Q_D(QComboBox);
     if (d->container && d->container->isVisible()) {
-#if !defined(QT_NO_EFFECTS)
-        d->model->blockSignals(true);
-        d->container->itemView()->blockSignals(true);
-        d->container->blockSignals(true);
-        // Flash selected/triggered item (if any).
-        if (style()->styleHint(QStyle::SH_Menu_FlashTriggeredItem)) {
-            QItemSelectionModel *selectionModel = view() ? view()->selectionModel() : 0;
-            if (selectionModel && selectionModel->hasSelection()) {
-                QEventLoop eventLoop;
-                const QItemSelection selection = selectionModel->selection();
-
-                // Deselect item and wait 60 ms.
-                selectionModel->select(selection, QItemSelectionModel::Toggle);
-                QTimer::singleShot(60, &eventLoop, SLOT(quit()));
-                eventLoop.exec();
-
-                // Select item and wait 20 ms.
-                selectionModel->select(selection, QItemSelectionModel::Toggle);
-                QTimer::singleShot(20, &eventLoop, SLOT(quit()));
-                eventLoop.exec();
-            }
-        }
-
-        // Fade out.
-        const bool needFade = style()->styleHint(QStyle::SH_Menu_FadeOutOnHide);
-        d->model->blockSignals(false);
-        d->container->itemView()->blockSignals(false);
-        d->container->blockSignals(false);
-
-        if (!needFade)
-#endif // QT_NO_EFFECTS
-            // Fade should implicitly hide as well ;-)
-            d->container->hide();
+        d->container->hide();
     }
     d->_q_resetButton();
 }

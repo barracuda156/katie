@@ -642,8 +642,6 @@ public:
         SH_TextControl_FocusIndicatorTextCharFormat,
         SH_ItemView_ArrowKeysNavigateIntoChildren,
         SH_Menu_Mask,
-        SH_Menu_FlashTriggeredItem,
-        SH_Menu_FadeOutOnHide,
         SH_SpinBox_ClickAutoRepeatThreshold,
         SH_ItemView_PaintAlternatingRowColorsForEmptyArea,
         SH_FormLayoutWrapPolicy,

@@ -355,10 +355,9 @@ QRect QMenuPrivate::actionRect(QAction *act) const
 void QMenuPrivate::hideUpToMenuBar()
 {
     Q_Q(QMenu);
-    bool fadeMenus = q->style()->styleHint(QStyle::SH_Menu_FadeOutOnHide);
     if (!tornoff) {
         QWidget *caused = causedPopup.widget;
-        hideMenu(q); //hide after getting causedPopup
+        q->close(); //hide after getting causedPopup
         while(caused) {
 #ifndef QT_NO_MENUBAR
             if (QMenuBar *mb = qobject_cast<QMenuBar*>(caused)) {
@@ -370,53 +369,14 @@ void QMenuPrivate::hideUpToMenuBar()
             if (QMenu *m = qobject_cast<QMenu*>(caused)) {
                 caused = m->d_func()->causedPopup.widget;
                 if (!m->d_func()->tornoff)
-                    hideMenu(m, fadeMenus);
-                if (!fadeMenus) // Mac doesn't clear the action until after hidden.
-                    m->d_func()->setCurrentAction(0);
+                    m->close();
+                m->d_func()->setCurrentAction(0);
             } else {
                 caused = 0;
             }
         }
     }
     setCurrentAction(0);
-}
-
-void QMenuPrivate::hideMenu(QMenu *menu, bool justRegister)
-{
-    if (!menu)
-        return;
-#if !defined(QT_NO_EFFECTS)
-    menu->blockSignals(true);
-    aboutToHide = true;
-    // Flash item which is about to trigger (if any).
-    if (menu->style()->styleHint(QStyle::SH_Menu_FlashTriggeredItem)
-        && currentAction && currentAction == actionAboutToTrigger
-        && menu->actions().contains(currentAction)) {
-        QEventLoop eventLoop;
-        QAction *activeAction = currentAction;
-
-        menu->setActiveAction(0);
-        QTimer::singleShot(60, &eventLoop, SLOT(quit()));
-        eventLoop.exec();
-
-        // Select and wait 20 ms.
-        menu->setActiveAction(activeAction);
-        QTimer::singleShot(20, &eventLoop, SLOT(quit()));
-        eventLoop.exec();
-    }
-
-    // Fade out.
-    if (menu->style()->styleHint(QStyle::SH_Menu_FadeOutOnHide)) {
-        // ### Qt 4.4:
-        // Should be something like: q->transitionWindow(Qt::FadeOutTransition, MenuFadeTimeInSec);
-        // Hopefully we'll integrate qt/research/windowtransitions into main before 4.4.
-        // Talk to Richard, Trenton or Bjoern.
-    }
-    aboutToHide = false;
-    menu->blockSignals(false);
-#endif // QT_NO_EFFECTS
-    if (!justRegister)
-        menu->close();
 }
 
 void QMenuPrivate::popupAction(QAction *action, int delay, bool activateFirst)
@@ -429,9 +389,10 @@ void QMenuPrivate::popupAction(QAction *action, int delay, bool activateFirst)
             menuDelayTimer.start(delay, q);
         if (activateFirst && action->menu())
             action->menu()->d_func()->setFirstActionActive();
-    } else if (QMenu *menu = activeMenu) {  //hide the current item
+    } else if (QMenu *menu = activeMenu) {
+        // hide the current item
         activeMenu = 0;
-        hideMenu(menu);
+        menu->close();
     }
 }
 
@@ -545,7 +506,7 @@ void QMenuPrivate::setCurrentAction(QAction *action, int popup, SelectionReason 
         // kill any running effect
         qFadeEffect(nullptr);
 #endif
-        hideMenu(hideActiveMenu);
+        hideActiveMenu->close();
     }
 }
 
@@ -2097,7 +2058,7 @@ void QMenu::wheelEvent(QWheelEvent *e)
 void QMenu::mousePressEvent(QMouseEvent *e)
 {
     Q_D(QMenu);
-    if (d->aboutToHide || d->mouseEventTaken(e))
+    if (d->mouseEventTaken(e))
         return;
     if (!rect().contains(e->pos())) {
          if (d->noReplayFor
@@ -2121,7 +2082,7 @@ void QMenu::mousePressEvent(QMouseEvent *e)
 void QMenu::mouseReleaseEvent(QMouseEvent *e)
 {
     Q_D(QMenu);
-    if (d->aboutToHide || d->mouseEventTaken(e))
+    if (d->mouseEventTaken(e))
         return;
     if(d->mouseDown != this) {
         d->mouseDown = 0;
@@ -2437,7 +2398,7 @@ void QMenu::keyPressEvent(QKeyEvent *e)
         }
         if (!key_consumed && key == Qt::Key_Left && qobject_cast<QMenu*>(d->causedPopup.widget)) {
             QPointer<QWidget> caused = d->causedPopup.widget;
-            d->hideMenu(this);
+            close();
             if (caused)
                 caused->setFocus();
             key_consumed = true;
@@ -2451,7 +2412,7 @@ void QMenu::keyPressEvent(QKeyEvent *e)
         key_consumed = true;
         if (style()->styleHint(QStyle::SH_MenuBar_AltKeyNavigation, 0, this))
         {
-            d->hideMenu(this);
+            close();
 #ifndef QT_NO_MENUBAR
             if (QMenuBar *mb = qobject_cast<QMenuBar*>(QApplication::focusWidget())) {
                 mb->d_func()->setKeyboardMode(false);
@@ -2468,7 +2429,7 @@ void QMenu::keyPressEvent(QKeyEvent *e)
         }
         {
             QPointer<QWidget> caused = d->causedPopup.widget;
-            d->hideMenu(this); // hide after getting causedPopup
+            close(); // hide after getting causedPopup
 #ifndef QT_NO_MENUBAR
             if (QMenuBar *mb = qobject_cast<QMenuBar*>(caused)) {
                 mb->d_func()->setCurrentAction(d->menuAction);
@@ -2601,7 +2562,7 @@ void QMenu::keyPressEvent(QKeyEvent *e)
 void QMenu::mouseMoveEvent(QMouseEvent *e)
 {
     Q_D(QMenu);
-    if (!isVisible() || d->aboutToHide || d->mouseEventTaken(e))
+    if (!isVisible() || d->mouseEventTaken(e))
         return;
     d->motions++;
     if (d->motions == 0) // ignore first mouse move event (see enterEvent())
@@ -2734,7 +2695,7 @@ void QMenu::internalDelayedPopup()
     //hide the current item
     if (QMenu *menu = d->activeMenu) {
         d->activeMenu = 0;
-        d->hideMenu(menu);
+        menu->close();
     }
 
     if (!d->currentAction || !d->currentAction->isEnabled() || !d->currentAction->menu() ||

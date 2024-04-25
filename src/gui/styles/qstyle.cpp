@@ -1756,9 +1756,6 @@ void QStyle::drawItemPixmap(QPainter *painter, const QRect &rect, int alignment,
     QStyleHintReturnVariant return value. The QTextFormat::OutlinePen property is used for the outline and QTextFormat::BackgroundBrush
     for the background of the highlighted area.
 
-    \value SH_Menu_FlashTriggeredItem Flash triggered item.
-    \value SH_Menu_FadeOutOnHide Fade out the menu instead of hiding it immediately.
-
     \value SH_TabWidget_DefaultTabPosition Default position of the tab bar in a tab widget.
 
     \value SH_ToolBar_Movable Determines if the tool bar is movable by default.
