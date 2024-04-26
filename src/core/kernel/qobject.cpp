@@ -143,9 +143,8 @@ QObjectPrivate::~QObjectPrivate()
     if (threadData)
         threadData->deref();
 
-    QAbstractDynamicMetaObject* mobject = static_cast<QAbstractDynamicMetaObject*>(metaObject);
-    if (mobject)
-        delete mobject;
+    if (metaObject)
+        delete metaObject;
     if (extraData) {
         delete extraData;
     }

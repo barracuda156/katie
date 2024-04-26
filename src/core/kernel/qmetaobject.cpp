@@ -205,7 +205,7 @@ int QMetaObject::static_metacall(Call cl, int idx, void **argv) const
 int QMetaObject::metacall(QObject *object, Call cl, int idx, void **argv)
 {
     if (QMetaObject *mo = object->d_ptr->metaObject)
-        return static_cast<QAbstractDynamicMetaObject*>(mo)->metaCall(cl, idx, argv);
+        return idx;
     else
         return object->qt_metacall(cl, idx, argv);
 }
@@ -644,13 +644,6 @@ int QMetaObject::indexOfProperty(const char *name) const
     }
 
     Q_ASSERT(priv(this->d.data)->revision >= 6);
-    if (priv(this->d.data)->flags & DynamicMetaObject) {
-        QAbstractDynamicMetaObject *me = 
-            const_cast<QAbstractDynamicMetaObject *>(static_cast<const QAbstractDynamicMetaObject *>(this));
-
-        return me->createProperty(name, nullptr);
-    }
-
     return -1;
 }
 
