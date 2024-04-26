@@ -52,7 +52,7 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
     Q_PROPERTY(LineWrapMode lineWrapMode READ lineWrapMode WRITE setLineWrapMode)
     Q_PROPERTY(QTextOption::WrapMode wordWrapMode READ wordWrapMode WRITE setWordWrapMode)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
-    Q_PROPERTY(QString plainText READ toPlainText WRITE setPlainText NOTIFY textChanged USER true)
+    Q_PROPERTY(QString plainText READ toPlainText WRITE setPlainText NOTIFY textChanged)
     Q_PROPERTY(bool overwriteMode READ overwriteMode WRITE setOverwriteMode)
     Q_PROPERTY(int tabStopWidth READ tabStopWidth WRITE setTabStopWidth)
     Q_PROPERTY(int cursorWidth READ cursorWidth WRITE setCursorWidth)

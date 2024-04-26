@@ -62,10 +62,14 @@ struct ArgumentDef
 
 struct FunctionDef
 {
-    FunctionDef(): returnTypeIsVolatile(false), access(Private), isConst(false), isVirtual(false), isStatic(false),
-                   inlineCode(false), wasCloned(false), isInvokable(false),
-                   isScriptable(false), isSlot(false), isSignal(false),
-                   isConstructor(false), isDestructor(false), isAbstract(false), revision(0) {}
+    FunctionDef() :
+        returnTypeIsVolatile(false), access(Private), isConst(false), isVirtual(false), isStatic(false),
+        inlineCode(false), wasCloned(false), isInvokable(false),
+        isScriptable(false), isSlot(false), isSignal(false),
+        isConstructor(false), isDestructor(false), isAbstract(false)
+    {
+    }
+
     Type type;
     QByteArray normalizedType;
     QByteArray tag;
@@ -90,17 +94,13 @@ struct FunctionDef
     bool isConstructor;
     bool isDestructor;
     bool isAbstract;
-
-    int revision;
 };
 
 struct PropertyDef
 {
-    PropertyDef():notifyId(-1), constant(false), final(false), gspec(ValueSpec), revision(0){}
-    QByteArray name, type, read, write, reset, designable, scriptable, editable, stored, user, notify, inPrivateClass;
+    PropertyDef():notifyId(-1), gspec(ValueSpec), revision(0){}
+    QByteArray name, type, read, write, reset, scriptable, notify, inPrivateClass;
     int notifyId;
-    bool constant;
-    bool final;
     enum Specification  { ValueSpec, ReferenceSpec, PointerSpec };
     Specification gspec;
     bool stdCppSet() const {
@@ -122,7 +122,7 @@ struct ClassInfoDef
 struct ClassDef {
     ClassDef():
         hasQObject(false), hasQGadget(false), notifyableProperties(0)
-        , revisionedMethods(0), revisionedProperties(0), begin(0), end(0){}
+        , begin(0), end(0){}
     QByteArray classname;
     QByteArray qualified;
     QList<QPair<QByteArray, FunctionDef::Access> > superclassList;
@@ -147,8 +147,6 @@ struct ClassDef {
     QMap<QByteArray, bool> enumDeclarations;
     QList<EnumDef> enumList;
     QMap<QByteArray, QByteArray> flagAliases;
-    int revisionedMethods;
-    int revisionedProperties;
 
     int begin;
     int end;
@@ -220,7 +218,6 @@ public:
     // in FunctionDef accordingly
     bool testFunctionAttribute(FunctionDef *def);
     bool testFunctionAttribute(Token tok, FunctionDef *def);
-    bool testFunctionRevision(FunctionDef *def);
 
     void checkSuperClasses(ClassDef *def);
     void checkProperties(ClassDef* cdef);

@@ -386,7 +386,6 @@ classlist = [
     "QStackedLayout",
     "QStackedWidget",
     "QStandardItem",
-    "QStandardItemEditorCreator",
     "QStandardItemModel",
     "QStandardPaths",
     "QStatusBar",

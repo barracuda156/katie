@@ -67,7 +67,7 @@ class Q_GUI_EXPORT QTextDocument : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool undoRedoEnabled READ isUndoRedoEnabled WRITE setUndoRedoEnabled)
-    Q_PROPERTY(bool modified READ isModified WRITE setModified DESIGNABLE false)
+    Q_PROPERTY(bool modified READ isModified WRITE setModified)
     Q_PROPERTY(QSizeF pageSize READ pageSize WRITE setPageSize)
     Q_PROPERTY(QFont defaultFont READ defaultFont WRITE setDefaultFont)
     Q_PROPERTY(QSizeF size READ size)

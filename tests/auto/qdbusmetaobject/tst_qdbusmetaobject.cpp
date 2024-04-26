@@ -397,15 +397,11 @@ void tst_QDBusMetaObject::types()
         QVERIFY(propIdx != -1);
         QMetaProperty constructed = result->property(propIdx);
 
-        QCOMPARE(constructed.isDesignable(), expected.isDesignable());
-        QCOMPARE(constructed.isEditable(), expected.isEditable());
         QCOMPARE(constructed.isEnumType(), expected.isEnumType());
         QCOMPARE(constructed.isFlagType(), expected.isFlagType());
         QCOMPARE(constructed.isReadable(), expected.isReadable());
         QCOMPARE(constructed.isResettable(), expected.isResettable());
         QCOMPARE(constructed.isScriptable(), expected.isScriptable());
-        QCOMPARE(constructed.isStored(), expected.isStored());
-        QCOMPARE(constructed.isUser(), expected.isUser());
         QCOMPARE(constructed.isWritable(), expected.isWritable());
         QCOMPARE(constructed.typeName(), expected.typeName());
     }

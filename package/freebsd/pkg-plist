@@ -502,7 +502,6 @@ include/katie/QtGui/QSplitterHandle
 include/katie/QtGui/QStackedLayout
 include/katie/QtGui/QStackedWidget
 include/katie/QtGui/QStandardItem
-include/katie/QtGui/QStandardItemEditorCreator
 include/katie/QtGui/QStandardItemModel
 include/katie/QtGui/QStatusBar
 include/katie/QtGui/QStatusTipEvent

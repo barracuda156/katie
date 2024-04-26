@@ -35,7 +35,7 @@ class Q_GUI_EXPORT QCommandLinkButton: public QPushButton
     Q_OBJECT
 
     Q_PROPERTY(QString description READ description WRITE setDescription)
-    Q_PROPERTY(bool flat READ isFlat WRITE setFlat DESIGNABLE false)
+    Q_PROPERTY(bool flat READ isFlat WRITE setFlat)
 
 public:
     explicit QCommandLinkButton(QWidget *parent=0);

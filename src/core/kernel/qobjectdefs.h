@@ -51,7 +51,6 @@ class QString;
 #define Q_INTERFACES(x)
 #define Q_PROPERTY(text)
 #define Q_PRIVATE_PROPERTY(d, text)
-#define Q_REVISION(v)
 #define Q_OVERRIDE(text)
 #define Q_ENUMS(x)
 #define Q_FLAGS(x)
@@ -119,7 +118,6 @@ private:
 #define Q_INTERFACES(x) Q_INTERFACES(x)
 #define Q_PROPERTY(text) Q_PROPERTY(text)
 #define Q_PRIVATE_PROPERTY(d, text) Q_PRIVATE_PROPERTY(d, text)
-#define Q_REVISION(v) Q_REVISION(v)
 #define Q_OVERRIDE(text) Q_OVERRIDE(text)
 #define Q_ENUMS(x) Q_ENUMS(x)
 #define Q_FLAGS(x) Q_FLAGS(x)
@@ -234,7 +232,6 @@ struct Q_CORE_EXPORT QMetaObject
     QMetaEnum enumerator(int index) const;
     QMetaProperty property(int index) const;
     QMetaClassInfo classInfo(int index) const;
-    QMetaProperty userProperty() const;
 
     static bool checkConnectArgs(const char *signal, const char *method);
     static QByteArray normalizedSignature(const char *method);
@@ -336,11 +333,7 @@ struct Q_CORE_EXPORT QMetaObject
         ReadProperty,
         WriteProperty,
         ResetProperty,
-        QueryPropertyDesignable,
         QueryPropertyScriptable,
-        QueryPropertyStored,
-        QueryPropertyEditable,
-        QueryPropertyUser,
         CreateInstance
     };
 

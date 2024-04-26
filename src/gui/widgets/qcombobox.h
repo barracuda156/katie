@@ -45,7 +45,7 @@ class Q_GUI_EXPORT QComboBox : public QWidget
     Q_ENUMS(SizeAdjustPolicy)
     Q_PROPERTY(bool editable READ isEditable WRITE setEditable)
     Q_PROPERTY(int count READ count)
-    Q_PROPERTY(QString currentText READ currentText USER true)
+    Q_PROPERTY(QString currentText READ currentText)
     Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex NOTIFY currentIndexChanged)
     Q_PROPERTY(int maxVisibleItems READ maxVisibleItems WRITE setMaxVisibleItems)
     Q_PROPERTY(int maxCount READ maxCount WRITE setMaxCount)
@@ -55,8 +55,8 @@ class Q_GUI_EXPORT QComboBox : public QWidget
     Q_PROPERTY(QSize iconSize READ iconSize WRITE setIconSize)
 
 #ifndef QT_NO_COMPLETER
-    Q_PROPERTY(bool autoCompletion READ autoCompletion WRITE setAutoCompletion DESIGNABLE false)
-    Q_PROPERTY(Qt::CaseSensitivity autoCompletionCaseSensitivity READ autoCompletionCaseSensitivity WRITE setAutoCompletionCaseSensitivity DESIGNABLE false)
+    Q_PROPERTY(bool autoCompletion READ autoCompletion WRITE setAutoCompletion)
+    Q_PROPERTY(Qt::CaseSensitivity autoCompletionCaseSensitivity READ autoCompletionCaseSensitivity WRITE setAutoCompletionCaseSensitivity)
 #endif // QT_NO_COMPLETER
 
     Q_PROPERTY(bool duplicatesEnabled READ duplicatesEnabled WRITE setDuplicatesEnabled)

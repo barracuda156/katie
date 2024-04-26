@@ -312,7 +312,7 @@ void QDBusMetaObjectGenerator::parseProperties()
         mp.typeName = type.name;
 
         // build the flags:
-        mp.flags = StdCppSet | Scriptable | Stored | Designable;
+        mp.flags = StdCppSet | Scriptable;
         if (p.access != QDBusIntrospection::Property::Write)
             mp.flags |= Readable;
         if (p.access != QDBusIntrospection::Property::Read)

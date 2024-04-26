@@ -39,8 +39,8 @@ class Q_GUI_EXPORT QTextBrowser : public QTextEdit
 
     Q_PROPERTY(QUrl source READ source WRITE setSource)
     Q_OVERRIDE(bool modified SCRIPTABLE false)
-    Q_OVERRIDE(bool readOnly DESIGNABLE false SCRIPTABLE false)
-    Q_OVERRIDE(bool undoRedoEnabled DESIGNABLE false SCRIPTABLE false)
+    Q_OVERRIDE(bool readOnly SCRIPTABLE false)
+    Q_OVERRIDE(bool undoRedoEnabled SCRIPTABLE false)
     Q_PROPERTY(QStringList searchPaths READ searchPaths WRITE setSearchPaths)
     Q_PROPERTY(bool openExternalLinks READ openExternalLinks WRITE setOpenExternalLinks)
     Q_PROPERTY(bool openLinks READ openLinks WRITE setOpenLinks)

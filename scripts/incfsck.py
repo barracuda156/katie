@@ -177,7 +177,6 @@ incmap = {
         'QSpacerItem': 'qlayoutitem.h',
         'QSplitterHandle': 'qsplitter.h',
         'QStandardItem': 'qstandarditemmodel.h',
-        'QStandardItemEditorCreator': 'qitemeditorfactory.h',
         'QStatusTipEvent': 'qevent.h',
         'QStyleHintReturn': 'qstyleoption.h',
         'QStyleHintReturnMask': 'qstyleoption.h',

@@ -49,11 +49,10 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
     Q_PROPERTY(ViewMode viewMode READ viewMode WRITE setViewMode)
     Q_PROPERTY(FileMode fileMode READ fileMode WRITE setFileMode)
     Q_PROPERTY(AcceptMode acceptMode READ acceptMode WRITE setAcceptMode)
-    Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE false)
-    Q_PROPERTY(bool confirmOverwrite READ confirmOverwrite WRITE setConfirmOverwrite DESIGNABLE false)
+    Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
+    Q_PROPERTY(bool confirmOverwrite READ confirmOverwrite WRITE setConfirmOverwrite)
     Q_PROPERTY(QString defaultSuffix READ defaultSuffix WRITE setDefaultSuffix)
-    Q_PROPERTY(bool nameFilterDetailsVisible READ isNameFilterDetailsVisible
-               WRITE setNameFilterDetailsVisible DESIGNABLE false)
+    Q_PROPERTY(bool nameFilterDetailsVisible READ isNameFilterDetailsVisible WRITE setNameFilterDetailsVisible)
     Q_PROPERTY(Options options READ options WRITE setOptions)
 
 public:

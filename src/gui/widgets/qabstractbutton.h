@@ -44,12 +44,12 @@ class Q_GUI_EXPORT QAbstractButton : public QWidget
     Q_PROPERTY(QKeySequence shortcut READ shortcut WRITE setShortcut)
 #endif
     Q_PROPERTY(bool checkable READ isCheckable WRITE setCheckable)
-    Q_PROPERTY(bool checked READ isChecked WRITE setChecked DESIGNABLE isCheckable NOTIFY toggled USER true)
+    Q_PROPERTY(bool checked READ isChecked WRITE setChecked NOTIFY toggled)
     Q_PROPERTY(bool autoRepeat READ autoRepeat WRITE setAutoRepeat)
     Q_PROPERTY(bool autoExclusive READ autoExclusive WRITE setAutoExclusive)
     Q_PROPERTY(int autoRepeatDelay READ autoRepeatDelay WRITE setAutoRepeatDelay)
     Q_PROPERTY(int autoRepeatInterval READ autoRepeatInterval WRITE setAutoRepeatInterval)
-    Q_PROPERTY(bool down READ isDown WRITE setDown DESIGNABLE false)
+    Q_PROPERTY(bool down READ isDown WRITE setDown)
 
 public:
     explicit QAbstractButton(QWidget* parent = nullptr);

@@ -33,7 +33,7 @@ class QDateTimeEditPrivate;
 class Q_GUI_EXPORT QDateTimeEdit : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(QDateTime dateTime READ dateTime WRITE setDateTime NOTIFY dateTimeChanged USER true)
+    Q_PROPERTY(QDateTime dateTime READ dateTime WRITE setDateTime NOTIFY dateTimeChanged)
     Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY dateChanged)
     Q_PROPERTY(QTime time READ time WRITE setTime NOTIFY timeChanged)
     Q_PROPERTY(QDateTime maximumDateTime READ maximumDateTime)

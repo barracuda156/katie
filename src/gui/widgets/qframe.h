@@ -40,7 +40,7 @@ class Q_GUI_EXPORT QFrame : public QWidget
     Q_PROPERTY(int lineWidth READ lineWidth WRITE setLineWidth)
     Q_PROPERTY(int midLineWidth READ midLineWidth WRITE setMidLineWidth)
     Q_PROPERTY(int frameWidth READ frameWidth)
-    Q_PROPERTY(QRect frameRect READ frameRect WRITE setFrameRect DESIGNABLE false)
+    Q_PROPERTY(QRect frameRect READ frameRect WRITE setFrameRect)
 
 public:
     explicit QFrame(QWidget* parent = nullptr, Qt::WindowFlags f = 0);

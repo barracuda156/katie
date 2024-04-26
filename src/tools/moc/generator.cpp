@@ -153,13 +153,9 @@ void Generator::generateCode()
     int methodCount = cdef->signalList.count() + cdef->slotList.count() + cdef->methodList.count();
     fprintf(out, "    %4d, %4d, // methods\n", methodCount, methodCount ? index : 0);
     index += methodCount * 5;
-    if (cdef->revisionedMethods)
-        index += methodCount;
     fprintf(out, "    %4d, %4d, // properties\n", cdef->propertyList.count(), cdef->propertyList.count() ? index : 0);
     index += cdef->propertyList.count() * 3;
     if(cdef->notifyableProperties)
-        index += cdef->propertyList.count();
-    if (cdef->revisionedProperties)
         index += cdef->propertyList.count();
     fprintf(out, "    %4d, %4d, // enums/sets\n", cdef->enumList.count(), cdef->enumList.count() ? index : 0);
 
@@ -192,15 +188,6 @@ void Generator::generateCode()
 // Build method array
 //
     generateFunctions(cdef->methodList, "method", MethodMethod);
-
-//
-// Build method version arrays
-//
-    if (cdef->revisionedMethods) {
-        generateFunctionRevisions(cdef->signalList, "signal");
-        generateFunctionRevisions(cdef->slotList, "slot");
-        generateFunctionRevisions(cdef->methodList, "method");
-    }
 
 //
 // Build property array
@@ -400,23 +387,11 @@ void Generator::generateFunctions(QList<FunctionDef>& list, const char *functype
             flags |= MethodCloned;
         if (f.isScriptable)
             flags |= MethodScriptable;
-        if (f.revision > 0)
-            flags |= MethodRevisioned;
         fprintf(out, "    %4d, %4d, %4d, %4d, 0x%02x,\n",
                 strreg(sig.constData()),
                 strreg(arguments.constData()),
                 strreg(f.normalizedType.constData()),
                 strreg(f.tag.constData()), flags);
-    }
-}
-
-void Generator::generateFunctionRevisions(QList<FunctionDef>& list, const char *functype)
-{
-    if (list.count())
-        fprintf(out, "\n // %ss: revision\n", functype);
-    for (int i = 0; i < list.count(); ++i) {
-        const FunctionDef &f = list.at(i);
-        fprintf(out, "    %4d,\n", f.revision);
     }
 }
 
@@ -449,41 +424,13 @@ void Generator::generateProperties()
 //         if (p.override)
 //             flags |= Override;
 
-        if (p.designable.isEmpty())
-            flags |= ResolveDesignable;
-        else if (p.designable != "false")
-            flags |= Designable;
-
         if (p.scriptable.isEmpty())
             flags |= ResolveScriptable;
         else if (p.scriptable != "false")
             flags |= Scriptable;
 
-        if (p.stored.isEmpty())
-            flags |= ResolveStored;
-        else if (p.stored != "false")
-            flags |= Stored;
-
-        if (p.editable.isEmpty())
-            flags |= ResolveEditable;
-        else if (p.editable != "false")
-            flags |= Editable;
-
-        if (p.user.isEmpty())
-            flags |= ResolveUser;
-        else if (p.user != "false")
-            flags |= User;
-
         if (p.notifyId != -1)
             flags |= Notify;
-
-        if (p.revision > 0)
-            flags |= Revisioned;
-
-        if (p.constant)
-            flags |= Constant;
-        if (p.final)
-            flags |= Final;
 
         fprintf(out, "    %4d, %4d, ",
                 strreg(p.name.constData()),
@@ -503,13 +450,6 @@ void Generator::generateProperties()
             else
                 fprintf(out, "    %4d,\n",
                         p.notifyId);
-        }
-    }
-    if (cdef->revisionedProperties) {
-        fprintf(out, "\n // properties: revision\n");
-        for (int i = 0; i < cdef->propertyList.count(); ++i) {
-            const PropertyDef &p = cdef->propertyList.at(i);
-            fprintf(out, "    %4d,\n", p.revision);
         }
     }
 }
@@ -583,21 +523,13 @@ void Generator::generateMetacall()
         bool needGet = false;
         bool needSet = false;
         bool needReset = false;
-        bool needDesignable = false;
         bool needScriptable = false;
-        bool needStored = false;
-        bool needEditable = false;
-        bool needUser = false;
         for (int i = 0; i < cdef->propertyList.size(); ++i) {
             const PropertyDef &p = cdef->propertyList.at(i);
             needGet |= !p.read.isEmpty();
             needSet |= !p.write.isEmpty();
             needReset |= !p.reset.isEmpty();
-            needDesignable |= p.designable.endsWith(')');
             needScriptable |= p.scriptable.endsWith(')');
-            needStored |= p.stored.endsWith(')');
-            needEditable |= p.editable.endsWith(')');
-            needUser |= p.user.endsWith(')');
         }
         fprintf(out, "\n#ifndef QT_NO_PROPERTIES\n     ");
 
@@ -686,23 +618,6 @@ void Generator::generateMetacall()
                 "        _id -= %d;\n"
                 "    }", cdef->propertyList.count());
 
-        fprintf(out, " else ");
-        fprintf(out, "if (_c == QMetaObject::QueryPropertyDesignable) {\n");
-        if (needDesignable) {
-            fprintf(out, "        switch (_id) {\n");
-            for (int propindex = 0; propindex < cdef->propertyList.size(); ++propindex) {
-                const PropertyDef &p = cdef->propertyList.at(propindex);
-                if (!p.designable.endsWith(')'))
-                    continue;
-                fprintf(out, "        case %d: *static_cast<bool*>(_a[0]) = %s; break;\n",
-                         propindex, p.designable.constData());
-            }
-            fprintf(out, "        }\n");
-        }
-        fprintf(out,
-                "        _id -= %d;\n"
-                "    }", cdef->propertyList.count());
-
         fprintf(out, " else if (_c == QMetaObject::QueryPropertyScriptable) {\n");
         if (needScriptable) {
             fprintf(out, "        switch (_id) {\n");
@@ -718,56 +633,6 @@ void Generator::generateMetacall()
         fprintf(out,
                 "        _id -= %d;\n"
                 "    }", cdef->propertyList.count());
-
-        fprintf(out, " else if (_c == QMetaObject::QueryPropertyStored) {\n");
-        if (needStored) {
-            fprintf(out, "        switch (_id) {\n");
-            for (int propindex = 0; propindex < cdef->propertyList.size(); ++propindex) {
-                const PropertyDef &p = cdef->propertyList.at(propindex);
-                if (!p.stored.endsWith(')'))
-                    continue;
-                fprintf(out, "        case %d: *static_cast<bool*>(_a[0]) = %s; break;\n",
-                         propindex, p.stored.constData());
-            }
-            fprintf(out, "        }\n");
-        }
-        fprintf(out,
-                "        _id -= %d;\n"
-                "    }", cdef->propertyList.count());
-
-        fprintf(out, " else if (_c == QMetaObject::QueryPropertyEditable) {\n");
-        if (needEditable) {
-            fprintf(out, "        switch (_id) {\n");
-            for (int propindex = 0; propindex < cdef->propertyList.size(); ++propindex) {
-                const PropertyDef &p = cdef->propertyList.at(propindex);
-                if (!p.editable.endsWith(')'))
-                    continue;
-                fprintf(out, "        case %d: *static_cast<bool*>(_a[0]) = %s; break;\n",
-                         propindex, p.editable.constData());
-            }
-            fprintf(out, "        }\n");
-        }
-        fprintf(out,
-                "        _id -= %d;\n"
-                "    }", cdef->propertyList.count());
-
-
-        fprintf(out, " else if (_c == QMetaObject::QueryPropertyUser) {\n");
-        if (needUser) {
-            fprintf(out, "        switch (_id) {\n");
-            for (int propindex = 0; propindex < cdef->propertyList.size(); ++propindex) {
-                const PropertyDef &p = cdef->propertyList.at(propindex);
-                if (!p.user.endsWith(')'))
-                    continue;
-                fprintf(out, "        case %d: *static_cast<bool*>(_a[0]) = %s; break;\n",
-                         propindex, p.user.constData());
-            }
-            fprintf(out, "        }\n");
-        }
-        fprintf(out,
-                "        _id -= %d;\n"
-                "    }", cdef->propertyList.count());
-
 
         fprintf(out, "\n#endif // QT_NO_PROPERTIES");
     }

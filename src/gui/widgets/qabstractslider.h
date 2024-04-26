@@ -38,13 +38,13 @@ class Q_GUI_EXPORT QAbstractSlider : public QWidget
     Q_PROPERTY(int maximum READ maximum WRITE setMaximum)
     Q_PROPERTY(int singleStep READ singleStep WRITE setSingleStep)
     Q_PROPERTY(int pageStep READ pageStep WRITE setPageStep)
-    Q_PROPERTY(int value READ value WRITE setValue NOTIFY valueChanged USER true)
+    Q_PROPERTY(int value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(int sliderPosition READ sliderPosition WRITE setSliderPosition NOTIFY sliderMoved)
     Q_PROPERTY(bool tracking READ hasTracking WRITE setTracking)
     Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)
     Q_PROPERTY(bool invertedAppearance READ invertedAppearance WRITE setInvertedAppearance)
     Q_PROPERTY(bool invertedControls READ invertedControls WRITE setInvertedControls)
-    Q_PROPERTY(bool sliderDown READ isSliderDown WRITE setSliderDown DESIGNABLE false)
+    Q_PROPERTY(bool sliderDown READ isSliderDown WRITE setSliderDown)
 
 public:
     explicit QAbstractSlider(QWidget *parent=0);

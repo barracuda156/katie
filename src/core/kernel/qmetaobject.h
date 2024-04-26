@@ -45,7 +45,6 @@ public:
     enum Attributes { Cloned = 0x1, Scriptable = 0x2 };
     int attributes() const;
     int methodIndex() const;
-    int revision() const;
 
     inline const QMetaObject *enclosingMetaObject() const { return mobj; }
 
@@ -162,13 +161,7 @@ public:
     bool isReadable() const;
     bool isWritable() const;
     bool isResettable() const;
-    bool isDesignable(const QObject *obj = nullptr) const;
     bool isScriptable(const QObject *obj = nullptr) const;
-    bool isStored(const QObject *obj = nullptr) const;
-    bool isEditable(const QObject *obj = nullptr) const;
-    bool isUser(const QObject *obj = nullptr) const;
-    bool isConstant() const;
-    bool isFinal() const;
 
     bool isFlagType() const;
     bool isEnumType() const;
@@ -177,8 +170,6 @@ public:
     bool hasNotifySignal() const;
     QMetaMethod notifySignal() const;
     int notifySignalIndex() const;
-
-    int revision() const;
 
     QVariant read(const QObject *obj) const;
     bool write(QObject *obj, const QVariant &value) const;

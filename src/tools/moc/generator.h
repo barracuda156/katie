@@ -37,7 +37,6 @@ public:
 private:
     void generateClassInfos();
     void generateFunctions(QList<FunctionDef> &list, const char *functype, int type);
-    void generateFunctionRevisions(QList<FunctionDef>& list, const char *functype);
     void generateEnums(int index);
     void generateProperties();
     void generateMetacall();

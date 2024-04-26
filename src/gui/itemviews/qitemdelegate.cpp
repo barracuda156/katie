@@ -501,27 +501,9 @@ void QItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) con
 #else
     Q_D(const QItemDelegate);
     QVariant v = index.data(Qt::EditRole);
-    QByteArray n = editor->metaObject()->userProperty().name();
-
-    // ### Qt 5: remove
-    // A work-around for missing "USER true" in qdatetimeedit.h for
-    // QTimeEdit's time property and QDateEdit's date property.
-    // It only triggers if the default user property "dateTime" is
-    // reported for QTimeEdit and QDateEdit.
-    if (n == "dateTime") {
-        if (editor->inherits("QTimeEdit"))
-            n = "time";
-        else if (editor->inherits("QDateEdit"))
-            n = "date";
-    }
-
-    // ### Qt 5: give QComboBox a USER property
-    if (n.isEmpty() && editor->inherits("QComboBox"))
-        n = d->editorFactory()->valuePropertyName(static_cast<QVariant::Type>(v.userType()));
+    QByteArray n = d->editorFactory()->valuePropertyName(v.type());
     if (!n.isEmpty()) {
-        if (!v.isValid())
-            v = QVariant(editor->property(n).userType(), (const void *)0);
-        editor->setProperty(n, v);
+        editor->setProperty(n, editor->property(n));
     }
 #endif
 }
@@ -549,10 +531,7 @@ void QItemDelegate::setModelData(QWidget *editor,
     Q_D(const QItemDelegate);
     Q_ASSERT(model);
     Q_ASSERT(editor);
-    QByteArray n = editor->metaObject()->userProperty().name();
-    if (n.isEmpty())
-        n = d->editorFactory()->valuePropertyName(
-            static_cast<QVariant::Type>(model->data(index, Qt::EditRole).userType()));
+    QByteArray n = d->editorFactory()->valuePropertyName(model->data(index, Qt::EditRole).type());
     if (!n.isEmpty())
         model->setData(index, editor->property(n), Qt::EditRole);
 #endif

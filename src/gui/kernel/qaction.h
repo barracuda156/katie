@@ -46,7 +46,7 @@ class Q_GUI_EXPORT QAction : public QObject
     Q_ENUMS(MenuRole)
     Q_ENUMS(Priority)
     Q_PROPERTY(bool checkable READ isCheckable WRITE setCheckable NOTIFY changed)
-    Q_PROPERTY(bool checked READ isChecked WRITE setChecked DESIGNABLE isCheckable NOTIFY toggled)
+    Q_PROPERTY(bool checked READ isChecked WRITE setChecked NOTIFY toggled)
     Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY changed)
     Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY changed)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY changed)

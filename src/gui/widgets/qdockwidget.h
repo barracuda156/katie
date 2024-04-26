@@ -44,7 +44,7 @@ class Q_GUI_EXPORT QDockWidget : public QWidget
     Q_PROPERTY(DockWidgetFeatures features READ features WRITE setFeatures NOTIFY featuresChanged)
     Q_PROPERTY(Qt::DockWidgetAreas allowedAreas READ allowedAreas
                WRITE setAllowedAreas NOTIFY allowedAreasChanged)
-    Q_PROPERTY(QString windowTitle READ windowTitle WRITE setWindowTitle DESIGNABLE true)
+    Q_PROPERTY(QString windowTitle READ windowTitle WRITE setWindowTitle)
 
 public:
     explicit QDockWidget(const QString &title, QWidget *parent = nullptr, Qt::WindowFlags flags = 0);
