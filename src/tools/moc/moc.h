@@ -98,7 +98,11 @@ struct FunctionDef
 
 struct PropertyDef
 {
-    PropertyDef():notifyId(-1), gspec(ValueSpec), revision(0){}
+    PropertyDef() :
+        notifyId(-1), gspec(ValueSpec)
+    {
+    }
+
     QByteArray name, type, read, write, reset, scriptable, notify, inPrivateClass;
     int notifyId;
     enum Specification  { ValueSpec, ReferenceSpec, PointerSpec };
@@ -109,7 +113,6 @@ struct PropertyDef
         s += name.mid(1);
         return (s == write);
     }
-    int revision;
 };
 
 
@@ -121,8 +124,10 @@ struct ClassInfoDef
 
 struct ClassDef {
     ClassDef():
-        hasQObject(false), hasQGadget(false), notifyableProperties(0)
-        , begin(0), end(0){}
+        hasQObject(false), hasQGadget(false), notifyableProperties(0), begin(0), end(0)
+    {
+    }
+
     QByteArray classname;
     QByteArray qualified;
     QList<QPair<QByteArray, FunctionDef::Access> > superclassList;
