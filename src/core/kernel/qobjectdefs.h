@@ -32,7 +32,7 @@ class QByteArray;
 
 class QString;
 
-#define Q_MOC_OUTPUT_REVISION 66
+#define Q_MOC_OUTPUT_REVISION 67
 
 // The following macros are our "extensions" to C++
 // They are used, strictly speaking, only by the moc.
@@ -359,7 +359,6 @@ struct Q_CORE_EXPORT QMetaObject
 #else
         const QMetaObject **relatedMetaObjects;
 #endif
-        void *extradata; //reserved for future use
     } d;
 };
 

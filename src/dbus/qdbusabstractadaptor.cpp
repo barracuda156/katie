@@ -341,7 +341,7 @@ void QDBusAdaptorConnector::qt_static_metacall(QObject *_o, QMetaObject::Call _c
 
 const QMetaObject QDBusAdaptorConnector::staticMetaObject = {
     { &QObject::staticMetaObject, qt_meta_stringdata_QDBusAdaptorConnector,
-      qt_meta_data_QDBusAdaptorConnector, qt_static_metacall, nullptr, nullptr }
+      qt_meta_data_QDBusAdaptorConnector, qt_static_metacall, nullptr }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
