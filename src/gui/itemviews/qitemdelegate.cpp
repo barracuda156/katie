@@ -476,7 +476,7 @@ QWidget *QItemDelegate::createEditor(QWidget *parent,
     Q_D(const QItemDelegate);
     if (!index.isValid())
         return 0;
-    QVariant::Type t = static_cast<QVariant::Type>(index.data(Qt::EditRole).userType());
+    QVariant::Type t = index.data(Qt::EditRole).type();
     const QItemEditorFactory *factory = d->f;
     if (factory == 0)
         factory = QItemEditorFactory::defaultFactory();

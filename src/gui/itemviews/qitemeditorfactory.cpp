@@ -27,6 +27,7 @@
 
 #include "qcombobox.h"
 #include "qdatetimeedit.h"
+#include "qfontcombobox.h"
 #include "qlabel.h"
 #include "qlineedit.h"
 #include "qspinbox.h"
@@ -91,6 +92,7 @@ public:
     \row    \o QPixmap \o QLabel
     \row    \o QString \o QLineEdit
     \row    \o QTime \o QTimeEdit
+    \row    \o QFont \o QFontComboBox
     \endtable
 
     Additional editors can be registered with the registerEditor() function.
@@ -181,7 +183,8 @@ QWidget *QDefaultItemEditorFactory::createEditor(QVariant::Type type, QWidget *p
     case QVariant::Bool: {
         QBooleanComboBox *cb = new QBooleanComboBox(parent);
         cb->setFrame(false);
-        return cb; }
+        return cb;
+    }
 #endif
 #ifndef QT_NO_SPINBOX
     case QVariant::UInt: {
@@ -194,18 +197,22 @@ QWidget *QDefaultItemEditorFactory::createEditor(QVariant::Type type, QWidget *p
         sb->setFrame(false);
         sb->setMinimum(INT_MIN);
         sb->setMaximum(INT_MAX);
-        return sb; }
+        return sb;
+    }
 #endif
 #ifndef QT_NO_DATETIMEEDIT
     case QVariant::Date: {
         QDateTimeEdit *ed = new QDateEdit(parent);
-        return ed; }
+        return ed;
+    }
     case QVariant::Time: {
         QDateTimeEdit *ed = new QTimeEdit(parent);
-        return ed; }
+        return ed;
+    }
     case QVariant::DateTime: {
         QDateTimeEdit *ed = new QDateTimeEdit(parent);
-        return ed; }
+        return ed;
+    }
 #endif
     case QVariant::Pixmap:
         return new QLabel(parent);
@@ -215,7 +222,15 @@ QWidget *QDefaultItemEditorFactory::createEditor(QVariant::Type type, QWidget *p
         sb->setFrame(false);
         sb->setMinimum(-DBL_MAX);
         sb->setMaximum(DBL_MAX);
-        return sb; }
+        return sb;
+    }
+#endif
+#ifndef QT_NO_FONTCOMBOBOX
+    case QVariant::Font: {
+        QFontComboBox *fb = new QFontComboBox(parent);
+        fb->setFrame(false);
+        return fb;
+    }
 #endif
 #ifndef QT_NO_LINEEDIT
     case QVariant::String:
@@ -225,7 +240,8 @@ QWidget *QDefaultItemEditorFactory::createEditor(QVariant::Type type, QWidget *p
         le->setFrame(le->style()->styleHint(QStyle::SH_ItemView_DrawDelegateFrame, 0, le));
         if (!le->style()->styleHint(QStyle::SH_ItemView_ShowDecorationSelected, 0, le))
             le->setWidgetOwnsGeometry(true);
-        return le; }
+        return le;
+    }
 #else
     default:
         break;
@@ -254,6 +270,10 @@ QByteArray QDefaultItemEditorFactory::valuePropertyName(QVariant::Type type) con
         return "time";
     case QVariant::DateTime:
         return "dateTime";
+#endif
+#ifndef QT_NO_FONTCOMBOBOX
+    case QVariant::Font:
+        return "currentFont";
 #endif
     case QVariant::String:
     default:
