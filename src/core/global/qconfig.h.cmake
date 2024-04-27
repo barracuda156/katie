@@ -46,7 +46,6 @@
 
 // Not supported, used to bootstrap
 #cmakedefine QT_NO_QOBJECT
-#cmakedefine QT_NO_COMPRESS
 #cmakedefine QT_NO_THREAD
 #cmakedefine QT_NO_PROCESS
 #cmakedefine QT_NO_DATASTREAM

@@ -11,6 +11,7 @@ include_directories(
     ${CMAKE_BINARY_DIR}/include/QtCore
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${ICU_INCLUDES}
+    ${DEFLATE_INCLUDES}
 )
 
 set(MOC_SOURCES
@@ -34,7 +35,6 @@ set(BOOTSTRAP_DEFINITIONS
     -DQT_NO_THREAD
     -DQT_NO_PROCESS
     -DQT_NO_USING_NAMESPACE
-    -DQT_NO_COMPRESS
     -DQT_NO_EXCEPTIONS
     -DQT_NO_REGEXP
     -DQT_NO_TEXTCODEC
@@ -81,7 +81,7 @@ set(BOOTSTRAP_SOURCES
 
 add_executable(bootstrap_moc ${BOOTSTRAP_SOURCES} ${MOC_SOURCES})
 target_compile_definitions(bootstrap_moc PRIVATE ${BOOTSTRAP_DEFINITIONS})
-target_link_libraries(bootstrap_moc ${ICU_LIBRARIES})
+target_link_libraries(bootstrap_moc ${ICU_LIBRARIES} ${DEFLATE_LIBRARIES})
 
 add_executable(moc ${MOC_SOURCES})
 target_link_libraries(moc ${EXTRA_MOC_LIBS})

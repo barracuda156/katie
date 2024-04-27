@@ -35,9 +35,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifndef QT_NO_COMPRESS
 #include <libdeflate.h>
-#endif // QT_NO_COMPRESS
 
 #define IS_RAW_DATA(d) ((d)->data != (d)->array)
 
@@ -226,21 +224,6 @@ char* qstrncpy(char *dst, const char *src, uint len)
 /*!
     \relates QByteArray
 
-    Returns the CRC-32 checksum of the first \a len bytes of \a data.
-*/
-quint32 qChecksum(const char *data, uint len)
-{
-#ifndef QT_NO_COMPRESS
-    return libdeflate_crc32(0, data, len);
-#else
-    Q_ASSERT_X(false, "qChecksum", "internal error");
-    return 0;
-#endif
-}
-
-/*!
-    \relates QByteArray
-
     Returns pseudo-randomly generated UUID.
 */
 QByteArray qRandomUuid()
@@ -286,10 +269,7 @@ QByteArray qRandomUuid()
     return QByteArray(uuidbuf, sizeof(uuidbuf));
 }
 
-#ifndef QT_NO_COMPRESS
 /*!
-    \fn QByteArray qCompress(const QByteArray& data, int compressionLevel)
-
     \relates QByteArray
 
     Compresses the \a data byte array and returns the compressed data
@@ -423,7 +403,6 @@ QByteArray qUncompress(const char* data, int nbytes)
     }
     return result;
 }
-#endif // QT_NO_COMPRESS
 
 QByteArray::Data QByteArray::shared_null = { QAtomicInt(1),
                                              0, 0, shared_null.array, {0} };

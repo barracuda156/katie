@@ -150,7 +150,7 @@ static inline QByteArray normalizeTypeInternal(const char *t, const char *e, boo
 {
     const int len = e - t;
 #ifndef QT_BOOTSTRAPPED
-    const uint cachekey = qHash(QByteArray::fromRawData(t, len));
+    const uint cachekey = qHash(t, len);
     QMutexLocker lock(qGlobalNormalizedTypeMutex());
     QByteArray cached = qGlobalNormalizedTypeHash()->value(cachekey);
     if (!cached.isEmpty()) {

@@ -43,7 +43,7 @@ inline uint qstrnlen(const char *str, uint maxlen)
 { return str ? uint(strnlen(str, maxlen)) : 0; }
 
 Q_CORE_EXPORT char* qstrcpy(char *dst, const char *src);
-Q_CORE_EXPORT char* qstrncpy(char *dst, const char *src, uint len);
+Q_CORE_EXPORT char* qstrncpy(char *dst, const char *src, const uint len);
 
 inline int qstrcmp(const char *str1, const char *str2)
 {
@@ -51,7 +51,7 @@ inline int qstrcmp(const char *str1, const char *str2)
         : (str1 ? 1 : (str2 ? -1 : 0));
 }
 
-inline int qstrncmp(const char *str1, const char *str2, uint len)
+inline int qstrncmp(const char *str1, const char *str2, const uint len)
 {
     return (str1 && str2) ? strncmp(str1, str2, len)
         : (str1 ? 1 : (str2 ? -1 : 0));
@@ -62,13 +62,11 @@ inline int qstricmp(const char *str1, const char *str2)
         : (str1 ? 1 : (str2 ? -1 : 0));
 }
 
-inline int qstrnicmp(const char *str1, const char *str2, uint len)
+inline int qstrnicmp(const char *str1, const char *str2, const uint len)
 {
     return (str1 && str2) ? strncasecmp(str1, str2, len)
         : (str1 ? 1 : (str2 ? -1 : 0));
 }
-
-Q_CORE_EXPORT quint32 qChecksum(const char *s, uint len);
 
 Q_CORE_EXPORT QByteArray qRandomUuid();
 
@@ -481,14 +479,12 @@ Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QByteArray &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QByteArray &);
 #endif
 
-#ifndef QT_NO_COMPRESS
 Q_CORE_EXPORT QByteArray qCompress(const char* data, int nbytes, int compressionLevel = 1);
 Q_CORE_EXPORT QByteArray qUncompress(const char* data, int nbytes);
 inline QByteArray qCompress(const QByteArray& data, int compressionLevel = 1)
 { return qCompress(data.constData(), data.size(), compressionLevel); }
 inline QByteArray qUncompress(const QByteArray& data)
 { return qUncompress(data.constData(), data.size()); }
-#endif
 
 Q_DECLARE_TYPEINFO(QByteArray, Q_MOVABLE_TYPE);
 

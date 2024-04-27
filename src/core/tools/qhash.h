@@ -34,6 +34,9 @@ class QByteArray;
 class QString;
 class QStringRef;
 
+Q_CORE_EXPORT uint qHash(const char *key, const uint len);
+Q_CORE_EXPORT uint qHash(const QBitArray &key);
+
 inline uint qHash(const char key) { return uint(key); }
 inline uint qHash(const uchar key) { return uint(key); }
 inline uint qHash(const signed char key) { return uint(key); }
@@ -60,11 +63,15 @@ inline uint qHash(const quint64 key)
 }
 inline uint qHash(const qint64 key) { return qHash(quint64(key)); }
 inline uint qHash(const QChar key) { return qHash(key.unicode()); }
-Q_CORE_EXPORT uint qHash(const QByteArray &key);
-Q_CORE_EXPORT uint qHash(const QString &key);
-Q_CORE_EXPORT uint qHash(const QStringRef &key);
-Q_CORE_EXPORT uint qHash(const QBitArray &key);
-
+inline uint qHash(const QByteArray &key) { return qHash(key.constData(), key.size()); }
+inline uint qHash(const QString &key)
+{
+    return qHash(reinterpret_cast<const char *>(key.unicode()), key.size() * sizeof(QChar));
+}
+inline uint qHash(const QStringRef &key)
+{
+    return qHash(reinterpret_cast<const char *>(key.unicode()), key.size() * sizeof(QChar));
+}
 template <class T> inline uint qHash(const T *key)
 {
     return qHash(reinterpret_cast<quintptr>(key));

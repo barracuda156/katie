@@ -23,63 +23,19 @@
 #include "qbitarray.h"
 #include "qstring.h"
 
+#include <libdeflate.h>
 #include <stdlib.h>
 
 QT_BEGIN_NAMESPACE
 
-
-// ### Qt 5: see tests/benchmarks/corelib/tools/qhash/qhash_string.cpp
-// Hashing of the whole string is a waste of cycles.
-
-/*
-    These functions are based on Peter J. Weinberger's hash function
-    (from the Dragon Book). The constant 24 in the original function
-    was replaced with 23 to produce fewer collisions on input such as
-    "a", "aa", "aaa", "aaaa", ...
-*/
-
-static inline uint hash(const uchar *p, int n)
+uint qHash(const char *key, const uint len)
 {
-    uint h = 0;
-
-    while (n--) {
-        h = (h << 4) + *p++;
-        h ^= (h & 0xf0000000) >> 23;
-        h &= 0x0fffffff;
-    }
-    return h;
-}
-
-static inline uint hash(const QChar *p, int n)
-{
-    uint h = 0;
-
-    while (n--) {
-        h = (h << 4) + (*p++).unicode();
-        h ^= (h & 0xf0000000) >> 23;
-        h &= 0x0fffffff;
-    }
-    return h;
-}
-
-uint qHash(const QByteArray &key)
-{
-    return hash(reinterpret_cast<const uchar *>(key.constData()), key.size());
-}
-
-uint qHash(const QString &key)
-{
-    return hash(key.unicode(), key.size());
-}
-
-uint qHash(const QStringRef &key)
-{
-    return hash(key.unicode(), key.size());
+    return libdeflate_crc32(23, key, len);
 }
 
 uint qHash(const QBitArray &bitArray)
 {
-    return hash(reinterpret_cast<const uchar *>(bitArray.d.constData()), bitArray.d.size());
+    return qHash(bitArray.d.constData(), bitArray.d.size());
 }
 
 /*

@@ -38,7 +38,6 @@ private slots:
     void to_from_hex();
     void bench_qstrcmp();
     void bench_qstrncmp();
-    void bench_qchecksum();
 };
 
 
@@ -133,17 +132,6 @@ void tst_qbytearray::bench_qstrncmp()
         Q_UNUSED(result);
     }
 }
-
-void tst_qbytearray::bench_qchecksum()
-{
-    static const int loremsize = lorem.size();
-    static const char* const loremdata = lorem.constData();
-    QBENCHMARK {
-        const int result = qChecksum(loremdata, loremsize);
-        Q_UNUSED(result);
-    }
-}
-
 
 QTEST_MAIN(tst_qbytearray)
 

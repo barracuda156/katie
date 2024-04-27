@@ -11,7 +11,6 @@ set(unifdef_arguments
     -UQT_BOOTSTRAPPED
     # not supported
     -UQT_NO_QOBJECT
-    -UQT_NO_COMPRESS
     -UQT_NO_THREAD
     -UQT_NO_PROCESS
     -UQT_NO_DATASTREAM
