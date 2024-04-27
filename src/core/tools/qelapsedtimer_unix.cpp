@@ -48,7 +48,7 @@ QElapsedTimer::ClockType QElapsedTimer::clockType()
 
 static inline void do_gettime(qint64 *sec, qint64 *frac)
 {
-    struct timespec ts;
+    struct timespec ts = { 0, 0 };
     if (Q_LIKELY(QElapsedTimer::isMonotonic())) {
         ::clock_gettime(CLOCK_MONOTONIC, &ts);
     } else {
@@ -112,7 +112,7 @@ qint64 QElapsedTimer::msecsTo(const QElapsedTimer &other) const
 {
     qint64 secs = other.t1 - t1;
     qint64 fraction = other.t2 - t2;
-    return (secs * Q_INT64_C(1000000000) + fraction) / Q_INT64_C(1000000);;
+    return (secs * Q_INT64_C(1000000000) + fraction) / Q_INT64_C(1000000);
 }
 
 qint64 QElapsedTimer::secsTo(const QElapsedTimer &other) const
