@@ -172,7 +172,10 @@ void QDateTimeEditPrivate::updateWidgets(const QDateTime &datetime)
 
     if (m_showdate) {
         const QDate curdate = datetime.date();
-        calendarwidget->setSelectedDate(curdate);
+        // check in case the calendar is on different page
+        if (calendarwidget->selectedDate() != curdate) {
+            calendarwidget->setSelectedDate(curdate);
+        }
         updateButton(curdate);
     }
     if (m_showtime) {
