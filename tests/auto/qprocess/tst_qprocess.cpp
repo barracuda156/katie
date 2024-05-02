@@ -1192,7 +1192,6 @@ void tst_QProcess::waitForBytesWrittenInABytesWrittenSlot()
     process->start(binary);
     QVERIFY2(process->waitForStarted(5000),
              msgStartProcessFailed(binary, process->errorString()).constData());
-    qRegisterMetaType<qint64>("qint64");
     QSignalSpy spy(process, SIGNAL(bytesWritten(qint64)));
     process->write("f");
     QTestEventLoop::instance().enterLoop(30);
