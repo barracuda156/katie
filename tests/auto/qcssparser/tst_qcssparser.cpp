@@ -800,8 +800,6 @@ void tst_QCssParser::invalidAtKeywords()
     QCOMPARE(rule.declarations.at(0).d->values.at(0).variant.toString(), QString("blue"));
 }
 
-Q_DECLARE_METATYPE(QColor)
-
 void tst_QCssParser::colorValue_data()
 {
     QTest::addColumn<QString>("css");

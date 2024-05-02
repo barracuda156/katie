@@ -33,9 +33,6 @@ class tst_QPen : public QObject
 {
     Q_OBJECT
 
-public:
-    tst_QPen();
-
 private slots:
     void getSetCheck();
     void swap();
@@ -81,14 +78,6 @@ void tst_QPen::swap()
     p1.swap(p2);
     QCOMPARE(p1.color(), QColor(Qt::white));
     QCOMPARE(p2.color(), QColor(Qt::black));
-}
-
-Q_DECLARE_METATYPE(QPen)
-Q_DECLARE_METATYPE(QBrush)
-
-tst_QPen::tst_QPen()
-
-{
 }
 
 void tst_QPen::operator_eq_eq_data()

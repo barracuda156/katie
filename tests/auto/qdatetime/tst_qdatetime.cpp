@@ -36,13 +36,10 @@ class tst_QDateTime : public QObject
 
 public:
     tst_QDateTime();
-    virtual ~tst_QDateTime();
 
     static QString str( int y, int month, int d, int h, int min, int s );
     static QDateTime dt( const QString& str );
-public slots:
-    void init();
-    void cleanup();
+
 private slots:
     void ctor();
     void operator_eq();
@@ -123,28 +120,11 @@ private:
     QTime invalidTime() const { return QTime(-1, -1, -1); }
 };
 
-Q_DECLARE_METATYPE(QDateTime)
-Q_DECLARE_METATYPE(QDate)
-Q_DECLARE_METATYPE(QTime)
-
-
 tst_QDateTime::tst_QDateTime()
 {
     uint x1 = QDateTime(QDate(1990, 1, 1), QTime()).toTime_t();
     uint x2 = QDateTime(QDate(1990, 6, 1), QTime()).toTime_t();
     europeanTimeZone = (x1 == 631148400 && x2 == 644191200);
-}
-
-tst_QDateTime::~tst_QDateTime()
-{
-}
-
-void tst_QDateTime::init()
-{
-}
-
-void tst_QDateTime::cleanup()
-{
 }
 
 QString tst_QDateTime::str( int y, int month, int d, int h, int min, int s )

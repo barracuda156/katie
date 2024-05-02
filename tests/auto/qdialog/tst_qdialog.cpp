@@ -32,10 +32,8 @@
 
 #include "../../shared/util.h"
 
-Q_DECLARE_METATYPE(QSize)
-
-//TESTED_CLASS=
-//TESTED_FILES=
+// TESTED_CLASS=
+// TESTED_FILES=
 
 class tst_QDialog : public QObject
 {

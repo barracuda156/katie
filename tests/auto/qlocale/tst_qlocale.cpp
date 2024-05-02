@@ -37,8 +37,6 @@
 
 QT_USE_NAMESPACE
 
-Q_DECLARE_METATYPE(qlonglong)
-Q_DECLARE_METATYPE(QDate)
 Q_DECLARE_METATYPE(QLocale::FormatType)
 
 //TESTED_CLASS=
@@ -791,8 +789,6 @@ void tst_QLocale::formatDate()
     QLocale l(QLocale::C);
     QCOMPARE(l.toString(date, format), result);
 }
-
-Q_DECLARE_METATYPE(QTime)
 
 void tst_QLocale::formatTime_data()
 {

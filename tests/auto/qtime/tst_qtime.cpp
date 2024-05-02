@@ -28,16 +28,6 @@ class tst_QTime : public QObject
 {
     Q_OBJECT
 
-public:
-    tst_QTime();
-    virtual ~tst_QTime();
-
-
-public slots:
-    void initTestCase();
-    void cleanupTestCase();
-    void init();
-    void cleanup();
 private slots:
     void toStringLocale();
     void toString();
@@ -72,39 +62,6 @@ private slots:
     void toString_format_data();
     void toString_format();
 };
-
-Q_DECLARE_METATYPE(QTime)
-
-tst_QTime::tst_QTime()
-{
-}
-
-tst_QTime::~tst_QTime()
-{
-
-}
-
-// initTestCase will be executed once before the first testfunction is executed.
-void tst_QTime::initTestCase()
-{
-}
-
-// cleanupTestCase will be executed once after the last testfunction is executed.
-void tst_QTime::cleanupTestCase()
-{
-}
-
-// init() will be executed immediately before each testfunction is run.
-void tst_QTime::init()
-{
-// TODO: Add testfunction specific initialization code here.
-}
-
-// cleanup() will be executed immediately after each testfunction is run.
-void tst_QTime::cleanup()
-{
-// TODO: Add testfunction specific cleanup code here.
-}
 
 void tst_QTime::addSecs_data()
 {

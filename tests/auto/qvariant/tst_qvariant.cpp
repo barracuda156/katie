@@ -47,31 +47,12 @@
 
 #include <limits.h>
 
-Q_DECLARE_METATYPE(qlonglong)
-Q_DECLARE_METATYPE(qulonglong)
-Q_DECLARE_METATYPE(QPointF)
-Q_DECLARE_METATYPE(QRectF)
-Q_DECLARE_METATYPE(QSize)
-Q_DECLARE_METATYPE(QSizeF)
-Q_DECLARE_METATYPE(QLine)
-Q_DECLARE_METATYPE(QLineF)
-Q_DECLARE_METATYPE(QPoint)
-Q_DECLARE_METATYPE(QRect)
-Q_DECLARE_METATYPE(QPixmap)
-Q_DECLARE_METATYPE(QBrush)
-Q_DECLARE_METATYPE(QFont)
-Q_DECLARE_METATYPE(QColor)
-Q_DECLARE_METATYPE(QKeySequence)
-
 //TESTED_CLASS=
 //TESTED_FILES=
 
 class tst_QVariant : public QObject
 {
     Q_OBJECT
-
-public:
-    tst_QVariant();
 
 private slots:
     void constructor();
@@ -245,17 +226,10 @@ private slots:
     void forwardDeclare();
 };
 
-Q_DECLARE_METATYPE(QDate)
-Q_DECLARE_METATYPE(QTime)
-Q_DECLARE_METATYPE(QDateTime)
 Q_DECLARE_METATYPE(QVariant)
 
 const qlonglong intMax1 = (qlonglong)INT_MAX + 1;
 const qulonglong uintMax1 = (qulonglong)UINT_MAX + 1;
-
-tst_QVariant::tst_QVariant()
-{
-}
 
 void tst_QVariant::constructor()
 {

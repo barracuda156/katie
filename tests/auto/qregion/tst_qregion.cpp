@@ -39,9 +39,6 @@ class tst_QRegion : public QObject
 {
     Q_OBJECT
 
-public:
-    tst_QRegion();
-
 private slots:
     void boundingRect();
     void rects();
@@ -85,13 +82,7 @@ private slots:
     void regionToPath();
 };
 
-Q_DECLARE_METATYPE(QPolygon)
 Q_DECLARE_METATYPE(QVector<QRect>)
-Q_DECLARE_METATYPE(QRegion)
-
-tst_QRegion::tst_QRegion()
-{
-}
 
 void tst_QRegion::boundingRect()
 {

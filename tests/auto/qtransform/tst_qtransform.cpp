@@ -26,23 +26,13 @@
 #include "qpolygon.h"
 #include "qdebug.h"
 
-Q_DECLARE_METATYPE(QRect)
-
-//TESTED_CLASS=
-//TESTED_FILES=
+// TESTED_CLASS=
+// TESTED_FILES=
 
 class tst_QTransform : public QObject
 {
     Q_OBJECT
 
-public:
-    tst_QTransform();
-    virtual ~tst_QTransform();
-
-
-public slots:
-    void init();
-    void cleanup();
 private slots:
     void mapRect_data();
     void operator_star_qrect_data();
@@ -70,27 +60,6 @@ private slots:
 private:
     void mapping_data();
 };
-
-Q_DECLARE_METATYPE(QTransform)
-Q_DECLARE_METATYPE(QPolygon)
-
-tst_QTransform::tst_QTransform()
-{
-}
-
-tst_QTransform::~tst_QTransform()
-{
-}
-
-void tst_QTransform::init()
-{
-    // No initialisation is required
-}
-
-void tst_QTransform::cleanup()
-{
-    // No cleanup is required.
-}
 
 void tst_QTransform::mapRect_data()
 {

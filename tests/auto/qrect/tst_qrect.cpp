@@ -22,16 +22,12 @@
 
 #include <QtTest/QtTest>
 #include <qrect.h>
-#include <limits.h>
 #include <qdebug.h>
 
-Q_DECLARE_METATYPE(QRectF)
-Q_DECLARE_METATYPE(QPointF)
-Q_DECLARE_METATYPE(QRect)
-Q_DECLARE_METATYPE(QPoint)
+#include <limits.h>
 
-//TESTED_CLASS=
-//TESTED_FILES=
+// TESTED_CLASS=
+// TESTED_FILES=
 
 class tst_QRect : public QObject
 {

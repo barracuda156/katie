@@ -51,11 +51,7 @@ static QBitArray QStringToQBitArray(const QString &str)
 
 class tst_QBitArray : public QObject
 {
-Q_OBJECT
-
-public:
-    tst_QBitArray();
-    virtual ~tst_QBitArray();
+    Q_OBJECT
 
 private slots:
     void size_data();
@@ -88,17 +84,6 @@ private slots:
 
     void resize();
 };
-
-Q_DECLARE_METATYPE(QBitArray)
-
-tst_QBitArray::tst_QBitArray()
-{
-}
-
-tst_QBitArray::~tst_QBitArray()
-{
-
-}
 
 void tst_QBitArray::size_data()
 {

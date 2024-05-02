@@ -25,10 +25,8 @@
 
 #include <limits.h>
 
-Q_DECLARE_METATYPE(QSize)
-
-//TESTED_CLASS=
-//TESTED_FILES=
+// TESTED_CLASS=
+// TESTED_FILES=
 
 class tst_QSize : public QObject
 {

@@ -35,9 +35,6 @@ class tst_QBrush : public QObject
 {
     Q_OBJECT
 
-public:
-    tst_QBrush();
-
 private slots:
     void operator_eq_eq();
     void operator_eq_eq_data();
@@ -60,12 +57,6 @@ private slots:
     void isOpaque();
     void debug();
 };
-
-Q_DECLARE_METATYPE(QBrush)
-
-tst_QBrush::tst_QBrush()
-{
-}
 
 void tst_QBrush::operator_eq_eq_data()
 {

@@ -29,15 +29,8 @@
 
 class tst_QDate : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-public:
-    tst_QDate();
-    virtual ~tst_QDate();
-
-public slots:
-    void init();
-    void cleanup();
 private slots:
     void toString();
     void isValid_data();
@@ -81,29 +74,6 @@ private slots:
     void standaloneLongMonthName() const;
     void roundtrip() const;
 };
-
-Q_DECLARE_METATYPE(QDate)
-
-tst_QDate::tst_QDate()
-{
-}
-
-tst_QDate::~tst_QDate()
-{
-
-}
-
-void tst_QDate::init()
-{
-// This will be executed immediately before each test is run.
-// TODO: Add initialization code here.
-}
-
-void tst_QDate::cleanup()
-{
-// This will be executed immediately after each test is run.
-// TODO: Add cleanup code here.
-}
 
 void tst_QDate::isValid_data()
 {

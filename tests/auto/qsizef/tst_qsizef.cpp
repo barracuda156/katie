@@ -23,10 +23,8 @@
 #include <QtTest/QtTest>
 #include <qsize.h>
 
-Q_DECLARE_METATYPE(QSizeF)
-
-//TESTED_CLASS=
-//TESTED_FILES=corelib/tools/qsize.h corelib/tools/qsize.cpp
+// TESTED_CLASS=
+// TESTED_FILES=corelib/tools/qsize.h corelib/tools/qsize.cpp
 
 class tst_QSizeF : public QObject {
     Q_OBJECT

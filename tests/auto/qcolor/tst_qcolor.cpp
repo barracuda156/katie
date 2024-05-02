@@ -34,9 +34,6 @@ class tst_QColor : public QObject
 {
     Q_OBJECT
 
-public:
-    tst_QColor();
-
 private slots:
     void getSetCheck();
     void isValid_data();
@@ -213,13 +210,6 @@ void tst_QColor::getSetCheck()
     QCOMPARE(obj1.rgb(), var10);
     obj1.setRgb(QRgb(0));
     QCOMPARE(obj1.rgb(), qRgb(0, 0, 0));
-}
-
-Q_DECLARE_METATYPE(QColor)
-
-
-tst_QColor::tst_QColor()
-{
 }
 
 void tst_QColor::isValid_data()
