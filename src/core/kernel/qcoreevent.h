@@ -194,8 +194,6 @@ public:
     inline void accept() { m_accept = true; }
     inline void ignore() { m_accept = false; }
 
-    static int registerEventType(int hint = -1);
-
 protected:
     Type t;
 

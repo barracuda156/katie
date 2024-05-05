@@ -22,8 +22,6 @@
 #include "qcoreevent.h"
 #include "qcoreapplication.h"
 #include "qcoreapplication_p.h"
-#include "qmutex.h"
-#include "qstdcontainers_p.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -185,12 +183,6 @@ QT_BEGIN_NAMESPACE
     \value User                             User-defined event.
     \value MaxUser                          Last user event ID.
 
-    For convenience, you can use the registerEventType() function to
-    register and reserve a custom event type for your
-    application. Doing so will allow you to avoid accidentally
-    re-using a custom event type already in use elsewhere in your
-    application.
-
     \omitvalue GraphicsSceneLeave
     \omitvalue AcceptDropsChange
     \omitvalue Create
@@ -206,7 +198,8 @@ QT_BEGIN_NAMESPACE
 */
 QEvent::QEvent(Type type)
     : t(type), posted(false), spont(false), m_accept(true), looplevel(0)
-{}
+{
+}
 
 /*!
     Destroys the event. If it was \link
@@ -276,44 +269,6 @@ QEvent::~QEvent()
 
     The return value of this function is not defined for paint events.
 */
-
-typedef QStdVector<int> QEventUserEventList;
-Q_GLOBAL_STATIC(QMutex, qGlobalUserEventsMutex)
-Q_GLOBAL_STATIC(QEventUserEventList, qGlobalUserEvents)
-
-/*!
-    \since 4.4
-    \threadsafe
-
-    Registers and returns a custom event type. The \a hint provided
-    will be used if it is available, otherwise it will return a value
-    between QEvent::User and QEvent::MaxUser that has not yet been
-    registered. The \a hint is ignored if its value is not between
-    QEvent::User and QEvent::MaxUser.
-*/
-int QEvent::registerEventType(int hint)
-{
-    QMutexLocker locker(qGlobalUserEventsMutex());
-    QEventUserEventList *userEventRegistration = qGlobalUserEvents();
-    if (!userEventRegistration)
-        return -1;
-
-    // if the type hint hasn't been registered yet, take it
-    if (hint >= QEvent::User && hint <= QEvent::MaxUser && !userEventRegistration->contains(hint)) {
-        userEventRegistration->append(hint);
-        return hint;
-    }
-
-    // find a free event type, starting at MaxUser and decreasing
-    int id = QEvent::MaxUser;
-    while (userEventRegistration->contains(id) && id >= QEvent::User)
-        --id;
-    if (id >= QEvent::User) {
-        userEventRegistration->append(id);
-        return id;
-    }
-    return -1;
-}
 
 /*!
     \class QTimerEvent
