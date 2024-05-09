@@ -9,7 +9,7 @@ pkgdesc='C++ toolkit derived from the Qt 4.8 framework'
 arch=('i486' 'i686' 'pentium4' 'x86_64' 'arm')
 url='https://bitbucket.org/smil3y/workspace/projects/KATANA'
 license=('LGPL' 'BSD')
-depends=('libsm' 'libxcursor' 'libxinerama' 'libxrandr' 'fontconfig'
+depends=('libxcursor' 'libxinerama' 'libxrandr' 'fontconfig'
          'icu' 'jansson' 'libcups' 'xdg-utils' 'libdeflate')
 makedepends=('cmake' 'git' 'unifdef')
 optdepends=('gnu-free-fonts: last resort font')

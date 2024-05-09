@@ -14,7 +14,7 @@ DIST_SUBDIR = ${PORTNAME}
 WRKSRC = ${WRKDIR}/katie.git
 
 USES = compiler:c++11-lang pkgconfig cmake xorg desktop-file-utils
-USE_XORG = x11 xinerama xrandr xrender xfixes xcursor xext sm ice
+USE_XORG = x11 xinerama xrandr xrender xfixes xcursor xext
 USE_LDCONFIG = yes
 USE_GETTEXT_TOOLS = build run
 RUN_DEPENDS = xdg-open:devel/xdg-utils \
