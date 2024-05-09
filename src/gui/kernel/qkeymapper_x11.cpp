@@ -58,8 +58,6 @@ void QKeyMapper::clearMappings()
     keyboardInputDirection = keyboardInputLocale.textDirection();
 }
 
-extern bool qt_sm_blockUserInput;
-
 // keyboard mapping table
 static const struct KeyTblData {
     const uint x11key;
@@ -204,9 +202,6 @@ struct qt_auto_repeat_data
 
 bool QKeyMapper::translateKeyEvent(QWidget *keyWidget, const XEvent *event)
 {
-    if (qt_sm_blockUserInput) // block user interaction during session management
-        return true;
-
     Q_ASSERT(keyWidget->isEnabled());
 
     QEvent::Type type = (event->type == XKeyPress) ? QEvent::KeyPress : QEvent::KeyRelease;

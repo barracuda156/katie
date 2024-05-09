@@ -350,8 +350,6 @@ QString QSettingsPrivate::toGroupKey(const QString &key) const
     If you want to read an INI file directly, you can use the QSettings
     constructor that takes a file name as first argument. You can then
     use the QSettings object to read and write settingsin the file.
-
-    \sa QSessionManager
 */
 
 /*! \enum QSettings::SettingsStatus

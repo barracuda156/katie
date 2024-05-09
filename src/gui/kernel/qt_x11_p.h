@@ -92,10 +92,6 @@
 #  include <X11/extensions/Xfixes.h>
 #endif // QT_NO_XFIXES
 
-#ifndef QT_NO_SESSIONMANAGER
-#  include <X11/SM/SMlib.h>
-#endif // QT_NO_SESSIONMANAGER
-
 QT_BEGIN_NAMESPACE
 
 class QWidget;
@@ -262,7 +258,6 @@ public:
         // Session management
         WM_CLIENT_LEADER,
         WM_WINDOW_ROLE,
-        SM_CLIENT_ID,
 
         // Clipboard
         CLIPBOARD,

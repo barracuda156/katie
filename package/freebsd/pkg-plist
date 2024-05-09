@@ -486,7 +486,6 @@ include/katie/QtGui/QRubberBand
 include/katie/QtGui/QScrollArea
 include/katie/QtGui/QScrollBar
 include/katie/QtGui/QSequentialAnimationGroup
-include/katie/QtGui/QSessionManager
 include/katie/QtGui/QShortcut
 include/katie/QtGui/QShortcutEvent
 include/katie/QtGui/QShowEvent
@@ -743,7 +742,6 @@ include/katie/QtGui/qrubberband.h
 include/katie/QtGui/qscrollarea.h
 include/katie/QtGui/qscrollbar.h
 include/katie/QtGui/qsequentialanimationgroup.h
-include/katie/QtGui/qsessionmanager.h
 include/katie/QtGui/qshortcut.h
 include/katie/QtGui/qsizegrip.h
 include/katie/QtGui/qsizepolicy.h

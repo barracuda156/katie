@@ -219,17 +219,6 @@ static void create_wm_client_leader()
                      qt_x11Data->wm_client_leader, ATOM(WM_CLIENT_LEADER),
                      XA_WINDOW, 32, PropModeReplace,
                      (unsigned char *)&qt_x11Data->wm_client_leader, 1);
-
-#ifndef QT_NO_SESSIONMANAGER
-    // If we are session managed, inform the window manager about it
-    QByteArray session = qApp->sessionId().toLatin1();
-    if (!session.isEmpty()) {
-        XChangeProperty(qt_x11Data->display,
-                         qt_x11Data->wm_client_leader, ATOM(SM_CLIENT_ID),
-                         XA_STRING, 8, PropModeReplace,
-                         (unsigned char *)session.data(), session.size());
-    }
-#endif
 }
 
 /*!

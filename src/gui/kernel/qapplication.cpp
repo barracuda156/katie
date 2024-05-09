@@ -32,7 +32,6 @@
 #include "qhash.h"
 #include "qset.h"
 #include "qlayout.h"
-#include "qsessionmanager.h"
 #include "qstyle.h"
 #include "qstylefactory.h"
 #include "qtextcodec.h"
@@ -77,11 +76,6 @@ bool QApplicationPrivate::autoSipEnabled = true;
 
 QApplicationPrivate::QApplicationPrivate(int &argc, char **argv)
     : QCoreApplicationPrivate(argc, argv)
-#ifndef QT_NO_SESSIONMANAGER
-    , session_manager(nullptr)
-    , is_session_restored(false)
-#endif
-
 {
     QCoreApplicationPrivate::app_type = QCoreApplication::Gui;
 
@@ -104,9 +98,8 @@ QApplicationPrivate::~QApplicationPrivate()
 
     QApplication contains the main event loop, where all events from the window
     system and other sources are processed and dispatched. It also handles the
-    application's initialization, finalization, and provides session
-    management. In addition, QApplication handles most of the system-wide and
-    application-wide settings.
+    application's initialization and finalization. In addition, QApplication
+    handles most of the system-wide and application-wide settings.
 
     For any GUI application using Qt, there is precisely \bold one QApplication
     object, no matter whether the application has 0, 1, 2 or more windows at
@@ -151,14 +144,6 @@ QApplicationPrivate::~QApplicationPrivate()
 
             \o  On the X window system, it provides functions to flush and sync
                 the communication stream, see flushX() and syncX().
-
-            \o  It provides support for sophisticated \l{Session Management}
-                {session management}. This makes it possible for applications
-                to terminate gracefully when the user logs out, to cancel a
-                shutdown process if termination isn't possible and even to
-                preserve the entire application's state for a future session.
-                See isSessionRestored(), sessionId() and commitData() and
-                saveState() for details.
         \endlist
 
     Since the QApplication object does so much initialization, it \e{must} be
@@ -234,13 +219,6 @@ QApplicationPrivate::~QApplicationPrivate()
         \o  X Window System synchronization
         \o  flushX(),
             syncX().
-
-        \row
-        \o  Session management
-        \o  isSessionRestored(),
-            sessionId(),
-            commitData(),
-            saveState().
 
         \row
         \o  Miscellaneous
@@ -354,19 +332,6 @@ void QApplicationPrivate::process_cmdline()
             s = QString::fromLocal8Bit(argv[i] + 7).toLower();
         } else if (qstrcmp(argv[i], "-style") == 0 && i < argc - 1) {
             s = QString::fromLocal8Bit(argv[++i]).toLower();
-#ifndef QT_NO_SESSIONMANAGER
-        } else if (qstrcmp(argv[i], "-session") == 0 && i < argc - 1) {
-            ++i;
-            if (argv[i] && *argv[i]) {
-                session_id = QString::fromLatin1(argv[i]);
-                int p = session_id.indexOf(QLatin1Char('_'));
-                if (p >= 0) {
-                    session_key = session_id.mid(p +1);
-                    session_id = session_id.left(p);
-                }
-                is_session_restored = true;
-            }
-#endif
         } else if (qstrcmp(argv[i], "-reverse") == 0) {
             force_reverse = true;
             QApplication::setLayoutDirection(Qt::RightToLeft);
@@ -419,9 +384,6 @@ void QApplicationPrivate::process_cmdline()
             additional styles or have additional styles as plugins these will
             be available to the \c -style command line option.
         \o  -style \e style, is the same as listed above.
-        \o  -session= \e session, restores the application from an earlier
-            \l{Session Management}{session}.
-        \o  -session \e session, is the same as listed above.
         \o  -reverse, sets the application's layout direction to
             Qt::RightToLeft
     \endlist
@@ -479,11 +441,6 @@ void QApplicationPrivate::construct(Display *dpy, Qt::HANDLE visual, Qt::HANDLE 
     is_app_running = true; // no longer starting up
 
     Q_Q(QApplication);
-#ifndef QT_NO_SESSIONMANAGER
-    // connect to the session manager
-    session_manager = new QSessionManager(q, session_id, session_key);
-#endif
-
     if (qgetenv("QT_USE_NATIVE_WINDOWS").toInt() > 0)
         q->setAttribute(Qt::AA_NativeWindows);
 }
@@ -663,11 +620,6 @@ QApplication::~QApplication()
 #endif
 
     qt_cleanup();
-
-#ifndef QT_NO_SESSIONMANAGER
-    delete d->session_manager;
-    d->session_manager = nullptr;
-#endif //QT_NO_SESSIONMANAGER
 
     QApplicationPrivate::cursor_flash_time = 1000;
     QApplicationPrivate::mouse_double_click_time = 400;
@@ -2276,222 +2228,6 @@ Qt::MouseButtons QApplication::mouseButtons()
     return QApplicationPrivate::mouse_buttons;
 }
 
-/*!
-    \fn bool QApplication::isSessionRestored() const
-
-    Returns true if the application has been restored from an earlier
-    \l{Session Management}{session}; otherwise returns false.
-
-    \sa sessionId(), commitData(), saveState()
-*/
-
-
-/*!
-    \fn QString QApplication::sessionId() const
-
-    Returns the current \l{Session Management}{session's} identifier.
-
-    If the application has been restored from an earlier session, this
-    identifier is the same as it was in that previous session. The session
-    identifier is guaranteed to be unique both for different applications
-    and for different instances of the same application.
-
-    \sa isSessionRestored(), sessionKey(), commitData(), saveState()
-*/
-
-/*!
-    \fn QString QApplication::sessionKey() const
-
-    Returns the session key in the current \l{Session Management}{session}.
-
-    If the application has been restored from an earlier session, this key is
-    the same as it was when the previous session ended.
-
-    The session key changes with every call of commitData() or saveState().
-
-    \sa isSessionRestored(), sessionId(), commitData(), saveState()
-*/
-#ifndef QT_NO_SESSIONMANAGER
-bool QApplication::isSessionRestored() const
-{
-    Q_D(const QApplication);
-    return d->is_session_restored;
-}
-
-QString QApplication::sessionId() const
-{
-    Q_D(const QApplication);
-    return d->session_id;
-}
-
-QString QApplication::sessionKey() const
-{
-    Q_D(const QApplication);
-    return d->session_key;
-}
-#endif
-
-/*!
-    \since 4.7.4
-    \fn void QApplication::aboutToReleaseGpuResources()
-
-    This signal is emitted when application is about to release all
-    GPU resources associated to contexts owned by application.
-
-    The signal is particularly useful if your application has allocated
-    GPU resources directly apart from Qt and needs to do some last-second
-    cleanup.
-
-    \warning This signal is only emitted on Symbian.
-
-    \sa aboutToUseGpuResources()
-*/
-
-/*!
-    \since 4.7.4
-    \fn void QApplication::aboutToUseGpuResources()
-
-    This signal is emitted when application is about to use GPU resources.
-
-    The signal is particularly useful if your application needs to know
-    when GPU resources are be available.
-
-   \warning This signal is only emitted on Symbian.
-
-   \sa aboutToReleaseGpuResources()
-*/
-
-/*!
-    \since 4.2
-    \fn void QApplication::commitDataRequest(QSessionManager &manager)
-
-    This signal deals with \l{Session Management}{session management}. It is
-    emitted when the QSessionManager wants the application to commit all its
-    data.
-
-    Usually this means saving all open files, after getting permission from
-    the user. Furthermore you may want to provide a means by which the user
-    can cancel the shutdown.
-
-    You should not exit the application within this signal. Instead,
-    the session manager may or may not do this afterwards, depending on the
-    context.
-
-    \warning Within this signal, no user interaction is possible, \e
-    unless you ask the \a manager for explicit permission. See
-    QSessionManager::allowsInteraction() and
-    QSessionManager::allowsErrorInteraction() for details and example
-    usage.
-
-    \note You should use Qt::DirectConnection when connecting to this signal.
-
-    \sa isSessionRestored(), sessionId(), saveState(), {Session Management}
-*/
-
-/*!
-    This function deals with \l{Session Management}{session management}. It is
-    invoked when the QSessionManager wants the application to commit all its
-    data.
-
-    Usually this means saving all open files, after getting permission from the
-    user. Furthermore you may want to provide a means by which the user can
-    cancel the shutdown.
-
-    You should not exit the application within this function. Instead, the
-    session manager may or may not do this afterwards, depending on the
-    context.
-
-    \warning Within this function, no user interaction is possible, \e
-    unless you ask the \a manager for explicit permission. See
-    QSessionManager::allowsInteraction() and
-    QSessionManager::allowsErrorInteraction() for details and example
-    usage.
-
-    The default implementation requests interaction and sends a close event to
-    all visible top-level widgets. If any event was rejected, the shutdown is
-    canceled.
-
-    \sa isSessionRestored(), sessionId(), saveState(), {Session Management}
-*/
-#ifndef QT_NO_SESSIONMANAGER
-void QApplication::commitData(QSessionManager& manager )
-{
-    emit commitDataRequest(manager);
-    if (manager.allowsInteraction()) {
-        QWidgetList done;
-        QWidgetList list = QApplication::topLevelWidgets();
-        bool cancelled = false;
-        for (int i = 0; !cancelled && i < list.size(); ++i) {
-            QWidget* w = list.at(i);
-            if (w->isVisible() && !done.contains(w)) {
-                cancelled = !w->close();
-                if (!cancelled)
-                    done.append(w);
-                list = QApplication::topLevelWidgets();
-                i = -1;
-            }
-        }
-        if (cancelled)
-            manager.cancel();
-    }
-}
-
-/*!
-    \since 4.2
-    \fn void QApplication::saveStateRequest(QSessionManager &manager)
-
-    This signal deals with \l{Session Management}{session management}. It is
-    invoked when the \l{QSessionManager}{session manager} wants the application
-    to preserve its state for a future session.
-
-    For example, a text editor would create a temporary file that includes the
-    current contents of its edit buffers, the location of the cursor and other
-    aspects of the current editing session.
-
-    You should never exit the application within this signal. Instead, the
-    session manager may or may not do this afterwards, depending on the
-    context. Futhermore, most session managers will very likely request a saved
-    state immediately after the application has been started. This permits the
-    session manager to learn about the application's restart policy.
-
-    \warning Within this function, no user interaction is possible, \e
-    unless you ask the \a manager for explicit permission. See
-    QSessionManager::allowsInteraction() and
-    QSessionManager::allowsErrorInteraction() for details.
-
-    \note You should use Qt::DirectConnection when connecting to this signal.
-
-    \sa isSessionRestored(), sessionId(), commitData(), {Session Management}
-*/
-
-/*!
-    This function deals with \l{Session Management}{session management}. It is
-    invoked when the \l{QSessionManager}{session manager} wants the application
-    to preserve its state for a future session.
-
-    For example, a text editor would create a temporary file that includes the
-    current contents of its edit buffers, the location of the cursor and other
-    aspects of the current editing session.
-
-    You should never exit the application within this function. Instead, the
-    session manager may or may not do this afterwards, depending on the
-    context. Futhermore, most session managers will very likely request a saved
-    state immediately after the application has been started. This permits the
-    session manager to learn about the application's restart policy.
-
-    \warning Within this function, no user interaction is possible, \e
-    unless you ask the \a manager for explicit permission. See
-    QSessionManager::allowsInteraction() and
-    QSessionManager::allowsErrorInteraction() for details.
-
-    \sa isSessionRestored(), sessionId(), commitData(), {Session Management}
-*/
-
-void QApplication::saveState(QSessionManager &manager)
-{
-    emit saveStateRequest(manager);
-}
-#endif //QT_NO_SESSIONMANAGER
 /*
   Sets the time after which a drag should start to \a ms ms.
 
@@ -3104,297 +2840,6 @@ bool QApplicationPrivate::notify_helper(QObject *receiver, QEvent * e)
     return consumed;
 }
 
-
-/*!
-    \class QSessionManager
-    \brief The QSessionManager class provides access to the session manager.
-
-    A session manager in a desktop environment (in which Qt GUI applications
-    live) keeps track of a session, which is a group of running applications,
-    each of which has a particular state. The state of an application contains
-    (most notably) the documents the application has open and the position and
-    size of its windows.
-
-    The session manager is used to save the session, e.g., when the machine is
-    shut down, and to restore a session, e.g., when the machine is started up.
-    We recommend that you use QSettings to save an application's settings,
-    for example, window positions, recently used files, etc. When the
-    application is restarted by the session manager, you can restore the
-    settings.
-
-    QSessionManager provides an interface between the application and the
-    session manager so that the program can work well with the session manager.
-    In Qt, session management requests for action are handled by the two
-    virtual functions QApplication::commitData() and QApplication::saveState().
-    Both provide a reference to a session manager object as argument, to allow
-    the application to communicate with the session manager. The session
-    manager can only be accessed through these functions.
-
-    No user interaction is possible \e unless the application gets explicit
-    permission from the session manager. You ask for permission by calling
-    allowsInteraction() or, if it is really urgent, allowsErrorInteraction().
-    Qt does not enforce this, but the session manager may.
-
-    You can try to abort the shutdown process by calling cancel(). The default
-    commitData() function does this if some top-level window rejected its
-    closeEvent().
-
-    For sophisticated session managers provided on Unix/X11, QSessionManager
-    offers further possibilities to fine-tune an application's session
-    management behavior: setRestartCommand(), setDiscardCommand(),
-    setRestartHint(), setProperty(), requestPhase2(). See the respective
-    function descriptions for further details.
-
-    \sa QApplication, {Session Management}
-*/
-
-/*! \enum QSessionManager::RestartHint
-
-    This enum type defines the circumstances under which this application wants
-    to be restarted by the session manager. The current values are:
-
-    \value  RestartIfRunning    If the application is still running when the
-                                session is shut down, it wants to be restarted
-                                at the start of the next session.
-
-    \value  RestartAnyway       The application wants to be started at the
-                                start of the next session, no matter what.
-                                (This is useful for utilities that run just
-                                after startup and then quit.)
-
-    \value  RestartImmediately  The application wants to be started immediately
-                                whenever it is not running.
-
-    \value  RestartNever        The application does not want to be restarted
-                                automatically.
-
-    The default hint is \c RestartIfRunning.
-*/
-
-
-/*!
-    \fn QString QSessionManager::sessionId() const
-
-    Returns the identifier of the current session.
-
-    If the application has been restored from an earlier session, this
-    identifier is the same as it was in the earlier session.
-
-    \sa sessionKey(), QApplication::sessionId()
-*/
-
-/*!
-    \fn QString QSessionManager::sessionKey() const
-
-    Returns the session key in the current session.
-
-    If the application has been restored from an earlier session, this key is
-    the same as it was when the previous session ended.
-
-    The session key changes with every call of commitData() or saveState().
-
-    \sa sessionId(), QApplication::sessionKey()
-*/
-
-/*!
-    \fn void* QSessionManager::handle() const
-
-    \internal
-*/
-
-/*!
-    \fn bool QSessionManager::allowsInteraction()
-
-    Asks the session manager for permission to interact with the user. Returns
-    true if interaction is permitted; otherwise returns false.
-
-    The rationale behind this mechanism is to make it possible to synchronize
-    user interaction during a shutdown. Advanced session managers may ask all
-    applications simultaneously to commit their data, resulting in a much
-    faster shutdown.
-
-    When the interaction is completed we strongly recommend releasing the user
-    interaction semaphore with a call to release(). This way, other
-    applications may get the chance to interact with the user while your
-    application is still busy saving data. (The semaphore is implicitly
-    released when the application exits.)
-
-    If the user decides to cancel the shutdown process during the interaction
-    phase, you must tell the session manager that this has happened by calling
-    cancel().
-
-    Here's an example of how an application's QApplication::commitData() might
-    be implemented:
-
-    \snippet doc/src/snippets/code/src_gui_kernel_qapplication.cpp 8
-
-    If an error occurred within the application while saving its data, you may
-    want to try allowsErrorInteraction() instead.
-
-    \sa QApplication::commitData(), release(), cancel()
-*/
-
-
-/*!
-    \fn bool QSessionManager::allowsErrorInteraction()
-
-    Returns true if error interaction is permitted; otherwise returns false.
-
-    This is similar to allowsInteraction(), but also enables the application to
-    tell the user about any errors that occur. Session managers may give error
-    interaction requests higher priority, which means that it is more likely
-    that an error interaction is permitted. However, you are still not
-    guaranteed that the session manager will allow interaction.
-
-    \sa allowsInteraction(), release(), cancel()
-*/
-
-/*!
-    \fn void QSessionManager::release()
-
-    Releases the session manager's interaction semaphore after an interaction
-    phase.
-
-    \sa allowsInteraction(), allowsErrorInteraction()
-*/
-
-/*!
-    \fn void QSessionManager::cancel()
-
-    Tells the session manager to cancel the shutdown process.  Applications
-    should not call this function without asking the user first.
-
-    \sa allowsInteraction(), allowsErrorInteraction()
-*/
-
-/*!
-    \fn void QSessionManager::setRestartHint(RestartHint hint)
-
-    Sets the application's restart hint to \a hint. On application startup, the
-    hint is set to \c RestartIfRunning.
-
-    \note These flags are only hints, a session manager may or may not respect
-    them.
-
-    We recommend setting the restart hint in QApplication::saveState() because
-    most session managers perform a checkpoint shortly after an application's
-    startup.
-
-    \sa restartHint()
-*/
-
-/*!
-    \fn QSessionManager::RestartHint QSessionManager::restartHint() const
-
-    Returns the application's current restart hint. The default is
-    \c RestartIfRunning.
-
-    \sa setRestartHint()
-*/
-
-/*!
-    \fn void QSessionManager::setRestartCommand(const QStringList& command)
-
-    If the session manager is capable of restoring sessions it will execute
-    \a command in order to restore the application. The command defaults to
-
-    \snippet doc/src/snippets/code/src_gui_kernel_qapplication.cpp 9
-
-    The \c -session option is mandatory; otherwise QApplication cannot tell
-    whether it has been restored or what the current session identifier is.
-    See QApplication::isSessionRestored() and QApplication::sessionId() for
-    details.
-
-    If your application is very simple, it may be possible to store the entire
-    application state in additional command line options. This is usually a
-    very bad idea because command lines are often limited to a few hundred
-    bytes. Instead, use QSettings, temporary files, or a database for this
-    purpose. By marking the data with the unique sessionId(), you will be able
-    to restore the application in a future  session.
-
-    \sa restartCommand(), setDiscardCommand(), setRestartHint()
-*/
-
-/*!
-    \fn QStringList QSessionManager::restartCommand() const
-
-    Returns the currently set restart command.
-
-    To iterate over the list, you can use the \l foreach pseudo-keyword:
-
-    \snippet doc/src/snippets/code/src_gui_kernel_qapplication.cpp 10
-
-    \sa setRestartCommand(), restartHint()
-*/
-
-/*!
-    \fn void QSessionManager::setDiscardCommand(const QStringList& list)
-
-    Sets the discard command to the given \a list.
-
-    \sa discardCommand(), setRestartCommand()
-*/
-
-
-/*!
-    \fn QStringList QSessionManager::discardCommand() const
-
-    Returns the currently set discard command.
-
-    To iterate over the list, you can use the \l foreach pseudo-keyword:
-
-    \snippet doc/src/snippets/code/src_gui_kernel_qapplication.cpp 11
-
-    \sa setDiscardCommand(), restartCommand(), setRestartCommand()
-*/
-
-/*!
-    \fn void QSessionManager::setManagerProperty(const QString &name, const QString &value)
-    \overload
-
-    Low-level write access to the application's identification and state
-    records are kept in the session manager.
-
-    The property called \a name has its value set to the string \a value.
-*/
-
-/*!
-    \fn void QSessionManager::setManagerProperty(const QString& name,
-                                                 const QStringList& value)
-
-    Low-level write access to the application's identification and state record
-    are kept in the session manager.
-
-    The property called \a name has its value set to the string list \a value.
-*/
-
-/*!
-    \fn bool QSessionManager::isPhase2() const
-
-    Returns true if the session manager is currently performing a second
-    session management phase; otherwise returns false.
-
-    \sa requestPhase2()
-*/
-
-/*!
-    \fn void QSessionManager::requestPhase2()
-
-    Requests a second session management phase for the application. The
-    application may then return immediately from the QApplication::commitData()
-    or QApplication::saveState() function, and they will be called again once
-    most or all other applications have finished their session management.
-
-    The two phases are useful for applications such as the X11 window manager
-    that need to store information about another application's windows and
-    therefore have to wait until these applications have completed their
-    respective session management tasks.
-
-    \note If another application has requested a second phase it may get called
-    before, simultaneously with, or after your application's second phase.
-
-    \sa isPhase2()
-*/
 
 /*!
     \fn bool QApplication::hasGlobalMouseTracking()

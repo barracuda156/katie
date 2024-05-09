@@ -72,7 +72,6 @@
 #cmakedefine QT_NO_CUPS
 #cmakedefine QT_NO_EXECINFO
 #cmakedefine QT_NO_FONTCONFIG
-#cmakedefine QT_NO_SESSIONMANAGER
 #cmakedefine QT_NO_TRANSLATION
 #cmakedefine QT_NO_XCURSOR
 #cmakedefine QT_NO_XFIXES

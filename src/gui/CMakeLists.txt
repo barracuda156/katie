@@ -132,7 +132,6 @@ set(GUI_PUBLIC_HEADERS
     QRubberBand
     QScrollArea
     QScrollBar
-    QSessionManager
     QShortcut
     QSizeGrip
     QSizePolicy
@@ -353,7 +352,6 @@ set(GUI_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayout_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayoutengine_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayoutitem.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsessionmanager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshortcut.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshortcutmap_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsizepolicy.h
@@ -828,7 +826,7 @@ set(GUI_SOURCES
 )
 
 # keep in sync with the top-level CMake file, only libraries setup is needed here
-foreach(x11ext Xshape Xinerama Xrandr Xrender Xfixes Xcursor Xext SM ICE)
+foreach(x11ext Xshape Xinerama Xrandr Xrender Xfixes Xcursor Xext)
     if(X11_${x11ext}_FOUND AND X11_${x11ext}_LIB)
         set(EXTRA_GUI_LIBS
             ${EXTRA_GUI_LIBS}

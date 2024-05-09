@@ -102,13 +102,6 @@ public:
     static void setFocusWidget(QWidget *focus, Qt::FocusReason reason);
     static QWidget *focusNextPrevChild_helper(QWidget *toplevel, bool next);
 
-#ifndef QT_NO_SESSIONMANAGER
-    QSessionManager *session_manager;
-    QString session_id;
-    QString session_key;
-    bool is_session_restored;
-#endif
-
 #ifndef QT_NO_CURSOR
     QList<QCursor> cursor_list;
 #endif

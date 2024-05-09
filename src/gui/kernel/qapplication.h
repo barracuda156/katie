@@ -35,7 +35,6 @@ class QFont;
 class QPalette;
 class QFontMetrics;
 class QClipboard;
-class QSessionManager;
 class QDesktopWidget;
 class QStyle;
 class QIcon;
@@ -154,15 +153,6 @@ public:
     int x11ProcessEvent(XEvent*);
 #endif
 
-#ifndef QT_NO_SESSIONMANAGER
-    // session management
-    bool isSessionRestored() const;
-    QString sessionId() const;
-    QString sessionKey() const;
-    virtual void commitData(QSessionManager& sm);
-    virtual void saveState(QSessionManager& sm);
-#endif
-
     static QLocale keyboardInputLocale();
     static Qt::LayoutDirection keyboardInputDirection();
 
@@ -175,10 +165,6 @@ public:
 Q_SIGNALS:
     void lastWindowClosed();
     void focusChanged(QWidget *old, QWidget *now);
-#ifndef QT_NO_SESSIONMANAGER
-    void commitDataRequest(QSessionManager &sessionManager);
-    void saveStateRequest(QSessionManager &sessionManager);
-#endif
 
 public Q_SLOTS:
     void setAutoSipEnabled(const bool enabled);

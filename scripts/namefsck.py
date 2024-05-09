@@ -357,7 +357,6 @@ classlist = [
     "QScrollBar",
     "QSemaphore",
     "QSequentialAnimationGroup",
-    "QSessionManager",
     "QSet",
     "QSetIterator",
     "QSettings",

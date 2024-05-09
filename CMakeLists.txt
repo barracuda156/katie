@@ -413,10 +413,6 @@ if(NOT X11_Xext_FOUND)
     katie_config(QT_NO_XSYNC)
     katie_config(QT_NO_XSHAPE)
 endif()
-if(NOT X11_SM_FOUND OR NOT X11_ICE_FOUND)
-    message(WARNING "The X11 SM/ICE was not found thus disabling session manager support")
-    katie_config(QT_NO_SESSIONMANAGER)
-endif()
 
 configure_file(
     ${CMAKE_SOURCE_DIR}/src/core/global/qconfig.h.cmake
