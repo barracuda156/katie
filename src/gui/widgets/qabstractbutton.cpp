@@ -600,8 +600,7 @@ void QAbstractButton::setText(const QString &text)
         return;
     d->text = text;
 #ifndef QT_NO_SHORTCUT
-    QKeySequence newMnemonic = QKeySequence::mnemonic(text);
-    setShortcut(newMnemonic);
+    setShortcut(QKeySequence::mnemonic(text));
 #endif
     d->sizeHint = QSize();
     updateGeometry();
