@@ -322,8 +322,8 @@ void QPushButton::setAutoDefault(bool enable)
         return;
     d->autoDefault = state;
     d->sizeHint = QSize();
-    update();
     updateGeometry();
+    update();
 }
 
 bool QPushButton::autoDefault() const
@@ -509,8 +509,8 @@ void QPushButton::setMenu(QMenu* menu)
 
     d->resetLayoutItemMargins();
     d->sizeHint = QSize();
-    update();
     updateGeometry();
+    update();
 }
 
 /*!
@@ -615,8 +615,8 @@ void QPushButton::setFlat(bool flat)
     d->flat = flat;
     d->resetLayoutItemMargins();
     d->sizeHint = QSize();
-    update();
     updateGeometry();
+    update();
 }
 
 bool QPushButton::isFlat() const
