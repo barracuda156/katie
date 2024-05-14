@@ -330,7 +330,7 @@ bool QPushButton::autoDefault() const
 {
     Q_D(const QPushButton);
     if(d->autoDefault == QPushButtonPrivate::Auto)
-        return ( d->dialogParent() != 0 );
+        return (d->dialogParent() != 0);
     return bool(d->autoDefault);
 }
 
@@ -359,9 +359,9 @@ bool QPushButton::isDefault() const
 QSize QPushButton::sizeHint() const
 {
     Q_D(const QPushButton);
-    if (d->sizeHint.isValid() && d->lastAutoDefault == autoDefault())
+    if (d->sizeHint.isValid()) {
         return d->sizeHint;
-    d->lastAutoDefault = autoDefault();
+    }
     ensurePolished();
 
     int w = 0, h = 0;

@@ -48,7 +48,9 @@ public:
 
     QPushButtonPrivate()
         : QAbstractButtonPrivate(QSizePolicy::PushButton), autoDefault(Auto),
-          defaultButton(false), flat(false), menuOpen(false), lastAutoDefault(false) {}
+        defaultButton(false), flat(false), menuOpen(false)
+    {
+    }
 
     inline void init() { resetLayoutItemMargins(); }
     static QPushButtonPrivate* get(QPushButton *b) { return b->d_func(); }
@@ -64,7 +66,6 @@ public:
     bool defaultButton;
     bool flat;
     bool menuOpen;
-    mutable bool lastAutoDefault;
 };
 
 QT_END_NAMESPACE
