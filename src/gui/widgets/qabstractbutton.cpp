@@ -604,8 +604,8 @@ void QAbstractButton::setText(const QString &text)
     setShortcut(newMnemonic);
 #endif
     d->sizeHint = QSize();
-    update();
     updateGeometry();
+    update();
 }
 
 QString QAbstractButton::text() const
@@ -627,8 +627,8 @@ void QAbstractButton::setIcon(const QIcon &icon)
     Q_D(QAbstractButton);
     d->icon = icon;
     d->sizeHint = QSize();
-    update();
     updateGeometry();
+    update();
 }
 
 QIcon QAbstractButton::icon() const
