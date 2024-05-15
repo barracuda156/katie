@@ -532,23 +532,6 @@ Q_GUI_EXPORT void qt_x11_apply_settings_in_all_apps()
 */
 bool QApplicationPrivate::x11_apply_settings()
 {
-    /*
-      Qt settings. This is now they are written into the datastream.
-
-      Palette / *                - QPalette
-      font                       - QFont
-      libraryPath                - QStringList
-      style                      - QString
-      doubleClickInterval        - int
-      keyboardInputInterval      - int
-      cursorFlashTime            - int
-      wheelScrollLines           - int
-      defaultCodec               - QString
-      globalStrut/width          - int
-      globalStrut/height         - int
-      GUIEffects                 - QStringList
-    */
-
     QPalette pal = qt_guiPlatformPlugin()->palette();
     if (pal != QPalette()) {
         QApplication::setPalette(pal);
