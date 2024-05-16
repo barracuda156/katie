@@ -43,8 +43,6 @@
 #  include <sys/filio.h> // FIONREAD
 #endif
 
-//#define QPROCESS_DEBUG
-
 extern char **environ;
 
 QT_BEGIN_NAMESPACE

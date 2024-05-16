@@ -32,8 +32,6 @@
 #include "qcore_unix_p.h"
 #include "qcorecommon_p.h"
 
-//#define QPROCESS_DEBUG
-
 #ifndef QT_NO_PROCESS
 extern char **environ;
 

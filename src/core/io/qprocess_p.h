@@ -38,6 +38,8 @@
 #include "qringbuffer_p.h"
 #include "qorderedmutexlocker_p.h"
 
+// #define QPROCESS_DEBUG
+
 typedef int Q_PIPE;
 #define INVALID_Q_PIPE -1
 
