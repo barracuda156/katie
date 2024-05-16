@@ -970,11 +970,11 @@ bool QProcessPrivate::waitForDeadChild()
     Q_Q(QProcess);
 
     // read a byte from the death pipe
-    char c;
+    char c = 0;
     qt_safe_read(deathPipe[0], &c, 1);
 
     // check if our process is dead
-    int status;
+    int status = 0;
     if (qt_safe_waitpid(pid, &status, WNOHANG) > 0) {
         processManager()->remove(q);
         crashed = !WIFEXITED(status);
@@ -1089,7 +1089,7 @@ bool QProcessPrivate::startDetached(const QString &program, const QStringList &a
 
     char reply = '\0';
     qint64 startResult = qt_safe_read(startedPipe[0], &reply, 1);
-    int result;
+    int result = 0;
     qt_safe_close(startedPipe[0]);
     qt_safe_waitpid(childPid, &result, 0);
     bool success = (startResult != -1 && reply == '\0');
