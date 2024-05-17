@@ -428,8 +428,8 @@ QWidget *QStyledItemDelegate::createEditor(QWidget *parent,
     Q_D(const QStyledItemDelegate);
     if (!index.isValid())
         return 0;
-    QVariant::Type t = static_cast<QVariant::Type>(index.data(Qt::EditRole).userType());
-    return d->editorFactory()->createEditor(t, parent);
+    QVariant v = index.data(Qt::EditRole);
+    return d->editorFactory()->createEditor(v, parent);
 }
 
 /*!

@@ -146,8 +146,6 @@ incmap = {
         'QImageIOPlugin': 'qimageiohandler.h',
         'QInputEvent': 'qevent.h',
         'QIntValidator': 'qvalidator.h',
-        'QItemEditorCreator': 'qitemeditorfactory.h',
-        'QItemEditorCreatorBase': 'qitemeditorfactory.h',
         'QItemSelection': 'qitemselectionmodel.h',
         'QItemSelectionRange': 'qitemselectionmodel.h',
         'QKeyEvent': 'qevent.h',

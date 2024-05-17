@@ -245,7 +245,6 @@ static const struct ClassTblData {
     { QLatin1String("QIntValidator"), QLatin1String("QtGui/qvalidator.h") },
     { QLatin1String("QInternal"), QLatin1String("QtCore/qnamespace.h") },
     { QLatin1String("QItemDelegate"), QLatin1String("QtGui/qitemdelegate.h") },
-    { QLatin1String("QItemEditorCreatorBase"), QLatin1String("QtGui/qitemeditorfactory.h") },
     { QLatin1String("QItemEditorFactory"), QLatin1String("QtGui/qitemeditorfactory.h") },
     { QLatin1String("QItemSelection"), QLatin1String("QtGui/qitemselectionmodel.h") },
     { QLatin1String("QItemSelectionModel"), QLatin1String("QtGui/qitemselectionmodel.h") },

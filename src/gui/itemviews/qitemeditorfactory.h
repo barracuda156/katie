@@ -35,48 +35,16 @@ QT_BEGIN_NAMESPACE
 
 class QWidget;
 
-class Q_GUI_EXPORT QItemEditorCreatorBase
-{
-public:
-    virtual ~QItemEditorCreatorBase() {}
-
-    virtual QWidget *createWidget(QWidget *parent) const = 0;
-    virtual QByteArray valuePropertyName() const = 0;
-};
-
-template <class T>
-class QItemEditorCreator : public QItemEditorCreatorBase
-{
-public:
-    inline QItemEditorCreator(const QByteArray &valuePropertyName);
-    inline QWidget *createWidget(QWidget *parent) const { return new T(parent); }
-    inline QByteArray valuePropertyName() const { return propertyName; }
-
-private:
-    QByteArray propertyName;
-};
-
-
-template <class T>
-Q_INLINE_TEMPLATE QItemEditorCreator<T>::QItemEditorCreator(const QByteArray &avaluePropertyName)
-    : propertyName(avaluePropertyName) {}
-
 class Q_GUI_EXPORT QItemEditorFactory
 {
 public:
-    inline QItemEditorFactory() {}
+    QItemEditorFactory();
     virtual ~QItemEditorFactory();
 
-    virtual QWidget *createEditor(QVariant::Type type, QWidget *parent) const;
+    virtual QWidget *createEditor(const QVariant &variant, QWidget *parent) const;
     virtual QByteArray valuePropertyName(QVariant::Type type) const;
 
-    void registerEditor(QVariant::Type type, QItemEditorCreatorBase *creator);
-
-    static const QItemEditorFactory *defaultFactory();
-    static void setDefaultFactory(QItemEditorFactory *factory);
-
-private:
-    QHash<QVariant::Type, QItemEditorCreatorBase *> creatorMap;
+    static const QItemEditorFactory* defaultFactory();
 };
 
 #endif // QT_NO_ITEMVIEWS

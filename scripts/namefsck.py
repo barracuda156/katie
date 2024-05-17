@@ -217,8 +217,6 @@ classlist = [
     "QIntValidator",
     "QInternal",
     "QItemDelegate",
-    "QItemEditorCreator",
-    "QItemEditorCreatorBase",
     "QItemEditorFactory",
     "QItemSelection",
     "QItemSelectionModel",

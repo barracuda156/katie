@@ -411,8 +411,6 @@ include/katie/QtGui/QInputDialog
 include/katie/QtGui/QInputEvent
 include/katie/QtGui/QIntValidator
 include/katie/QtGui/QItemDelegate
-include/katie/QtGui/QItemEditorCreator
-include/katie/QtGui/QItemEditorCreatorBase
 include/katie/QtGui/QItemEditorFactory
 include/katie/QtGui/QItemSelection
 include/katie/QtGui/QItemSelectionModel

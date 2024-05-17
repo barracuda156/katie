@@ -33,17 +33,28 @@
 // We mean it.
 //
 
-
-
 #include "qlineedit.h"
-
-#ifndef QT_NO_ITEMVIEWS
-
-#ifndef QT_NO_LINEEDIT
+#include "qcombobox.h"
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_ITEMVIEWS
 
+#ifndef QT_NO_COMBOBOX
+class QBooleanComboBox : public QComboBox
+{
+    Q_OBJECT
+    Q_PROPERTY(bool value READ value WRITE setValue)
+
+public:
+    QBooleanComboBox(QWidget *parent);
+    void setValue(bool);
+    bool value() const;
+};
+#endif // QT_NO_COMBOBOX
+
+
+#ifndef QT_NO_LINEEDIT
 class QExpandingLineEdit : public QLineEdit
 {
     Q_OBJECT
@@ -68,12 +79,10 @@ private:
     int originalWidth;
     bool widgetOwnsGeometry;
 };
-
-
-QT_END_NAMESPACE
-
 #endif // QT_NO_LINEEDIT
 
 #endif //QT_NO_ITEMVIEWS
+
+QT_END_NAMESPACE
 
 #endif //QITEMEDITORFACTORY_P_H

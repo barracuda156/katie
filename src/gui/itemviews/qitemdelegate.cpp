@@ -476,11 +476,11 @@ QWidget *QItemDelegate::createEditor(QWidget *parent,
     Q_D(const QItemDelegate);
     if (!index.isValid())
         return 0;
-    QVariant::Type t = index.data(Qt::EditRole).type();
+    QVariant v = index.data(Qt::EditRole);
     const QItemEditorFactory *factory = d->f;
     if (factory == 0)
         factory = QItemEditorFactory::defaultFactory();
-    return factory->createEditor(t, parent);
+    return factory->createEditor(v, parent);
 }
 
 /*!
