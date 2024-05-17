@@ -187,7 +187,7 @@ QByteArray QItemEditorFactory::valuePropertyName(QVariant::Type type) const
     switch (type) {
 #ifndef QT_NO_COMBOBOX
     case QVariant::Bool:
-        return "currentIndex";
+        return "value";
 #endif
 #ifndef QT_NO_SPINBOX
     case QVariant::UInt:
