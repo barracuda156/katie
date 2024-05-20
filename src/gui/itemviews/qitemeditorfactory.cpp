@@ -48,13 +48,11 @@ static std::unique_ptr<QItemEditorFactory> q_default_factory(nullptr);
     \since 4.2
     \ingroup model-view
 
-    When editing data in an item view, editors are created and
-    displayed by a delegate. QItemDelegate, which is the delegate by
-    default installed on Katie's item views, uses a QItemEditorFactory to
-    create editors for it. A default unique instance provided by
-    QItemEditorFactory is used by all item delegates.  If you set a
-    new default factory with setDefaultFactory(), the new factory will
-    be used by existing and new delegates.
+    When editing data in an item view, editors are created and displayed by a
+    delegate. QItemDelegate, which is the delegate by default installed on
+    Katie's item views, uses a QItemEditorFactory to create editors for it.
+    A default unique instance provided by QItemEditorFactory is used by all
+    item delegates.
 
     A factory has specialized editors for particular QVariant data type
     (All Katie models store their data in \l{QVariant}s).
@@ -79,8 +77,6 @@ static std::unique_ptr<QItemEditorFactory> q_default_factory(nullptr);
     \row    \o QFont \o QFontComboBox
     \endtable
 
-    Additional editors can be registered with the registerEditor() function.
-
     \sa QItemDelegate, {Model/View Programming}, {Color Editor Factory Example}
 */
 
@@ -92,10 +88,8 @@ QItemEditorFactory::QItemEditorFactory()
 }
 
 /*!
-    Creates an editor widget with the given \a parent for the specified \a type of data,
-    and returns it as a QWidget.
-
-    \sa registerEditor()
+    Creates an editor widget with the given \a parent for the specified
+    \a variant and returns it as a QWidget.
 */
 QWidget *QItemEditorFactory::createEditor(const QVariant &variant, QWidget *parent) const
 {
@@ -235,7 +229,6 @@ const QItemEditorFactory *QItemEditorFactory::defaultFactory()
 }
 
 #ifndef QT_NO_LINEEDIT
-
 QExpandingLineEdit::QExpandingLineEdit(QWidget *parent)
     : QLineEdit(parent), originalWidth(-1), widgetOwnsGeometry(false)
 {
@@ -293,7 +286,6 @@ void QExpandingLineEdit::resizeToContents()
         resize(newWidth, height());
     }
 }
-
 #endif // QT_NO_LINEEDIT
 
 #ifndef QT_NO_COMBOBOX
@@ -313,7 +305,6 @@ bool QBooleanComboBox::value() const
 {
     return (currentIndex() == 1);
 }
-
 #endif // QT_NO_COMBOBOX
 
 QT_END_NAMESPACE
