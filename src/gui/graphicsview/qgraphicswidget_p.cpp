@@ -132,9 +132,7 @@ void QGraphicsWidgetPrivate::setPalette_helper(const QPalette &palette)
 void QGraphicsWidgetPrivate::resolvePalette(uint inheritedMask)
 {
     inheritedPaletteResolveMask = inheritedMask;
-    QPalette naturalPalette = naturalWidgetPalette();
-    QPalette resolvedPalette = palette.resolve(naturalPalette);
-    updatePalette(resolvedPalette);
+    updatePalette(palette.resolve(naturalWidgetPalette()));
 }
 
 void QGraphicsWidgetPrivate::updatePalette(const QPalette &palette)
