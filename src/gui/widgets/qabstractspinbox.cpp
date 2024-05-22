@@ -408,7 +408,6 @@ QAbstractSpinBox::CorrectionMode QAbstractSpinBox::correctionMode() const
     return d->correctionMode;
 }
 
-
 /*!
   \property QAbstractSpinBox::acceptableInput
   \brief whether the input satisfies the current validation
@@ -440,14 +439,12 @@ bool QAbstractSpinBox::hasAcceptableInput() const
 Qt::Alignment QAbstractSpinBox::alignment() const
 {
     Q_D(const QAbstractSpinBox);
-
-    return (Qt::Alignment)d->edit->alignment();
+    return d->edit->alignment();
 }
 
 void QAbstractSpinBox::setAlignment(Qt::Alignment flag)
 {
     Q_D(QAbstractSpinBox);
-
     d->edit->setAlignment(flag);
 }
 
@@ -601,7 +598,7 @@ void QAbstractSpinBox::stepBy(int steps)
     This function returns a pointer to the line edit of the spin box.
 */
 
-QLineEdit *QAbstractSpinBox::lineEdit() const
+QLineEdit* QAbstractSpinBox::lineEdit() const
 {
     Q_D(const QAbstractSpinBox);
 
@@ -1442,7 +1439,15 @@ void QAbstractSpinBoxPrivate::init()
 {
     Q_Q(QAbstractSpinBox);
 
-    q->setLineEdit(new QLineEdit(q));
+    QLineEdit* lineedit = new QLineEdit(q);
+    // inverse alignment of QLineEdit to put the text next to the arrows and expand text in the
+    // other direction
+    if (q->layoutDirection() == Qt::RightToLeft) {
+        lineedit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    } else {
+        lineedit->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    }
+    q->setLineEdit(lineedit);
     edit->setObjectName(QLatin1String("qt_spinbox_lineedit"));
     validator = new QSpinBoxValidator(q, this);
     edit->setValidator(validator);
