@@ -182,7 +182,6 @@ public:
     QString anchorOnMousePress;
     bool hadSelectionOnMousePress;
 
-    bool ignoreUnusedNavigationEvents;
     bool openExternalLinks;
 
     bool wordSelectionEnabled;

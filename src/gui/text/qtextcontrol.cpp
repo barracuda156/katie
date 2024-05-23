@@ -103,10 +103,10 @@ QTextControlPrivate::QTextControlPrivate()
       hasFocus(false),
       isEnabled(true),
       hadSelectionOnMousePress(false),
-      ignoreUnusedNavigationEvents(false),
       openExternalLinks(false),
       wordSelectionEnabled(false)
-{}
+{
+}
 
 bool QTextControlPrivate::cursorMoveKeyEvent(QKeyEvent *e)
 {
@@ -227,32 +227,15 @@ bool QTextControlPrivate::cursorMoveKeyEvent(QKeyEvent *e)
         return false;
     }
 
-// Except for pageup and pagedown, Mac OS X has very different behavior, we don't do it all, but
-// here's the breakdown:
-// Shift still works as an anchor, but only one of the other keys can be down Ctrl (Command),
-// Alt (Option), or Meta (Control).
-// Command/Control + Left/Right -- Move to left or right of the line
-//                 + Up/Down -- Move to top bottom of the file. (Control doesn't move the cursor)
-// Option + Left/Right -- Move one word Left/right.
-//        + Up/Down  -- Begin/End of Paragraph.
-// Home/End Top/Bottom of file. (usually don't move the cursor, but will select)
-
     bool visualNavigation = cursor.visualNavigation();
     cursor.setVisualNavigation(true);
     const bool moved = cursor.movePosition(op, mode);
     cursor.setVisualNavigation(visualNavigation);
     q->ensureCursorVisible();
 
-    bool ignoreNavigationEvents = ignoreUnusedNavigationEvents;
-    bool isNavigationEvent = e->key() == Qt::Key_Up || e->key() == Qt::Key_Down;
-
-    isNavigationEvent = isNavigationEvent || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right;
-
     if (moved) {
         if (cursor.position() != oldCursorPos)
             emit q->cursorPositionChanged();
-    } else if (ignoreNavigationEvents && isNavigationEvent && oldSelection.anchor() == cursor.anchor()) {
-        return false;
     }
 
     selectionChanged(/*forceEmitSelectionChanged =*/(mode == QTextCursor::KeepAnchor));
@@ -2078,18 +2061,6 @@ bool QTextControl::openExternalLinks() const
 {
     Q_D(const QTextControl);
     return d->openExternalLinks;
-}
-
-bool QTextControl::ignoreUnusedNavigationEvents() const
-{
-    Q_D(const QTextControl);
-    return d->ignoreUnusedNavigationEvents;
-}
-
-void QTextControl::setIgnoreUnusedNavigationEvents(bool ignore)
-{
-    Q_D(QTextControl);
-    d->ignoreUnusedNavigationEvents = ignore;
 }
 
 void QTextControl::moveCursor(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode)

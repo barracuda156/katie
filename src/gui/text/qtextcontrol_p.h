@@ -66,7 +66,6 @@ class Q_GUI_EXPORT QTextControl : public QObject
     Q_PROPERTY(int cursorWidth READ cursorWidth WRITE setCursorWidth)
     Q_PROPERTY(Qt::TextInteractionFlags textInteractionFlags READ textInteractionFlags WRITE setTextInteractionFlags)
     Q_PROPERTY(bool openExternalLinks READ openExternalLinks WRITE setOpenExternalLinks)
-    Q_PROPERTY(bool ignoreUnusedNavigationEvents READ ignoreUnusedNavigationEvents WRITE setIgnoreUnusedNavigationEvents)
 public:
     explicit QTextControl(QObject *parent = nullptr);
     explicit QTextControl(const QString &text, QObject *parent = nullptr);
@@ -134,9 +133,6 @@ public:
 
     void setOpenExternalLinks(bool open);
     bool openExternalLinks() const;
-
-    void setIgnoreUnusedNavigationEvents(bool ignore);
-    bool ignoreUnusedNavigationEvents() const;
 
     void moveCursor(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
 
