@@ -1854,7 +1854,8 @@ QString QLocalePrivate::doubleToString(const QChar _zero, const QChar plus, cons
 
     // Handle normal numbers
     if (!special_number) {
-        int decpt, sign;
+        int decpt = 0;
+        int sign = 0;
         QString digits;
 
         // NOT thread safe!
