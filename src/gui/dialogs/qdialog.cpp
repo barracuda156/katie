@@ -457,12 +457,6 @@ void QDialog::reject()
     done(Rejected);
 }
 
-/*! \reimp */
-bool QDialog::eventFilter(QObject *o, QEvent *e)
-{
-    return QWidget::eventFilter(o, e);
-}
-
 /*****************************************************************************
   Event handlers
  *****************************************************************************/

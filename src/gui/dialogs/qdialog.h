@@ -77,7 +77,6 @@ protected:
 #ifndef QT_NO_CONTEXTMENU
     void contextMenuEvent(QContextMenuEvent *);
 #endif
-    bool eventFilter(QObject *, QEvent *);
     void adjustPosition(QWidget*);
 private:
     Q_DECLARE_PRIVATE(QDialog)
