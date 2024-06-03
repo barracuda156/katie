@@ -824,7 +824,7 @@ set(GUI_SOURCES
 )
 
 # keep in sync with the top-level CMake file, only libraries setup is needed here
-foreach(x11ext Xshape Xinerama Xrandr Xrender Xfixes Xcursor Xext)
+foreach(x11ext Xshape Xinerama Xrandr Xrender Xfixes Xcursor Xext Xpm)
     if(X11_${x11ext}_FOUND AND X11_${x11ext}_LIB)
         set(EXTRA_GUI_LIBS
             ${EXTRA_GUI_LIBS}

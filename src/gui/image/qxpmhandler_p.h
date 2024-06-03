@@ -46,26 +46,9 @@ public:
     bool canRead() const final;
     bool read(QImage *image) final;
 
-    bool supportsOption(QImageIOHandler::ImageOption option) const final;
-    QVariant option(QImageIOHandler::ImageOption option) const final;
-
     QByteArray name() const final;
 
     static bool canRead(QIODevice *device);
-
-private:
-    bool readHeader();
-    enum State {
-        Ready,
-        ReadHeader,
-        Error
-    };
-    State state;
-    int width;
-    int height;
-    int ncols;
-    int cpp;
-    QByteArray buffer;
 };
 
 QT_END_NAMESPACE

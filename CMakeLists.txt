@@ -413,6 +413,10 @@ if(NOT X11_Xext_FOUND)
     katie_config(QT_NO_XSYNC)
     katie_config(QT_NO_XSHAPE)
 endif()
+if(NOT X11_Xpm_FOUND)
+    message(WARNING "The X11 Xpm extension was not found")
+    katie_config(QT_NO_IMAGEFORMAT_XPM)
+endif()
 
 configure_file(
     ${CMAKE_SOURCE_DIR}/src/core/global/qconfig.h.cmake
