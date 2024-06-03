@@ -35,7 +35,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <libdeflate.h>
+#ifndef QT_BOOTSTRAPPED
+#  include <libdeflate.h>
+#endif
 
 #define IS_RAW_DATA(d) ((d)->data != (d)->array)
 
@@ -296,6 +298,7 @@ QByteArray qRandomUuid()
 */
 QByteArray qCompress(const char* data, int nbytes, int compressionLevel)
 {
+#ifndef QT_BOOTSTRAPPED
     if (Q_UNLIKELY(!data)) {
         qWarning("qCompress: Data is null");
         return QByteArray();
@@ -328,6 +331,13 @@ QByteArray qCompress(const char* data, int nbytes, int compressionLevel)
 
     result.resize(compresult);
     return result;
+#else
+    Q_UNUSED(data);
+    Q_UNUSED(nbytes);
+    Q_UNUSED(compressionLevel);
+    Q_ASSERT_X(false, "qCompress", "internal error");
+    return QByteArray();
+#endif
 }
 
 /*!
@@ -354,6 +364,7 @@ QByteArray qCompress(const char* data, int nbytes, int compressionLevel)
 */
 QByteArray qUncompress(const char* data, int nbytes)
 {
+#ifndef QT_BOOTSTRAPPED
     if (Q_UNLIKELY(!data)) {
         qWarning("qUncompress: Data is null");
         return QByteArray();
@@ -402,12 +413,20 @@ QByteArray qUncompress(const char* data, int nbytes)
         }
     }
     return result;
+#else
+    Q_UNUSED(data);
+    Q_UNUSED(nbytes);
+    Q_ASSERT_X(false, "qUncompress", "internal error");
+    return QByteArray();
+#endif
 }
 
-QByteArray::Data QByteArray::shared_null = { QAtomicInt(1),
-                                             0, 0, shared_null.array, {0} };
-QByteArray::Data QByteArray::shared_empty = { QAtomicInt(1),
-                                              0, 0, shared_empty.array, {0} };
+QByteArray::Data QByteArray::shared_null = {
+    QAtomicInt(1), 0, 0, shared_null.array, {0}
+};
+QByteArray::Data QByteArray::shared_empty = {
+    QAtomicInt(1), 0, 0, shared_empty.array, {0}
+};
 
 /*!
     \class QByteArray

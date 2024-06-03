@@ -23,19 +23,52 @@
 #include "qbitarray.h"
 #include "qstring.h"
 
-#include <libdeflate.h>
 #include <stdlib.h>
 
 QT_BEGIN_NAMESPACE
 
+/*
+    These functions are based on Peter J. Weinberger's hash function
+    (from the Dragon Book). The constant 24 in the original function
+    was replaced with 23 to produce fewer collisions on input such as
+    "a", "aa", "aaa", "aaaa", ...
+*/
+static inline uint hash(const QChar *p, int n)
+{
+    uint h = 0;
+    while (n--) {
+        h = (h << 4) + (*p++).unicode();
+        h ^= (h & 0xf0000000) >> 23;
+        h &= 0x0fffffff;
+    }
+    return h;
+}
+
 uint qHash(const char *key, const uint len)
 {
-    return libdeflate_crc32(0, key, len);
+    uint h = 0;
+    uint n = len;
+    while (n--) {
+        h = (h << 4) + *key++;
+        h ^= (h & 0xf0000000) >> 23;
+        h &= 0x0fffffff;
+    }
+    return h;
 }
 
 uint qHash(const QBitArray &bitArray)
 {
     return qHash(bitArray.d.constData(), bitArray.d.size());
+}
+
+uint qHash(const QString &key)
+{
+    return hash(key.unicode(), key.size());
+}
+
+uint qHash(const QStringRef &key)
+{
+    return hash(key.unicode(), key.size());
 }
 
 /*
