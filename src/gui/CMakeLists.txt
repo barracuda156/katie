@@ -867,6 +867,7 @@ katie_unity_exclude(
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicsscene.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview/qgraphicsview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/qpixmap.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/image/qxpmhandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/itemviews/qitemeditorfactory.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication_x11.cpp
