@@ -54,15 +54,9 @@
         var = cmd;                                            \
     } while (var == -1 && errno == EINTR)
 
-// BSD and musl libc implementations do not reset errno and there is no
-// reliable way to check if some functions (e.g. strtoll()) errored or returned
-// a valid value if they do not reset errno
-#ifdef __GLIBC__
-#  define Q_RESET_ERRNO
-#else
-#  define Q_RESET_ERRNO errno = 0;
-#endif
-
+// there is no reliable way to check if some functions (e.g. strtoll()) errored
+// or returned a valid value if errno is not reset
+#define Q_RESET_ERRNO errno = 0;
 
 QT_BEGIN_NAMESPACE
 
