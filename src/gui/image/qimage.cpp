@@ -296,8 +296,6 @@ bool QImageData::checkForAlphaPixels() const
     \header \o Format \o Description                      \o Katie's support
     \row    \o PNG    \o Portable Network Graphics        \o Read/write
     \row    \o KAT    \o Katie Image                      \o Read/write
-    \row    \o PBM    \o Portable Bitmap                  \o Read
-    \row    \o PPM    \o Portable Pixmap                  \o Read/write
     \row    \o XPM    \o X11 Pixmap                       \o Read
     \endtable
 
@@ -3242,9 +3240,8 @@ qint64 QImage::cacheKey() const
     \obsolete
     Sets the alpha channel of this image to the given \a alphaChannel.
 
-    If \a alphaChannel is an 8 bit grayscale image, the intensity values are
-    written into this buffer directly. Otherwise, \a alphaChannel is converted
-    to 32 bit and the intensity of the RGB pixel values is used.
+    \a alphaChannel is converted to 32 bit and the intensity of the RGB pixel
+    values is used.
 
     Note that the image will be converted to the Format_ARGB32_Premultiplied
     format if the function succeeds.

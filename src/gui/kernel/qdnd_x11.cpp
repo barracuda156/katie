@@ -369,10 +369,6 @@ QStringList QX11Data::xdndMimeFormatsForAtom(Atom a)
         // special cases for uris
         if (atomName == QLatin1String("text/x-moz-url"))
             formats.append(QLatin1String("text/uri-list"));
-
-        // special case for images
-        if (a == XA_PIXMAP)
-            formats.append(QLatin1String("image/ppm"));
     }
     return formats;
 }
@@ -389,68 +385,56 @@ bool QX11Data::xdndMimeDataForAtom(Atom a, QMimeData *mimeData, QByteArray *data
         if (atomName == QLatin1String("application/x-color"))
             *dataFormat = 16;
         ret = true;
-    } else {
-        if ((a == ATOM(UTF8_STRING) || a == XA_STRING
-             || a == ATOM(TEXT) || a == ATOM(COMPOUND_TEXT))
-            && QInternalMimeData::hasFormatHelper(QLatin1String("text/plain"), mimeData)) {
-            if (a == ATOM(UTF8_STRING)){
-                *data = QInternalMimeData::renderDataHelper(QLatin1String("text/plain"), mimeData);
-                ret = true;
-            } else if (a == XA_STRING) {
-                *data = QString::fromUtf8(QInternalMimeData::renderDataHelper(
-                        QLatin1String("text/plain"), mimeData)).toLocal8Bit();
-                ret = true;
-            } else if (a == ATOM(TEXT) || a == ATOM(COMPOUND_TEXT)) {
-                // the ICCCM states that TEXT and COMPOUND_TEXT are in the
-                // encoding of choice, so we choose the encoding of the locale
-                QByteArray strData = QString::fromUtf8(QInternalMimeData::renderDataHelper(
-                                     QLatin1String("text/plain"), mimeData)).toLocal8Bit();
-                char *list[] = { strData.data(), NULL };
-
-                XICCEncodingStyle style = (a == ATOM(COMPOUND_TEXT))
-                                        ? XCompoundTextStyle : XStdICCTextStyle;
-                XTextProperty textprop;
-                if (list[0] != NULL
-                    && XmbTextListToTextProperty(qt_x11Data->display, list, 1, style,
-                                                 &textprop) == Success) {
-                    *atomFormat = textprop.encoding;
-                    *dataFormat = textprop.format;
-                    *data = QByteArray((const char *) textprop.value, textprop.nitems * textprop.format / 8);
-                    ret = true;
-
-                    DEBUG("    textprop type %lx\n"
-                    "    textprop name '%s'\n"
-                    "    format %d\n"
-                    "    %ld items\n"
-                    "    %d bytes\n",
-                    textprop.encoding,
-                    qt_x11Data->xdndMimeAtomToString(textprop.encoding).toLatin1().data(),
-                    textprop.format, textprop.nitems, data->size());
-
-                    XFree(textprop.value);
-                }
-            }
-        } else if (atomName == QLatin1String("text/x-moz-url") &&
-                   QInternalMimeData::hasFormatHelper(QLatin1String("text/uri-list"), mimeData)) {
-            QByteArray uri = QInternalMimeData::renderDataHelper(
-                             QLatin1String("text/uri-list"), mimeData).split('\n').first();
-            QString mozUri = QString::fromLatin1(uri, uri.size());
-            mozUri += QLatin1Char('\n');
-            *data = QByteArray(reinterpret_cast<const char *>(mozUri.utf16()), mozUri.length() * 2);
+    } else if ((a == ATOM(UTF8_STRING) || a == XA_STRING
+        || a == ATOM(TEXT) || a == ATOM(COMPOUND_TEXT))
+        && QInternalMimeData::hasFormatHelper(QLatin1String("text/plain"), mimeData)) {
+        if (a == ATOM(UTF8_STRING)){
+            *data = QInternalMimeData::renderDataHelper(QLatin1String("text/plain"), mimeData);
             ret = true;
-        } else if ((a == XA_PIXMAP || a == XA_BITMAP) && mimeData->hasImage()) {
-            QPixmap pm = qvariant_cast<QPixmap>(mimeData->imageData());
-            if (a == XA_BITMAP && pm.depth() != 1) {
-                QImage img = pm.toImage();
-                img = img.convertToFormat(QImage::Format_MonoLSB);
-                pm = QPixmap::fromImage(img);
-            }
-            Pixmap handle = pm.toX11Pixmap();
-            *data = QByteArray(reinterpret_cast<const char *>(&handle), sizeof(Pixmap));
+        } else if (a == XA_STRING) {
+            *data = QString::fromUtf8(QInternalMimeData::renderDataHelper(
+                    QLatin1String("text/plain"), mimeData)).toLocal8Bit();
             ret = true;
-        } else {
-            DEBUG("QClipboard: xdndMimeDataForAtom(): converting to type '%s' is not supported", qPrintable(atomName));
+        } else if (a == ATOM(TEXT) || a == ATOM(COMPOUND_TEXT)) {
+            // the ICCCM states that TEXT and COMPOUND_TEXT are in the
+            // encoding of choice, so we choose the encoding of the locale
+            QByteArray strData = QString::fromUtf8(QInternalMimeData::renderDataHelper(
+                                    QLatin1String("text/plain"), mimeData)).toLocal8Bit();
+            char *list[] = { strData.data(), NULL };
+
+            XICCEncodingStyle style = (a == ATOM(COMPOUND_TEXT))
+                                    ? XCompoundTextStyle : XStdICCTextStyle;
+            XTextProperty textprop;
+            if (list[0] != NULL
+                && XmbTextListToTextProperty(qt_x11Data->display, list, 1, style,
+                                                &textprop) == Success) {
+                *atomFormat = textprop.encoding;
+                *dataFormat = textprop.format;
+                *data = QByteArray((const char *) textprop.value, textprop.nitems * textprop.format / 8);
+                ret = true;
+
+                DEBUG("    textprop type %lx\n"
+                "    textprop name '%s'\n"
+                "    format %d\n"
+                "    %ld items\n"
+                "    %d bytes\n",
+                textprop.encoding,
+                qt_x11Data->xdndMimeAtomToString(textprop.encoding).toLatin1().data(),
+                textprop.format, textprop.nitems, data->size());
+
+                XFree(textprop.value);
+            }
         }
+    } else if (atomName == QLatin1String("text/x-moz-url") &&
+                QInternalMimeData::hasFormatHelper(QLatin1String("text/uri-list"), mimeData)) {
+        QByteArray uri = QInternalMimeData::renderDataHelper(
+                            QLatin1String("text/uri-list"), mimeData).split('\n').first();
+        QString mozUri = QString::fromLatin1(uri, uri.size());
+        mozUri += QLatin1Char('\n');
+        *data = QByteArray(reinterpret_cast<const char *>(mozUri.utf16()), mozUri.length() * 2);
+        ret = true;
+    } else {
+        DEBUG("QClipboard: xdndMimeDataForAtom(): converting to type '%s' is not supported", qPrintable(atomName));
     }
     return ret && data != 0;
 }
@@ -470,11 +454,6 @@ QList<Atom> QX11Data::xdndMimeAtomsForFormat(const QString &format)
     // special cases for uris
     } else if (format == QLatin1String("text/uri-list")) {
         atoms.append(xdndMimeStringToAtom(QLatin1String("text/x-moz-url")));
-    //special cases for images
-    } else if (format == QLatin1String("image/ppm")) {
-        atoms.append(XA_PIXMAP);
-    } else if (format == QLatin1String("image/pbm")) {
-        atoms.append(XA_BITMAP);
     }
 
     return atoms;
@@ -523,24 +502,6 @@ QVariant QX11Data::xdndMimeConvertToFormat(Atom a, const QByteArray &data, const
         }
     }
 
-    // special case for images
-    if (format == QLatin1String("image/ppm")) {
-        if (a == XA_PIXMAP && data.size() == sizeof(Pixmap)) {
-            Pixmap xpm = *((Pixmap*)data.data());
-            if (!xpm)
-                return QByteArray();
-            QPixmap qpm = QPixmap::fromX11Pixmap(xpm);
-            XFreePixmap(qt_x11Data->display, xpm);
-            QImageWriter imageWriter;
-            imageWriter.setFormat("PPMRAW");
-            QImage imageToWrite = qpm.toImage();
-            QBuffer buf;
-            buf.open(QIODevice::WriteOnly);
-            imageWriter.setDevice(&buf);
-            imageWriter.write(imageToWrite);
-            return buf.buffer();
-        }
-    }
     return QVariant();
 }
 
@@ -569,12 +530,6 @@ Atom QX11Data::xdndMimeAtomForFormat(const QString &format, QVariant::Type reque
         a = xdndMimeStringToAtom(QLatin1String("text/x-moz-url"));
         if (a && atoms.contains(a))
             return a;
-    }
-
-    // find match for image
-    if (format == QLatin1String("image/ppm")) {
-        if (atoms.contains(XA_PIXMAP))
-            return XA_PIXMAP;
     }
 
     // for string/text requests try to use a format with a well-defined charset

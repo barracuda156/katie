@@ -109,7 +109,6 @@
 #include "qguicommon_p.h"
 
 // image handlers
-#include "qppmhandler_p.h"
 #include "qxpmhandler_p.h"
 #include "qkathandler_p.h"
 #include "qpnghandler_p.h"
@@ -141,10 +140,6 @@ static QImageIOHandler *createReadHandlerHelper(QIODevice *device,
     } else if (form == "xpm") {
         handler = new QXpmHandler();
 #endif
-#ifndef QT_NO_IMAGEFORMAT_PPM
-    } else if (form == "pbm" || form == "pbmraw" || form == "ppm" || form == "ppmraw") {
-        handler = new QPpmHandler(form);
-#endif
     }
 
     if (handler) {
@@ -172,12 +167,6 @@ static QImageIOHandler *createReadHandlerHelper(QIODevice *device,
 #ifndef QT_NO_IMAGEFORMAT_XPM
         if (!handler && QXpmHandler::canRead(device)) {
             handler = new QXpmHandler();
-        }
-#endif
-#ifndef QT_NO_IMAGEFORMAT_PPM
-        QByteArray subType;
-        if (!handler && QPpmHandler::canRead(device, &subType)) {
-            handler = new QPpmHandler(subType);
         }
 #endif
     }
@@ -853,8 +842,6 @@ QByteArray QImageReader::imageFormat(QIODevice *device)
     \header \o Format \o Description
     \row    \o PNG    \o Portable Network Graphics
     \row    \o KAT    \o Katie Image
-    \row    \o PBM    \o Portable Bitmap
-    \row    \o PPM    \o Portable Pixmap
     \row    \o XPM    \o X11 Pixmap
     \row    \o SVG    \o Scalable Vector Graphics
     \endtable
@@ -876,9 +863,6 @@ QList<QByteArray> QImageReader::supportedImageFormats()
 #endif
 #ifndef QT_NO_IMAGEFORMAT_XPM
         << "xpm"
-#endif
-#ifndef QT_NO_IMAGEFORMAT_PPM
-        << "ppm" << "pbm"
 #endif
         ;
 
@@ -917,13 +901,6 @@ QByteArray QImageReader::formatForMimeType(const QByteArray &mime)
         return QByteArray("xpm");
     }
 #endif
-#ifndef QT_NO_IMAGEFORMAT_PPM
-    if (mime == "image/x-portable-pixmap") {
-        return QByteArray("ppm");
-    } else if (mime == "image/x-portable-bitmap") {
-        return QByteArray("pbm");
-    }
-#endif
 
 #ifndef QT_NO_LIBRARY
     QFactoryLoader *l = imageloader();
@@ -956,9 +933,6 @@ QList<QByteArray> QImageReader::supportedMimeTypes()
 #endif
 #ifndef QT_NO_IMAGEFORMAT_XPM
         << "image/x-xpixmap"
-#endif
-#ifndef QT_NO_IMAGEFORMAT_PPM
-        << "image/x-portable-pixmap" << "image/x-portable-bitmap"
 #endif
         ;
 

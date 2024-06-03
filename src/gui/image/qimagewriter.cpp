@@ -84,7 +84,6 @@
 #include "qguicommon_p.h"
 
 // image handlers
-#include "qppmhandler_p.h"
 #include "qkathandler_p.h"
 #include "qpnghandler_p.h"
 
@@ -101,10 +100,6 @@ static QImageIOHandler *createWriteHandlerHelper(QIODevice *device, const QByteA
 #ifndef QT_NO_IMAGEFORMAT_KAT
     } else if (form == "kat") {
         handler = new QKatHandler();
-#endif
-#ifndef QT_NO_IMAGEFORMAT_PPM
-    } else if (form == "pbm" || form == "pbmraw" || form == "ppm" || form == "ppmraw") {
-        handler = new QPpmHandler(form);
 #endif
     }
 
@@ -486,7 +481,6 @@ QByteArray QImageWriter::defaultImageFormat()
     \header \o Format \o Description
     \row    \o PNG    \o Portable Network Graphics
     \row    \o KAT    \o Katie Image
-    \row    \o PPM    \o Portable Pixmap
     \endtable
 
     Reading and writing SVG files is supported through Katie's
@@ -504,9 +498,6 @@ QList<QByteArray> QImageWriter::supportedImageFormats()
     formats << "png";
 #ifndef QT_NO_IMAGEFORMAT_KAT
     formats << "kat";
-#endif
-#ifndef QT_NO_IMAGEFORMAT_PPM
-    formats << "ppm";
 #endif
 
 #ifndef QT_NO_LIBRARY
@@ -539,11 +530,6 @@ QByteArray QImageWriter::formatForMimeType(const QByteArray &mime)
         return QByteArray("kat");
     }
 #endif
-#ifndef QT_NO_IMAGEFORMAT_PPM
-    if (mime == "image/x-portable-pixmap") {
-        return QByteArray("ppm");
-    }
-#endif
 
 #ifndef QT_NO_LIBRARY
     QFactoryLoader *l = imageloader();
@@ -573,9 +559,6 @@ QList<QByteArray> QImageWriter::supportedMimeTypes()
         << "image/png"
 #ifndef QT_NO_IMAGEFORMAT_KAT
         << "image/katie"
-#endif
-#ifndef QT_NO_IMAGEFORMAT_PPM
-        << "image/x-portable-pixmap"
 #endif
         ;
 
