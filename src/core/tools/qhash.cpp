@@ -30,7 +30,7 @@ QT_BEGIN_NAMESPACE
 
 uint qHash(const char *key, const uint len)
 {
-    return libdeflate_crc32(23, key, len);
+    return libdeflate_crc32(0, key, len);
 }
 
 uint qHash(const QBitArray &bitArray)
