@@ -172,7 +172,6 @@
 #cmakedefine QT_NO_FSCOMPLETER
 #cmakedefine QT_NO_IDENTITYPROXYMODEL
 #cmakedefine QT_NO_IMAGEFORMAT_KAT
-#cmakedefine QT_NO_IMAGEFORMAT_PPM
 #cmakedefine QT_NO_IMAGEFORMAT_XPM
 #cmakedefine QT_NO_IMAGE_HEURISTIC_MASK
 #cmakedefine QT_NO_IPV6
@@ -303,7 +302,7 @@
 #endif
 
 // Drag and drop
-#if !defined(QT_NO_DRAGANDDROP) && (defined(QT_NO_CLIPBOARD) || defined(QT_NO_IMAGEFORMAT_PPM))
+#if !defined(QT_NO_DRAGANDDROP) && defined(QT_NO_CLIPBOARD)
 #  define QT_NO_DRAGANDDROP
 #endif
 
