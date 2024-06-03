@@ -32,7 +32,57 @@
 #include "qdebug.h"
 #include "qcorecommon_p.h"
 
+#include <libdeflate.h>
+
 QT_BEGIN_NAMESPACE
+
+static QByteArray qt_uncompress(const char* data, const int nbytes)
+{
+    if (Q_UNLIKELY(nbytes <= 0)) {
+        return QByteArray();
+    }
+
+    struct libdeflate_decompressor* decomp = libdeflate_alloc_decompressor();
+    if (Q_UNLIKELY(!decomp)) {
+        qWarning("Could not allocate SVG decompressor");
+        return QByteArray();
+    }
+
+    size_t speculativesize = (nbytes * 2);
+    QByteArray result(speculativesize, Qt::Uninitialized);
+    libdeflate_result decompresult = LIBDEFLATE_INSUFFICIENT_SPACE;
+    while (decompresult == LIBDEFLATE_INSUFFICIENT_SPACE) {
+        decompresult = libdeflate_gzip_decompress(
+            decomp,
+            data, nbytes,
+            result.data(), result.size(),
+            &speculativesize
+        );
+
+        if (decompresult == LIBDEFLATE_INSUFFICIENT_SPACE) {
+            speculativesize = (speculativesize + QT_BUFFSIZE);
+            result.resize(speculativesize);
+        }
+
+        if (speculativesize >= QBYTEARRAY_MAX) {
+            break;
+        }
+    }
+    libdeflate_free_decompressor(decomp);
+
+    switch (decompresult) {
+        case LIBDEFLATE_SUCCESS: {
+            result.resize(speculativesize);
+            break;
+        }
+        default: {
+            qWarning("Could not decompress SVG data");
+            result.clear();
+            break;
+        }
+    }
+    return result;
+}
 
 QSvgTinyDocument::QSvgTinyDocument()
     : QSvgStructureNode(0)
@@ -57,9 +107,9 @@ QSvgTinyDocument * QSvgTinyDocument::load(const QString &fileName)
 
 QSvgTinyDocument * QSvgTinyDocument::load(const QByteArray &contents)
 {
-    // Check for gzip magic number and inflate if appropriate
+    // Check for gzip magic number and decompress if appropriate
     if (contents.startsWith("\x1f\x8b")) {
-        return load(qUncompress(contents.constData(), contents.size()));
+        return load(qt_uncompress(contents.constData(), contents.size()));
     }
 
     QSvgHandler handler(contents);

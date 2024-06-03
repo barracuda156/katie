@@ -32,8 +32,6 @@ class tst_qbytearray : public QObject
 private slots:
     void append();
     void append_data();
-    void compress_uncompress_data();
-    void compress_uncompress();
     void to_from_base64();
     void to_from_hex();
     void bench_qstrcmp();
@@ -64,33 +62,6 @@ void tst_qbytearray::append()
         QByteArray ba2(size, 'x');
         ba.append(ba2);
         ba.clear();
-    }
-}
-
-void tst_qbytearray::compress_uncompress_data()
-{
-    QTest::addColumn<int>("level");
-    QTest::newRow("0")  << int(0);
-    QTest::newRow("1")  << int(1);
-    QTest::newRow("2")  << int(2);
-    QTest::newRow("3")  << int(3);
-    QTest::newRow("4")  << int(4);
-    QTest::newRow("5")  << int(5);
-    QTest::newRow("6")  << int(6);
-    QTest::newRow("7")  << int(7);
-    QTest::newRow("8")  << int(8);
-    QTest::newRow("9")  << int(9);
-}
-
-void tst_qbytearray::compress_uncompress()
-{
-    QFETCH(int, level);
-
-    QBENCHMARK {
-        QByteArray compressed = qCompress(lorem, level);
-        QVERIFY(!compressed.isEmpty());
-        QByteArray decompressed = qUncompress(compressed);
-        QVERIFY(decompressed == lorem);
     }
 }
 

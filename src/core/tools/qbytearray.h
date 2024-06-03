@@ -479,13 +479,6 @@ Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QByteArray &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QByteArray &);
 #endif
 
-Q_CORE_EXPORT QByteArray qCompress(const char* data, int nbytes, int compressionLevel = 1);
-Q_CORE_EXPORT QByteArray qUncompress(const char* data, int nbytes);
-inline QByteArray qCompress(const QByteArray& data, int compressionLevel = 1)
-{ return qCompress(data.constData(), data.size(), compressionLevel); }
-inline QByteArray qUncompress(const QByteArray& data)
-{ return qUncompress(data.constData(), data.size()); }
-
 Q_DECLARE_TYPEINFO(QByteArray, Q_MOVABLE_TYPE);
 
 static inline int qstrcmp(const char *str1, const QByteArray &str2)

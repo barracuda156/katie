@@ -2,7 +2,6 @@
 set(EXTRA_CORE_LIBS
     ${ICU_LIBRARIES}
     ${JANSSON_LIBRARIES}
-    ${DEFLATE_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     # libm should be present by default becaue this is C++
     m
@@ -89,7 +88,6 @@ include_directories(
     ${CMAKE_BINARY_DIR}/include/QtCore
     ${ICU_INCLUDES}
     ${JANSSON_INCLUDES}
-    ${DEFLATE_INCLUDES}
 )
 
 set(CORE_HEADERS

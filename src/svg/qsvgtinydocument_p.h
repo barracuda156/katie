@@ -51,10 +51,10 @@ class QSvgFont;
 class QSvgTinyDocument : public QSvgStructureNode
 {
 public:
-    static QSvgTinyDocument * load(const QString &file);
-    static QSvgTinyDocument * load(const QByteArray &contents);
-    static QSvgTinyDocument * load(QXmlStreamReader *contents);
-public:
+    static QSvgTinyDocument* load(const QString &file);
+    static QSvgTinyDocument* load(const QByteArray &contents);
+    static QSvgTinyDocument* load(QXmlStreamReader *contents);
+
     QSvgTinyDocument();
     ~QSvgTinyDocument();
     Type type() const;

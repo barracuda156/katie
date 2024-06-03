@@ -58,7 +58,7 @@ There are several things you should be aware before considering Katie:
   - Unicode v5.0+ characters and partial scripts support
   - support for AArch64 architecture
   - support for locale aliases
-  - qCompress() and qUncompress() use libdeflate which is much faster
+  - SVG document handler use libdeflate which is much faster
   - stack backtrace on assert, crash or warning via execinfo
   - brief manual pages for all command-line tools
   - desktop files, Shell profile and dynamic linker/loader config

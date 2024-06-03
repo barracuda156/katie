@@ -1,6 +1,7 @@
 # add_definitions()
 set(EXTRA_SVG_LIBS
     KtCore KtXml KtGui
+    ${DEFLATE_LIBRARIES}
 )
 
 set(SVG_PUBLIC_HEADERS
@@ -14,6 +15,7 @@ include_directories(
     ${CMAKE_BINARY_DIR}/include/QtXml
     ${CMAKE_BINARY_DIR}/include/QtGui
     ${CMAKE_BINARY_DIR}/include/QtSvg
+    ${DEFLATE_INCLUDES}
 )
 
 set(SVG_HEADERS
