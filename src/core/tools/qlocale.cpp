@@ -2130,8 +2130,8 @@ QString QLocalePrivate::unsLongLongToString(const QChar zero, const QChar group,
     of the number.
 */
 bool QLocalePrivate::numberToCLocale(const QString &num,
-                                            GroupSeparatorMode group_sep_mode,
-                                            CharBuff *result) const
+                                     GroupSeparatorMode group_sep_mode,
+                                     CharBuff *result) const
 {
     const QChar *uc = num.unicode();
     int l = num.length();
@@ -2175,16 +2175,15 @@ bool QLocalePrivate::numberToCLocale(const QString &num,
     result->append('\0');
 
     // Check separators
-    if (group_sep_mode == ParseGroupSeparators
-            && !removeGroupSeparators(result))
+    if (group_sep_mode == ParseGroupSeparators && !removeGroupSeparators(result)) {
         return false;
-
+    }
 
     return true;
 }
 
 bool QLocalePrivate::validateChars(const QString &str, NumberMode numMode, QByteArray *buff,
-                                    int decDigits) const
+                                   int decDigits) const
 {
     buff->clear();
     buff->reserve(str.length());
@@ -2344,7 +2343,7 @@ float QLocalePrivate::bytearrayToFloat(const char *num, bool *ok)
     if (qstrcmp(num, "-inf") == 0)
         return -qInf();
 
-    char *endptr;
+    char *endptr = nullptr;
     Q_RESET_ERRNO
     float ret = std::strtof(num, &endptr);
     if ((ret == 0.0l && errno == ERANGE) || ret == HUGE_VALF || ret == -HUGE_VALF) {
@@ -2381,7 +2380,7 @@ double QLocalePrivate::bytearrayToDouble(const char *num, bool *ok)
     if (qstrcmp(num, "-inf") == 0)
         return -qInf();
 
-    char *endptr;
+    char *endptr = nullptr;
     Q_RESET_ERRNO
     double ret = std::strtod(num, &endptr);
     if ((ret == 0.0l && errno == ERANGE) || ret == HUGE_VAL || ret == -HUGE_VAL) {
@@ -2408,7 +2407,7 @@ qlonglong QLocalePrivate::bytearrayToLongLong(const char *num, int base, bool *o
         return 0;
     }
 
-    char *endptr;
+    char *endptr = nullptr;
     Q_RESET_ERRNO
     qlonglong ret = std::strtoll(num, &endptr, base);
     if ((ret == LLONG_MIN || ret == LLONG_MAX) && (errno == ERANGE || errno == EINVAL)) {
@@ -2439,7 +2438,7 @@ qulonglong QLocalePrivate::bytearrayToUnsLongLong(const char *num, int base, boo
         return 0;
     }
 
-    char *endptr;
+    char *endptr = nullptr;
     Q_RESET_ERRNO
     qulonglong ret = std::strtoull(num, &endptr, base);
     if (ret == ULLONG_MAX && (errno == ERANGE || errno == EINVAL)) {
