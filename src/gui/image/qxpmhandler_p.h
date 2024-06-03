@@ -34,7 +34,7 @@
 
 #include "QtGui/qimageiohandler.h"
 
-#ifndef QT_NO_IMAGEFORMAT_XPM
+#ifndef QT_NO_XPM
 
 QT_BEGIN_NAMESPACE
 
@@ -53,6 +53,6 @@ public:
 
 QT_END_NAMESPACE
 
-#endif // QT_NO_IMAGEFORMAT_XPM
+#endif // QT_NO_XPM
 
 #endif // QXPMHANDLER_P_H

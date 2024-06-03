@@ -20,8 +20,6 @@
 
 #include "qkathandler_p.h"
 
-#ifndef QT_NO_IMAGEFORMAT_KAT
-
 #include "qimage.h"
 #include "qimage_p.h"
 #include "qvariant.h"
@@ -246,5 +244,3 @@ QByteArray QKatHandler::name() const
 }
 
 QT_END_NAMESPACE
-
-#endif // QT_NO_IMAGEFORMAT_KAT

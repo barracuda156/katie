@@ -20,13 +20,11 @@
 
 #include "qxpmhandler_p.h"
 
-#ifndef QT_NO_IMAGEFORMAT_XPM
+#ifndef QT_NO_XPM
 
 #include "qimage.h"
 #include "qt_x11_p.h"
 #include "qcorecommon_p.h"
-
-#include <X11/xpm.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -123,4 +121,4 @@ bool QXpmHandler::canRead(QIODevice *device)
 
 QT_END_NAMESPACE
 
-#endif // QT_NO_IMAGEFORMAT_XPM
+#endif // QT_NO_XPM

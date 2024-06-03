@@ -401,7 +401,7 @@ if(NOT HAVE_pic)
 endif()
 
 # keep in sync with the GUI component CMake file, only definitions setup is needed here
-foreach(x11ext Xshape Xinerama Xrandr Xrender Xfixes Xcursor)
+foreach(x11ext Xshape Xinerama Xrandr Xrender Xfixes Xcursor Xpm)
     if(NOT X11_${x11ext}_FOUND)
         message(WARNING "The X11 ${x11ext} extension was not found")
         string(TOUPPER "${x11ext}" upperext)
@@ -412,10 +412,6 @@ if(NOT X11_Xext_FOUND)
     message(WARNING "The X11 Xext extension was not found")
     katie_config(QT_NO_XSYNC)
     katie_config(QT_NO_XSHAPE)
-endif()
-if(NOT X11_Xpm_FOUND)
-    message(WARNING "The X11 Xpm extension was not found")
-    katie_config(QT_NO_IMAGEFORMAT_XPM)
 endif()
 
 configure_file(

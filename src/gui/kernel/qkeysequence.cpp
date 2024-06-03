@@ -21,7 +21,6 @@
 
 #include "qkeysequence.h"
 #include "qkeysequence_p.h"
-#include "qapplication_p.h"
 
 #ifndef QT_NO_SHORTCUT
 
@@ -155,9 +154,6 @@ QT_BEGIN_NAMESPACE
     be specified using either of the following ways:
 
     \snippet doc/src/snippets/code/src_gui_kernel_qkeysequence.cpp 1
-
-    \warning A QApplication instance must have been constructed before a
-             QKeySequence is created; otherwise, your application may crash.
 
     \sa QShortcut
 */

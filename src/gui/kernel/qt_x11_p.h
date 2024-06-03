@@ -92,6 +92,10 @@
 #  include <X11/extensions/Xfixes.h>
 #endif // QT_NO_XFIXES
 
+#ifndef QT_NO_XPM
+#  include <X11/xpm.h>
+#endif // QT_NO_XPM
+
 QT_BEGIN_NAMESPACE
 
 class QWidget;

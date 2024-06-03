@@ -134,7 +134,7 @@ void QX11Data::copyXImageToQImage(XImage *ximage, QImage &image, bool *freedata)
                     uchar* imageline = QFAST_SCAN_LINE(imagedata, imagebpl, h);
                     for (int w = 0; w < ximage->width; w++) {
                         const uint xpixel = XGetPixel(ximage, w, h);
-                        //make sure alpha is 255, we depend on it in qdrawhelper for cases
+                        // make sure alpha is 255, we depend on it in qdrawhelper for cases
                         // when image is set as a texture pattern on a qbrush
                         ((uint *)imageline)[w] = (xpixel | 0xff000000);
                     }

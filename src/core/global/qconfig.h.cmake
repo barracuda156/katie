@@ -80,6 +80,7 @@
 #cmakedefine QT_NO_XRENDER
 #cmakedefine QT_NO_XSHAPE
 #cmakedefine QT_NO_XSYNC
+#cmakedefine QT_NO_XPM
 
 // Broken, do not set until further notice
 // #cmakedefine QT_NO_ACTION
@@ -171,8 +172,6 @@
 #cmakedefine QT_NO_FRAME
 #cmakedefine QT_NO_FSCOMPLETER
 #cmakedefine QT_NO_IDENTITYPROXYMODEL
-#cmakedefine QT_NO_IMAGEFORMAT_KAT
-#cmakedefine QT_NO_IMAGEFORMAT_XPM
 #cmakedefine QT_NO_IMAGE_HEURISTIC_MASK
 #cmakedefine QT_NO_IPV6
 #cmakedefine QT_NO_LCDNUMBER

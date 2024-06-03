@@ -132,11 +132,9 @@ static QImageIOHandler *createReadHandlerHelper(QIODevice *device,
     // check if we have built-in support for the format first
     if (form == "png") {
         handler = new QPngHandler();
-#ifndef QT_NO_IMAGEFORMAT_KAT
     } else if (form == "kat") {
         handler = new QKatHandler();
-#endif
-#ifndef QT_NO_IMAGEFORMAT_XPM
+#ifndef QT_NO_XPM
     } else if (form == "xpm") {
         handler = new QXpmHandler();
 #endif
@@ -159,12 +157,10 @@ static QImageIOHandler *createReadHandlerHelper(QIODevice *device,
         if (QPngHandler::canRead(device)) {
             handler = new QPngHandler();
         }
-#ifndef QT_NO_IMAGEFORMAT_KAT
         if (!handler && QKatHandler::canRead(device)) {
             handler = new QKatHandler();
         }
-#endif
-#ifndef QT_NO_IMAGEFORMAT_XPM
+#ifndef QT_NO_XPM
         if (!handler && QXpmHandler::canRead(device)) {
             handler = new QXpmHandler();
         }
@@ -849,19 +845,14 @@ QByteArray QImageReader::imageFormat(QIODevice *device)
     Reading and writing SVG files is supported through Qt's
     \l{QtSvg Module}{SVG Module}.
 
-    Note that the QApplication instance must be created before this function is
-    called.
-
     \sa setFormat(), QImageWriter::supportedImageFormats(), QImageIOPlugin
 */
 QList<QByteArray> QImageReader::supportedImageFormats()
 {
     QList<QByteArray> formats = QList<QByteArray>()
         << "png"
-#ifndef QT_NO_IMAGEFORMAT_KAT
         << "kat"
-#endif
-#ifndef QT_NO_IMAGEFORMAT_XPM
+#ifndef QT_NO_XPM
         << "xpm"
 #endif
         ;
@@ -891,12 +882,10 @@ QByteArray QImageReader::formatForMimeType(const QByteArray &mime)
     if (mime == "image/png") {
         return QByteArray("png");
     }
-#ifndef QT_NO_IMAGEFORMAT_KAT
     if (mime == "image/katie") {
         return QByteArray("kat");
     }
-#endif
-#ifndef QT_NO_IMAGEFORMAT_XPM
+#ifndef QT_NO_XPM
     if (mime == "image/x-xpixmap") {
         return QByteArray("xpm");
     }
@@ -928,10 +917,8 @@ QList<QByteArray> QImageReader::supportedMimeTypes()
 {
     QList<QByteArray> mimes = QList<QByteArray>()
         << "image/png"
-#ifndef QT_NO_IMAGEFORMAT_KAT
         << "image/katie"
-#endif
-#ifndef QT_NO_IMAGEFORMAT_XPM
+#ifndef QT_NO_XPM
         << "image/x-xpixmap"
 #endif
         ;

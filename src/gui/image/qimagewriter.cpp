@@ -97,10 +97,8 @@ static QImageIOHandler *createWriteHandlerHelper(QIODevice *device, const QByteA
     // check if any built-in handlers can write the image
     if (form == "png") {
         handler = new QPngHandler();
-#ifndef QT_NO_IMAGEFORMAT_KAT
     } else if (form == "kat") {
         handler = new QKatHandler();
-#endif
     }
 
 #ifndef QT_NO_LIBRARY
@@ -486,9 +484,6 @@ QByteArray QImageWriter::defaultImageFormat()
     Reading and writing SVG files is supported through Katie's
     \l{QtSvg Module}{SVG Module}.
 
-    Note that the QApplication instance must be created before this function is
-    called.
-
     \sa setFormat(), QImageReader::supportedImageFormats(), QImageIOPlugin,
     defaultImageFormat()
 */
@@ -496,9 +491,7 @@ QList<QByteArray> QImageWriter::supportedImageFormats()
 {
     QList<QByteArray> formats;
     formats << "png";
-#ifndef QT_NO_IMAGEFORMAT_KAT
     formats << "kat";
-#endif
 
 #ifndef QT_NO_LIBRARY
     QFactoryLoader *l = imageloader();
@@ -525,11 +518,9 @@ QByteArray QImageWriter::formatForMimeType(const QByteArray &mime)
     if (mime == "image/png") {
         return QByteArray("png");
     }
-#ifndef QT_NO_IMAGEFORMAT_KAT
     if (mime == "image/katie") {
         return QByteArray("kat");
     }
-#endif
 
 #ifndef QT_NO_LIBRARY
     QFactoryLoader *l = imageloader();
@@ -557,10 +548,7 @@ QList<QByteArray> QImageWriter::supportedMimeTypes()
 {
     QList<QByteArray> mimes = QList<QByteArray>()
         << "image/png"
-#ifndef QT_NO_IMAGEFORMAT_KAT
-        << "image/katie"
-#endif
-        ;
+        << "image/katie";
 
 #ifndef QT_NO_LIBRARY
     QFactoryLoader *l = imageloader();

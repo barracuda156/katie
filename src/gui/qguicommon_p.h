@@ -19,13 +19,8 @@ struct QRealRect {
     qreal x1, y1, x2, y2;
 };
 
-#ifndef QT_NO_IMAGEFORMAT_KAT
 static const char* const qt_imageformat = "kat";
 static const char* const qt_imagemime = "image/katie";
-#else
-static const char* const qt_imageformat = "png";
-static const char* const qt_imagemime = "image/png";
-#endif
 
 #ifdef QT_NO_FPU
 static const qreal qt_epsilon = qreal(1e-12);
