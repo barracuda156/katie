@@ -32,6 +32,10 @@
 #include <time.h>
 #include <pthread.h>
 
+#ifdef Q_OS_MAC
+#include <CoreServices/CoreServices.h>
+#endif
+
 #if defined(QT_HAVE_PRCTL)
 #include <sys/prctl.h>
 #endif
@@ -41,7 +45,7 @@
 # define SCHED_IDLE    5
 #endif
 
-#if !defined(Q_OS_OPENBSD) && defined(_POSIX_THREAD_PRIORITY_SCHEDULING) && (_POSIX_THREAD_PRIORITY_SCHEDULING-0 >= 0)
+#if defined(Q_OS_DARWIN) || !defined(Q_OS_OPENBSD) && defined(_POSIX_THREAD_PRIORITY_SCHEDULING) && (_POSIX_THREAD_PRIORITY_SCHEDULING-0 >= 0)
 #define QT_HAS_THREAD_PRIORITY_SCHEDULING
 #endif
 
@@ -166,6 +170,9 @@ void *QThreadPrivate::start(void *arg)
     ::prctl(PR_SET_NAME, (unsigned long)objectName.toLocal8Bit().constData(), 0, 0, 0);
 #elif defined(QT_HAVE_PTHREAD_SETNAME_NP) && defined(Q_OS_NETBSD)
     pthread_setname_np(thr->d_func()->thread_id, objectName.toLocal8Bit().constData(), (char*)"%s");
+#elif defined(QT_HAVE_PTHREAD_SETNAME_NP) && defined(Q_OS_MAC)
+    Q_UNUSED(thr->d_func()->thread_id);
+    pthread_setname_np(objectName.toLocal8Bit().constData());
 #elif defined(QT_HAVE_PTHREAD_SETNAME_NP)
     pthread_setname_np(thr->d_func()->thread_id, objectName.toLocal8Bit().constData());
 #endif
@@ -229,8 +236,11 @@ Qt::HANDLE QThread::currentThreadId()
 
 int QThread::idealThreadCount()
 {
-#ifdef _SC_NPROCESSORS_ONLN
+#if defined(_SC_NPROCESSORS_ONLN)
     return sysconf(_SC_NPROCESSORS_ONLN);
+#elif defined(Q_OS_MAC)
+    cores = MPProcessorsScheduled();
+    return cores
 #else
     return 1;
 #endif
