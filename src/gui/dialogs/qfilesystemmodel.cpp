@@ -617,7 +617,11 @@ QString QFileSystemModelPrivate::size(const QModelIndex &index) const
         return QString();
     const QFileSystemNode *n = node(index);
     if (n->isDir()) {
+#ifdef Q_OS_MAC
+        return QLatin1String("--");
+#else
         return QLatin1String("");
+#endif
     // Konqueror - "4 KB"
     // Nautilus  - "9 items" (the number of children)
     }
@@ -787,7 +791,11 @@ QVariant QFileSystemModel::headerData(int section, Qt::Orientation orientation, 
             break;
         }
         case 2: {
+#ifdef Q_OS_MAC
+            returnValue = tr("Kind");
+#else
             returnValue = tr("Type");
+#endif
             break;
         }
         // Konqueror - File Type
@@ -933,11 +941,13 @@ public:
     {
         switch (sortColumn) {
         case 0: {
+#ifndef Q_OS_MAC
             // place directories before files
             bool left = l->isDir();
             bool right = r->isDir();
             if (left ^ right)
                 return left;
+#endif
             return QFileSystemModelPrivate::naturalCompare(l->fileName,
                                                 r->fileName, Qt::CaseInsensitive) < 0;
                 }
