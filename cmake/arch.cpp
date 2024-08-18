@@ -13,9 +13,9 @@ int main() {
     printf("MIPS64");
 #elif defined(__mips__)
     printf("MIPS");
-#elif defined(__powerpc64__)
+#elif defined(__powerpc64__) || defined(__ppc64__)
     printf("POWERPC64");
-#elif defined(__powerpc__)
+#elif defined(__powerpc__) || defined(__ppc__)
     printf("POWERPC");
 #elif defined(__s390__)
     printf("S390");
