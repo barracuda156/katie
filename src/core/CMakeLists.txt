@@ -152,6 +152,7 @@ set(CORE_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qobject_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmath.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcore_unix_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcore_mac_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_unix_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qpluginloader.h
     ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qlibrary.h

@@ -34,9 +34,13 @@
 #include "qcorecommon_p.h"
 #include "qcore_unix_p.h"
 
+#ifdef Q_OS_MAC
+#  include <qcore_mac_p.h>
+#endif
+
 #include <errno.h>
 
-#ifndef QT_NO_PLUGIN_CHECK
+#if !defined(QT_NO_PLUGIN_CHECK) && !defined(Q_OS_MAC)
 #  include <elf.h>
 #  if QT_POINTER_SIZE == 8
 #    define QT_ELF_CLASS_TYPE ELFCLASS64
@@ -124,7 +128,7 @@ QT_BEGIN_NAMESPACE
     \sa loadHints
 */
 
-#ifndef QT_NO_PLUGIN_CHECK
+#if !defined(QT_NO_PLUGIN_CHECK) && !defined(Q_OS_MAC)
 /*
   This opens the specified library and checks for the ELF magic and class.
   The advantage of this approach is that we can do verification without
@@ -314,11 +318,23 @@ bool QLibrary::isLibrary(const QString &fileName)
     //  libfoo-0.3.so
     //  libfoo-0.3.so.0.3.0
 
+#ifdef Q_OS_MAC
+    QStringList suffixes = completeSuffix.split(QLatin1Char('.'));
+    const QString lastSuffix = suffixes.at(suffixes.count() - 1);
+    const QString firstSuffix = suffixes.at(0);
+
+    bool valid = (lastSuffix == QLatin1String("dylib")
+            || firstSuffix == QLatin1String("so")
+            || firstSuffix == QLatin1String("bundle"));
+
+    return valid;
+#else
     foreach (const QString &suffix, completeSuffix.split(QLatin1Char('.'))) {
         if (suffix == QLatin1String("so")) {
             return true;
         };
     }
+#endif
     return false;
 }
 
@@ -329,7 +345,7 @@ bool QLibraryPrivate::isPlugin()
         return (pluginState == QLibraryPrivate::IsAPlugin);
     }
 
-#ifndef QT_NO_PLUGIN_CHECK
+#if !defined(QT_NO_PLUGIN_CHECK) && !defined(Q_OS_MAC)
     if (Q_UNLIKELY(fileName.endsWith(QLatin1String(".debug")))) {
         // refuse to load a file that ends in .debug
         // these are the debug symbols from the libraries
