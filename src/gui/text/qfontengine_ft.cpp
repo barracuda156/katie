@@ -49,9 +49,6 @@ QT_BEGIN_NAMESPACE
 #define TRUNC(x)    ((x) >> 6)
 #define ROUND(x)    (((x)+32) & -64)
 
-// failsafe in case Freetype breaks ABI
-#define QT_MEMCPY_FT_OUTLINE
-
 // -------------------------- Freetype support ------------------------------
 
 QFreetypeFace::QFreetypeFace(const QFontEngine::FaceId &face_id)
@@ -249,13 +246,7 @@ QFontEngineFT::~QFontEngineFT()
     GlyphCache::const_iterator iterend = glyphcache.end();
     while (iter != iterend) {
         QFontGlyph* gcache = iter->second;
-#ifdef QT_MEMCPY_FT_OUTLINE
-        ::free(gcache->outline.contours);
-        ::free(gcache->outline.points);
-        ::free(gcache->outline.tags);
-#else
         FT_Outline_Done(freetype->library, &(gcache->outline));
-#endif
         delete gcache;
         iter++;
     }
@@ -316,21 +307,9 @@ QFontGlyph* QFontEngineFT::getGlyph(glyph_t glyph) const
     gcache->horiadvance = face->glyph->metrics.horiAdvance;
     gcache->advancex = ROUND(face->glyph->advance.x);
 
-#ifdef QT_MEMCPY_FT_OUTLINE
-    const short n_contours = face->glyph->outline.n_contours;
-    gcache->outline.n_contours = n_contours;
-    gcache->outline.contours = static_cast<short*>(::malloc(sizeof(short) * n_contours));
-    ::memcpy(gcache->outline.contours, face->glyph->outline.contours, sizeof(short) * n_contours);
-    const short n_points = face->glyph->outline.n_points;
-    gcache->outline.points = static_cast<FT_Vector*>(::malloc(sizeof(FT_Vector) * n_points));
-    ::memcpy(gcache->outline.points, face->glyph->outline.points, sizeof(FT_Vector) * n_points);
-    gcache->outline.tags = static_cast<char*>(::malloc(sizeof(char) * n_points));
-    ::memcpy(gcache->outline.tags, face->glyph->outline.tags, sizeof(char) * n_points);
-#else
     FT_Outline_New(freetype->library, face->glyph->outline.n_points,
                    face->glyph->outline.n_contours, &gcache->outline);
     FT_Outline_Copy(&face->glyph->outline, &gcache->outline);
-#endif
 
     glyphcache.insert({glyph, gcache});
 
